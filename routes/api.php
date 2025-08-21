@@ -13,4 +13,5 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/forget-password', [AuthController::class, 'forgotPassword']);
     Route::post('/check-otp', [AuthController::class, 'checkOtp']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 });

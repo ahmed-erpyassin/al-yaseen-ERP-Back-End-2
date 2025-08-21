@@ -11,7 +11,8 @@ class UserOtp extends Model
         'user_id',
         'type',
         'otp',
-        'otp_expires_at'
+        'otp_expires_at',
+        'token'
     ];
 
     protected $table = 'user_otps';

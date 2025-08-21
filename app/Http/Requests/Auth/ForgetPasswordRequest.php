@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CheckOtpRequest extends FormRequest
+class ForgetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class CheckOtpRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'otp' => 'required|integer|max:9999|min:0000'
+            "email" => 'required|email'
         ];
     }
 }
