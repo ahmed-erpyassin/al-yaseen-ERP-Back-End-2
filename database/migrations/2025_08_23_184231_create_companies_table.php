@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('country_code', 10);
             $table->string('phone');
             $table->boolean('allow_emails')->default(false);
-            $table->decimal('income_tax_rate', 5, 2);
-            $table->decimal('vat_rate', 5, 2);
+            $table->decimal('income_tax_rate', 5, 2)->default(0);
+            $table->decimal('vat_rate', 5, 2)->default(0);
             $table->year('fiscal_year');
             $table->date('from');
             $table->date('to');

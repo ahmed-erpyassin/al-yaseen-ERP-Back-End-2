@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CurrencySeeder::class);
         $this->call(CompanyTypesSeeder::class);
         $this->call(WorkTypeSeeder::class);
+        $this->call(CountrySeeder::class);
     }
 }
