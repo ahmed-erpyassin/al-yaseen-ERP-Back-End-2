@@ -9,21 +9,28 @@ use Illuminate\Http\Request;
 
 class EmployeesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Employee::all(), 200);
+
+        $user_id = $request->user()->id;
+
+        $employees = Employee::where('user_id', $user_id)->get();
+
+        return response()->json([
+            'success' => true,
+            'data'    => $employees
+        ], 200);
     }
 
     public function store(StoreEmployeeRequest $request)
     {
         $data = $request->validated();
 
-        if ($request->hasFile('attachments')) {
-            $data['attachments'] = $request->file('attachments')->store('employees', 'public');
-        }
-
         $employee = Employee::create($data);
 
-        return response()->json($employee, 201);
+        return response()->json([
+            'success' => true,
+            'data'    => $employee
+        ], 201);
     }
 }

@@ -10,43 +10,60 @@ class Employee extends Model
     protected $table = 'employees';
 
     protected $fillable = [
+        'company_id',
+        'user_id',
         'employee_number',
-        'last_name',
+        'nickname',
         'first_name',
         'second_name',
         'third_name',
-        'email',
         'phone1',
         'phone2',
+        'email',
         'birth_date',
         'address',
-        'bank_account',
-        'iban',
-        'car_number',
-        'children_count',
-        'wives_count',
-        'family_count',
-        'dependents_count',
-        'gender',
+        'national_id',
         'id_number',
-
+        'gender',
+        'wives_count',
+        'children_count',
+        'dependents_count',
+        'car_number',
+        'is_driver',
+        'is_sales',
         'job_title',
-        'hire_date',
-        'employee_manager',
-        'employee_status',
-        'department',
-        'work_title',
+        'hiring_date',
+        'employee_code',
+        'employee_identifier',
+        'job_address',
+        'department_id',
         'salary',
-        'deductions',
-        'allowances',
-        'currency',
-
+        'billing_rate',
+        'monthly_discount',
+        'currency_id',
         'notes',
     ];
 
-    /**
-     * علاقة بالمرفقات (لو هتخليها خاصة بالموظف فقط)
-     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
     public function documents()
     {
         return $this->morphMany(Document::class, 'related');
