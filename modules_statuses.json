@@ -1,0 +1,14 @@
+{
+    "Users": true,
+    "Billing": true,
+    "Sales": true,
+    "Purchases": true,
+    "Customers": true,
+    "Suppliers": true,
+    "Inventory": true,
+    "FinancialAccounts": true,
+    "ProjectsManagment": true,
+    "Human": true,
+    "Resources": true,
+    "HumanResources": true
+}

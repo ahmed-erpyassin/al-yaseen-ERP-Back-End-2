@@ -20,9 +20,7 @@ return new class extends Migration
             $table->date('invoice_date');
             $table->time('invoice_time')->nullable();
             $table->date('due_date')->nullable();
-
             $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete();
-
             $table->text('notes')->nullable();
             $table->timestamps();
         });

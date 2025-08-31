@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('outgoing_shipment_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('outgoing_shipment_id')->constrained('outgoing_shipments')->cascadeOnDelete();
-
             $table->string('item_number');
             $table->string('item_name');
             $table->string('item_statement', 200);
