@@ -1,0 +1,1752 @@
+<?php
+
+namespace Modules\Inventory\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Modules\Inventory\Models\Item;
+use Modules\Inventory\Http\Requests\StoreItemRequest;
+use Modules\Inventory\Http\Requests\UpdateItemRequest;
+
+class ItemController extends Controller
+{
+    /**
+     * Display a listing of items.
+     */
+    public function index(Request $request): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+        
+        $query = Item::with(['company', 'branch', 'user', 'unit', 'parent', 'itemUnits.unit'])
+            ->forCompany($companyId);
+
+        // Apply filters
+        if ($request->has('type')) {
+            $query->where('type', $request->get('type'));
+        }
+
+        if ($request->has('branch_id')) {
+            $query->where('branch_id', $request->get('branch_id'));
+        }
+
+        if ($request->has('unit_id')) {
+            $query->where('unit_id', $request->get('unit_id'));
+        }
+
+        if ($request->has('parent_id')) {
+            $query->where('parent_id', $request->get('parent_id'));
+        }
+
+        if ($request->has('stock_tracking')) {
+            $query->where('stock_tracking', $request->boolean('stock_tracking'));
+        }
+
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('item_number', 'like', "%{$search}%")
+                  ->orWhere('model', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('barcode', 'like', "%{$search}%");
+            });
+        }
+
+        // Individual field filters
+        if ($request->has('item_number')) {
+            $query->where('item_number', 'like', "%{$request->get('item_number')}%");
+        }
+
+        if ($request->has('name')) {
+            $query->where('name', 'like', "%{$request->get('name')}%");
+        }
+
+        if ($request->has('model')) {
+            $query->where('model', 'like', "%{$request->get('model')}%");
+        }
+
+        if ($request->has('balance')) {
+            $balance = $request->get('balance');
+            if (is_numeric($balance)) {
+                $query->where('balance', $balance);
+            }
+        }
+
+        if ($request->has('balance_min')) {
+            $query->where('balance', '>=', $request->get('balance_min'));
+        }
+
+        if ($request->has('balance_max')) {
+            $query->where('balance', '<=', $request->get('balance_max'));
+        }
+
+        if ($request->has('id')) {
+            $query->where('id', $request->get('id'));
+        }
+
+        // Advanced Sorting with multiple columns support
+        $this->applySorting($query, $request);
+
+        // Pagination
+        $perPage = $request->get('per_page', 15);
+        $items = $query->paginate($perPage);
+
+        // Apply dynamic field selection
+        $items = $this->applyFieldSelection($items, $request);
+
+        return response()->json([
+            'success' => true,
+            'data' => $items,
+            'message' => 'Items retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Store a newly created item.
+     */
+    public function store(StoreItemRequest $request): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $userId = auth()->id() ?? $request->user_id;
+
+        // Check if warehouses exist for the company
+        $warehousesExist = \Modules\Inventory\Models\Warehouse::forCompany($companyId)->exists();
+
+        if (!$warehousesExist) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot add item. No warehouses exist for this company.',
+                'message_ar' => 'لا يمكن إضافة الصنف. لا توجد مخازن لهذه الشركة.',
+                'error_code' => 'NO_WAREHOUSES'
+            ], 422);
+        }
+
+        $data = $request->validated();
+        $data['company_id'] = $companyId;
+        $data['user_id'] = $userId;
+        $data['created_by'] = $userId;
+
+        // Auto-generate item number if not provided
+        if (empty($data['item_number'])) {
+            $data['item_number'] = $this->generateItemNumber($companyId);
+        }
+
+        // Set default warehouse if not specified
+        if (empty($data['warehouse_id'])) {
+            $defaultWarehouse = $this->getDefaultWarehouse($companyId);
+            if ($defaultWarehouse) {
+                $data['warehouse_id'] = $defaultWarehouse->id;
+            }
+        }
+
+        // Create the item
+        $item = Item::create($data);
+
+        // Load relationships for response
+        $item->load([
+            'company:id,name',
+            'branch:id,name',
+            'user:id,name,email',
+            'unit:id,name,symbol',
+            'parent:id,item_number,name',
+            'createdBy:id,name,email'
+        ]);
+
+        // Create initial inventory stock record if warehouse is specified
+        if (!empty($data['warehouse_id'])) {
+            $this->createInitialInventoryStock($item, $data['warehouse_id'], $data);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $item,
+            'message' => 'Item created successfully',
+            'message_ar' => 'تم إنشاء الصنف بنجاح',
+            'warehouse_assigned' => !empty($data['warehouse_id'])
+        ], 201);
+    }
+
+    /**
+     * Get available warehouses for item creation.
+     */
+    public function getAvailableWarehouses(Request $request): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+
+        $warehouses = \Modules\Inventory\Models\Warehouse::forCompany($companyId)
+            ->select('id', 'name', 'code', 'address', 'is_default')
+            ->orderBy('is_default', 'desc')
+            ->orderBy('name', 'asc')
+            ->get();
+
+        if ($warehouses->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No warehouses available. Please create a warehouse first.',
+                'message_ar' => 'لا توجد مخازن متاحة. يرجى إنشاء مخزن أولاً.',
+                'data' => [],
+                'can_add_items' => false
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $warehouses,
+            'message' => 'Available warehouses retrieved successfully',
+            'message_ar' => 'تم استرداد المخازن المتاحة بنجاح',
+            'can_add_items' => true,
+            'default_warehouse' => $warehouses->where('is_default', true)->first()
+        ]);
+    }
+
+    /**
+     * Generate unique item number for the company.
+     */
+    private function generateItemNumber($companyId): string
+    {
+        $prefix = 'ITM';
+        $year = date('Y');
+
+        // Get the last item number for this company and year
+        $lastItem = Item::forCompany($companyId)
+            ->where('item_number', 'like', "{$prefix}-{$year}-%")
+            ->orderBy('item_number', 'desc')
+            ->first();
+
+        if ($lastItem) {
+            // Extract the sequence number and increment
+            $parts = explode('-', $lastItem->item_number);
+            $sequence = isset($parts[2]) ? intval($parts[2]) + 1 : 1;
+        } else {
+            $sequence = 1;
+        }
+
+        return sprintf('%s-%s-%04d', $prefix, $year, $sequence);
+    }
+
+    /**
+     * Get default warehouse for the company.
+     */
+    private function getDefaultWarehouse($companyId)
+    {
+        // First try to get warehouse marked as default
+        $defaultWarehouse = \Modules\Inventory\Models\Warehouse::forCompany($companyId)
+            ->where('is_default', true)
+            ->first();
+
+        if ($defaultWarehouse) {
+            return $defaultWarehouse;
+        }
+
+        // If no default warehouse, try to find "Main Warehouse"
+        $mainWarehouse = \Modules\Inventory\Models\Warehouse::forCompany($companyId)
+            ->where('name', 'like', '%main%')
+            ->orWhere('name', 'like', '%رئيسي%')
+            ->orWhere('name', 'like', '%المخزن الرئيسي%')
+            ->first();
+
+        if ($mainWarehouse) {
+            return $mainWarehouse;
+        }
+
+        // If still no warehouse found, get the first available warehouse
+        return \Modules\Inventory\Models\Warehouse::forCompany($companyId)->first();
+    }
+
+    /**
+     * Create initial inventory stock record.
+     */
+    private function createInitialInventoryStock($item, $warehouseId, $data)
+    {
+        $initialQuantity = $data['quantity'] ?? 0;
+
+        \Modules\Inventory\Models\InventoryStock::create([
+            'company_id' => $item->company_id,
+            'inventory_item_id' => $item->id,
+            'warehouse_id' => $warehouseId,
+            'quantity' => $initialQuantity,
+            'reserved_quantity' => 0,
+            'available_quantity' => $initialQuantity,
+        ]);
+    }
+
+    /**
+     * Display the specified item with all available data.
+     */
+    public function show($id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+
+        $item = Item::with([
+            'company:id,name,email,phone',
+            'branch:id,name,address,phone',
+            'user:id,name,email',
+            'unit:id,name,symbol,description',
+            'parent:id,item_number,name,code',
+            'children:id,item_number,name,code,parent_id',
+            'itemUnits.unit:id,name,symbol',
+            'createdBy:id,name,email',
+            'updatedBy:id,name,email',
+            'deletedBy:id,name,email'
+        ])
+        ->forCompany($companyId)
+        ->findOrFail($id);
+
+        // Get comprehensive item data
+        $itemData = $this->getComprehensiveItemData($item);
+
+        return response()->json([
+            'success' => true,
+            'data' => $itemData,
+            'message' => 'Item details retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Get comprehensive preview/review data for an item.
+     */
+    public function preview($id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+
+        $item = Item::with([
+            'company:id,name,email,phone,address',
+            'branch:id,name,address,phone,email',
+            'user:id,name,email,phone',
+            'unit:id,name,symbol,description',
+            'parent:id,item_number,name,code,description',
+            'children:id,item_number,name,code,parent_id,quantity,balance',
+            'itemUnits.unit:id,name,symbol,description',
+            'createdBy:id,name,email',
+            'updatedBy:id,name,email',
+            'deletedBy:id,name,email'
+        ])
+        ->forCompany($companyId)
+        ->findOrFail($id);
+
+        // Get comprehensive preview data
+        $previewData = $this->getComprehensivePreviewData($item);
+
+        return response()->json([
+            'success' => true,
+            'data' => $previewData,
+            'message' => 'Item preview data retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Update the specified item.
+     */
+    public function update(UpdateItemRequest $request, $id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $userId = auth()->id() ?? $request->user_id;
+
+        $item = Item::forCompany($companyId)->findOrFail($id);
+
+        $data = $request->validated();
+        $data['updated_by'] = $userId;
+
+        // Store original values for comparison
+        $originalData = $item->only([
+            'item_number', 'name', 'description', 'model', 'unit_id',
+            'balance', 'minimum_limit', 'maximum_limit', 'reorder_limit'
+        ]);
+
+        $item->update($data);
+        $item->load(['company', 'branch', 'user', 'unit', 'parent']);
+
+        // Get updated values for response
+        $updatedFields = [];
+        foreach ($originalData as $field => $originalValue) {
+            if (isset($data[$field]) && $data[$field] != $originalValue) {
+                $updatedFields[$field] = [
+                    'from' => $originalValue,
+                    'to' => $data[$field]
+                ];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $item,
+            'updated_fields' => $updatedFields,
+            'message' => 'Item updated successfully'
+        ]);
+    }
+
+    /**
+     * Remove the specified item (soft delete).
+     */
+    public function destroy($id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $userId = auth()->id() ?? request()->user_id;
+
+        $item = Item::forCompany($companyId)->findOrFail($id);
+
+        // Check if item has children or item units
+        if ($item->children()->exists() || $item->itemUnits()->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete item with existing children or item units',
+                'message_ar' => 'لا يمكن حذف الصنف الذي يحتوي على أصناف فرعية أو وحدات'
+            ], 422);
+        }
+
+        // Set deleted_by before soft delete
+        $item->update(['deleted_by' => $userId]);
+        $item->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item deleted successfully',
+            'message_ar' => 'تم حذف الصنف بنجاح',
+            'deleted_at' => $item->deleted_at,
+            'deleted_by' => $userId
+        ]);
+    }
+
+    /**
+     * Restore a soft deleted item.
+     */
+    public function restore($id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $userId = auth()->id() ?? request()->user_id;
+
+        $item = Item::withTrashed()
+            ->forCompany($companyId)
+            ->findOrFail($id);
+
+        if (!$item->trashed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item is not deleted',
+                'message_ar' => 'الصنف غير محذوف'
+            ], 422);
+        }
+
+        // Clear deleted_by and restore
+        $item->update([
+            'deleted_by' => null,
+            'updated_by' => $userId
+        ]);
+        $item->restore();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item restored successfully',
+            'message_ar' => 'تم استعادة الصنف بنجاح',
+            'data' => $item->load(['unit', 'company', 'branch'])
+        ]);
+    }
+
+    /**
+     * Permanently delete an item (force delete).
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+
+        $item = Item::withTrashed()
+            ->forCompany($companyId)
+            ->findOrFail($id);
+
+        // Check if item has children or item units
+        if ($item->children()->withTrashed()->exists() || $item->itemUnits()->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot permanently delete item with existing children or item units',
+                'message_ar' => 'لا يمكن حذف الصنف نهائياً الذي يحتوي على أصناف فرعية أو وحدات'
+            ], 422);
+        }
+
+        $itemName = $item->name;
+        $item->forceDelete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item permanently deleted successfully',
+            'message_ar' => 'تم حذف الصنف نهائياً بنجاح',
+            'deleted_item' => $itemName
+        ]);
+    }
+
+    /**
+     * Get trashed (soft deleted) items.
+     */
+    public function trashed(Request $request): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+
+        $query = Item::onlyTrashed()
+            ->with(['company', 'branch', 'unit', 'deletedBy'])
+            ->forCompany($companyId);
+
+        // Apply search to trashed items
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%")
+                  ->orWhere('item_number', 'like', "%{$search}%");
+            });
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'deleted_at');
+        $sortDirection = $request->get('sort_direction', 'desc');
+        $query->orderBy($sortBy, $sortDirection);
+
+        // Pagination
+        $perPage = $request->get('per_page', 15);
+        $trashedItems = $query->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $trashedItems,
+            'message' => 'Trashed items retrieved successfully',
+            'message_ar' => 'تم استرداد الأصناف المحذوفة بنجاح'
+        ]);
+    }
+
+    /**
+     * Get the first item.
+     */
+    public function first(): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+        
+        $item = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
+            ->forCompany($companyId)
+            ->orderBy('name')
+            ->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No items found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $item,
+            'message' => 'First item retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Get the last item.
+     */
+    public function last(): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+        
+        $item = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
+            ->forCompany($companyId)
+            ->orderBy('name', 'desc')
+            ->first();
+
+        if (!$item) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No items found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $item,
+            'message' => 'Last item retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Get items by type.
+     */
+    public function byType($type): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+        
+        $items = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
+            ->forCompany($companyId)
+            ->byType($type)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $items,
+            'message' => "Items of type {$type} retrieved successfully"
+        ]);
+    }
+
+    /**
+     * Get parent items only.
+     */
+    public function parents(): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+
+        $items = Item::with(['company', 'branch', 'user', 'unit', 'children'])
+            ->forCompany($companyId)
+            ->parentsOnly()
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $items,
+            'message' => 'Parent items retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Search for items with advanced filtering.
+     */
+    public function search(Request $request): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+
+        $query = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
+            ->forCompany($companyId);
+
+        // Search by ID (Item Number)
+        if ($request->has('id') && !empty($request->get('id'))) {
+            $query->where('id', $request->get('id'));
+        }
+
+        // Search by Item Number
+        if ($request->has('item_number') && !empty($request->get('item_number'))) {
+            $query->where('item_number', 'like', "%{$request->get('item_number')}%");
+        }
+
+        // Search by Name (اسم الصنف)
+        if ($request->has('name') && !empty($request->get('name'))) {
+            $query->where('name', 'like', "%{$request->get('name')}%");
+        }
+
+        // Search by Model (موديل)
+        if ($request->has('model') && !empty($request->get('model'))) {
+            $query->where('model', 'like', "%{$request->get('model')}%");
+        }
+
+        // Search by Balance (الرصيد)
+        if ($request->has('balance') && is_numeric($request->get('balance'))) {
+            $query->where('balance', $request->get('balance'));
+        }
+
+        // Balance range filters
+        if ($request->has('balance_from') && is_numeric($request->get('balance_from'))) {
+            $query->where('balance', '>=', $request->get('balance_from'));
+        }
+
+        if ($request->has('balance_to') && is_numeric($request->get('balance_to'))) {
+            $query->where('balance', '<=', $request->get('balance_to'));
+        }
+
+        // Additional filters
+        if ($request->has('active')) {
+            $query->where('active', $request->boolean('active'));
+        }
+
+        if ($request->has('type')) {
+            $query->where('type', $request->get('type'));
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'name');
+        $sortDirection = $request->get('sort_direction', 'asc');
+        $query->orderBy($sortBy, $sortDirection);
+
+        // Pagination
+        $perPage = $request->get('per_page', 15);
+        $items = $query->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $items,
+            'message' => 'Items search completed successfully',
+            'search_criteria' => [
+                'id' => $request->get('id'),
+                'item_number' => $request->get('item_number'),
+                'name' => $request->get('name'),
+                'model' => $request->get('model'),
+                'balance' => $request->get('balance'),
+                'balance_from' => $request->get('balance_from'),
+                'balance_to' => $request->get('balance_to'),
+            ]
+        ]);
+    }
+
+    /**
+     * Get comprehensive item data for detailed view.
+     */
+    private function getComprehensiveItemData($item): array
+    {
+        return [
+            // Basic Information
+            'basic_info' => [
+                'id' => $item->id,
+                'item_number' => $item->item_number,
+                'code' => $item->code,
+                'catalog_number' => $item->catalog_number,
+                'name' => $item->name,
+                'description' => $item->description,
+                'model' => $item->model,
+                'type' => $item->type,
+                'type_label' => $this->getTypeLabel($item->type),
+                'barcode' => $item->barcode,
+                'color' => $item->color,
+                'image' => $item->image,
+                'active' => $item->active,
+                'stock_tracking' => $item->stock_tracking,
+            ],
+
+            // Stock Information
+            'stock_info' => [
+                'quantity' => $item->quantity,
+                'balance' => $item->balance,
+                'minimum_limit' => $item->minimum_limit,
+                'maximum_limit' => $item->maximum_limit,
+                'reorder_limit' => $item->reorder_limit,
+                'max_reorder_limit' => $item->max_reorder_limit,
+                'stock_status' => $this->getStockStatus($item),
+            ],
+
+            // Sales & Purchase Prices Information
+            'pricing_info' => [
+                'purchase_prices' => [
+                    'first' => $item->first_purchase_price,
+                    'second' => $item->second_purchase_price,
+                    'third' => $item->third_purchase_price,
+                    'discount_rate' => $item->purchase_discount_rate,
+                    'include_vat' => $item->purchase_prices_include_vat,
+                    'last_from_purchases' => $item->getLastPurchasePriceFromPurchases(),
+                    'first_from_purchases' => $item->getFirstPurchasePriceFromPurchases(),
+                ],
+                'sale_prices' => [
+                    'first' => $item->first_sale_price,
+                    'second' => $item->second_sale_price,
+                    'third' => $item->third_sale_price,
+                    'discount_rate' => $item->sale_discount_rate,
+                    'maximum_discount_rate' => $item->maximum_sale_discount_rate,
+                    'minimum_allowed_price' => $item->minimum_allowed_sale_price,
+                    'include_vat' => $item->sale_prices_include_vat,
+                    'last_from_invoices' => $item->getLastSalePriceFromInvoices(),
+                    'first_from_invoices' => $item->getFirstSalePriceFromInvoices(),
+                ],
+                'vat_info' => [
+                    'item_subject_to_vat' => $item->item_subject_to_vat,
+                ],
+            ],
+
+            // Relationships
+            'relationships' => [
+                'company' => $item->company,
+                'branch' => $item->branch,
+                'user' => $item->user,
+                'unit' => $item->unit,
+                'parent' => $item->parent,
+                'children' => $item->children,
+                'item_units' => $item->itemUnits,
+            ],
+
+            // Audit Information
+            'audit_info' => [
+                'created_by' => $item->createdBy,
+                'updated_by' => $item->updatedBy,
+                'deleted_by' => $item->deletedBy,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+                'deleted_at' => $item->deleted_at,
+            ],
+
+            // Additional Notes
+            'notes' => $item->notes,
+        ];
+    }
+
+    /**
+     * Get comprehensive preview data with Arabic labels.
+     */
+    private function getComprehensivePreviewData($item): array
+    {
+        return [
+            // معلومات أساسية
+            'basic_info' => [
+                'title' => 'المعلومات الأساسية',
+                'data' => [
+                    'رقم الصنف' => $item->item_number,
+                    'كود الصنف' => $item->code,
+                    'رقم الكتالوج' => $item->catalog_number,
+                    'اسم الصنف' => $item->name,
+                    'بيان الصنف' => $item->description,
+                    'موديل' => $item->model,
+                    'نوع الصنف' => $this->getTypeLabel($item->type),
+                    'الباركود' => $item->barcode,
+                    'اللون' => $item->color,
+                    'الصورة' => $item->image,
+                    'نشط' => $item->active ? 'نعم' : 'لا',
+                    'تتبع المخزون' => $item->stock_tracking ? 'نعم' : 'لا',
+                ]
+            ],
+
+            // معلومات المخزون
+            'stock_info' => [
+                'title' => 'معلومات المخزون',
+                'data' => [
+                    'الكمية الحالية' => $item->quantity,
+                    'الرصيد' => $item->balance,
+                    'الحد الأدنى' => $item->minimum_limit,
+                    'الحد الأقصى' => $item->maximum_limit,
+                    'حد إعادة الطلب' => $item->reorder_limit,
+                    'أغلى حد لإعادة الطلب' => $item->max_reorder_limit,
+                    'حالة المخزون' => $this->getStockStatusArabic($item),
+                ]
+            ],
+
+            // أسعار البيع والشراء
+            'sales_purchase_prices' => [
+                'title' => 'أسعار البيع والشراء',
+                'data' => [
+                    // Sale Prices
+                    'سعر البيع الأول' => $item->first_sale_price ? number_format($item->first_sale_price, 2) . ' ريال' : 'غير محدد',
+                    'سعر البيع الثاني' => $item->second_sale_price ? number_format($item->second_sale_price, 2) . ' ريال' : 'غير محدد',
+                    'سعر البيع الثالث' => $item->third_sale_price ? number_format($item->third_sale_price, 2) . ' ريال' : 'غير محدد',
+                    'نسبة الخصم عند البيع' => $item->sale_discount_rate ? $item->sale_discount_rate . '%' : 'غير محدد',
+                    'أعلى نسبة خصم عند البيع' => $item->maximum_sale_discount_rate ? $item->maximum_sale_discount_rate . '%' : 'غير محدد',
+                    'أقل سعر بيع مسموح به' => $item->minimum_allowed_sale_price ? number_format($item->minimum_allowed_sale_price, 2) . ' ريال' : 'غير محدد',
+                    'أسعار البيع تشمل الضريبة المضافة' => $item->sale_prices_include_vat ? 'نعم' : 'لا',
+
+                    // Purchase Prices
+                    'سعر الشراء الأول' => $item->first_purchase_price ? number_format($item->first_purchase_price, 2) . ' ريال' : 'غير محدد',
+                    'سعر الشراء الثاني' => $item->second_purchase_price ? number_format($item->second_purchase_price, 2) . ' ريال' : 'غير محدد',
+                    'سعر الشراء الثالث' => $item->third_purchase_price ? number_format($item->third_purchase_price, 2) . ' ريال' : 'غير محدد',
+                    'نسبة الخصم عند الشراء' => $item->purchase_discount_rate ? $item->purchase_discount_rate . '%' : 'غير محدد',
+                    'أسعار الشراء تشمل الضريبة المضافة' => $item->purchase_prices_include_vat ? 'نعم' : 'لا',
+
+                    // VAT Information
+                    'يخضع الصنف لضريبة المضافة' => $item->item_subject_to_vat ? 'نعم' : 'لا',
+                ]
+            ],
+
+            // العلاقات
+            'relationships' => [
+                'title' => 'العلاقات والارتباطات',
+                'data' => [
+                    'الشركة' => $item->company ? $item->company->name : 'غير محدد',
+                    'الفرع' => $item->branch ? $item->branch->name : 'غير محدد',
+                    'المستخدم' => $item->user ? $item->user->name : 'غير محدد',
+                    'الوحدة' => $item->unit ? $item->unit->name . ' (' . $item->unit->symbol . ')' : 'غير محدد',
+                    'الصنف الأب' => $item->parent ? $item->parent->name : 'لا يوجد',
+                    'عدد الأصناف الفرعية' => $item->children ? $item->children->count() : 0,
+                ]
+            ],
+
+            // معلومات التدقيق
+            'audit_info' => [
+                'title' => 'معلومات التدقيق',
+                'data' => [
+                    'أنشئ بواسطة' => $item->createdBy ? $item->createdBy->name : 'غير محدد',
+                    'عُدل بواسطة' => $item->updatedBy ? $item->updatedBy->name : 'غير محدد',
+                    'حُذف بواسطة' => $item->deletedBy ? $item->deletedBy->name : 'غير محدد',
+                    'تاريخ الإنشاء' => $item->created_at ? $item->created_at->format('Y-m-d H:i:s') : 'غير محدد',
+                    'تاريخ التحديث' => $item->updated_at ? $item->updated_at->format('Y-m-d H:i:s') : 'غير محدد',
+                    'تاريخ الحذف' => $item->deleted_at ? $item->deleted_at->format('Y-m-d H:i:s') : 'غير محذوف',
+                ]
+            ],
+
+            // ملاحظات إضافية
+            'additional_info' => [
+                'title' => 'معلومات إضافية',
+                'data' => [
+                    'الملاحظات' => $item->notes ?: 'لا توجد ملاحظات',
+                    'الباركود' => $item->barcode ?: 'غير محدد',
+                    'نوع الباركود' => $item->barcode_type_display,
+                    'تاريخ الانتهاء' => $item->expiry_date ? $item->expiry_date->format('Y-m-d') : 'لا ينتهي',
+                    'حالة الانتهاء' => $item->expiry_status_arabic,
+                    'الأيام المتبقية' => $item->days_until_expiry !== null ? $item->days_until_expiry . ' يوم' : 'لا ينطبق',
+                    'الصورة' => $item->image ? 'متوفرة' : 'غير متوفرة',
+                    'اللون' => $item->color ?: 'غير محدد',
+                    'نوع الصنف' => $item->item_type_display,
+                    'نشط' => $item->active ? 'نعم' : 'لا',
+                    'تتبع المخزون' => $item->stock_tracking ? 'نعم' : 'لا',
+                    'وحدات الصنف' => $item->itemUnits ? $item->itemUnits->map(function($itemUnit) {
+                        return $itemUnit->unit->name . ' (' . $itemUnit->unit->symbol . ')';
+                    })->implode(', ') : 'لا توجد وحدات إضافية',
+                ]
+            ],
+
+            // الأصناف الفرعية
+            'children_items' => [
+                'title' => 'الأصناف الفرعية',
+                'data' => $item->children ? $item->children->map(function($child) {
+                    return [
+                        'رقم الصنف' => $child->item_number,
+                        'اسم الصنف' => $child->name,
+                        'الكمية' => $child->quantity,
+                        'الرصيد' => $child->balance,
+                    ];
+                }) : []
+            ]
+        ];
+    }
+
+    /**
+     * Get stock status in English.
+     */
+    private function getStockStatus($item): string
+    {
+        if ($item->quantity <= $item->minimum_limit) {
+            return 'Low Stock';
+        } elseif ($item->quantity <= $item->reorder_limit) {
+            return 'Reorder Required';
+        } elseif ($item->quantity >= $item->maximum_limit) {
+            return 'Overstock';
+        } else {
+            return 'Normal';
+        }
+    }
+
+    /**
+     * Get stock status in Arabic.
+     */
+    private function getStockStatusArabic($item): string
+    {
+        if ($item->quantity <= $item->minimum_limit) {
+            return 'مخزون منخفض';
+        } elseif ($item->quantity <= $item->reorder_limit) {
+            return 'يحتاج إعادة طلب';
+        } elseif ($item->quantity >= $item->maximum_limit) {
+            return 'مخزون زائد';
+        } else {
+            return 'طبيعي';
+        }
+    }
+
+    /**
+     * Apply dynamic field selection based on user preferences.
+     */
+    private function applyFieldSelection($items, Request $request)
+    {
+        // Get selected fields from request
+        $selectedFields = $request->get('fields', []);
+
+        // If no fields specified, return all data
+        if (empty($selectedFields) || !is_array($selectedFields)) {
+            return $items;
+        }
+
+        // Define available fields mapping (Arabic to English)
+        $fieldMapping = [
+            'item_number' => 'item_number',        // رقم الصنف
+            'code' => 'code',                      // كود الصنف
+            'catalog_number' => 'catalog_number',  // رقم الكتالوج
+            'name' => 'name',                      // اسم الصنف
+            'description' => 'description',        // بيان الصنف
+            'model' => 'model',                    // موديل
+            'unit' => 'unit',                      // الوحدة
+            'balance' => 'balance',                // الرصيد
+            'minimum_limit' => 'minimum_limit',    // الحد الأدنى
+            'maximum_limit' => 'maximum_limit',    // الحد الأقصى
+            'reorder_limit' => 'reorder_limit',    // حد إعادة الطلب
+            'max_reorder_limit' => 'max_reorder_limit', // أغلى حد لإعادة الطلب
+            'first_purchase_price' => 'first_purchase_price', // سعر الشراء الأول
+            'second_purchase_price' => 'second_purchase_price', // سعر الشراء الثاني
+            'third_purchase_price' => 'third_purchase_price', // سعر الشراء الثالث
+            'color' => 'color',                    // اللون
+            'image' => 'image',                    // الصورة
+        ];
+
+        // Always include ID for reference
+        $fieldsToInclude = ['id'];
+
+        // Add selected fields
+        foreach ($selectedFields as $field) {
+            if (isset($fieldMapping[$field])) {
+                $fieldsToInclude[] = $fieldMapping[$field];
+            }
+        }
+
+        // Transform the paginated data
+        if (method_exists($items, 'getCollection')) {
+            // For paginated results
+            $transformedCollection = $items->getCollection()->map(function ($item) use ($fieldsToInclude) {
+                return $this->selectItemFields($item, $fieldsToInclude);
+            });
+            $items->setCollection($transformedCollection);
+        } else {
+            // For regular collections
+            $items = $items->map(function ($item) use ($fieldsToInclude) {
+                return $this->selectItemFields($item, $fieldsToInclude);
+            });
+        }
+
+        return $items;
+    }
+
+    /**
+     * Select specific fields from an item.
+     */
+    private function selectItemFields($item, array $fieldsToInclude)
+    {
+        $selectedData = [];
+
+        foreach ($fieldsToInclude as $field) {
+            if ($field === 'unit' && $item->unit) {
+                $selectedData['unit'] = [
+                    'id' => $item->unit->id,
+                    'name' => $item->unit->name,
+                    'symbol' => $item->unit->symbol ?? null,
+                ];
+            } else {
+                $selectedData[$field] = $item->{$field} ?? null;
+            }
+        }
+
+        return $selectedData;
+    }
+
+    /**
+     * Apply advanced sorting to the query.
+     */
+    private function applySorting($query, Request $request)
+    {
+        // Define sortable columns with their database column names
+        $sortableColumns = [
+            'id' => 'id',
+            'item_number' => 'item_number',
+            'name' => 'name',
+            'code' => 'code',
+            'description' => 'description',
+            'model' => 'model',
+            'type' => 'type',
+            'quantity' => 'quantity',
+            'balance' => 'balance',
+            'minimum_limit' => 'minimum_limit',
+            'maximum_limit' => 'maximum_limit',
+            'reorder_limit' => 'reorder_limit',
+            'max_reorder_limit' => 'max_reorder_limit',
+            'first_purchase_price' => 'first_purchase_price',
+            'second_purchase_price' => 'second_purchase_price',
+            'third_purchase_price' => 'third_purchase_price',
+            'first_sale_price' => 'first_sale_price',
+            'second_sale_price' => 'second_sale_price',
+            'third_sale_price' => 'third_sale_price',
+            'active' => 'active',
+            'created_at' => 'created_at',
+            'updated_at' => 'updated_at',
+            'unit_name' => 'units.name', // For joined sorting
+        ];
+
+        // Multiple column sorting support
+        if ($request->has('sorts') && is_array($request->get('sorts'))) {
+            foreach ($request->get('sorts') as $sort) {
+                if (isset($sort['column']) && isset($sort['direction'])) {
+                    $column = $sort['column'];
+                    $direction = strtolower($sort['direction']) === 'desc' ? 'desc' : 'asc';
+
+                    if (isset($sortableColumns[$column])) {
+                        if ($column === 'unit_name') {
+                            $query->leftJoin('units', 'items.unit_id', '=', 'units.id')
+                                  ->orderBy('units.name', $direction);
+                        } else {
+                            $query->orderBy($sortableColumns[$column], $direction);
+                        }
+                    }
+                }
+            }
+        } else {
+            // Single column sorting (backward compatibility)
+            $sortBy = $request->get('sort_by', 'name');
+            $sortDirection = $request->get('sort_direction', 'asc');
+
+            if (isset($sortableColumns[$sortBy])) {
+                if ($sortBy === 'unit_name') {
+                    $query->leftJoin('units', 'items.unit_id', '=', 'units.id')
+                          ->orderBy('units.name', $sortDirection);
+                } else {
+                    $query->orderBy($sortableColumns[$sortBy], $sortDirection);
+                }
+            } else {
+                $query->orderBy('name', 'asc'); // Default sorting
+            }
+        }
+    }
+
+    /**
+     * Get sortable columns with their Arabic labels.
+     */
+    public function getSortableColumns(): JsonResponse
+    {
+        $columns = [
+            [
+                'key' => 'id',
+                'label' => 'الرقم',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'item_number',
+                'label' => 'رقم الصنف',
+                'type' => 'string',
+                'sortable' => true
+            ],
+            [
+                'key' => 'name',
+                'label' => 'اسم الصنف',
+                'type' => 'string',
+                'sortable' => true
+            ],
+            [
+                'key' => 'code',
+                'label' => 'كود الصنف',
+                'type' => 'string',
+                'sortable' => true
+            ],
+            [
+                'key' => 'description',
+                'label' => 'بيان الصنف',
+                'type' => 'text',
+                'sortable' => true
+            ],
+            [
+                'key' => 'model',
+                'label' => 'موديل',
+                'type' => 'string',
+                'sortable' => true
+            ],
+            [
+                'key' => 'type',
+                'label' => 'نوع الصنف',
+                'type' => 'string',
+                'sortable' => true
+            ],
+            [
+                'key' => 'unit_name',
+                'label' => 'الوحدة',
+                'type' => 'string',
+                'sortable' => true
+            ],
+            [
+                'key' => 'quantity',
+                'label' => 'الكمية',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'balance',
+                'label' => 'الرصيد',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'minimum_limit',
+                'label' => 'الحد الأدنى',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'maximum_limit',
+                'label' => 'الحد الأقصى',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'reorder_limit',
+                'label' => 'حد إعادة الطلب',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'first_purchase_price',
+                'label' => 'سعر الشراء الأول',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'second_purchase_price',
+                'label' => 'سعر الشراء الثاني',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'third_purchase_price',
+                'label' => 'سعر الشراء الثالث',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'first_sale_price',
+                'label' => 'سعر البيع الأول',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'second_sale_price',
+                'label' => 'سعر البيع الثاني',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'third_sale_price',
+                'label' => 'سعر البيع الثالث',
+                'type' => 'number',
+                'sortable' => true
+            ],
+            [
+                'key' => 'active',
+                'label' => 'نشط',
+                'type' => 'boolean',
+                'sortable' => true
+            ],
+            [
+                'key' => 'created_at',
+                'label' => 'تاريخ الإنشاء',
+                'type' => 'datetime',
+                'sortable' => true
+            ],
+            [
+                'key' => 'updated_at',
+                'label' => 'تاريخ التحديث',
+                'type' => 'datetime',
+                'sortable' => true
+            ]
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $columns,
+            'message' => 'Sortable columns retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Get available categories/types for filtering.
+     */
+    public function getCategories(): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? request()->company_id;
+
+        // Get distinct types from items
+        $types = Item::forCompany($companyId)
+            ->select('type')
+            ->distinct()
+            ->whereNotNull('type')
+            ->pluck('type')
+            ->map(function ($type) {
+                return [
+                    'key' => $type,
+                    'label' => $this->getTypeLabel($type),
+                    'count' => Item::forCompany(auth()->user()->company_id ?? request()->company_id)
+                        ->where('type', $type)
+                        ->count()
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => $types,
+            'message' => 'Categories retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Get Arabic label for item type.
+     */
+    private function getTypeLabel($type): string
+    {
+        $typeLabels = [
+            'product' => 'منتج',
+            'service' => 'خدمة',
+            'material' => 'مادة',
+            'raw_material' => 'مادة خام'
+        ];
+
+        return $typeLabels[$type] ?? $type;
+    }
+
+    /**
+     * Get available fields for dynamic selection.
+     */
+    public function getAvailableFields(): JsonResponse
+    {
+        $fields = [
+            [
+                'key' => 'item_number',
+                'label' => 'رقم الصنف',
+                'type' => 'string',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'code',
+                'label' => 'كود الصنف',
+                'type' => 'string',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'catalog_number',
+                'label' => 'رقم الكتالوج',
+                'type' => 'string',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'name',
+                'label' => 'اسم الصنف',
+                'type' => 'string',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'description',
+                'label' => 'بيان الصنف',
+                'type' => 'text',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'model',
+                'label' => 'موديل',
+                'type' => 'string',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'unit',
+                'label' => 'الوحدة',
+                'type' => 'object',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'balance',
+                'label' => 'الرصيد',
+                'type' => 'decimal',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'minimum_limit',
+                'label' => 'الحد الأدنى',
+                'type' => 'decimal',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'maximum_limit',
+                'label' => 'الحد الأقصى',
+                'type' => 'decimal',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'reorder_limit',
+                'label' => 'حد إعادة الطلب',
+                'type' => 'decimal',
+                'default_selected' => true
+            ],
+            [
+                'key' => 'max_reorder_limit',
+                'label' => 'أغلى حد لإعادة الطلب',
+                'type' => 'decimal',
+                'default_selected' => false
+            ],
+            [
+                'key' => 'first_purchase_price',
+                'label' => 'سعر الشراء الأول',
+                'type' => 'decimal',
+                'default_selected' => false
+            ],
+            [
+                'key' => 'second_purchase_price',
+                'label' => 'سعر الشراء الثاني',
+                'type' => 'decimal',
+                'default_selected' => false
+            ],
+            [
+                'key' => 'third_purchase_price',
+                'label' => 'سعر الشراء الثالث',
+                'type' => 'decimal',
+                'default_selected' => false
+            ],
+            [
+                'key' => 'color',
+                'label' => 'اللون',
+                'type' => 'string',
+                'default_selected' => false
+            ],
+            [
+                'key' => 'image',
+                'label' => 'الصورة',
+                'type' => 'string',
+                'default_selected' => false
+            ]
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $fields,
+            'message' => 'Available fields retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Get pricing validation and form data.
+     */
+    public function getPricingFormData(Request $request): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+
+        $data = [
+            'pricing_fields' => [
+                'sale_prices' => [
+                    'first_sale_price' => [
+                        'label' => 'سعر البيع الأول',
+                        'type' => 'decimal',
+                        'source' => 'invoice_lines_table',
+                        'logic' => 'fetch_last_sale_price_recorded'
+                    ],
+                    'second_sale_price' => [
+                        'label' => 'سعر البيع الثاني',
+                        'type' => 'decimal',
+                        'source' => 'manual_input'
+                    ],
+                    'third_sale_price' => [
+                        'label' => 'سعر البيع الثالث',
+                        'type' => 'decimal',
+                        'source' => 'invoice_lines_table',
+                        'logic' => 'fetch_first_sale_price_recorded'
+                    ],
+                    'sale_discount_rate' => [
+                        'label' => 'نسبة الخصم عند البيع',
+                        'type' => 'percentage',
+                        'source' => 'manual_input',
+                        'format' => 'must_be_percentage',
+                        'max' => 100
+                    ],
+                    'maximum_sale_discount_rate' => [
+                        'label' => 'أعلى نسبة خصم عند البيع',
+                        'type' => 'percentage',
+                        'source' => 'manual_input',
+                        'format' => 'must_be_percentage',
+                        'max' => 100
+                    ],
+                    'minimum_allowed_sale_price' => [
+                        'label' => 'أقل سعر بيع مسموح به',
+                        'type' => 'decimal',
+                        'source' => 'manual_input'
+                    ],
+                    'sale_prices_include_vat' => [
+                        'label' => 'أسعار البيع المذكورة تشمل الضريبة المضافة',
+                        'type' => 'toggle',
+                        'source' => 'manual_input',
+                        'logic' => 'activate_tax_handling_using_tax_rate_from_sales_items_table'
+                    ]
+                ],
+                'purchase_prices' => [
+                    'first_purchase_price' => [
+                        'label' => 'سعر الشراء الأول',
+                        'type' => 'decimal',
+                        'source' => 'purchase_items_table',
+                        'logic' => 'fetch_last_purchase_price_recorded'
+                    ],
+                    'second_purchase_price' => [
+                        'label' => 'سعر الشراء الثاني',
+                        'type' => 'decimal',
+                        'source' => 'purchase_items_table'
+                    ],
+                    'third_purchase_price' => [
+                        'label' => 'سعر الشراء الثالث',
+                        'type' => 'decimal',
+                        'source' => 'purchase_items_table',
+                        'logic' => 'fetch_first_purchase_price_recorded'
+                    ],
+                    'purchase_discount_rate' => [
+                        'label' => 'نسبة الخصم عند الشراء',
+                        'type' => 'percentage',
+                        'source' => 'manual_input',
+                        'format' => 'must_be_percentage',
+                        'max' => 100
+                    ],
+                    'purchase_prices_include_vat' => [
+                        'label' => 'أسعار الشراء المذكورة تشمل الضريبة المضافة',
+                        'type' => 'toggle',
+                        'source' => 'manual_input',
+                        'logic' => 'activate_tax_handling_using_tax_rate_from_purchase_items_table'
+                    ]
+                ],
+                'vat_info' => [
+                    'item_subject_to_vat' => [
+                        'label' => 'يخضع الصنف لضريبة المضافة',
+                        'type' => 'toggle',
+                        'source' => 'manual_input',
+                        'logic' => 'activate_tax_handling_using_rate_from_tax_rates_table'
+                    ]
+                ]
+            ],
+            'validation_rules' => [
+                'discount_rates_max' => 100,
+                'prices_min' => 0,
+                'percentage_format' => 'required_percentage_symbol'
+            ],
+            'external_table_references' => [
+                'invoice_lines' => [
+                    'fields' => ['first_sale_price'],
+                    'module' => 'sales'
+                ],
+                'purchase_items' => [
+                    'fields' => ['first_purchase_price'],
+                    'module' => 'purchases'
+                ],
+                'sales_items' => [
+                    'fields' => ['tax_rate'],
+                    'module' => 'sales'
+                ],
+                'purchase_items' => [
+                    'fields' => ['tax_rate'],
+                    'module' => 'purchases'
+                ],
+                'tax_rates' => [
+                    'fields' => ['rate'],
+                    'module' => 'invoices'
+                ]
+            ]
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+            'message' => 'Pricing form data retrieved successfully',
+            'message_ar' => 'تم استرداد بيانات نموذج التسعير بنجاح'
+        ]);
+    }
+
+    /**
+     * Validate pricing data.
+     */
+    public function validatePricingData(Request $request): JsonResponse
+    {
+        $request->validate([
+            'item_id' => 'required|exists:items,id',
+            'proposed_sale_price' => 'nullable|numeric|min:0',
+            'proposed_discount_rate' => 'nullable|numeric|min:0|max:100',
+        ]);
+
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $item = Item::forCompany($companyId)->findOrFail($request->item_id);
+
+        $validations = [];
+
+        // Validate minimum sale price
+        if ($request->has('proposed_sale_price')) {
+            $validations['minimum_price_check'] = [
+                'valid' => $item->validateMinimumSalePrice($request->proposed_sale_price),
+                'minimum_allowed' => $item->minimum_allowed_sale_price,
+                'proposed_price' => $request->proposed_sale_price,
+                'message' => $item->validateMinimumSalePrice($request->proposed_sale_price)
+                    ? 'السعر المقترح مقبول'
+                    : 'السعر المقترح أقل من الحد الأدنى المسموح'
+            ];
+        }
+
+        // Validate maximum discount rate
+        if ($request->has('proposed_discount_rate')) {
+            $validations['maximum_discount_check'] = [
+                'valid' => $item->validateMaximumDiscountRate($request->proposed_discount_rate),
+                'maximum_allowed' => $item->maximum_sale_discount_rate,
+                'proposed_discount' => $request->proposed_discount_rate,
+                'message' => $item->validateMaximumDiscountRate($request->proposed_discount_rate)
+                    ? 'نسبة الخصم المقترحة مقبولة'
+                    : 'نسبة الخصم المقترحة تتجاوز الحد الأقصى المسموح'
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $validations,
+            'message' => 'Pricing validation completed',
+            'message_ar' => 'تم التحقق من صحة التسعير'
+        ]);
+    }
+
+    /**
+     * Get barcode types for dropdown.
+     */
+    public function getBarcodeTypes(): JsonResponse
+    {
+        $barcodeTypes = Item::getAvailableBarcodeTypes();
+        $defaultType = Item::getDefaultBarcodeType();
+
+        $options = collect($barcodeTypes)->map(function ($name, $code) use ($defaultType) {
+            return [
+                'value' => $code,
+                'label' => $name,
+                'code' => $code,
+                'is_default' => $code === $defaultType,
+            ];
+        })->values();
+
+        return response()->json([
+            'success' => true,
+            'data' => $options,
+            'default_type' => $defaultType,
+            'supported_types' => [
+                'C128' => 'Code 128 - كود 128',
+                'EAN13' => 'EAN-13 - إي إيه إن-13',
+                'C39' => 'Code 39 - كود 39',
+                'UPCA' => 'UPC-A - يو بي سي-إيه',
+                'ITF' => 'Interleaved 2 of 5 - متداخل 2 من 5',
+            ],
+            'message' => 'Barcode types retrieved successfully',
+            'message_ar' => 'تم استرداد أنواع الباركود بنجاح'
+        ]);
+    }
+
+    /**
+     * Get item types for dropdown.
+     */
+    public function getItemTypes(Request $request): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+
+        $itemTypes = \Modules\Inventory\Models\ItemType::forCompany($companyId)
+            ->active()
+            ->orderBy('sort_order', 'asc')
+            ->orderBy('name', 'asc')
+            ->get(['id', 'code', 'name', 'name_ar', 'is_system']);
+
+        $options = $itemTypes->map(function ($type) {
+            return [
+                'value' => $type->code,
+                'label' => $type->display_name,
+                'id' => $type->id,
+                'is_system' => $type->is_system,
+            ];
+        });
+
+        // Add system types as base options
+        $systemTypes = collect(\Modules\Inventory\Models\ItemType::getSystemTypes())->map(function ($nameAr, $code) {
+            return [
+                'value' => $code,
+                'label' => $nameAr,
+                'is_system' => true,
+            ];
+        })->values();
+
+        return response()->json([
+            'success' => true,
+            'data' => $options,
+            'system_types' => $systemTypes,
+            'message' => 'Item types retrieved successfully',
+            'message_ar' => 'تم استرداد أنواع الأصناف بنجاح'
+        ]);
+    }
+
+    /**
+     * Generate barcode for item.
+     */
+    public function generateBarcode(Request $request, $id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $item = Item::forCompany($companyId)->findOrFail($id);
+
+        $request->validate([
+            'width' => 'nullable|integer|min:1|max:10',
+            'height' => 'nullable|integer|min:10|max:100',
+        ]);
+
+        try {
+            $options = [
+                'w' => $request->get('width', 2),
+                'h' => $request->get('height', 30),
+            ];
+
+            $barcodeImage = $item->generateBarcode($options);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'item_id' => $item->id,
+                    'barcode' => $item->barcode,
+                    'barcode_type' => $item->barcode_type,
+                    'barcode_type_display' => $item->barcode_type_display,
+                    'image' => 'data:image/png;base64,' . base64_encode($barcodeImage),
+                ],
+                'message' => 'Barcode generated successfully',
+                'message_ar' => 'تم إنشاء الباركود بنجاح'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate barcode: ' . $e->getMessage(),
+                'message_ar' => 'فشل في إنشاء الباركود: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Create custom item type.
+     */
+    public function createCustomItemType(Request $request): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'name_ar' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            $itemType = \Modules\Inventory\Models\ItemType::createCustomType(
+                $companyId,
+                $request->name,
+                $request->name_ar
+            );
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'value' => $itemType->code,
+                    'label' => $itemType->display_name,
+                    'id' => $itemType->id,
+                    'is_system' => false,
+                ],
+                'message' => 'Custom item type created successfully',
+                'message_ar' => 'تم إنشاء نوع الصنف المخصص بنجاح'
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create custom item type: ' . $e->getMessage(),
+                'message_ar' => 'فشل في إنشاء نوع الصنف المخصص: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Validate barcode format.
+     */
+    public function validateBarcode(Request $request): JsonResponse
+    {
+        $request->validate([
+            'barcode' => 'required|string',
+            'barcode_type' => 'required|string|in:C128,EAN13,C39,UPCA,ITF',
+        ]);
+
+        // Create a temporary item to use validation method
+        $tempItem = new Item([
+            'barcode' => $request->barcode,
+            'barcode_type' => $request->barcode_type,
+        ]);
+
+        $validation = $tempItem->validateBarcode();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'barcode' => $request->barcode,
+                'barcode_type' => $request->barcode_type,
+                'barcode_type_display' => Item::BARCODE_TYPE_OPTIONS[$request->barcode_type] ?? $request->barcode_type,
+                'validation' => $validation,
+            ],
+            'message' => 'Barcode validation completed',
+            'message_ar' => 'تم التحقق من صحة الباركود'
+        ]);
+    }
+}
