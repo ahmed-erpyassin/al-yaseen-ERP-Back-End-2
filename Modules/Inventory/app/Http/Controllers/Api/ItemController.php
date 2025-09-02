@@ -5,9 +5,14 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Modules\Inventory\Models\Item;
 use Modules\Inventory\Http\Requests\StoreItemRequest;
 use Modules\Inventory\Http\Requests\UpdateItemRequest;
+use Modules\Inventory\Exports\ItemTransactionsExport;
+use Modules\Inventory\Exports\ItemTransactionsMultiSheetExport;
+use Modules\Inventory\Exports\ItemTransactionsSummaryExport;
 
 class ItemController extends Controller
 {
@@ -104,7 +109,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Store a newly created item.
+     * Store a newly created item with all comprehensive data (Save functionality).
      */
     public function store(StoreItemRequest $request): JsonResponse
     {
@@ -123,49 +128,132 @@ class ItemController extends Controller
             ], 422);
         }
 
-        $data = $request->validated();
-        $data['company_id'] = $companyId;
-        $data['user_id'] = $userId;
-        $data['created_by'] = $userId;
+        try {
+            DB::beginTransaction();
 
-        // Auto-generate item number if not provided
-        if (empty($data['item_number'])) {
-            $data['item_number'] = $this->generateItemNumber($companyId);
-        }
+            $data = $request->validated();
+            $data['company_id'] = $companyId;
+            $data['user_id'] = $userId;
+            $data['created_by'] = $userId;
 
-        // Set default warehouse if not specified
-        if (empty($data['warehouse_id'])) {
-            $defaultWarehouse = $this->getDefaultWarehouse($companyId);
-            if ($defaultWarehouse) {
-                $data['warehouse_id'] = $defaultWarehouse->id;
+            // Auto-generate item number if not provided
+            if (empty($data['item_number'])) {
+                $data['item_number'] = $this->generateItemNumber($companyId);
             }
+
+            // Set default warehouse if not specified
+            if (empty($data['warehouse_id'])) {
+                $defaultWarehouse = $this->getDefaultWarehouse($companyId);
+                if ($defaultWarehouse) {
+                    $data['warehouse_id'] = $defaultWarehouse->id;
+                }
+            }
+
+            // Set default barcode type if barcode is provided but type is not
+            if (!empty($data['barcode']) && empty($data['barcode_type'])) {
+                $data['barcode_type'] = Item::getDefaultBarcodeType();
+            }
+
+            // Validate barcode if provided
+            if (!empty($data['barcode']) && !empty($data['barcode_type'])) {
+                $tempItem = new Item([
+                    'barcode' => $data['barcode'],
+                    'barcode_type' => $data['barcode_type'],
+                ]);
+                $validation = $tempItem->validateBarcode();
+                if (!$validation['valid']) {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Barcode validation failed',
+                        'message_ar' => 'فشل في التحقق من صحة الباركود',
+                        'errors' => ['barcode' => $validation['errors']]
+                    ], 422);
+                }
+            }
+
+            // Handle custom item type creation if needed
+            if (!empty($data['custom_item_type'])) {
+                $customType = \Modules\Inventory\Models\ItemType::createCustomType(
+                    $companyId,
+                    $data['custom_item_type'],
+                    $data['custom_item_type_ar'] ?? $data['custom_item_type']
+                );
+                $data['item_type'] = $customType->code;
+                unset($data['custom_item_type'], $data['custom_item_type_ar']);
+            }
+
+            // Create the main item record
+            $item = Item::create($data);
+
+            // Load all relationships for comprehensive response
+            $item->load([
+                'company:id,name',
+                'branch:id,name',
+                'user:id,name,email',
+                'unit:id,name,symbol',
+                'parent:id,item_number,name',
+                'createdBy:id,name,email',
+                'children:id,item_number,name',
+                'itemUnits.unit:id,name,symbol'
+            ]);
+
+            // Create initial inventory stock record if warehouse is specified
+            if (!empty($data['warehouse_id'])) {
+                $this->createInitialInventoryStock($item, $data['warehouse_id'], $data);
+            }
+
+            DB::commit();
+
+            // Prepare comprehensive response data
+            $responseData = [
+                'item' => $item,
+                'comprehensive_data' => $this->getComprehensiveItemData($item),
+                'validation_results' => [
+                    'barcode_validation' => !empty($item->barcode) ? $item->validateBarcode() : null,
+                    'expiry_status' => $item->expiry_status,
+                    'expiry_status_ar' => $item->expiry_status_arabic,
+                    'days_until_expiry' => $item->days_until_expiry,
+                    'is_expired' => $item->is_expired,
+                ],
+                'pricing_info' => $item->pricing_info,
+                'formatted_data' => [
+                    'barcode_type_display' => $item->barcode_type_display,
+                    'item_type_display' => $item->item_type_display,
+                    'formatted_discount_rates' => $item->formatted_discount_rates,
+                    'expiry_date_formatted' => $item->expiry_date ? $item->expiry_date->format('Y-m-d') : null,
+                ],
+                'system_info' => [
+                    'item_number_generated' => empty($request->item_number),
+                    'warehouse_assigned' => !empty($data['warehouse_id']),
+                    'barcode_type_defaulted' => !empty($data['barcode']) && empty($request->barcode_type),
+                    'custom_item_type_created' => !empty($request->custom_item_type),
+                ]
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $responseData,
+                'message' => 'Item saved successfully with all data',
+                'message_ar' => 'تم حفظ الصنف بنجاح مع جميع البيانات',
+                'save_status' => 'complete'
+            ], 201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to save item: ' . $e->getMessage(),
+                'message_ar' => 'فشل في حفظ الصنف: ' . $e->getMessage(),
+                'error_details' => [
+                    'type' => get_class($e),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ],
+                'save_status' => 'failed'
+            ], 500);
         }
-
-        // Create the item
-        $item = Item::create($data);
-
-        // Load relationships for response
-        $item->load([
-            'company:id,name',
-            'branch:id,name',
-            'user:id,name,email',
-            'unit:id,name,symbol',
-            'parent:id,item_number,name',
-            'createdBy:id,name,email'
-        ]);
-
-        // Create initial inventory stock record if warehouse is specified
-        if (!empty($data['warehouse_id'])) {
-            $this->createInitialInventoryStock($item, $data['warehouse_id'], $data);
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => $item,
-            'message' => 'Item created successfully',
-            'message_ar' => 'تم إنشاء الصنف بنجاح',
-            'warehouse_assigned' => !empty($data['warehouse_id'])
-        ], 201);
     }
 
     /**
@@ -1639,7 +1727,7 @@ class ItemController extends Controller
     }
 
     /**
-     * Generate barcode for item.
+     * Generate barcode for item (PNG or SVG).
      */
     public function generateBarcode(Request $request, $id): JsonResponse
     {
@@ -1649,15 +1737,34 @@ class ItemController extends Controller
         $request->validate([
             'width' => 'nullable|integer|min:1|max:10',
             'height' => 'nullable|integer|min:10|max:100',
+            'format' => 'nullable|string|in:png,svg',
+            'color' => 'nullable|string',
         ]);
 
         try {
+            $format = strtolower($request->get('format', 'png'));
+
             $options = [
                 'w' => $request->get('width', 2),
                 'h' => $request->get('height', 30),
+                'format' => $format,
             ];
 
+            // Set color based on format
+            if ($format === 'svg') {
+                $options['color'] = $request->get('color', 'black'); // SVG uses color names/hex
+            } else {
+                $options['color'] = [0, 0, 0]; // PNG uses RGB array
+            }
+
             $barcodeImage = $item->generateBarcode($options);
+
+            // Prepare response based on format
+            if ($format === 'svg') {
+                $dataUri = 'data:image/svg+xml;base64,' . base64_encode($barcodeImage);
+            } else {
+                $dataUri = 'data:image/png;base64,' . base64_encode($barcodeImage);
+            }
 
             return response()->json([
                 'success' => true,
@@ -1666,7 +1773,9 @@ class ItemController extends Controller
                     'barcode' => $item->barcode,
                     'barcode_type' => $item->barcode_type,
                     'barcode_type_display' => $item->barcode_type_display,
-                    'image' => 'data:image/png;base64,' . base64_encode($barcodeImage),
+                    'format' => $format,
+                    'image' => $dataUri,
+                    'raw_svg' => $format === 'svg' ? $barcodeImage : null, // Include raw SVG for direct use
                 ],
                 'message' => 'Barcode generated successfully',
                 'message_ar' => 'تم إنشاء الباركود بنجاح'
@@ -1720,6 +1829,53 @@ class ItemController extends Controller
     }
 
     /**
+     * Generate SVG barcode for item specifically.
+     */
+    public function generateBarcodeSVG(Request $request, $id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $item = Item::forCompany($companyId)->findOrFail($id);
+
+        $request->validate([
+            'width' => 'nullable|integer|min:1|max:10',
+            'height' => 'nullable|integer|min:10|max:100',
+            'color' => 'nullable|string',
+        ]);
+
+        try {
+            $options = [
+                'w' => $request->get('width', 2),
+                'h' => $request->get('height', 30),
+                'color' => $request->get('color', 'black'),
+            ];
+
+            $svgBarcode = $item->generateBarcodeSVG($options);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'item_id' => $item->id,
+                    'barcode' => $item->barcode,
+                    'barcode_type' => $item->barcode_type,
+                    'barcode_type_display' => $item->barcode_type_display,
+                    'format' => 'svg',
+                    'svg_content' => $svgBarcode,
+                    'data_uri' => 'data:image/svg+xml;base64,' . base64_encode($svgBarcode),
+                    'inline_svg' => $svgBarcode, // Raw SVG for direct HTML insertion
+                ],
+                'message' => 'SVG Barcode generated successfully',
+                'message_ar' => 'تم إنشاء الباركود SVG بنجاح'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate SVG barcode: ' . $e->getMessage(),
+                'message_ar' => 'فشل في إنشاء الباركود SVG: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
      * Validate barcode format.
      */
     public function validateBarcode(Request $request): JsonResponse
@@ -1748,5 +1904,506 @@ class ItemController extends Controller
             'message' => 'Barcode validation completed',
             'message_ar' => 'تم التحقق من صحة الباركود'
         ]);
+    }
+
+    /**
+     * Get all transactions/movements for a specific item.
+     */
+    public function getItemTransactions(Request $request, $id): JsonResponse
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $item = Item::forCompany($companyId)->findOrFail($id);
+
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'transaction_type' => 'nullable|string|in:sales,purchases,stock_movements,all',
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'sort_by' => 'nullable|string|in:date,type,quantity,amount',
+            'sort_direction' => 'nullable|string|in:asc,desc',
+        ]);
+
+        try {
+            $transactions = collect();
+            $transactionType = $request->get('transaction_type', 'all');
+            $dateFrom = $request->date_from;
+            $dateTo = $request->date_to;
+            $sortBy = $request->get('sort_by', 'date');
+            $sortDirection = $request->get('sort_direction', 'desc');
+
+            // Fetch Sales Transactions
+            if ($transactionType === 'all' || $transactionType === 'sales') {
+                $salesTransactions = $this->getSalesTransactions($item->id, $dateFrom, $dateTo);
+                $transactions = $transactions->merge($salesTransactions);
+            }
+
+            // Fetch Purchase Transactions
+            if ($transactionType === 'all' || $transactionType === 'purchases') {
+                $purchaseTransactions = $this->getPurchaseTransactions($item->id, $dateFrom, $dateTo);
+                $transactions = $transactions->merge($purchaseTransactions);
+            }
+
+            // Fetch Stock Movement Transactions
+            if ($transactionType === 'all' || $transactionType === 'stock_movements') {
+                $stockMovements = $this->getStockMovements($item->id, $dateFrom, $dateTo);
+                $transactions = $transactions->merge($stockMovements);
+            }
+
+            // Sort transactions
+            $transactions = $this->sortTransactions($transactions, $sortBy, $sortDirection);
+
+            // Paginate results
+            $perPage = $request->get('per_page', 15);
+            $currentPage = $request->get('page', 1);
+            $total = $transactions->count();
+            $paginatedTransactions = $transactions->forPage($currentPage, $perPage);
+
+            // Calculate summary statistics
+            $summary = $this->calculateTransactionSummary($transactions, $item);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'item' => [
+                        'id' => $item->id,
+                        'name' => $item->name,
+                        'code' => $item->code,
+                        'item_number' => $item->item_number,
+                        'current_balance' => $item->balance,
+                        'unit' => $item->unit ? $item->unit->name : null,
+                    ],
+                    'transactions' => $paginatedTransactions->values(),
+                    'summary' => $summary,
+                    'pagination' => [
+                        'current_page' => $currentPage,
+                        'per_page' => $perPage,
+                        'total' => $total,
+                        'last_page' => ceil($total / $perPage),
+                        'from' => ($currentPage - 1) * $perPage + 1,
+                        'to' => min($currentPage * $perPage, $total),
+                    ],
+                    'filters' => [
+                        'date_from' => $dateFrom,
+                        'date_to' => $dateTo,
+                        'transaction_type' => $transactionType,
+                        'sort_by' => $sortBy,
+                        'sort_direction' => $sortDirection,
+                    ]
+                ],
+                'message' => 'Item transactions retrieved successfully',
+                'message_ar' => 'تم استرداد حركات الصنف بنجاح'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve item transactions: ' . $e->getMessage(),
+                'message_ar' => 'فشل في استرداد حركات الصنف: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get sales transactions for an item.
+     */
+    private function getSalesTransactions($itemId, $dateFrom = null, $dateTo = null): \Illuminate\Support\Collection
+    {
+        $query = DB::table('sales_items')
+            ->join('sales', 'sales_items.sale_id', '=', 'sales.id')
+            ->leftJoin('customers', 'sales.customer_id', '=', 'customers.id')
+            ->where('sales_items.item_id', $itemId);
+
+        if ($dateFrom) {
+            $query->where('sales.sale_date', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $query->where('sales.sale_date', '<=', $dateTo);
+        }
+
+        $salesItems = $query->select([
+            'sales.id as transaction_id',
+            'sales.sale_number as document_number',
+            'sales.sale_date as transaction_date',
+            'sales_items.quantity',
+            'sales_items.unit_price',
+            'sales_items.total_amount',
+            'sales_items.discount_amount',
+            'customers.name as customer_name',
+            'sales.notes',
+            'sales.status'
+        ])->get();
+
+        return $salesItems->map(function ($item) {
+            return [
+                'id' => 'sale_' . $item->transaction_id,
+                'type' => 'sale',
+                'type_ar' => 'مبيعات',
+                'document_number' => $item->document_number,
+                'transaction_date' => $item->transaction_date,
+                'quantity' => -abs($item->quantity), // Negative for outgoing
+                'unit_price' => $item->unit_price,
+                'total_amount' => $item->total_amount,
+                'discount_amount' => $item->discount_amount ?? 0,
+                'net_amount' => $item->total_amount - ($item->discount_amount ?? 0),
+                'reference' => $item->customer_name ?? 'عميل غير محدد',
+                'notes' => $item->notes,
+                'status' => $item->status,
+                'status_ar' => $this->getStatusArabic($item->status),
+                'direction' => 'out',
+                'direction_ar' => 'صادر',
+                'icon' => 'sale',
+                'color' => 'success'
+            ];
+        });
+    }
+
+    /**
+     * Get purchase transactions for an item.
+     */
+    private function getPurchaseTransactions($itemId, $dateFrom = null, $dateTo = null): \Illuminate\Support\Collection
+    {
+        $query = DB::table('purchase_items')
+            ->join('purchases', 'purchase_items.purchase_id', '=', 'purchases.id')
+            ->leftJoin('suppliers', 'purchases.supplier_id', '=', 'suppliers.id')
+            ->where('purchase_items.item_id', $itemId);
+
+        if ($dateFrom) {
+            $query->where('purchases.purchase_date', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $query->where('purchases.purchase_date', '<=', $dateTo);
+        }
+
+        $purchaseItems = $query->select([
+            'purchases.id as transaction_id',
+            'purchases.purchase_number as document_number',
+            'purchases.purchase_date as transaction_date',
+            'purchase_items.quantity',
+            'purchase_items.unit_price',
+            'purchase_items.total_amount',
+            'purchase_items.discount_amount',
+            'suppliers.name as supplier_name',
+            'purchases.notes',
+            'purchases.status'
+        ])->get();
+
+        return $purchaseItems->map(function ($item) {
+            return [
+                'id' => 'purchase_' . $item->transaction_id,
+                'type' => 'purchase',
+                'type_ar' => 'مشتريات',
+                'document_number' => $item->document_number,
+                'transaction_date' => $item->transaction_date,
+                'quantity' => abs($item->quantity), // Positive for incoming
+                'unit_price' => $item->unit_price,
+                'total_amount' => $item->total_amount,
+                'discount_amount' => $item->discount_amount ?? 0,
+                'net_amount' => $item->total_amount - ($item->discount_amount ?? 0),
+                'reference' => $item->supplier_name ?? 'مورد غير محدد',
+                'notes' => $item->notes,
+                'status' => $item->status,
+                'status_ar' => $this->getStatusArabic($item->status),
+                'direction' => 'in',
+                'direction_ar' => 'وارد',
+                'icon' => 'purchase',
+                'color' => 'primary'
+            ];
+        });
+    }
+
+    /**
+     * Get stock movements for an item.
+     */
+    private function getStockMovements($itemId, $dateFrom = null, $dateTo = null): \Illuminate\Support\Collection
+    {
+        $query = DB::table('stock_movements')
+            ->leftJoin('warehouses as from_warehouse', 'stock_movements.from_warehouse_id', '=', 'from_warehouse.id')
+            ->leftJoin('warehouses as to_warehouse', 'stock_movements.to_warehouse_id', '=', 'to_warehouse.id')
+            ->leftJoin('users', 'stock_movements.created_by', '=', 'users.id')
+            ->where('stock_movements.item_id', $itemId);
+
+        if ($dateFrom) {
+            $query->where('stock_movements.movement_date', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $query->where('stock_movements.movement_date', '<=', $dateTo);
+        }
+
+        $stockMovements = $query->select([
+            'stock_movements.id as transaction_id',
+            'stock_movements.movement_number as document_number',
+            'stock_movements.movement_date as transaction_date',
+            'stock_movements.quantity',
+            'stock_movements.movement_type',
+            'stock_movements.reason',
+            'stock_movements.notes',
+            'from_warehouse.name as from_warehouse_name',
+            'to_warehouse.name as to_warehouse_name',
+            'users.name as created_by_name'
+        ])->get();
+
+        return $stockMovements->map(function ($item) {
+            $movementTypeAr = $this->getMovementTypeArabic($item->movement_type);
+            $isIncoming = in_array($item->movement_type, ['adjustment_in', 'transfer_in', 'return_in']);
+
+            return [
+                'id' => 'stock_' . $item->transaction_id,
+                'type' => 'stock_movement',
+                'type_ar' => 'حركة مخزون',
+                'document_number' => $item->document_number,
+                'transaction_date' => $item->transaction_date,
+                'quantity' => $isIncoming ? abs($item->quantity) : -abs($item->quantity),
+                'unit_price' => null,
+                'total_amount' => null,
+                'discount_amount' => 0,
+                'net_amount' => null,
+                'reference' => $this->getStockMovementReference($item),
+                'notes' => $item->notes,
+                'status' => 'completed',
+                'status_ar' => 'مكتمل',
+                'direction' => $isIncoming ? 'in' : 'out',
+                'direction_ar' => $isIncoming ? 'وارد' : 'صادر',
+                'movement_type' => $item->movement_type,
+                'movement_type_ar' => $movementTypeAr,
+                'reason' => $item->reason,
+                'created_by' => $item->created_by_name,
+                'icon' => 'stock_movement',
+                'color' => $isIncoming ? 'info' : 'warning'
+            ];
+        });
+    }
+
+    /**
+     * Sort transactions by specified field and direction.
+     */
+    private function sortTransactions($transactions, $sortBy, $sortDirection)
+    {
+        return $transactions->sortBy(function ($transaction) use ($sortBy) {
+            switch ($sortBy) {
+                case 'date':
+                    return $transaction['transaction_date'];
+                case 'type':
+                    return $transaction['type'];
+                case 'quantity':
+                    return abs($transaction['quantity']);
+                case 'amount':
+                    return $transaction['total_amount'] ?? 0;
+                default:
+                    return $transaction['transaction_date'];
+            }
+        }, SORT_REGULAR, $sortDirection === 'desc');
+    }
+
+    /**
+     * Calculate transaction summary statistics.
+     */
+    private function calculateTransactionSummary($transactions, $item)
+    {
+        $totalIn = $transactions->where('direction', 'in')->sum('quantity');
+        $totalOut = abs($transactions->where('direction', 'out')->sum('quantity'));
+        $totalSales = $transactions->where('type', 'sale')->sum('total_amount');
+        $totalPurchases = $transactions->where('type', 'purchase')->sum('total_amount');
+
+        $salesCount = $transactions->where('type', 'sale')->count();
+        $purchasesCount = $transactions->where('type', 'purchase')->count();
+        $stockMovementsCount = $transactions->where('type', 'stock_movement')->count();
+
+        return [
+            'current_balance' => $item->balance,
+            'total_transactions' => $transactions->count(),
+            'quantity_summary' => [
+                'total_in' => $totalIn,
+                'total_out' => $totalOut,
+                'net_movement' => $totalIn - $totalOut,
+            ],
+            'amount_summary' => [
+                'total_sales_amount' => $totalSales,
+                'total_purchases_amount' => $totalPurchases,
+                'net_amount' => $totalSales - $totalPurchases,
+            ],
+            'transaction_counts' => [
+                'sales' => $salesCount,
+                'purchases' => $purchasesCount,
+                'stock_movements' => $stockMovementsCount,
+            ],
+            'transaction_counts_ar' => [
+                'مبيعات' => $salesCount,
+                'مشتريات' => $purchasesCount,
+                'حركات مخزون' => $stockMovementsCount,
+            ]
+        ];
+    }
+
+    /**
+     * Get status in Arabic.
+     */
+    private function getStatusArabic($status)
+    {
+        $statusMap = [
+            'pending' => 'معلق',
+            'confirmed' => 'مؤكد',
+            'completed' => 'مكتمل',
+            'cancelled' => 'ملغي',
+            'draft' => 'مسودة',
+            'approved' => 'معتمد',
+            'rejected' => 'مرفوض',
+        ];
+
+        return $statusMap[$status] ?? $status;
+    }
+
+    /**
+     * Get movement type in Arabic.
+     */
+    private function getMovementTypeArabic($movementType)
+    {
+        $movementTypeMap = [
+            'adjustment_in' => 'تسوية وارد',
+            'adjustment_out' => 'تسوية صادر',
+            'transfer_in' => 'تحويل وارد',
+            'transfer_out' => 'تحويل صادر',
+            'return_in' => 'مرتجع وارد',
+            'return_out' => 'مرتجع صادر',
+            'damage' => 'تالف',
+            'expired' => 'منتهي الصلاحية',
+            'lost' => 'مفقود',
+            'found' => 'موجود',
+        ];
+
+        return $movementTypeMap[$movementType] ?? $movementType;
+    }
+
+    /**
+     * Get stock movement reference description.
+     */
+    private function getStockMovementReference($item)
+    {
+        if ($item->from_warehouse_name && $item->to_warehouse_name) {
+            return "من {$item->from_warehouse_name} إلى {$item->to_warehouse_name}";
+        } elseif ($item->from_warehouse_name) {
+            return "من {$item->from_warehouse_name}";
+        } elseif ($item->to_warehouse_name) {
+            return "إلى {$item->to_warehouse_name}";
+        } elseif ($item->created_by_name) {
+            return "بواسطة {$item->created_by_name}";
+        } else {
+            return 'حركة مخزون';
+        }
+    }
+
+    /**
+     * Export item transactions to Excel.
+     */
+    public function exportItemTransactions(Request $request, $id)
+    {
+        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $item = Item::forCompany($companyId)->findOrFail($id);
+
+        $request->validate([
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'transaction_type' => 'nullable|string|in:sales,purchases,stock_movements,all',
+            'export_type' => 'nullable|string|in:transactions,summary,multi_sheet',
+            'format' => 'nullable|string|in:xlsx,csv,pdf',
+        ]);
+
+        try {
+            $transactions = collect();
+            $transactionType = $request->get('transaction_type', 'all');
+            $exportType = $request->get('export_type', 'multi_sheet');
+            $format = $request->get('format', 'xlsx');
+            $dateFrom = $request->date_from;
+            $dateTo = $request->date_to;
+
+            // Fetch transactions based on type
+            if ($transactionType === 'all' || $transactionType === 'sales') {
+                $salesTransactions = $this->getSalesTransactions($item->id, $dateFrom, $dateTo);
+                $transactions = $transactions->merge($salesTransactions);
+            }
+
+            if ($transactionType === 'all' || $transactionType === 'purchases') {
+                $purchaseTransactions = $this->getPurchaseTransactions($item->id, $dateFrom, $dateTo);
+                $transactions = $transactions->merge($purchaseTransactions);
+            }
+
+            if ($transactionType === 'all' || $transactionType === 'stock_movements') {
+                $stockMovements = $this->getStockMovements($item->id, $dateFrom, $dateTo);
+                $transactions = $transactions->merge($stockMovements);
+            }
+
+            // Sort transactions by date (newest first)
+            $transactions = $this->sortTransactions($transactions, 'date', 'desc');
+
+            // Calculate summary
+            $summary = $this->calculateTransactionSummary($transactions, $item);
+
+            // Prepare item data
+            $itemData = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'code' => $item->code,
+                'item_number' => $item->item_number,
+                'current_balance' => $item->balance,
+                'unit' => $item->unit ? $item->unit->name : null,
+            ];
+
+            // Prepare filters data
+            $filters = [
+                'date_from' => $dateFrom,
+                'date_to' => $dateTo,
+                'transaction_type' => $transactionType,
+                'export_date' => now()->format('Y-m-d H:i:s'),
+            ];
+
+            // Generate filename
+            $filename = $this->generateExportFilename($item, $transactionType, $format);
+
+            // Export based on type
+            switch ($exportType) {
+                case 'transactions':
+                    return Excel::download(
+                        new ItemTransactionsExport($transactions, $itemData, $summary, $filters),
+                        $filename
+                    );
+
+                case 'summary':
+                    return Excel::download(
+                        new ItemTransactionsSummaryExport($itemData, $summary, $filters),
+                        $filename
+                    );
+
+                case 'multi_sheet':
+                default:
+                    return Excel::download(
+                        new ItemTransactionsMultiSheetExport($transactions, $itemData, $summary, $filters),
+                        $filename
+                    );
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to export item transactions: ' . $e->getMessage(),
+                'message_ar' => 'فشل في تصدير حركات الصنف: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Generate export filename.
+     */
+    private function generateExportFilename($item, $transactionType, $format): string
+    {
+        $typeMap = [
+            'all' => 'جميع_الحركات',
+            'sales' => 'المبيعات',
+            'purchases' => 'المشتريات',
+            'stock_movements' => 'حركات_المخزون'
+        ];
+
+        $typeName = $typeMap[$transactionType] ?? 'الحركات';
+        $date = now()->format('Y-m-d');
+
+        return "حركات_الصنف_{$item->code}_{$typeName}_{$date}.{$format}";
     }
 }

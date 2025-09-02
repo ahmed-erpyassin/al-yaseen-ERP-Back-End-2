@@ -24,7 +24,9 @@ return new class extends Migration
             $table->string('code'); // كود الصنف
             $table->string('catalog_number')->nullable(); // رقم الكتالوج
             $table->string('name'); // اسم الصنف
+            $table->string('name_ar')->nullable(); // الاسم بالعربية
             $table->text('description')->nullable(); // الوصف
+            $table->text('description_ar')->nullable(); // الوصف بالعربية
             $table->string('model')->nullable(); // موديل
             // $table->string('unit_name')->nullable(); take it from (unit_id) // الوحدة (text field)
 
@@ -40,6 +42,8 @@ return new class extends Migration
             $table->decimal('max_reorder_limit', 12, 2)->default(0); // أغلى حد لإعادة الطلب
 
             // Purchase Prices (أسعار الشراء)
+            $table->decimal('cost_price', 12, 2)->nullable(); // سعر التكلفة
+            $table->decimal('purchase_price', 12, 2)->nullable(); // سعر الشراء
             $table->decimal('first_purchase_price', 12, 2)->nullable(); // سعر الشراء الأول
             $table->decimal('second_purchase_price', 12, 2)->nullable(); // سعر الشراء الثاني
             $table->decimal('third_purchase_price', 12, 2)->nullable(); // سعر الشراء الثالث
@@ -47,6 +51,8 @@ return new class extends Migration
             $table->boolean('purchase_prices_include_vat')->default(false); // أسعار الشراء المذكورة تشمل الضريبة المضافة
 
             // Sale Prices (أسعار البيع)
+            $table->decimal('sale_price', 12, 2)->nullable(); // سعر البيع
+            $table->decimal('minimum_sale_price', 12, 2)->nullable(); // الحد الأدنى لسعر البيع
             $table->decimal('first_sale_price', 12, 2)->nullable(); // سعر البيع الأول
             $table->decimal('second_sale_price', 12, 2)->nullable(); // سعر البيع الثاني
             $table->decimal('third_sale_price', 12, 2)->nullable(); // سعر البيع الثالث

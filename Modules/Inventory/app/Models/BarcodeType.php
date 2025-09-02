@@ -153,17 +153,58 @@ class BarcodeType extends Model
     public function generateBarcodeImage(string $barcode, array $options = []): string
     {
         $generator = new \Milon\Barcode\DNS1D();
-        
+
         $defaultOptions = [
             'w' => 2, // Width
             'h' => 30, // Height
             'color' => [0, 0, 0], // Black color
+            'format' => 'png', // Default format
         ];
-        
+
         $options = array_merge($defaultOptions, $options);
-        
+
         try {
-            return $generator->getBarcodePNG(
+            // Generate based on format
+            if (strtolower($options['format']) === 'svg') {
+                return $generator->getBarcodeSVG(
+                    $barcode,
+                    $this->code,
+                    $options['w'],
+                    $options['h'],
+                    'black' // SVG uses color names or hex
+                );
+            } else {
+                // Default PNG format
+                return $generator->getBarcodePNG(
+                    $barcode,
+                    $this->code,
+                    $options['w'],
+                    $options['h'],
+                    $options['color']
+                );
+            }
+        } catch (\Exception $e) {
+            throw new \Exception("فشل في إنشاء الباركود: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Generate SVG barcode specifically.
+     */
+    public function generateBarcodeSVG(string $barcode, array $options = []): string
+    {
+        $generator = new \Milon\Barcode\DNS1D();
+
+        $defaultOptions = [
+            'w' => 2, // Width
+            'h' => 30, // Height
+            'color' => 'black', // SVG color
+        ];
+
+        $options = array_merge($defaultOptions, $options);
+
+        try {
+            return $generator->getBarcodeSVG(
                 $barcode,
                 $this->code,
                 $options['w'],
@@ -171,7 +212,7 @@ class BarcodeType extends Model
                 $options['color']
             );
         } catch (\Exception $e) {
-            throw new \Exception("فشل في إنشاء الباركود: " . $e->getMessage());
+            throw new \Exception("فشل في إنشاء الباركود SVG: " . $e->getMessage());
         }
     }
 

@@ -90,6 +90,9 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::post('/custom-item-type', [ItemController::class, 'createCustomItemType'])->name('inventory.items.custom-item-type');
         Route::post('/validate-barcode', [ItemController::class, 'validateBarcode'])->name('inventory.items.validate-barcode');
         Route::post('/{item}/generate-barcode', [ItemController::class, 'generateBarcode'])->name('inventory.items.generate-barcode');
+        Route::post('/{item}/generate-barcode-svg', [ItemController::class, 'generateBarcodeSVG'])->name('inventory.items.generate-barcode-svg');
+        Route::get('/{item}/transactions', [ItemController::class, 'getItemTransactions'])->name('inventory.items.transactions');
+        Route::get('/{item}/transactions/export', [ItemController::class, 'exportItemTransactions'])->name('inventory.items.transactions.export');
         Route::get('/first', [ItemController::class, 'first'])->name('inventory.items.first');
         Route::get('/last', [ItemController::class, 'last'])->name('inventory.items.last');
         Route::get('/parents', [ItemController::class, 'parents'])->name('inventory.items.parents');
@@ -128,6 +131,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/{id}', [BarcodeTypeController::class, 'show'])->name('inventory.barcode-types.show');
         Route::post('/validate', [BarcodeTypeController::class, 'validateBarcode'])->name('inventory.barcode-types.validate');
         Route::post('/generate', [BarcodeTypeController::class, 'generateBarcode'])->name('inventory.barcode-types.generate');
+        Route::post('/generate-svg', [BarcodeTypeController::class, 'generateBarcodeSVG'])->name('inventory.barcode-types.generate-svg');
     });
 
     // Item Types Routes

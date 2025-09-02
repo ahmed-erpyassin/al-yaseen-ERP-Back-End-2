@@ -108,7 +108,7 @@ class BarcodeTypeController extends Controller
     }
 
     /**
-     * Generate barcode image.
+     * Generate barcode image (PNG or SVG).
      */
     public function generateBarcode(Request $request): JsonResponse
     {
@@ -117,25 +117,44 @@ class BarcodeTypeController extends Controller
             'barcode_type_id' => 'required|exists:barcode_types,id',
             'width' => 'nullable|integer|min:1|max:10',
             'height' => 'nullable|integer|min:10|max:100',
+            'format' => 'nullable|string|in:png,svg',
+            'color' => 'nullable|string',
         ]);
 
         try {
             $barcodeType = BarcodeType::findOrFail($request->barcode_type_id);
-            
+            $format = strtolower($request->get('format', 'png'));
+
             $options = [
                 'w' => $request->get('width', 2),
                 'h' => $request->get('height', 30),
-                'color' => [0, 0, 0], // Black
+                'format' => $format,
             ];
 
+            // Set color based on format
+            if ($format === 'svg') {
+                $options['color'] = $request->get('color', 'black'); // SVG uses color names/hex
+            } else {
+                $options['color'] = [0, 0, 0]; // PNG uses RGB array
+            }
+
             $barcodeImage = $barcodeType->generateBarcodeImage($request->barcode, $options);
+
+            // Prepare response based on format
+            if ($format === 'svg') {
+                $dataUri = 'data:image/svg+xml;base64,' . base64_encode($barcodeImage);
+            } else {
+                $dataUri = 'data:image/png;base64,' . base64_encode($barcodeImage);
+            }
 
             return response()->json([
                 'success' => true,
                 'data' => [
                     'barcode' => $request->barcode,
                     'type' => $barcodeType->code,
-                    'image' => 'data:image/png;base64,' . base64_encode($barcodeImage),
+                    'format' => $format,
+                    'image' => $dataUri,
+                    'raw_svg' => $format === 'svg' ? $barcodeImage : null, // Include raw SVG for direct use
                 ],
                 'message' => 'Barcode generated successfully',
                 'message_ar' => 'تم إنشاء الباركود بنجاح'
@@ -145,6 +164,54 @@ class BarcodeTypeController extends Controller
                 'success' => false,
                 'message' => 'Failed to generate barcode: ' . $e->getMessage(),
                 'message_ar' => 'فشل في إنشاء الباركود: ' . $e->getMessage()
+            ], 422);
+        }
+    }
+
+    /**
+     * Generate SVG barcode specifically.
+     */
+    public function generateBarcodeSVG(Request $request): JsonResponse
+    {
+        $request->validate([
+            'barcode' => 'required|string',
+            'barcode_type_id' => 'required|exists:barcode_types,id',
+            'width' => 'nullable|integer|min:1|max:10',
+            'height' => 'nullable|integer|min:10|max:100',
+            'color' => 'nullable|string',
+        ]);
+
+        try {
+            $barcodeType = BarcodeType::findOrFail($request->barcode_type_id);
+
+            $options = [
+                'w' => $request->get('width', 2),
+                'h' => $request->get('height', 30),
+                'color' => $request->get('color', 'black'),
+            ];
+
+            $svgBarcode = $barcodeType->generateBarcodeSVG($request->barcode, $options);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'barcode' => $request->barcode,
+                    'type' => $barcodeType->code,
+                    'type_name' => $barcodeType->display_name,
+                    'format' => 'svg',
+                    'svg_content' => $svgBarcode,
+                    'data_uri' => 'data:image/svg+xml;base64,' . base64_encode($svgBarcode),
+                    'inline_svg' => $svgBarcode, // Raw SVG for direct HTML insertion
+                    'options' => $options,
+                ],
+                'message' => 'SVG Barcode generated successfully',
+                'message_ar' => 'تم إنشاء الباركود SVG بنجاح'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate SVG barcode: ' . $e->getMessage(),
+                'message_ar' => 'فشل في إنشاء الباركود SVG: ' . $e->getMessage()
             ], 422);
         }
     }

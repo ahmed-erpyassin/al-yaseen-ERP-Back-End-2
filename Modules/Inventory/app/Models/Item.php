@@ -23,7 +23,9 @@ class Item extends Model
         'code',
         'catalog_number',
         'name',
+        'name_ar', // الاسم بالعربية
         'description',
+        'description_ar', // الوصف بالعربية
         'model',
         'unit_name',
         'type',
@@ -34,6 +36,8 @@ class Item extends Model
         'reorder_limit',
         'max_reorder_limit',
         // Purchase Prices (أسعار الشراء)
+        'cost_price', // سعر التكلفة
+        'purchase_price', // سعر الشراء
         'first_purchase_price',
         'second_purchase_price',
         'third_purchase_price',
@@ -41,6 +45,8 @@ class Item extends Model
         'purchase_prices_include_vat',
 
         // Sale Prices (أسعار البيع)
+        'sale_price', // سعر البيع
+        'minimum_sale_price', // الحد الأدنى لسعر البيع
         'first_sale_price',
         'second_sale_price',
         'third_sale_price',
@@ -600,7 +606,7 @@ class Item extends Model
     }
 
     /**
-     * Generate barcode for this item using Milon library.
+     * Generate barcode for this item using Milon library (PNG or SVG).
      */
     public function generateBarcode(array $options = []): string
     {
@@ -613,13 +619,58 @@ class Item extends Model
         $defaultOptions = [
             'w' => 2, // Width
             'h' => 30, // Height
-            'color' => [0, 0, 0], // Black color
+            'color' => [0, 0, 0], // Black color for PNG
+            'format' => 'png', // Default format
         ];
 
         $options = array_merge($defaultOptions, $options);
 
         try {
-            return $generator->getBarcodePNG(
+            // Generate based on format
+            if (strtolower($options['format']) === 'svg') {
+                return $generator->getBarcodeSVG(
+                    $this->barcode,
+                    $this->barcode_type,
+                    $options['w'],
+                    $options['h'],
+                    is_array($options['color']) ? 'black' : $options['color'] // Convert to SVG color
+                );
+            } else {
+                // Default PNG format
+                return $generator->getBarcodePNG(
+                    $this->barcode,
+                    $this->barcode_type,
+                    $options['w'],
+                    $options['h'],
+                    $options['color']
+                );
+            }
+        } catch (\Exception $e) {
+            throw new \Exception("فشل في إنشاء الباركود: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Generate SVG barcode specifically for this item.
+     */
+    public function generateBarcodeSVG(array $options = []): string
+    {
+        if (!$this->barcode || !$this->barcode_type) {
+            throw new \Exception('الباركود أو نوع الباركود غير محدد');
+        }
+
+        $generator = new \Milon\Barcode\DNS1D();
+
+        $defaultOptions = [
+            'w' => 2, // Width
+            'h' => 30, // Height
+            'color' => 'black', // SVG color
+        ];
+
+        $options = array_merge($defaultOptions, $options);
+
+        try {
+            return $generator->getBarcodeSVG(
                 $this->barcode,
                 $this->barcode_type,
                 $options['w'],
@@ -627,7 +678,7 @@ class Item extends Model
                 $options['color']
             );
         } catch (\Exception $e) {
-            throw new \Exception("فشل في إنشاء الباركود: " . $e->getMessage());
+            throw new \Exception("فشل في إنشاء الباركود SVG: " . $e->getMessage());
         }
     }
 

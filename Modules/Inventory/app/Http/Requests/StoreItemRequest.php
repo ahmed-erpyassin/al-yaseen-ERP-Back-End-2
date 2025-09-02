@@ -28,7 +28,9 @@ class StoreItemRequest extends FormRequest
             'code' => 'required|string|max:255|unique:items,code',
             'catalog_number' => 'nullable|string|max:255|unique:items,catalog_number',
             'name' => 'required|string|max:255',
+            'name_ar' => 'nullable|string|max:255', // الاسم بالعربية
             'description' => 'nullable|string',
+            'description_ar' => 'nullable|string', // الوصف بالعربية
             'model' => 'nullable|string|max:255',
             'unit_name' => 'nullable|string|max:255',
             'type' => 'required|in:product,service,material,raw_material',
@@ -39,6 +41,8 @@ class StoreItemRequest extends FormRequest
             'reorder_limit' => 'nullable|numeric|min:0',
             'max_reorder_limit' => 'nullable|numeric|min:0',
             // Purchase Prices (أسعار الشراء)
+            'cost_price' => 'nullable|numeric|min:0', // سعر التكلفة
+            'purchase_price' => 'nullable|numeric|min:0', // سعر الشراء
             'first_purchase_price' => 'nullable|numeric|min:0',
             'second_purchase_price' => 'nullable|numeric|min:0',
             'third_purchase_price' => 'nullable|numeric|min:0',
@@ -46,6 +50,8 @@ class StoreItemRequest extends FormRequest
             'purchase_prices_include_vat' => 'boolean',
 
             // Sale Prices (أسعار البيع)
+            'sale_price' => 'nullable|numeric|min:0', // سعر البيع
+            'minimum_sale_price' => 'nullable|numeric|min:0', // الحد الأدنى لسعر البيع
             'first_sale_price' => 'nullable|numeric|min:0',
             'second_sale_price' => 'nullable|numeric|min:0',
             'third_sale_price' => 'nullable|numeric|min:0',
@@ -68,6 +74,8 @@ class StoreItemRequest extends FormRequest
             'image' => 'nullable|string|max:255',
             'color' => 'nullable|string|max:255',
             'item_type' => 'required|string|max:255',
+            'custom_item_type' => 'nullable|string|max:255',
+            'custom_item_type_ar' => 'nullable|string|max:255',
 
             'active' => 'boolean',
             'stock_tracking' => 'boolean',
@@ -89,6 +97,16 @@ class StoreItemRequest extends FormRequest
             'code.unique' => 'كود الصنف موجود مسبقاً',
             'catalog_number.unique' => 'رقم الكتالوج موجود مسبقاً',
             'name.required' => 'اسم الصنف مطلوب',
+            'name_ar.max' => 'الاسم بالعربية يجب أن يكون أقل من 255 حرف',
+            'description_ar.string' => 'الوصف بالعربية يجب أن يكون نص',
+            'cost_price.numeric' => 'سعر التكلفة يجب أن يكون رقم',
+            'cost_price.min' => 'سعر التكلفة يجب أن يكون أكبر من أو يساوي صفر',
+            'purchase_price.numeric' => 'سعر الشراء يجب أن يكون رقم',
+            'purchase_price.min' => 'سعر الشراء يجب أن يكون أكبر من أو يساوي صفر',
+            'sale_price.numeric' => 'سعر البيع يجب أن يكون رقم',
+            'sale_price.min' => 'سعر البيع يجب أن يكون أكبر من أو يساوي صفر',
+            'minimum_sale_price.numeric' => 'الحد الأدنى لسعر البيع يجب أن يكون رقم',
+            'minimum_sale_price.min' => 'الحد الأدنى لسعر البيع يجب أن يكون أكبر من أو يساوي صفر',
             'type.required' => 'نوع الصنف مطلوب',
             'type.in' => 'نوع الصنف غير صحيح',
             'barcode.unique' => 'الباركود موجود مسبقاً',
@@ -134,6 +152,8 @@ class StoreItemRequest extends FormRequest
             'expiry_date.after' => 'تاريخ الانتهاء يجب أن يكون بعد اليوم',
             'item_type.required' => 'نوع الصنف مطلوب',
             'item_type.max' => 'نوع الصنف يجب أن يكون أقل من 255 حرف',
+            'custom_item_type.max' => 'نوع الصنف المخصص يجب أن يكون أقل من 255 حرف',
+            'custom_item_type_ar.max' => 'نوع الصنف المخصص بالعربية يجب أن يكون أقل من 255 حرف',
         ];
     }
 }
