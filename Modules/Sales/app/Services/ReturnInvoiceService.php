@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Modules\Sales\app\Enums\SalesTypeEnum;
 use Modules\Sales\Http\Requests\ReturnInvoiceRequest;
+use Modules\Sales\Models\Sale;
 
 class ReturnInvoiceService
 {
@@ -18,7 +19,7 @@ class ReturnInvoiceService
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
 
-            return SalesInvoice::query()
+            return Sale::query()
                 ->where('type', SalesTypeEnum::RETURN_INVOICE)
                 ->when($customerSearch, function ($query, $customerSearch) {
                     $query->whereHas('customer', function ($q) use ($customerSearch) {
@@ -46,7 +47,7 @@ class ReturnInvoiceService
                 'status'     => 'draft',
             ] + $request->validated();
 
-            $invoice = SalesInvoice::create($data);
+            $invoice = Sale::create($data);
 
             return $invoice;
         } catch (Exception $e) {

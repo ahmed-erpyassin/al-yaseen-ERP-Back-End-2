@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Modules\Sales\app\Enums\SalesTypeEnum;
 use Modules\Sales\Http\Requests\IncomingOrderRequest;
+use Modules\Sales\Models\Sale;
 
 class IncomingOrderService
 {
@@ -18,7 +19,7 @@ class IncomingOrderService
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
 
-            return SalesInvoice::query()
+            return Sale::query()
                 ->where('type', SalesTypeEnum::INCOMING_ORDER)
                 ->when($customerSearch, function ($query, $customerSearch) {
                     $query->whereHas('customer', function ($q) use ($customerSearch) {
@@ -46,7 +47,7 @@ class IncomingOrderService
                 'status'     => 'draft',
             ] + $request->validated();
 
-            $offer = SalesInvoice::create($data);
+            $offer = Sale::create($data);
 
             return $offer;
         } catch (Exception $e) {

@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request as Request;
 use Modules\Sales\app\Enums\SalesTypeEnum;
 use Modules\Sales\Http\Requests\OutgoingOfferRequest;
+use Modules\Sales\Models\Sale;
 
 class OutgoingOfferService
 {
@@ -19,7 +20,7 @@ class OutgoingOfferService
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
 
-            return SalesInvoice::query()
+            return Sale::query()
                 ->where('type', SalesTypeEnum::QUOTATION)
                 ->when($customerSearch, function ($query, $customerSearch) {
                     $query->whereHas('customer', function ($q) use ($customerSearch) {
@@ -47,7 +48,7 @@ class OutgoingOfferService
                 'status'     => 'draft',
             ] + $request->validated();
 
-            $offer = SalesInvoice::create($data);
+            $offer = Sale::create($data);
 
             return $offer;
 

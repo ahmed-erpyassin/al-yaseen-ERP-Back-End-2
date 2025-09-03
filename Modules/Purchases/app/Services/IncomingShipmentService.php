@@ -1,15 +1,16 @@
 <?php
 
-namespace Modules\Sales\app\Services;
+namespace Modules\Purchases\app\Services;
 
-use App\Models\SalesInvoice;
 use Exception;
 use Illuminate\Http\Request;
-use Modules\Sales\app\Enums\SalesTypeEnum;
-use Modules\Sales\Http\Requests\ServiceRequest;
-use Modules\Sales\Models\Sale;
+use Modules\Purchases\app\Enums\PurchaseTypeEnum;
+use Modules\Purchases\app\Enums\SalesTypeEnum;
+use Modules\Purchases\Http\Requests\IncomingShipmentRequest;
+use Modules\Purchases\Http\Requests\OutgoingShipmentRequest;
+use Modules\Purchases\Models\Purchase;
 
-class ServiceService
+class IncomingShipmentService
 {
     public function index(Request $request)
     {
@@ -19,8 +20,8 @@ class ServiceService
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
 
-            return Sale::query()
-                ->where('type', SalesTypeEnum::SERVICE)
+            return Purchase::query()
+                ->where('type', PurchaseTypeEnum::INCOMING_SHIPMENT)
                 ->when($customerSearch, function ($query, $customerSearch) {
                     $query->whereHas('customer', function ($q) use ($customerSearch) {
                         $q->where('name', 'like', '%' . $customerSearch . '%');
@@ -33,7 +34,7 @@ class ServiceService
         }
     }
 
-    public function store(ServiceRequest $request)
+    public function store(IncomingShipmentRequest $request)
     {
 
         try {
@@ -41,13 +42,13 @@ class ServiceService
             $userId = $request->user()->id;
 
             $data = [
-                'type'       => SalesTypeEnum::SERVICE,
+                'type'       => PurchaseTypeEnum::INCOMING_SHIPMENT,
                 'company_id' => $companyId,
                 'user_id'    => $userId,
                 'status'     => 'draft',
             ] + $request->validated();
 
-            $offer = Sale::create($data);
+            $offer = Purchase::create($data);
 
             return $offer;
         } catch (Exception $e) {

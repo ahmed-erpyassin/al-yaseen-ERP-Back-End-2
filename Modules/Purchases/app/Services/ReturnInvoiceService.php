@@ -1,15 +1,14 @@
 <?php
 
-namespace Modules\Sales\app\Services;
+namespace Modules\Purchases\app\Services;
 
 use App\Models\SalesInvoice;
 use Exception;
 use Illuminate\Http\Request;
 use Modules\Sales\app\Enums\SalesTypeEnum;
-use Modules\Sales\Http\Requests\ServiceRequest;
-use Modules\Sales\Models\Sale;
+use Modules\Sales\Http\Requests\ReturnInvoiceRequest;
 
-class ServiceService
+class ReturnInvoiceService
 {
     public function index(Request $request)
     {
@@ -19,8 +18,8 @@ class ServiceService
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
 
-            return Sale::query()
-                ->where('type', SalesTypeEnum::SERVICE)
+            return SalesInvoice::query()
+                ->where('type', SalesTypeEnum::RETURN_INVOICE)
                 ->when($customerSearch, function ($query, $customerSearch) {
                     $query->whereHas('customer', function ($q) use ($customerSearch) {
                         $q->where('name', 'like', '%' . $customerSearch . '%');
@@ -33,7 +32,7 @@ class ServiceService
         }
     }
 
-    public function store(ServiceRequest $request)
+    public function store(ReturnInvoiceRequest $request)
     {
 
         try {
@@ -41,15 +40,15 @@ class ServiceService
             $userId = $request->user()->id;
 
             $data = [
-                'type'       => SalesTypeEnum::SERVICE,
+                'type'       => SalesTypeEnum::RETURN_INVOICE,
                 'company_id' => $companyId,
                 'user_id'    => $userId,
                 'status'     => 'draft',
             ] + $request->validated();
 
-            $offer = Sale::create($data);
+            $invoice = SalesInvoice::create($data);
 
-            return $offer;
+            return $invoice;
         } catch (Exception $e) {
             throw new \Exception('Error creating outgoing offer: ' . $e->getMessage());
         }
