@@ -18,25 +18,29 @@ return new class extends Migration
             $table->foreignId('branch_id')->nullable()->constrained('branches')->nullOnDelete();
 
             // Warehouse Information
-            $table->string('name'); // اسم المخزن
-            $table->string('code')->nullable(); // رقم المخزن
-            $table->string('location')->nullable(); // الموقع
+            $table->string('warehouse_number')->unique(); // رقم المخزن (Warehouse Number)
+            $table->string('name'); // اسم المخزن (Warehouse Name)
+            $table->text('address')->nullable(); // العنوان (Address)
+            $table->text('description')->nullable(); // الوصف (Description)
+            $table->json('warehouse_data')->nullable(); // بيانات المخزن (Warehouse Data)
 
-            // Responsible Person Information (FK?)
-            $table->string('warehouse_keeper_employee_number')->nullable(); // رقم الموظف أمين المخزن
-            $table->string('warehouse_keeper_name')->nullable(); // اسم الموظف أمين المخزن
+            // Warehouse Keeper Information (FK to employees table)
+            $table->foreignId('warehouse_keeper_id')->nullable()->constrained('employees')->nullOnDelete(); // أمين المخزن (Employee ID)
+            $table->string('warehouse_keeper_employee_number')->nullable(); // رقم الموظف أمين المخزن (Warehouse Keeper Employee Number)
+            $table->string('warehouse_keeper_employee_name')->nullable(); // اسم الموظف أمين المخزن (Warehouse Keeper Employee Name)
 
             // Contact Information
-            $table->string('mobile')->nullable(); // الجوال
-            $table->string('fax_number')->nullable(); // رقم الفاكس
-            $table->string('phone_number')->nullable(); // رقم الجوال
+            $table->string('phone_number')->nullable(); // رقم الهاتف (Phone Number)
+            $table->string('fax_number')->nullable(); // رقم الفاكس (Fax Number)
+            $table->string('mobile')->nullable(); // الجوال (Mobile)
 
-            // Department Information (FK)
+            // Account Information (FK to accounts table)
+            $table->foreignId('sales_account_id')->nullable()->constrained('accounts')->nullOnDelete(); // حساب المبيعات (Sales Account)
+            $table->foreignId('purchase_account_id')->nullable()->constrained('accounts')->nullOnDelete(); // حساب المشتريات (Purchase Account)
+
+            // Legacy fields for backward compatibility
+            $table->string('location')->nullable(); // الموقع (Location) - legacy field
             $table->foreignId('department_warehouse_id')->nullable()->constrained('department_warehouses')->nullOnDelete(); // القسم
-
-            // Purchase and Sale Account Information
-            $table->string('purchase_account')->nullable(); // حساب الشراء
-            $table->string('sale_account')->nullable(); // حساب البيع
 
             // Inventory Valuation Method
             $table->enum('inventory_valuation_method', [
@@ -59,7 +63,11 @@ return new class extends Migration
 
             $table->index(['company_id', 'status']);
             $table->index(['company_id', 'branch_id']);
-            $table->unique(['company_id', 'code']);
+            $table->index(['company_id', 'warehouse_number']);
+            $table->index(['warehouse_keeper_id']);
+            $table->index(['sales_account_id']);
+            $table->index(['purchase_account_id']);
+            $table->unique(['company_id', 'warehouse_number']);
         });
     }
 

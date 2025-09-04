@@ -11,6 +11,7 @@ use Modules\Inventory\Http\Controllers\Api\ItemUnitController;
 use Modules\Inventory\Http\Controllers\Api\BomItemController;
 use Modules\Inventory\Http\Controllers\Api\BarcodeTypeController;
 use Modules\Inventory\Http\Controllers\Api\ItemTypeController;
+use Modules\Inventory\Http\Controllers\Api\InventoryMovementController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -25,15 +26,20 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::delete('/{id}', [InventoryController::class, 'destroy'])->name('inventory.items.destroy');
     });
 
-    // Warehouses Routes
+    // ✅ Enhanced Warehouses Routes with Search, Sorting, and Soft Delete
     Route::prefix('warehouses')->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('inventory.warehouses.index');
         Route::post('/', [WarehouseController::class, 'store'])->name('inventory.warehouses.store');
+        Route::get('/form-data', [WarehouseController::class, 'getFormData'])->name('inventory.warehouses.form-data');
+        Route::get('/filter-by-field', [WarehouseController::class, 'filterByField'])->name('inventory.warehouses.filter-by-field');
+        Route::get('/trashed', [WarehouseController::class, 'trashed'])->name('inventory.warehouses.trashed');
         Route::get('/first', [WarehouseController::class, 'first'])->name('inventory.warehouses.first');
         Route::get('/last', [WarehouseController::class, 'last'])->name('inventory.warehouses.last');
         Route::get('/{id}', [WarehouseController::class, 'show'])->name('inventory.warehouses.show');
         Route::put('/{id}', [WarehouseController::class, 'update'])->name('inventory.warehouses.update');
         Route::delete('/{id}', [WarehouseController::class, 'destroy'])->name('inventory.warehouses.destroy');
+        Route::post('/{id}/restore', [WarehouseController::class, 'restore'])->name('inventory.warehouses.restore');
+        Route::delete('/{id}/force', [WarehouseController::class, 'forceDelete'])->name('inventory.warehouses.force-delete');
     });
 
     // Department Warehouses Routes
@@ -154,6 +160,26 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/{id}', [BomItemController::class, 'show'])->name('inventory.bom-items.show');
         Route::put('/{id}', [BomItemController::class, 'update'])->name('inventory.bom-items.update');
         Route::delete('/{id}', [BomItemController::class, 'destroy'])->name('inventory.bom-items.destroy');
+    });
+
+    // ✅ Complete Inventory Movement Routes (Add Warehouse Movement System)
+    Route::prefix('inventory-movements')->group(function () {
+        Route::get('/', [InventoryMovementController::class, 'index'])->name('inventory.movements.index');
+        Route::post('/', [InventoryMovementController::class, 'store'])->name('inventory.movements.store');
+        Route::get('/form-data', [InventoryMovementController::class, 'getFormData'])->name('inventory.movements.form-data');
+        Route::get('/filter-by-field', [InventoryMovementController::class, 'filterByField'])->name('inventory.movements.filter-by-field');
+        Route::get('/trashed', [InventoryMovementController::class, 'trashed'])->name('inventory.movements.trashed');
+        Route::get('/first', [InventoryMovementController::class, 'first'])->name('inventory.movements.first');
+        Route::get('/last', [InventoryMovementController::class, 'last'])->name('inventory.movements.last');
+        Route::get('/next-movement-number', [InventoryMovementController::class, 'getNextMovementNumber'])->name('inventory.movements.next-number');
+        Route::get('/{id}', [InventoryMovementController::class, 'show'])->name('inventory.movements.show');
+        Route::get('/{id}/movement-data', [InventoryMovementController::class, 'getMovementData'])->name('inventory.movements.movement-data');
+        Route::put('/{id}', [InventoryMovementController::class, 'update'])->name('inventory.movements.update');
+        Route::delete('/{id}', [InventoryMovementController::class, 'destroy'])->name('inventory.movements.destroy');
+        Route::post('/{id}/confirm', [InventoryMovementController::class, 'confirm'])->name('inventory.movements.confirm');
+        Route::post('/{id}/duplicate', [InventoryMovementController::class, 'duplicate'])->name('inventory.movements.duplicate');
+        Route::post('/{id}/restore', [InventoryMovementController::class, 'restore'])->name('inventory.movements.restore');
+        Route::delete('/{id}/force', [InventoryMovementController::class, 'forceDelete'])->name('inventory.movements.force-delete');
     });
 
     // Legacy route for backward compatibility

@@ -16,17 +16,27 @@ class Warehouse extends Model
         'user_id',
         'company_id',
         'branch_id',
+        // Warehouse Information
+        'warehouse_number',
         'name',
-        'code',
-        'location',
+        'address',
+        'description',
+        'warehouse_data',
+        // Warehouse Keeper Information
+        'warehouse_keeper_id',
         'warehouse_keeper_employee_number',
-        'warehouse_keeper_name',
-        'mobile',
-        'fax_number',
+        'warehouse_keeper_employee_name',
+        // Contact Information
         'phone_number',
+        'fax_number',
+        'mobile',
+        // Account Information
+        'sales_account_id',
+        'purchase_account_id',
+        // Legacy fields
+        'location',
         'department_warehouse_id',
-        'purchase_account',
-        'sale_account',
+        // System fields
         'inventory_valuation_method',
         'status',
         'created_by',
@@ -36,6 +46,7 @@ class Warehouse extends Model
 
     protected $casts = [
         'status' => 'string',
+        'warehouse_data' => 'array',
     ];
 
     const INVENTORY_VALUATION_METHODS = [
@@ -73,6 +84,30 @@ class Warehouse extends Model
     public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
+    }
+
+    /**
+     * Get the warehouse keeper employee.
+     */
+    public function warehouseKeeper(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Employee::class, 'warehouse_keeper_id');
+    }
+
+    /**
+     * Get the sales account.
+     */
+    public function salesAccount(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Account::class, 'sales_account_id');
+    }
+
+    /**
+     * Get the purchase account.
+     */
+    public function purchaseAccount(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Account::class, 'purchase_account_id');
     }
 
     /**
@@ -121,6 +156,52 @@ class Warehouse extends Model
     public function stockMovements(): HasMany
     {
         return $this->hasMany(StockMovement::class);
+    }
+
+    /**
+     * Get the warehouse keeper employee name from relationship or stored field.
+     */
+    public function getWarehouseKeeperNameAttribute()
+    {
+        if ($this->warehouseKeeper) {
+            return $this->warehouseKeeper->name;
+        }
+        return $this->warehouse_keeper_employee_name;
+    }
+
+    /**
+     * Get the warehouse keeper employee number from relationship or stored field.
+     */
+    public function getWarehouseKeeperNumberAttribute()
+    {
+        if ($this->warehouseKeeper) {
+            return $this->warehouseKeeper->employee_number;
+        }
+        return $this->warehouse_keeper_employee_number;
+    }
+
+    /**
+     * Get the sales account name.
+     */
+    public function getSalesAccountNameAttribute()
+    {
+        return $this->salesAccount ? $this->salesAccount->name : null;
+    }
+
+    /**
+     * Get the purchase account name.
+     */
+    public function getPurchaseAccountNameAttribute()
+    {
+        return $this->purchaseAccount ? $this->purchaseAccount->name : null;
+    }
+
+    /**
+     * Get the display name for the warehouse.
+     */
+    public function getDisplayNameAttribute()
+    {
+        return $this->warehouse_number . ' - ' . $this->name;
     }
 
     /**
