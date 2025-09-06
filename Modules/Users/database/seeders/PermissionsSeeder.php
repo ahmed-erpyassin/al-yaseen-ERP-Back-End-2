@@ -12,20 +12,28 @@ class PermissionsSeeder extends Seeder
      */
     public function run(): void
     {
-        // صلاحيات إضافية لليوزر
         $permissions = [
-            ['name' => 'view_users', 'group' => 'Users', 'label' => 'عرض المستخدمين'],
-            ['name' => 'create_users', 'group' => 'Users', 'label' => 'إنشاء مستخدم'],
-            ['name' => 'edit_users', 'group' => 'Users', 'label' => 'تعديل مستخدم'],
-            ['name' => 'delete_users', 'group' => 'Users', 'label' => 'حذف مستخدم'],
-            ['name' => 'edit_user_permissions', 'group' => 'Users', 'label' => 'إدارة صلاحيات المستخدم'],
+            ['name' => 'users.index',   'group' => 'Users', 'label' => 'عرض المستخدمين'],
+            ['name' => 'users.store',   'group' => 'Users', 'label' => 'إنشاء مستخدم'],
+            ['name' => 'users.update',  'group' => 'Users', 'label' => 'تحديث مستخدم'],
+            ['name' => 'users.destroy', 'group' => 'Users', 'label' => 'حذف مستخدم'],
+            ['name' => 'users.show',    'group' => 'Users', 'label' => 'عرض تفاصيل مستخدم'],
         ];
 
+
         foreach ($permissions as $perm) {
-            Permission::firstOrCreate(['name' => $perm['name']], [
+            Permission::firstOrCreate(['name' => 'api.' . $perm['name']], [
                 'group' => $perm['group'],
                 'label' => $perm['label'],
                 'guard_name' => 'api', // 🔥 مهم
+            ]);
+        }
+
+        foreach ($permissions as $perm) {
+            Permission::firstOrCreate(['name' => 'web.' . $perm['name']], [
+                'group' => $perm['group'],
+                'label' => $perm['label'],
+                'guard_name' => 'web', // 🔥 مهم
             ]);
         }
     }

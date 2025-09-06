@@ -19,30 +19,39 @@ class UserSeeder extends Seeder
         $user = User::firstOrCreate([
             'email' => 'admin@example.com',
         ], [
-            'first_name' => 'مدير',
-            'second_name' => 'النظام',
-            'phone' => '0599916672',
-            'password' => Hash::make('admin123'),
-            'status' => 'active',
+            'first_name'        => 'مدير',
+            'second_name'       => 'النظام',
+            'phone'             => '0599916672',
+            'password'          => Hash::make('admin123'),
+            'status'            => 'active',
+            'type'              => 'super_admin',
             'email_verified_at' => now(),
             'phone_verified_at' => now(),
-            'created_by' => 1,
-            'updated_by' => 1,
+            'created_by'        => 1,
+            'updated_by'        => 1,
         ]);
 
-        // إنشاء دور المشرف الأعلى
-        $role = Role::firstOrCreate([
-            'name' => 'super_admin',
-            'guard_name' => 'api', // 🔥 مهم
+        // إنشاء دوري المشرف الأعلى (واحد web وواحد api)
+        $roles = [];
+        foreach (['web', 'api'] as $guard) {
+            $roles[$guard] = Role::firstOrCreate([
+                'name'       => 'super_admin',
+                'guard_name' => $guard,
+            ]);
+        }
+
+        // ربط كل الصلاحيات المتوفرة بكل دور حسب الـ guard
+        foreach ($roles as $guard => $role) {
+            $permissions = Permission::where('guard_name', $guard)->pluck('name')->toArray();
+            $role->syncPermissions($permissions);
+        }
+
+        // ربط المستخدم بالدورين (web + api)
+        $user->syncRoles([
+            $roles['web']->name,
+            $roles['api']->name,
         ]);
 
-        // ربط كل الصلاحيات المتوفرة بالدور
-        $permissions = Permission::pluck('name')->toArray();
-        $role->syncPermissions($permissions);
-
-        // ربط الدور بالمستخدم
-        $user->syncRoles([$role->name]);
-
-        $this->command->info('✅ تم إنشاء مدير النظام وربطه بكل الصلاحيات.');
+        $this->command->info('✅ تم إنشاء مدير النظام وربطه بكل الصلاحيات (web + api).');
     }
 }

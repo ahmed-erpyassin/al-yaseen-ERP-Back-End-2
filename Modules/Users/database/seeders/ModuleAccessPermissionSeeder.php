@@ -26,14 +26,17 @@ class ModuleAccessPermissionSeeder extends Seeder
         ];
 
         foreach ($modules as $key => $label) {
-            Permission::firstOrCreate([
-                'name' => 'access_' . Str::snake($key),
-            ], [
-                'guard_name' => 'api', // 🔥 مهم
-                'group' => $key,
-                'label' => 'الوصول إلى ' . $label,
-            ]);
+            foreach (['web', 'api'] as $guard) {
+                Permission::firstOrCreate([
+                    'name'       => 'access_' . Str::snake($key),
+                    'guard_name' => $guard,
+                ], [
+                    'group' => $key,
+                    'label' => 'الوصول إلى ' . $label,
+                ]);
+            }
         }
+
         $this->command->info("✔ تم توليد صلاحيات الوصول للموديولات بنجاح.");
     }
 }

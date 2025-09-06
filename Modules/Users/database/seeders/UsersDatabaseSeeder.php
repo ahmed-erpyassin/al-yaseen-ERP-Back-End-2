@@ -3,6 +3,8 @@
 namespace Modules\Users\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Nwidart\Modules\Facades\Module;
+use Spatie\Permission\Contracts\Permission;
 
 class UsersDatabaseSeeder extends Seeder
 {
@@ -11,6 +13,11 @@ class UsersDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            PermissionsSeeder::class,
+            PermissionRouteSeeder::class,
+            ModuleAccessPermissionSeeder::class,
+            UserSeeder::class,
+        ]);
     }
 }

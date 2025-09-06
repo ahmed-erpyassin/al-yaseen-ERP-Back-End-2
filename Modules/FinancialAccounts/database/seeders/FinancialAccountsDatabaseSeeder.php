@@ -11,6 +11,10 @@ class FinancialAccountsDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            CurrencySeeder::class,
+            ExchangeRateSeeder::class,
+            FiscalYearSeeder::class,
+        ]);
     }
 }

@@ -2,16 +2,21 @@
 
 namespace Modules\Users\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Model
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
+
+    protected $guard_name = 'web';
 
     protected $fillable = [
         'first_name',
@@ -20,6 +25,7 @@ class User extends Model
         'phone',
         'password',
         'status',
+        'type',
         'otp_code',
         'otp_expires_at',
         'email_verified_at',
@@ -41,16 +47,18 @@ class User extends Model
     ];
 
     // Relationships
+    // المنشئ
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    // المحدث
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-
+    
     public function scopeData($builder)
     {
         return $builder->select([
@@ -60,10 +68,61 @@ class User extends Model
             'email',
             'phone',
             'status',
+            'type',
             'email_verified_at',
             'phone_verified_at',
             'created_at',
             'updated_at',
         ]);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->second_name;
+    }
+
+    public function scopeFilters(Builder $builder, array $filters = [])
+    {
+        $filters = array_merge([
+            'search' => '',
+            'status' => null,
+            'type' => null
+        ], $filters);
+
+        $builder->when($filters['search'] != '', function ($query) use ($filters) {
+            $query->whereRaw("CONCAT(first_name, ' ', second_name) LIKE ?", ['%' . $filters['search'] . '%'])
+                ->orWhere('email', 'like', '%' . $filters['search'] . '%')
+                ->orWhere('phone', 'like', '%' . $filters['search'] . '%');
+        });
+
+        $builder->when($filters['status'] !== null, function ($query) use ($filters) {
+            $query->where('status', $filters['status']);
+        });
+
+        $builder->when($filters['type'] !== null, function ($query) use ($filters) {
+            $query->where('type', $filters['type']);
+        });
+    }
+
+    public function scopeStore(Builder $builder, array $data = [])
+    {
+        $user = $builder->create($data);
+        return $user ? true : false;
+    }
+
+    public function scopeUpdateModel(Builder $builder, $data, $id)
+    {
+        if ($data["password"]) {
+            $data["password"] = Hash::make($data["password"]);
+        } else {
+            unset($data["password"]);
+        }
+
+        $user = $builder->find($id);
+
+        if ($user) {
+            return $user->update($data);
+        }
+        return false;
     }
 }
