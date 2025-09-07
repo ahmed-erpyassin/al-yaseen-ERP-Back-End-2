@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     {{-- CSS Styles --}}
-    <link rel="stylesheet" href="{{ asset('assets/mdb/marta-szymanska/mdb-demo-pro/css/mdb.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/mdb/marta-szymanska/ltr/css/mdb.min.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireStyles()
 
@@ -84,7 +84,7 @@
                     <div class="card-body p-md-5 mx-md-4">
 
                         <div class="text-center">
-                            <img src="{{ asset('assets/mdb/demo-pro/images/logo-brand.png') }}" style="width: 210px;"
+                            <img src="{{ asset('assets/mdb/marta-szymanska/images/logo-brand.png') }}" style="width: 210px;"
                                 alt="logo">
                             <h4 class="mt-1 mb-5 pb-1 fw-bold">{{ $headerTitle }}</h4>
                         </div>
@@ -97,7 +97,7 @@
                 </div>
 
                 <div class="col-sm-6 px-0 d-none d-sm-block">
-                    <img src="{{ asset('assets/mdb/demo-pro/images/login.png') }}" alt="Login image"
+                    <img src="{{ asset('assets/mdb/marta-szymanska/images/login.png') }}" alt="Login image"
                         class="w-100 vh-100" style="object-fit: cover;">
                 </div>
             </div>
@@ -106,7 +106,7 @@
 
 
     {{-- JS Scripts --}}
-    <script type="text/javascript" src="{{ asset('assets/mdb/marta-szymanska/mdb-demo-pro/js/mdb.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/mdb/marta-szymanska/ltr/js/mdb.min.js') }}"></script>
     @livewireScripts()
 </body>
 

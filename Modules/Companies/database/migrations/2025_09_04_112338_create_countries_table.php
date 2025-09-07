@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained('users')->onDelete('set null');
-            $table->foreignId('company_id')->constrained('companies')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->unsignedBigInteger('company_id')->nullable()->unique();
 
             $table->string('code', 5)->unique(); // ISO code مثل "PS", "SA"
             $table->string('name', 150);         // الاسم بالعربية
@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('currency_code', 10)->nullable();  // كود العملة
             $table->string('timezone', 50)->nullable();       // المنطقة الزمنية
 
-            $table->foreignId('created_by')->constrained('users')->onDelete('set null');
-            $table->foreignId('updated_by')->constrained('users')->onDelete('set null');
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->softDeletes();
 
             $table->timestamps();

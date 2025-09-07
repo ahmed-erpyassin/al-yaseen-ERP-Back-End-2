@@ -22,5 +22,38 @@ class ExchangeRateSeeder extends Seeder
             'created_by' => 1,
             'updated_by' => 1,
         ]);
+
+        ExchangeRate::create([
+            'currency_id' => 2, // EUR
+            'rate_date' => now()->toDateString(),
+            'rate' => 4.00,
+            'user_id' => 1,
+            'company_id' => 1,
+            'branch_id' => 1,
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
+
+        ExchangeRate::create([
+            'currency_id' => 3, // GBP
+            'rate_date' => now()->toDateString(),
+            'rate' => 4.50,
+            'user_id' => 1,
+            'company_id' => 1,
+            'branch_id' => 1,
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
+
+        ExchangeRate::create([
+            'currency_id' => 4, // ILS
+            'rate_date' => now()->toDateString(),
+            'rate' => 1.10,
+            'user_id' => 1,
+            'company_id' => 1,
+            'branch_id' => 1,
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
     }
 }

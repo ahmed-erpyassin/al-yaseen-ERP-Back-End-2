@@ -33,5 +33,27 @@ class CurrencySeeder extends Seeder
             'created_by' => 1,
             'updated_by' => 1,
         ]);
+
+        Currency::create([
+            'code' => 'GBP',
+            'name' => 'British Pound',
+            'symbol' => '£',
+            'decimal_places' => 2,
+            'user_id' => 1,
+            'company_id' => 1,
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
+
+        Currency::create([
+            'code' => 'ILS',
+            'name' => 'Israeli Shekel',
+            'symbol' => '₪',
+            'decimal_places' => 2,
+            'user_id' => 1,
+            'company_id' => 1,
+            'created_by' => 1,
+            'updated_by' => 1,
+        ]);
     }
 }

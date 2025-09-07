@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained('users')->onDelete('set null');
-            $table->foreignId('currency_id')->constrained('currencies')->onDelete('set null');
-            $table->foreignId('financial_year_id')->constrained('financial_years')->onDelete('set null');
-            $table->foreignId('industry_id')->constrained('industries')->onDelete('set null');
-            $table->foreignId('business_type_id')->constrained('business_types')->onDelete('set null');
-            $table->foreignId('country_id')->constrained('countries')->onDelete('set null');
-            $table->foreignId('region_id')->constrained('regions')->onDelete('set null');
-            $table->foreignId('city_id')->constrained('cities')->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
+            $table->foreignId('financial_year_id')->nullable()->constrained('fiscal_years')->nullOnDelete();
+            $table->foreignId('industry_id')->nullable()->constrained('industries')->nullOnDelete();
+            $table->foreignId('business_type_id')->nullable()->constrained('business_types')->nullOnDelete();
+            $table->foreignId('country_id')->nullable()->constrained('countries')->nullOnDelete();
+            $table->foreignId('region_id')->nullable()->constrained('regions')->nullOnDelete();
+            $table->foreignId('city_id')->nullable()->constrained('cities')->nullOnDelete();
 
             $table->string('title', 255);
             $table->string('commercial_registeration_number', 100);
@@ -36,8 +36,8 @@ return new class extends Migration
 
             $table->enum('status', ['active', 'inactive'])->default('active');
 
-            $table->foreignId('created_by')->constrained('users')->onDelete('set null');
-            $table->foreignId('updated_by')->constrained('users')->onDelete('set null');
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
 
             $table->softDeletes();
 

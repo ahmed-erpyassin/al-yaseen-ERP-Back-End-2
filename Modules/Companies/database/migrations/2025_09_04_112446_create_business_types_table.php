@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('business_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('set null');
-            $table->foreignId('company_id')->constrained('companies')->onDelete('set null');
-            $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
-            $table->foreignId('industry_id')->constrained('industries')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->unsignedBigInteger('company_id')->nullable()->unique();
+            $table->unsignedBigInteger('branch_id')->nullable()->unique();
+            $table->foreignId('industry_id')->nullable()->constrained('industries')->nullOnDelete();
 
             $table->string('name', 150);
             $table->text('description')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
 
-            $table->foreignId('created_by')->constrained('users')->onDelete('set null');
-            $table->foreignId('updated_by')->constrained('users')->onDelete('set null');
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->softDeletes();
 
             $table->timestamps();
