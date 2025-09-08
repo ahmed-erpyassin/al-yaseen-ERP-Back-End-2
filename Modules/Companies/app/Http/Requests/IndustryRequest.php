@@ -12,11 +12,10 @@ class IndustryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:150',
-            'name_en' => 'required|string|max:150',
+            'name' => 'required|string|max:150|unique:industries,name,' . $this->industry,
+            'name_en' => 'required|string|max:150|unique:industries,name_en,' . $this->industry,
             'description' => 'nullable|string',
             'company_id' => 'nullable|exists:companies,id',
-            'branch_id' => 'required|exists:branches,id',
         ];
     }
 

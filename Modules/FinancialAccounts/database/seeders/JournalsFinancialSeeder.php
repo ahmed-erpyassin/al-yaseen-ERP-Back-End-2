@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Companies\Database\Seeders;
+namespace Modules\FinancialAccounts\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class RegionSeeder extends Seeder
+class JournalsFinancialSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\Companies\Http\Requests\CountryRequest;
+use Modules\Companies\Services\CountryService;
+use Modules\Companies\Transformers\CountryResource;
 
 class CountriesController extends Controller
 {
@@ -22,7 +26,8 @@ class CountriesController extends Controller
 
     public function store(CountryRequest $request)
     {
-        $country = $this->countryService->createCountry($request->validated(), auth()->user());
+        $user = Auth::user();
+        $country = $this->countryService->createCountry($request->validated(), $user);
         return new CountryResource($country);
     }
 

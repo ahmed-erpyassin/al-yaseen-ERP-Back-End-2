@@ -12,8 +12,8 @@ class BranchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|max:50|unique:branches,code,' . $this->id,
-            'name' => 'required|string|max:150',
+            'code' => 'required|string|max:50|unique:branches,code,' . $this->branch,
+            'name' => 'required|string|max:150|unique:branches,name,' . $this->branch,
             'address' => 'nullable|string|max:255',
             'landline' => 'nullable|string|max:50',
             'mobile' => 'nullable|string|max:50',

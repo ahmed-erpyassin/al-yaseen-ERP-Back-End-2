@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Companies\Models\Company;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -47,6 +48,12 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     // Relationships
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'user_id', 'id');
+    }
+
     // المنشئ
     public function creator()
     {
@@ -58,7 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-    
+
     public function scopeData($builder)
     {
         return $builder->select([

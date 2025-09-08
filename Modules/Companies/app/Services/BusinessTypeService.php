@@ -10,16 +10,15 @@ class BusinessTypeService
     public function createBusinessType(array $data, $user)
     {
         return DB::transaction(function () use ($data, $user) {
-            $data['user_id'] = $user->id;
             $data['created_by'] = $user->id;
             $data['updated_by'] = $user->id;
             return BusinessType::create($data);
         });
     }
 
-    public function getBusinessTypes($user)
+    public function getBusinessTypes()
     {
-        return BusinessType::where('user_id', $user->id)->get();
+        return BusinessType::all();
     }
 
     public function getBusinessTypeById($id)

@@ -18,11 +18,9 @@ class RegionService
         });
     }
 
-    public function getRegions($user)
+    public function getRegions()
     {
-        return Region::with(['country', 'cities']) // المنطقة مع الدولة + المدن
-            ->where('user_id', $user->id)
-            ->get();
+        return Region::with(['country', 'cities'])->all();
     }
 
     public function getRegionById($id)

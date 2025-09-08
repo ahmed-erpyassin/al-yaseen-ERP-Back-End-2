@@ -14,12 +14,10 @@ return new class extends Migration
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->unsignedBigInteger('company_id')->nullable()->unique();
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
 
-            $table->string('name', 150);    // الاسم بالعربية
-            $table->string('name_en', 150); // الاسم بالإنجليزية
+            $table->string('name', 150)->unique();    // الاسم بالعربية
+            $table->string('name_en', 150)->unique(); // الاسم بالإنجليزية
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();

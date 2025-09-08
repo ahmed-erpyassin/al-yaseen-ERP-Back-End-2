@@ -16,9 +16,6 @@ class Industry extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id',
-        'company_id',
-        'branch_id',
         'name',
         'name_en',
         'description',
@@ -30,8 +27,6 @@ class Industry extends Model
     {
         return $builder->select([
             'id',
-            'user_id',
-            'company_id',
             'branch_id',
             'name',
             'name_en',
@@ -46,9 +41,6 @@ class Industry extends Model
         $filters = array_merge([
             'search' => '',
             'status' => null,
-            'user_id' => null,
-            'company_id' => null,
-            'branch_id' => null,
             'created_by' => null,
             'updated_by' => null,
         ], $filters);
@@ -60,18 +52,6 @@ class Industry extends Model
 
         $builder->when($filters['status'] !== null, function ($query) use ($filters) {
             $query->where('status', $filters['status']);
-        });
-
-        $builder->when($filters['user_id'] !== null, function ($query) use ($filters) {
-            $query->where('user_id', $filters['user_id']);
-        });
-
-        $builder->when($filters['company_id'] !== null, function ($query) use ($filters) {
-            $query->where('company_id', $filters['company_id']);
-        });
-
-        $builder->when($filters['branch_id'] !== null, function ($query) use ($filters) {
-            $query->where('branch_id', $filters['branch_id']);
         });
 
         $builder->when($filters['created_by'] !== null, function ($query) use ($filters) {
@@ -88,24 +68,6 @@ class Industry extends Model
     | العلاقات
     |--------------------------------------------------------------------------
     */
-
-    // مَن أنشأ الصناعة
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    // الشركة المالكة
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    // الفرع المرتبط
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class);
-    }
 
     // أنواع الأعمال التابعة لهذه الصناعة
     public function businessTypes()

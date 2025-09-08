@@ -12,11 +12,9 @@ class BusinessTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:150',
+            'name' => 'required|string|max:150|unique:business_types,name,' . $this->business_type,
             'description' => 'nullable|string',
             'status' => 'in:active,inactive',
-            'company_id' => 'nullable|exists:companies,id',
-            'branch_id' => 'required|exists:branches,id',
             'industry_id' => 'required|exists:industries,id',
         ];
     }

@@ -11,6 +11,8 @@ class ExchangeRateService
     {
         return DB::transaction(function () use ($data, $user) {
             $data['user_id'] = $user->id;
+            $data['company_id'] = $data['company_id'] ?? $user->company?->id;
+            $data['branch_id'] = $data['branch_id'] ?? $user->branch?->id;
             $data['created_by'] = $user->id;
             $data['updated_by'] = $user->id;
             return ExchangeRate::create($data);
@@ -19,7 +21,7 @@ class ExchangeRateService
 
     public function getExchangeRates($user)
     {
-        return ExchangeRate::where('user_id', $user->id)->get();
+        return ExchangeRate::all();
     }
 
     public function getExchangeRateById($id)

@@ -17,8 +17,6 @@ class IndustryResource extends JsonResource
             'name' => $this->name,
             'name_en' => $this->name_en,
             'description' => $this->description,
-            'company_id' => $this->company_id,
-            'branch_id' => $this->branch_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

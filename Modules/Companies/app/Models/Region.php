@@ -15,8 +15,6 @@ class Region extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id',
-        'company_id',
         'country_id',
         'name',
         'name_en',
@@ -28,8 +26,6 @@ class Region extends Model
     {
         return $builder->select([
             'id',
-            'user_id',
-            'company_id',
             'country_id',
             'name',
             'name_en',
@@ -42,8 +38,6 @@ class Region extends Model
     {
         $filters = array_merge([
             'search' => '',
-            'user_id' => null,
-            'company_id' => null,
             'country_id' => null,
         ], $filters);
 
@@ -52,14 +46,6 @@ class Region extends Model
                 $query->where('name', 'like', "%{$filters['search']}%")
                     ->orWhere('name_en', 'like', "%{$filters['search']}%");
             });
-        }
-
-        if ($filters['user_id'] !== null) {
-            $builder->where('user_id', $filters['user_id']);
-        }
-
-        if ($filters['company_id'] !== null) {
-            $builder->where('company_id', $filters['company_id']);
         }
 
         if ($filters['country_id'] !== null) {

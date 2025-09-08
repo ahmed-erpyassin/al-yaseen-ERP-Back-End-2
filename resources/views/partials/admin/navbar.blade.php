@@ -52,7 +52,8 @@
                         <a class="dropdown-item" href="#">{{ __('Settings') }}</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ route('admin.panel.logout') }}">{{ __('Logout') }}</a>
+                        <a class="dropdown-item"
+                            href="{{ route('admin.panel.logout', ['lang' => app()->getLocale()]) }}">{{ __('Logout') }}</a>
                     </li>
                 </ul>
             </div>

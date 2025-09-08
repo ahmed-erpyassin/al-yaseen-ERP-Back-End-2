@@ -1,6 +1,10 @@
 <?php
 
 use App\Livewire\Admin\Auth\Login;
+use App\Livewire\Admin\Panel\Companies\CompaniesList;
+use App\Livewire\Admin\Panel\FinancialAccounts\CurrenciesList;
+use App\Livewire\Admin\Panel\FinancialAccounts\ExchangeRatesList;
+use App\Livewire\Admin\Panel\FinancialAccounts\FiscalYearsList;
 use App\Livewire\Admin\Panel\Index;
 use App\Livewire\Admin\Panel\Users\UsersList;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +24,29 @@ Route::prefix('admin/')->as('admin.')->middleware(['auth', 'web'])->group(functi
             Route::get('/', UsersList::class)->name('list');
         });
 
+        Route::prefix('companies')->as('companies.')->group(function () {
+            Route::get('/', CompaniesList::class)->name('list');
+        });
+
+        Route::prefix('financial-accounts')->as('financial-accounts.')->group(function () {
+
+            // Currencies
+            Route::prefix('currencies')->as('currencies.')->group(function () {
+                Route::get('/', CurrenciesList::class)->name('list');
+            });
+
+            // Exchange Rates
+            Route::prefix('exchange-rates')->as('exchange-rates.')->group(function () {
+                Route::get('/', ExchangeRatesList::class)->name('list');
+            });
+
+            // Fiscal Years
+            Route::prefix('fiscal-years')->as('fiscal-years.')->group(function () {
+                Route::get('/', FiscalYearsList::class)->name('list');
+            });
+        });
+
+
 
         Route::get('logout', function () {
             Auth::guard('web')->logout();
@@ -27,4 +54,3 @@ Route::prefix('admin/')->as('admin.')->middleware(['auth', 'web'])->group(functi
         })->name('logout');
     });
 });
-

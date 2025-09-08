@@ -14,12 +14,8 @@ return new class extends Migration
         Schema::create('industries', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->unsignedBigInteger('company_id')->nullable()->unique();
-            $table->unsignedBigInteger('branch_id')->nullable()->unique();
-
-            $table->string('name', 150);
-            $table->string('name_en', 150);
+            $table->string('name', 150)->unique();
+            $table->string('name_en', 150)->unique();
             $table->text('description')->nullable();
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();

@@ -4,6 +4,7 @@ namespace Modules\Companies\Transformers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Companies\Transformers\IndustryResource;
 
 class BusinessTypeResource extends JsonResource
 {
@@ -17,9 +18,8 @@ class BusinessTypeResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'status' => $this->status,
-            'company_id' => $this->company_id,
-            'branch_id' => $this->branch_id,
             'industry_id' => $this->industry_id,
+            'industry' => new IndustryResource($this->industry),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

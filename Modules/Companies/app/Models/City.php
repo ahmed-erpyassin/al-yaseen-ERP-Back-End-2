@@ -16,8 +16,6 @@ class City extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id',
-        'company_id',
         'country_id',
         'region_id',
         'name',
@@ -30,8 +28,6 @@ class City extends Model
     {
         return $builder->select([
             'id',
-            'user_id',
-            'company_id',
             'country_id',
             'region_id',
             'name',
@@ -46,8 +42,6 @@ class City extends Model
         $filters = array_merge([
             'search' => '',
             'status' => null,
-            'user_id' => null,
-            'company_id' => null,
             'country_id' => null,
             'region_id' => null,
             'name' => null,
@@ -63,14 +57,6 @@ class City extends Model
 
         if ($filters['status'] !== null) {
             $builder->where('status', $filters['status']);
-        }
-
-        if ($filters['user_id'] !== null) {
-            $builder->where('user_id', $filters['user_id']);
-        }
-
-        if ($filters['company_id'] !== null) {
-            $builder->where('company_id', $filters['company_id']);
         }
 
         if ($filters['country_id'] !== null) {
@@ -97,16 +83,6 @@ class City extends Model
     | العلاقات
     |--------------------------------------------------------------------------
     */
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
 
     public function country()
     {

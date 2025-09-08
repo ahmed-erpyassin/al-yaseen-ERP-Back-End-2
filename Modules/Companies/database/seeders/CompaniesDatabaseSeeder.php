@@ -11,6 +11,9 @@ class CompaniesDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            LocationSeeder::class,
+            IndustrySeeder::class,
+        ]);
     }
 }

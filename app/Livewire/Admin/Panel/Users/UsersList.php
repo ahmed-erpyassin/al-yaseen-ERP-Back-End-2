@@ -5,8 +5,8 @@ namespace App\Livewire\Admin\Panel\Users;
 use App\Helpers\LivewireHelper;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Component;
 
 class UsersList extends Component
 {
@@ -40,16 +40,20 @@ class UsersList extends Component
         return $this->users->slice(($this->currentPage - 1) * $this->pagination, $this->pagination)->pluck('id')->toArray();
     }
 
-    #[Layout('layouts.admin.panel'), Title('Users List')]
-    public function render()
+    public function loadUsers()
     {
         $this->filters = [
             'search' => $this->search,
         ];
 
         $service = $this->setService('UserService');
-        $users = $service->data($this->filters, $this->sort_field, $this->sort_direction, $this->pagination);
+        return $service->data($this->filters, $this->sort_field, $this->sort_direction, $this->pagination);
+    }
 
+    #[Layout('layouts.admin.panel'), Title('Users List')]
+    public function render()
+    {
+        $users = $this->loadUsers();
         return view('livewire.admin.panel.users.users-list', compact('users'));
     }
 

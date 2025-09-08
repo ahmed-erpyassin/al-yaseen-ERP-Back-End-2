@@ -14,8 +14,6 @@ class Country extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id',
-        'company_id',
         'code',
         'name',
         'name_en',
@@ -30,8 +28,6 @@ class Country extends Model
     {
         return $builder->select([
             'id',
-            'user_id',
-            'company_id',
             'code',
             'name',
             'name_en',
@@ -49,8 +45,6 @@ class Country extends Model
         $filters = array_merge([
             'search' => '',
             'status' => null,
-            'user_id' => null,
-            'company_id' => null,
         ], $filters);
 
         if ($filters['search']) {
@@ -58,14 +52,6 @@ class Country extends Model
                 $query->where('name', 'like', "%{$filters['search']}%")
                     ->orWhere('name_en', 'like', "%{$filters['search']}%");
             });
-        }
-
-        if ($filters['user_id'] !== null) {
-            $builder->where('user_id', $filters['user_id']);
-        }
-
-        if ($filters['company_id'] !== null) {
-            $builder->where('company_id', $filters['company_id']);
         }
 
         if ($filters['status'] !== null) {
@@ -81,17 +67,6 @@ class Country extends Model
     |--------------------------------------------------------------------------
     */
 
-    // المستخدم
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    // الشركة
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
 
     // المناطق
     public function regions()

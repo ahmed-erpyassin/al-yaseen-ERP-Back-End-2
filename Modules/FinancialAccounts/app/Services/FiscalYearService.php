@@ -11,6 +11,7 @@ class FiscalYearService
     {
         return DB::transaction(function () use ($data, $user) {
             $data['user_id'] = $user->id;
+            $data['company_id'] = $user->company?->id;
             $data['created_by'] = $user->id;
             $data['updated_by'] = $user->id;
             return FiscalYear::create($data);
@@ -19,7 +20,7 @@ class FiscalYearService
 
     public function getFiscalYears($user)
     {
-        return FiscalYear::where('user_id', $user->id)->get();
+        return FiscalYear::all();
     }
 
     public function getFiscalYearById($id)

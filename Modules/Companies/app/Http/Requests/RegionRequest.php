@@ -12,8 +12,8 @@ class RegionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:150',
-            'name_en' => 'required|string|max:150',
+            'name' => 'required|string|max:150|unique:regions,name,' . $this->region,
+            'name_en' => 'required|string|max:150|unique:regions,name_en,' . $this->region,
             'country_id' => 'required|exists:countries,id',
             'company_id' => 'nullable|exists:companies,id',
         ];

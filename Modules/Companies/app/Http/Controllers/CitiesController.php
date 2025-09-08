@@ -4,6 +4,10 @@ namespace Modules\Companies\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\Companies\Http\Requests\CityRequest;
+use Modules\Companies\Services\CityService;
+use Modules\Companies\Transformers\CityResource;
 
 class CitiesController extends Controller
 {
@@ -22,7 +26,8 @@ class CitiesController extends Controller
 
     public function store(CityRequest $request)
     {
-        $city = $this->cityService->createCity($request->validated(), auth()->user());
+        $user = Auth::user();
+        $city = $this->cityService->createCity($request->validated(), $user);
         return new CityResource($city);
     }
 

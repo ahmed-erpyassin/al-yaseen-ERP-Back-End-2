@@ -12,9 +12,9 @@ class CountryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|max:5|unique:countries,code,' . $this->id,
-            'name' => 'required|string|max:150',
-            'name_en' => 'required|string|max:150',
+            'code' => 'required|string|max:5|unique:countries,code,' . $this->country,
+            'name' => 'required|string|max:150|unique:countries,name,' . $this->country,
+            'name_en' => 'required|string|max:150|unique:countries,name_en,' . $this->country,
             'phone_code' => 'nullable|string|max:10',
             'currency_code' => 'nullable|string|max:10',
             'timezone' => 'nullable|string|max:50',

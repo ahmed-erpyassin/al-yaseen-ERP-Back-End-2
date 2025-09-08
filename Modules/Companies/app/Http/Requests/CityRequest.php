@@ -12,8 +12,8 @@ class CityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:150',
-            'name_en' => 'required|string|max:150',
+            'name' => 'required|string|max:150|unique:cities,name,' . $this->city,
+            'name_en' => 'required|string|max:150|unique:cities,name_en,' . $this->city,
             'country_id' => 'required|exists:countries,id',
             'region_id' => 'required|exists:regions,id',
             'company_id' => 'nullable|exists:companies,id',

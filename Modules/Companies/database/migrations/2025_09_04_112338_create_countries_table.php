@@ -14,12 +14,9 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->unsignedBigInteger('company_id')->nullable()->unique();
-
             $table->string('code', 5)->unique(); // ISO code مثل "PS", "SA"
-            $table->string('name', 150);         // الاسم بالعربية
-            $table->string('name_en', 150);      // الاسم بالإنجليزية
+            $table->string('name', 150)->unique();         // الاسم بالعربية
+            $table->string('name_en', 150)->unique();      // الاسم بالإنجليزية
             $table->string('phone_code', 10)->nullable();     // كود الاتصال الدولي
             $table->string('currency_code', 10)->nullable();  // كود العملة
             $table->string('timezone', 50)->nullable();       // المنطقة الزمنية

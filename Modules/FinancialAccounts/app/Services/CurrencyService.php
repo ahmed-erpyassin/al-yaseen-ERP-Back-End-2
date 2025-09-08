@@ -11,6 +11,7 @@ class CurrencyService
     {
         return DB::transaction(function () use ($data, $user) {
             $data['user_id'] = $user->id;
+            $data['company_id'] = $data['company_id'] ?? $user->company?->id;
             $data['created_by'] = $user->id;
             $data['updated_by'] = $user->id;
             return Currency::create($data);
@@ -19,7 +20,7 @@ class CurrencyService
 
     public function getCurrencies($user)
     {
-        return Currency::where('user_id', $user->id)->get();
+        return Currency::all();
     }
 
     public function getCurrencyById($id)
