@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // ✅ هذا الحارس للـ API (مطلوب مع Vue + Sanctum)
+        'api' => [
+            'driver' => 'sanctum', // أو token لو ما بدك Sanctum
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -62,7 +68,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', \Modules\Users\Models\User::class),
         ],
 
         // 'users' => [

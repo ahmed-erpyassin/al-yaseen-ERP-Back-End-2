@@ -35,5 +35,4 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales')->group(function () {
         Route::post('/', [ServiceController::class, 'store']);
     });
 
-
 });

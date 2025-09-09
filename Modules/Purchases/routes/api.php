@@ -33,5 +33,4 @@ Route::middleware(['auth:sanctum'])->prefix('v1/purchase')->group(function () {
         Route::get('/', [ReturnInvoiceController::class, 'index']);
         Route::post('/', [ReturnInvoiceController::class, 'store']);
     });
-
 });

@@ -10,5 +10,6 @@
     "ProjectsManagment": true,
     "Human": true,
     "Resources": true,
-    "HumanResources": true
+    "HumanResources": true,
+    "Companies": true
 }
