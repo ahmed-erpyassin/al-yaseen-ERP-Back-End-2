@@ -11,19 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_groups', function (Blueprint $table) {
+        Schema::create('fa_attachments', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->unsignedBigInteger('company_id')->nullable();
+             $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
 
-            $table->foreignId('fiscal_year_id')->nullable()->constrained('fiscal_years')->nullOnDelete();
-            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
-            $table->foreignId('parent_id')->nullable()->constrained('account_groups')->nullOnDelete();
+            $table->foreignId('journal_entry_id')->nullable()->constrained('journals_entries')->nullOnDelete();
+            $table->string('type', 50)->nullable();
+            $table->unsignedBigInteger('document_id')->nullable();
 
-            $table->string('code', 50)->unique();
-            $table->string('name', 150);
-            $table->enum('type', ['asset', 'liability', 'equity', 'revenue', 'expense']);
+            $table->string('file_path', 255);
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
@@ -39,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account_groups');
+        Schema::dropIfExists('fa_attachments');
     }
 };

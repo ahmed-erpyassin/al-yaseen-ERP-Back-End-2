@@ -17,7 +17,7 @@
 
             <!-- Navbar brand -->
             <a class="navbar-brand mt-2 mt-lg-0" href="#">
-                <img src="{{ asset('assets/mdb/demo-pro/images/logo-removed-bg.png') }}" height="40" alt="MDB Logo"
+                <img src="{{ asset('assets/mdb/marta-szymanska/images/logo-removed-bg.png') }}" height="40" alt="MDB Logo"
                     loading="lazy" />
             </a>
             <!-- Left links -->

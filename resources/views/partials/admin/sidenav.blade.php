@@ -3,7 +3,7 @@
 
     <a class="ripple d-flex justify-content-center py-4 mb-3" style="padding-top: 4rem !important;"
         href="{{ route('admin.panel.index', ['lang' => app()->getLocale()]) }}" data-mdb-ripple-color="primary">
-        <img id="YassinERP-Logo" width="200" src="{{ asset('assets/mdb/demo-pro/images/logo-brand.png') }}"
+        <img id="YassinERP-Logo" width="200" src="{{ asset('assets/mdb/marta-szymanska/images/logo-brand.png') }}"
             alt="YassinERP-Logo" draggable="false" />
     </a>
 

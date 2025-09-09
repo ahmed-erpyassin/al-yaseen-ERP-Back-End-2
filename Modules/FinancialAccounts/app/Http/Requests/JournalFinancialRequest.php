@@ -4,20 +4,18 @@ namespace Modules\FinancialAccounts\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CurrencyRequest extends FormRequest
+class JournalFinancialRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
      */
     public function rules(): array
     {
-        $currencyId = $this->route('currency'); // لعملية update
-
         return [
-            'code' => 'required|string|max:10',
-            'name' => 'required|string|max:100',
-            'symbol' => 'nullable|string|max:10',
-            'decimal_places' => 'nullable|integer|min:0|max:6',
+            'fiscal_year_id' => 'required|exists:fiscal_years,id',
+            'code'           => 'required|string|max:50|unique:journals_financial,code',
+            'name'           => 'required|string|max:150',
+            'status'         => 'required|in:active,closed',
         ];
     }
 

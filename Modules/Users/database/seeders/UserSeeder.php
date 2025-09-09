@@ -4,6 +4,7 @@ namespace Modules\Users\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Modules\Companies\Models\Company;
 use Modules\Users\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -50,6 +51,22 @@ class UserSeeder extends Seeder
         $user->syncRoles([
             $roles['web']->name,
             $roles['api']->name,
+        ]);
+
+        $company = Company::firstOrCreate([
+            'user_id'                               => $user->id,
+            'title'                                 => 'Yassin ERP Company',
+            'commercial_registeration_number'       => 'YERPC-001',
+            'address'                               => 'رام الله، فلسطين',
+            'logo'                                  => 'path/to/logo.png',
+            'email'                                 => 'info@yassincompany.com',
+            'landline'                              => '02-1234567',
+            'mobile'                                => '0599916672',
+            'income_tax_rate'                       => 15.00,
+            'vat_rate'                              => 16.00,
+            'status'                                => 'active',
+            'created_by'                            => $user->id,
+            'updated_by'                            => $user->id,
         ]);
 
         $this->command->info('✅ تم إنشاء مدير النظام وربطه بكل الصلاحيات (web + api).');

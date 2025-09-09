@@ -11,19 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_groups', function (Blueprint $table) {
+        Schema::create('journals_entry_lines', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('fiscal_year_id')->nullable()->constrained('fiscal_years')->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
 
-            $table->foreignId('fiscal_year_id')->nullable()->constrained('fiscal_years')->nullOnDelete();
+            $table->foreignId('journal_entry_id')->constrained('journals_entries')->cascadeOnDelete();
             $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
-            $table->foreignId('parent_id')->nullable()->constrained('account_groups')->nullOnDelete();
+            $table->foreignId('account_id')->nullable()->constrained('accounts')->nullOnDelete();
+            $table->foreignId('cost_center_id')->nullable()->constrained('cost_centers')->nullOnDelete();
+            $table->unsignedBigInteger('project_id')->nullable(); // لو في جدول مشاريع مستقبلاً
 
-            $table->string('code', 50)->unique();
-            $table->string('name', 150);
-            $table->enum('type', ['asset', 'liability', 'equity', 'revenue', 'expense']);
+            $table->decimal('debit', 18, 6)->default(0);
+            $table->decimal('credit', 18, 6)->default(0);
+            $table->decimal('exchange_rate', 18, 6)->default(1);
+
+            $table->text('description')->nullable();
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
@@ -39,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account_groups');
+        Schema::dropIfExists('journals_entry_lines');
     }
 };

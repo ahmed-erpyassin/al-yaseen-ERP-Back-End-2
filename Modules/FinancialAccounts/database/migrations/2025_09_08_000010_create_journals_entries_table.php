@@ -11,19 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_groups', function (Blueprint $table) {
+        Schema::create('journals_entries', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId('fiscal_year_id')->nullable()->constrained('fiscal_years')->nullOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
 
-            $table->foreignId('fiscal_year_id')->nullable()->constrained('fiscal_years')->nullOnDelete();
-            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
-            $table->foreignId('parent_id')->nullable()->constrained('account_groups')->nullOnDelete();
+            $table->foreignId('journal_id')->nullable()->constrained('journals_financials')->nullOnDelete();
+            $table->unsignedBigInteger('document_id')->nullable(); // رابط مع فاتورة أو شراء
 
-            $table->string('code', 50)->unique();
-            $table->string('name', 150);
-            $table->enum('type', ['asset', 'liability', 'equity', 'revenue', 'expense']);
+            $table->enum('type', ['sales', 'purchase', 'payment', 'receipt', 'adjustment', 'inventory', 'production']);
+            $table->string('entry_number', 50);
+            $table->date('entry_date');
+            $table->text('description')->nullable();
+            $table->enum('status', ['draft', 'posted', 'cancelled'])->default('draft');
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
@@ -39,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account_groups');
+        Schema::dropIfExists('journals_entries');
     }
 };

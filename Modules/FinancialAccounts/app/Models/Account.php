@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Companies\Models\Company;
 use Modules\Users\Models\User;
 
-// use Modules\FinancialAccounts\Database\Factories\AccountFactory;
-
 class Account extends Model
 {
     use HasFactory;

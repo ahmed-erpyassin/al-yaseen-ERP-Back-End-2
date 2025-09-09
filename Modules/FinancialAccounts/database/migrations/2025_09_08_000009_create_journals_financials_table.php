@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_groups', function (Blueprint $table) {
+        Schema::create('journals_financials', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->unsignedBigInteger('company_id')->nullable();
-
+            $table->unsignedBigInteger('branch_id')->nullable();
             $table->foreignId('fiscal_year_id')->nullable()->constrained('fiscal_years')->nullOnDelete();
-            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
-            $table->foreignId('parent_id')->nullable()->constrained('account_groups')->nullOnDelete();
 
             $table->string('code', 50)->unique();
             $table->string('name', 150);
-            $table->enum('type', ['asset', 'liability', 'equity', 'revenue', 'expense']);
+            $table->enum('status', ['active', 'closed'])->default('active');
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
@@ -39,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account_groups');
+        Schema::dropIfExists('journals_financials');
     }
 };

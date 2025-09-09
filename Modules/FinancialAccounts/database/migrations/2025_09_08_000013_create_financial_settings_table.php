@@ -11,19 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_groups', function (Blueprint $table) {
+        Schema::create('financial_settings', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
 
+            $table->foreignId('default_currency_id')->nullable()->constrained('currencies')->nullOnDelete();
+            $table->foreignId('vat_account_id')->nullable()->constrained('accounts')->nullOnDelete();
+            $table->foreignId('retained_earnings_account_id')->nullable()->constrained('accounts')->nullOnDelete();
+            $table->foreignId('rounding_account_id')->nullable()->constrained('accounts')->nullOnDelete();
+            $table->foreignId('default_sales_account_id')->nullable()->constrained('accounts')->nullOnDelete();
+            $table->foreignId('default_purchase_account_id')->nullable()->constrained('accounts')->nullOnDelete();
             $table->foreignId('fiscal_year_id')->nullable()->constrained('fiscal_years')->nullOnDelete();
-            $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
-            $table->foreignId('parent_id')->nullable()->constrained('account_groups')->nullOnDelete();
-
-            $table->string('code', 50)->unique();
-            $table->string('name', 150);
-            $table->enum('type', ['asset', 'liability', 'equity', 'revenue', 'expense']);
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
@@ -39,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account_groups');
+        Schema::dropIfExists('financial_settings');
     }
 };

@@ -31,6 +31,38 @@
 
     @livewireStyles()
 
+
+    @if (app()->getLocale() === 'ar')
+        <style>
+            @media (max-width: 1440px) {
+                .mdb-docs-layout {
+                    padding-right: 0px;
+                }
+            }
+
+
+            .mdb-docs-layout {
+                padding-right: 240px;
+                transition: padding 0.3s ease;
+            }
+        </style>
+    @endif
+
+    @if (app()->getLocale() === 'en')
+        <style>
+            @media (max-width: 1440px) {
+                .mdb-docs-layout {
+                    padding-left: 0px;
+                }
+            }
+
+            .mdb-docs-layout {
+                padding-left: 240px;
+                transition: padding 0.3s ease;
+            }
+        </style>
+    @endif
+
     <!-- Custom Font Setup -->
     <style>
         /* @media (min-width: 1400px) {
@@ -46,7 +78,37 @@
             font-family: 'Cairo', sans-serif;
             font-size: 16px;
             line-height: 1.7;
+            overflow-x: hidden;
+
         }
+
+        /* #sidenav-6 {
+            background-color: rgb(45, 44, 44);
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            transition: 0.3s linear;
+            z-index: 1030;
+        }
+
+        #main-screen {
+            transition: margin 0.3s ease;
+            padding: 20px;
+        }
+
+        @media (min-width: 660px) {
+            #main-screen {
+                margin-left: {{ app()->getLocale() === 'ar' ? '0' : '240px' }};
+                margin-right: {{ app()->getLocale() === 'ar' ? '240px' : '0' }};
+            }
+        }
+
+        @media (max-width: 659px) {
+            #main-screen {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        } */
 
         h1 {
             font-size: 32px;
@@ -94,21 +156,25 @@
 </head>
 
 <body>
-    <!-- Header: Sidenav + Navbar -->
-    <header>
-        @include('partials.admin.sidenav')
-        @include('partials.admin.navbar')
-    </header>
+    <!-- Main Wrapper -->
+    <div class="d-flex flex-column" style="min-height: 100vh;">
+        <!-- Navbar -->
+        <header>
+            @include('partials.admin.sidenav')
+            @include('partials.admin.navbar')
+        </header>
 
-    <!-- Main Content -->
-    <main id="main-screen" class="container">
-        {{ $slot }}
-    </main>
+        <!-- Page content -->
+        <main id="main-screen" class="container-fluid m-auto flex-grow-1 mdb-docs-layout">
+            {{ $slot }}
+        </main>
 
-    @include('partials.admin.footer')
+        <!-- Footer -->
+        @include('partials.admin.footer')
+    </div>
+
 
     <!-- MDB JS -->
-
     @if (app()->getLocale() === 'ar')
         <script type="text/javascript" src="{{ asset('assets/mdb/marta-szymanska/rtl/js/mdb.min.js') }}"></script>
     @endif
@@ -118,33 +184,30 @@
         <script type="text/javascript" src="{{ asset('assets/mdb/marta-szymanska/ltr/js/mdb.min.js') }}"></script>
     @endif
 
-
     <script type="text/javascript" src="{{ asset('assets/mdb/js/jquery-3.4.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/mdb/js/popper.min.js') }}"></script>
 
     <!-- Sidenav Responsive Script -->
-    <script type="text/javascript">
+    <!-- Adjust Main Content Margin -->
+    <script>
         $(document).ready(function() {
-            const sidenav = document.getElementById('sidenav-6'); // ID في HTML
+            const sidenav = document.getElementById('sidenav-6');
+            const mainScreen = document.getElementById('main-screen');
             const sidenavInstance = mdb.Sidenav.getInstance(sidenav);
 
-            let innerWidth = null;
-
-            const setMode = () => {
-                if (window.innerWidth === innerWidth) return;
-                innerWidth = window.innerWidth;
-
+            const adjustSidenav = () => {
                 if (window.innerWidth < 660) {
                     sidenavInstance.changeMode('over');
-                    sidenavInstance.show();
+                    sidenavInstance.hide();
                 } else {
                     sidenavInstance.changeMode('side');
                     sidenavInstance.show();
                 }
             };
 
-            setMode();
-            window.addEventListener('resize', setMode);
+
+            adjustSidenav();
+            window.addEventListener('resize', adjustSidenav);
         });
     </script>
 
