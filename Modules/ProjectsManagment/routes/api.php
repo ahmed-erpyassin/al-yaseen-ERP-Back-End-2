@@ -49,6 +49,19 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::put('/{id}', [TaskController::class, 'update'])->name('tasks.update');
         Route::delete('/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
+        // Advanced search and filtering
+        Route::get('/search/advanced', [TaskController::class, 'search'])->name('tasks.search');
+        Route::get('/filter/field', [TaskController::class, 'getTasksByField'])->name('tasks.filter-by-field');
+
+        // Specialized task views
+        Route::get('/my-tasks/list', [TaskController::class, 'myTasks'])->name('tasks.my-tasks');
+        Route::get('/daily-due/list', [TaskController::class, 'dailyDueTasks'])->name('tasks.daily-due');
+        Route::get('/overdue/list', [TaskController::class, 'overdueTasks'])->name('tasks.overdue');
+
+        // Sorting and field management
+        Route::get('/fields/sortable', [TaskController::class, 'getSortableFields'])->name('tasks.sortable-fields');
+        Route::post('/sort', [TaskController::class, 'sortTasks'])->name('tasks.sort');
+
         // Helper endpoints for dropdown data
         Route::get('/employees/list', [TaskController::class, 'getEmployees'])->name('tasks.employees');
         Route::get('/statuses/list', [TaskController::class, 'getTaskStatuses'])->name('tasks.statuses');
