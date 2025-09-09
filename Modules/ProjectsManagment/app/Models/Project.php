@@ -29,7 +29,7 @@ class Project extends Model
         'customer_id',
         'currency_id',
         'country_id',
-        
+
         // Project Basic Information
         'code',
         'project_number',
@@ -42,25 +42,25 @@ class Project extends Model
         'project_value',
         'actual_cost',
         'progress',
-        
+
         // Customer Information (auto-populated)
         'customer_name',
         'customer_email',
         'customer_phone',
         'licensed_operator',
-        
+
         // Currency and Pricing
         'currency_price',
         'include_vat',
-        
+
         // Project Manager Information
         'project_manager_name',
-        
+
         // Additional Information
         'notes',
         'project_date',
         'project_time',
-        
+
         // System fields
         'created_by',
         'updated_by',
@@ -190,6 +190,102 @@ class Project extends Model
         return $query->where('user_id', $userId);
     }
 
+    // Advanced Search Scopes
+    public function scopeSearch($query, $filters = [])
+    {
+        // Project Number search
+        if (!empty($filters['project_number'])) {
+            $query->where('project_number', 'like', '%' . $filters['project_number'] . '%');
+        }
+
+        // Project Name search
+        if (!empty($filters['project_name'])) {
+            $query->where('name', 'like', '%' . $filters['project_name'] . '%');
+        }
+
+        // Customer Name search
+        if (!empty($filters['customer_name'])) {
+            $query->where('customer_name', 'like', '%' . $filters['customer_name'] . '%');
+        }
+
+        // Status search
+        if (!empty($filters['status'])) {
+            if (is_array($filters['status'])) {
+                $query->whereIn('status', $filters['status']);
+            } else {
+                $query->where('status', $filters['status']);
+            }
+        }
+
+        // Project Manager Name search
+        if (!empty($filters['project_manager_name'])) {
+            $query->where('project_manager_name', 'like', '%' . $filters['project_manager_name'] . '%');
+        }
+
+        // Exact date search
+        if (!empty($filters['exact_date'])) {
+            $query->whereDate('project_date', $filters['exact_date']);
+        }
+
+        // Date range search (from/to)
+        if (!empty($filters['date_from'])) {
+            $query->whereDate('project_date', '>=', $filters['date_from']);
+        }
+
+        if (!empty($filters['date_to'])) {
+            $query->whereDate('project_date', '<=', $filters['date_to']);
+        }
+
+        // Start date range search
+        if (!empty($filters['start_date_from'])) {
+            $query->whereDate('start_date', '>=', $filters['start_date_from']);
+        }
+
+        if (!empty($filters['start_date_to'])) {
+            $query->whereDate('start_date', '<=', $filters['start_date_to']);
+        }
+
+        // End date range search
+        if (!empty($filters['end_date_from'])) {
+            $query->whereDate('end_date', '>=', $filters['end_date_from']);
+        }
+
+        if (!empty($filters['end_date_to'])) {
+            $query->whereDate('end_date', '<=', $filters['end_date_to']);
+        }
+
+        // General text search across multiple fields
+        if (!empty($filters['general_search'])) {
+            $searchTerm = $filters['general_search'];
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('project_number', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('customer_name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('project_manager_name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('notes', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        return $query;
+    }
+
+    // Sorting scope
+    public function scopeSortBy($query, $field = 'created_at', $direction = 'desc')
+    {
+        $allowedFields = [
+            'id', 'code', 'project_number', 'name', 'customer_name', 'project_manager_name',
+            'status', 'project_value', 'currency_price', 'start_date', 'end_date',
+            'project_date', 'created_at', 'updated_at'
+        ];
+
+        if (in_array($field, $allowedFields)) {
+            return $query->orderBy($field, $direction);
+        }
+
+        return $query->orderBy('created_at', 'desc');
+    }
+
     // Helper methods
     public function generateProjectCode()
     {
@@ -199,9 +295,9 @@ class Project extends Model
             ->whereYear('created_at', $year)
             ->orderBy('id', 'desc')
             ->first();
-        
+
         $sequence = $lastProject ? (intval(substr($lastProject->code, -4)) + 1) : 1;
-        
+
         return 'PRJ-' . $year . '-' . str_pad($sequence, 4, '0', STR_PAD_LEFT);
     }
 
@@ -229,11 +325,11 @@ class Project extends Model
             if (empty($project->code)) {
                 $project->code = $project->generateProjectCode();
             }
-            
+
             if (empty($project->project_date)) {
                 $project->project_date = now();
             }
-            
+
             if (empty($project->project_time)) {
                 $project->project_time = now()->format('H:i');
             }

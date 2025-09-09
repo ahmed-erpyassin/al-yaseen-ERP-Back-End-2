@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Modules\ProjectsManagment\Models\Project;
 use Modules\ProjectsManagment\Http\Requests\StoreProjectRequest;
+use Modules\ProjectsManagment\Http\Requests\UpdateProjectRequest;
 use Modules\Customers\Models\Customer;
 use Modules\FinancialAccounts\Models\Currency;
 use Modules\Users\Models\User;
@@ -16,7 +17,7 @@ use Modules\Companies\Models\Company;
 class ProjectsManagmentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource with advanced search and sorting.
      */
     public function index(Request $request): JsonResponse
     {
@@ -24,14 +25,36 @@ class ProjectsManagmentController extends Controller
             $user = $request->user();
             $companyId = $user->company_id;
 
-            $projects = Project::with(['customer', 'currency', 'manager', 'country'])
+            // Get search filters from request
+            $filters = $request->only([
+                'project_number', 'project_name', 'customer_name', 'status',
+                'project_manager_name', 'exact_date', 'date_from', 'date_to',
+                'start_date_from', 'start_date_to', 'end_date_from', 'end_date_to',
+                'general_search'
+            ]);
+
+            // Get sorting parameters
+            $sortField = $request->get('sort_field', 'created_at');
+            $sortDirection = $request->get('sort_direction', 'desc');
+            $perPage = $request->get('per_page', 15);
+
+            // Build query with search and sorting
+            $projects = Project::with([
+                    'customer', 'currency', 'manager', 'country', 'company', 'branch'
+                ])
                 ->forCompany($companyId)
-                ->orderBy('created_at', 'desc')
-                ->paginate(15);
+                ->search($filters)
+                ->sortBy($sortField, $sortDirection)
+                ->paginate($perPage);
 
             return response()->json([
                 'success' => true,
                 'data' => $projects,
+                'filters_applied' => $filters,
+                'sorting' => [
+                    'field' => $sortField,
+                    'direction' => $sortDirection
+                ],
                 'message' => 'Projects retrieved successfully'
             ]);
         } catch (\Exception $e) {
@@ -94,19 +117,124 @@ class ProjectsManagmentController extends Controller
     }
 
     /**
-     * Show the specified resource.
+     * Advanced search for projects
+     */
+    public function search(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            // Validate search parameters
+            $request->validate([
+                'project_number' => 'nullable|string|max:255',
+                'project_name' => 'nullable|string|max:255',
+                'customer_name' => 'nullable|string|max:255',
+                'status' => 'nullable|string|in:draft,open,on-hold,cancelled,closed',
+                'project_manager_name' => 'nullable|string|max:255',
+                'exact_date' => 'nullable|date',
+                'date_from' => 'nullable|date',
+                'date_to' => 'nullable|date|after_or_equal:date_from',
+                'start_date_from' => 'nullable|date',
+                'start_date_to' => 'nullable|date|after_or_equal:start_date_from',
+                'end_date_from' => 'nullable|date',
+                'end_date_to' => 'nullable|date|after_or_equal:end_date_from',
+                'general_search' => 'nullable|string|max:255',
+                'sort_field' => 'nullable|string',
+                'sort_direction' => 'nullable|in:asc,desc',
+                'per_page' => 'nullable|integer|min:1|max:100'
+            ]);
+
+            // Get search filters
+            $filters = $request->only([
+                'project_number', 'project_name', 'customer_name', 'status',
+                'project_manager_name', 'exact_date', 'date_from', 'date_to',
+                'start_date_from', 'start_date_to', 'end_date_from', 'end_date_to',
+                'general_search'
+            ]);
+
+            // Get sorting parameters
+            $sortField = $request->get('sort_field', 'created_at');
+            $sortDirection = $request->get('sort_direction', 'desc');
+            $perPage = $request->get('per_page', 15);
+
+            // Build query
+            $projects = Project::with([
+                    'customer', 'currency', 'manager', 'country', 'company', 'branch'
+                ])
+                ->forCompany($companyId)
+                ->search($filters)
+                ->sortBy($sortField, $sortDirection)
+                ->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => $projects,
+                'search_criteria' => $filters,
+                'sorting' => [
+                    'field' => $sortField,
+                    'direction' => $sortDirection
+                ],
+                'message' => 'Search completed successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error performing search: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Show the specified resource with comprehensive data.
      */
     public function show($id): JsonResponse
     {
         try {
             $project = Project::with([
-                'customer', 'currency', 'manager', 'country', 'company',
-                'milestones', 'tasks', 'documents', 'financials'
+                'customer', 'currency', 'manager', 'country', 'company', 'branch',
+                'fiscalYear', 'costCenter', 'creator', 'updater', 'deleter',
+                'milestones', 'tasks', 'resources', 'documents', 'financials', 'risks'
             ])->findOrFail($id);
+
+            // Check if user has permission to view this project
+            $user = request()->user();
+            if ($project->company_id !== $user->company_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized to view this project'
+                ], 403);
+            }
+
+            // Calculate additional project metrics
+            $projectData = $project->toArray();
+
+            // Add calculated fields
+            $projectData['calculated_fields'] = [
+                'vat_amount' => $project->calculateVATAmount(),
+                'total_price_with_vat' => $project->getTotalPriceWithVAT(),
+                'days_remaining' => $project->end_date ? now()->diffInDays($project->end_date, false) : null,
+                'project_duration_days' => $project->start_date && $project->end_date ?
+                    $project->start_date->diffInDays($project->end_date) : null,
+                'is_overdue' => $project->end_date ? now()->isAfter($project->end_date) : false,
+                'completion_percentage' => $project->progress ?? 0,
+            ];
+
+            // Add project statistics
+            $projectData['statistics'] = [
+                'total_milestones' => $project->milestones->count(),
+                'completed_milestones' => $project->milestones->where('status', 'completed')->count(),
+                'total_tasks' => $project->tasks->count(),
+                'completed_tasks' => $project->tasks->where('status', 'done')->count(),
+                'total_documents' => $project->documents->count(),
+                'total_risks' => $project->risks->count(),
+                'open_risks' => $project->risks->where('status', 'open')->count(),
+            ];
 
             return response()->json([
                 'success' => true,
-                'data' => $project,
+                'data' => $projectData,
                 'message' => 'Project retrieved successfully'
             ]);
         } catch (\Exception $e) {
@@ -120,16 +248,54 @@ class ProjectsManagmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(UpdateProjectRequest $request, $id): JsonResponse
     {
         try {
             $project = Project::findOrFail($id);
 
-            $data = $request->all();
+            // Check if user has permission to update this project
+            if ($project->company_id !== $request->user()->company_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized to update this project'
+                ], 403);
+            }
+
+            $data = $request->validated();
+
+            // Auto-populate customer information if customer_id is changed
+            if (isset($data['customer_id']) && $data['customer_id'] !== $project->customer_id) {
+                $customer = Customer::find($data['customer_id']);
+                if ($customer) {
+                    $data['customer_name'] = $customer->first_name . ' ' . $customer->second_name;
+                    $data['customer_email'] = $customer->email;
+                    $data['customer_phone'] = $customer->phone;
+                    $data['licensed_operator'] = $customer->contact_name ?? '';
+                }
+            }
+
+            // Recalculate VAT if needed
+            if (isset($data['include_vat']) && isset($data['currency_price'])) {
+                if ($data['include_vat'] && $data['currency_price']) {
+                    $company = Company::find($project->company_id);
+                    if ($company && $company->vat_rate > 0) {
+                        $vatAmount = $data['currency_price'] * ($company->vat_rate / 100);
+                        $data['currency_price'] = $data['currency_price'] + $vatAmount;
+                    }
+                }
+            }
+
+            // Set system fields
             $data['updated_by'] = $request->user()->id;
 
+            // Update the project
             $project->update($data);
-            $project->load(['customer', 'currency', 'manager', 'country', 'company']);
+
+            // Load relationships for response
+            $project->load([
+                'customer', 'currency', 'manager', 'country', 'company', 'branch',
+                'creator', 'updater'
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -140,6 +306,142 @@ class ProjectsManagmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error updating project: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get projects by specific field value for dynamic selection display
+     */
+    public function getProjectsByField(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $request->validate([
+                'field' => 'required|string',
+                'value' => 'required',
+                'sort_field' => 'nullable|string',
+                'sort_direction' => 'nullable|in:asc,desc',
+                'per_page' => 'nullable|integer|min:1|max:100'
+            ]);
+
+            $field = $request->field;
+            $value = $request->value;
+            $sortField = $request->get('sort_field', 'created_at');
+            $sortDirection = $request->get('sort_direction', 'desc');
+            $perPage = $request->get('per_page', 15);
+
+            // Define allowed fields for security
+            $allowedFields = [
+                'status', 'customer_name', 'project_manager_name', 'country_id',
+                'currency_id', 'manager_id', 'customer_id', 'project_number',
+                'name', 'start_date', 'end_date', 'project_date'
+            ];
+
+            if (!in_array($field, $allowedFields)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid field specified'
+                ], 400);
+            }
+
+            // Build query based on field type
+            $query = Project::with([
+                    'customer', 'currency', 'manager', 'country', 'company', 'branch'
+                ])
+                ->forCompany($companyId);
+
+            // Apply field-specific filtering
+            if (in_array($field, ['status', 'customer_name', 'project_manager_name', 'project_number', 'name'])) {
+                $query->where($field, 'like', '%' . $value . '%');
+            } elseif (in_array($field, ['country_id', 'currency_id', 'manager_id', 'customer_id'])) {
+                $query->where($field, $value);
+            } elseif (in_array($field, ['start_date', 'end_date', 'project_date'])) {
+                $query->whereDate($field, $value);
+            }
+
+            $projects = $query->sortBy($sortField, $sortDirection)->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => $projects,
+                'filter_applied' => [
+                    'field' => $field,
+                    'value' => $value
+                ],
+                'sorting' => [
+                    'field' => $sortField,
+                    'direction' => $sortDirection
+                ],
+                'message' => 'Projects filtered by ' . $field . ' retrieved successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error filtering projects: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get unique values for a specific field for dropdown/selection
+     */
+    public function getFieldValues(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $request->validate([
+                'field' => 'required|string'
+            ]);
+
+            $field = $request->field;
+
+            // Define allowed fields and their display names
+            $allowedFields = [
+                'status' => 'Status',
+                'customer_name' => 'Customer Name',
+                'project_manager_name' => 'Project Manager Name',
+                'country_id' => 'Country',
+                'currency_id' => 'Currency',
+                'manager_id' => 'Manager',
+                'customer_id' => 'Customer'
+            ];
+
+            if (!array_key_exists($field, $allowedFields)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid field specified'
+                ], 400);
+            }
+
+            // Get unique values for the field
+            $values = Project::forCompany($companyId)
+                ->whereNotNull($field)
+                ->where($field, '!=', '')
+                ->distinct()
+                ->pluck($field)
+                ->filter()
+                ->values();
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'field' => $field,
+                    'field_name' => $allowedFields[$field],
+                    'values' => $values
+                ],
+                'message' => 'Field values retrieved successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving field values: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -308,6 +610,91 @@ class ProjectsManagmentController extends Controller
     }
 
     /**
+     * Get sortable fields for projects
+     */
+    public function getSortableFields(): JsonResponse
+    {
+        $sortableFields = [
+            'id' => 'ID',
+            'code' => 'Project Code',
+            'project_number' => 'Project Number',
+            'name' => 'Project Name',
+            'customer_name' => 'Customer Name',
+            'project_manager_name' => 'Project Manager Name',
+            'status' => 'Status',
+            'project_value' => 'Project Value',
+            'currency_price' => 'Currency Price',
+            'budget' => 'Budget',
+            'actual_cost' => 'Actual Cost',
+            'progress' => 'Progress',
+            'start_date' => 'Start Date',
+            'end_date' => 'End Date',
+            'project_date' => 'Project Date',
+            'created_at' => 'Created Date',
+            'updated_at' => 'Updated Date'
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $sortableFields,
+            'message' => 'Sortable fields retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Sort projects by specific field with first/last functionality
+     */
+    public function sortProjects(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $request->validate([
+                'sort_field' => 'required|string',
+                'sort_direction' => 'required|in:asc,desc,first,last',
+                'per_page' => 'nullable|integer|min:1|max:100'
+            ]);
+
+            $sortField = $request->sort_field;
+            $sortDirection = $request->sort_direction;
+            $perPage = $request->get('per_page', 15);
+
+            // Convert first/last to asc/desc
+            if ($sortDirection === 'first') {
+                $sortDirection = 'asc';
+            } elseif ($sortDirection === 'last') {
+                $sortDirection = 'desc';
+            }
+
+            // Get projects with sorting
+            $projects = Project::with([
+                    'customer', 'currency', 'manager', 'country', 'company', 'branch'
+                ])
+                ->forCompany($companyId)
+                ->sortBy($sortField, $sortDirection)
+                ->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => $projects,
+                'sorting' => [
+                    'field' => $sortField,
+                    'direction' => $sortDirection,
+                    'original_direction' => $request->sort_direction
+                ],
+                'message' => 'Projects sorted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error sorting projects: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Calculate VAT for given price and company
      */
     public function calculateVAT(Request $request): JsonResponse
@@ -387,14 +774,35 @@ class ProjectsManagmentController extends Controller
     }
 
     /**
-     * Delete a project
+     * Delete a project (soft delete)
      */
     public function destroy($id): JsonResponse
     {
         try {
+            $user = request()->user();
             $project = Project::findOrFail($id);
-            $project->deleted_by = auth()->id();
+
+            // Check if user has permission to delete this project
+            if ($project->company_id !== $user->company_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized to delete this project'
+                ], 403);
+            }
+
+            // Check if project can be deleted (business logic)
+            if ($project->status === 'closed') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete a closed project'
+                ], 422);
+            }
+
+            // Set deleted_by before soft delete
+            $project->deleted_by = $user->id;
             $project->save();
+
+            // Perform soft delete
             $project->delete();
 
             return response()->json([
@@ -405,6 +813,113 @@ class ProjectsManagmentController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting project: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Restore a soft-deleted project
+     */
+    public function restore($id): JsonResponse
+    {
+        try {
+            $user = request()->user();
+            $project = Project::withTrashed()->findOrFail($id);
+
+            // Check if user has permission to restore this project
+            if ($project->company_id !== $user->company_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized to restore this project'
+                ], 403);
+            }
+
+            // Restore the project
+            $project->restore();
+
+            // Clear deleted_by field
+            $project->deleted_by = null;
+            $project->save();
+
+            return response()->json([
+                'success' => true,
+                'data' => $project,
+                'message' => 'Project restored successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error restoring project: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Permanently delete a project (force delete)
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        try {
+            $user = request()->user();
+            $project = Project::withTrashed()->findOrFail($id);
+
+            // Check if user has permission to permanently delete this project
+            if ($project->company_id !== $user->company_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized to permanently delete this project'
+                ], 403);
+            }
+
+            // Additional authorization check - only admin or project creator can force delete
+            if ($user->role !== 'admin' && $project->user_id !== $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Only administrators or project creators can permanently delete projects'
+                ], 403);
+            }
+
+            // Force delete (permanent)
+            $project->forceDelete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Project permanently deleted'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error permanently deleting project: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get trashed (soft-deleted) projects
+     */
+    public function getTrashed(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $perPage = $request->get('per_page', 15);
+
+            $trashedProjects = Project::onlyTrashed()
+                ->with(['customer', 'currency', 'manager', 'country', 'company', 'deleter'])
+                ->forCompany($companyId)
+                ->orderBy('deleted_at', 'desc')
+                ->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => $trashedProjects,
+                'message' => 'Trashed projects retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving trashed projects: ' . $e->getMessage()
             ], 500);
         }
     }
