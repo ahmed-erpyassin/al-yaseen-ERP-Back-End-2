@@ -20,7 +20,10 @@ class ProjectTask extends Model
         'milestone_id',
         'assigned_to',
         'title',
+        'task_name',
         'description',
+        'notes',
+        'records',
         'priority',
         'status',
         'start_date',
@@ -39,6 +42,7 @@ class ProjectTask extends Model
         'progress' => 'decimal:2',
         'estimated_hours' => 'integer',
         'actual_hours' => 'integer',
+        'records' => 'array',
     ];
 
     public function project()
@@ -69,5 +73,57 @@ class ProjectTask extends Model
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(TaskDocument::class, 'task_id');
+    }
+
+    // Scopes
+    public function scopeForCompany($query, $companyId)
+    {
+        return $query->where('company_id', $companyId);
+    }
+
+    public function scopeForProject($query, $projectId)
+    {
+        return $query->where('project_id', $projectId);
+    }
+
+    public function scopeAssignedTo($query, $userId)
+    {
+        return $query->where('assigned_to', $userId);
+    }
+
+    public function scopeByStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    // Helper methods
+    public function getDisplayNameAttribute()
+    {
+        return $this->task_name ?: $this->title;
+    }
+
+    public function getStatusOptions()
+    {
+        return [
+            'to_do' => 'To Do',
+            'in_progress' => 'In Progress',
+            'done' => 'Done',
+            'blocked' => 'Blocked'
+        ];
+    }
+
+    public function getPriorityOptions()
+    {
+        return [
+            'low' => 'Low',
+            'medium' => 'Medium',
+            'high' => 'High',
+            'urgent' => 'Urgent'
+        ];
     }
 }

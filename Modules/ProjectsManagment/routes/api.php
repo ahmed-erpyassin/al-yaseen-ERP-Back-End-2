@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\ProjectsManagment\Http\Controllers\ProjectsManagmentController;
+use Modules\ProjectsManagment\Http\Controllers\TaskController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -37,5 +38,28 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         // Utility endpoints
         Route::post('/calculate-vat', [ProjectsManagmentController::class, 'calculateVAT'])->name('projects.calculate-vat');
         Route::get('/generate-code', [ProjectsManagmentController::class, 'generateProjectCode'])->name('projects.generate-code');
+    });
+
+    // Task Management Routes
+    Route::prefix('tasks')->group(function () {
+        // Main CRUD operations
+        Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
+        Route::post('/', [TaskController::class, 'store'])->name('tasks.store');
+        Route::get('/{id}', [TaskController::class, 'show'])->name('tasks.show');
+        Route::put('/{id}', [TaskController::class, 'update'])->name('tasks.update');
+        Route::delete('/{id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+        // Helper endpoints for dropdown data
+        Route::get('/employees/list', [TaskController::class, 'getEmployees'])->name('tasks.employees');
+        Route::get('/statuses/list', [TaskController::class, 'getTaskStatuses'])->name('tasks.statuses');
+        Route::get('/priorities/list', [TaskController::class, 'getTaskPriorities'])->name('tasks.priorities');
+
+        // Project-specific tasks
+        Route::get('/project/{projectId}', [TaskController::class, 'getProjectTasks'])->name('tasks.project');
+
+        // Document management
+        Route::post('/{taskId}/documents', [TaskController::class, 'uploadDocument'])->name('tasks.upload-document');
+        Route::get('/{taskId}/documents', [TaskController::class, 'getTaskDocuments'])->name('tasks.documents');
+        Route::delete('/documents/{documentId}', [TaskController::class, 'deleteDocument'])->name('tasks.delete-document');
     });
 });
