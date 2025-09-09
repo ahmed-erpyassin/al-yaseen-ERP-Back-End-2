@@ -12,7 +12,6 @@ class CompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'nullable|exists:users,id|unique:companies,user_id',
             'title' => 'required|string|max:255',
             'commercial_registeration_number' => 'required|string|max:100',
             'address' => 'nullable|string|max:255',
