@@ -1,0 +1,50 @@
+<?php
+
+namespace Modules\ProjectsManagment\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Users\Models\User;
+
+class ProjectRisk extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'user_id',
+        'company_id',
+        'branch_id',
+        'fiscal_year_id',
+        'project_id',
+        'title',
+        'description',
+        'impact',
+        'probability',
+        'mitigation_plan',
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function deleter()
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
+    }
+}
