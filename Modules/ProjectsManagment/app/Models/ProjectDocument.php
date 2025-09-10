@@ -82,6 +82,26 @@ class ProjectDocument extends Model
         return $query->where('document_category', $category);
     }
 
+    public function scopeByStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
+
+    public function scopeByFileType($query, $fileType)
+    {
+        return $query->where('file_type', 'like', "%{$fileType}%");
+    }
+
+    public function scopeByUploadDate($query, $date)
+    {
+        return $query->whereDate('upload_date', $date);
+    }
+
+    public function scopeByDateRange($query, $startDate, $endDate)
+    {
+        return $query->whereBetween('upload_date', [$startDate, $endDate]);
+    }
+
     // Helper methods
     public function generateDocumentNumber()
     {

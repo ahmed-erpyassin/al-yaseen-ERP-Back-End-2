@@ -157,6 +157,18 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         // File operations
         Route::get('/{id}/download', [DocumentController::class, 'downloadDocument'])->name('documents.download');
 
+        // Advanced search and filtering
+        Route::post('/search', [DocumentController::class, 'search'])->name('documents.search');
+        Route::get('/filter/by-field', [DocumentController::class, 'getDocumentsByField'])->name('documents.filter-by-field');
+        Route::get('/fields/values', [DocumentController::class, 'getFieldValues'])->name('documents.field-values');
+        Route::get('/fields/sortable', [DocumentController::class, 'getSortableFields'])->name('documents.sortable-fields');
+        Route::post('/sort', [DocumentController::class, 'sortDocuments'])->name('documents.sort');
+
+        // Soft delete management
+        Route::post('/{id}/restore', [DocumentController::class, 'restore'])->name('documents.restore');
+        Route::delete('/{id}/force-delete', [DocumentController::class, 'forceDelete'])->name('documents.force-delete');
+        Route::get('/trashed/list', [DocumentController::class, 'getTrashed'])->name('documents.trashed');
+
         // Helper endpoints for dropdown data
         Route::get('/projects/list', [DocumentController::class, 'getProjects'])->name('documents.projects');
         Route::get('/categories/list', [DocumentController::class, 'getDocumentCategories'])->name('documents.categories');
