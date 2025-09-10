@@ -117,6 +117,18 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::put('/{id}', [ResourceController::class, 'update'])->name('resources.update');
         Route::delete('/{id}', [ResourceController::class, 'destroy'])->name('resources.destroy');
 
+        // Advanced search and filtering
+        Route::post('/search', [ResourceController::class, 'search'])->name('resources.search');
+        Route::get('/filter/by-field', [ResourceController::class, 'getResourcesByField'])->name('resources.filter-by-field');
+        Route::get('/fields/values', [ResourceController::class, 'getFieldValues'])->name('resources.field-values');
+        Route::get('/fields/sortable', [ResourceController::class, 'getSortableFields'])->name('resources.sortable-fields');
+        Route::post('/sort', [ResourceController::class, 'sortResources'])->name('resources.sort');
+
+        // Soft delete management
+        Route::post('/{id}/restore', [ResourceController::class, 'restore'])->name('resources.restore');
+        Route::delete('/{id}/force-delete', [ResourceController::class, 'forceDelete'])->name('resources.force-delete');
+        Route::get('/trashed/list', [ResourceController::class, 'getTrashed'])->name('resources.trashed');
+
         // Helper endpoints for dropdown data
         Route::get('/suppliers/list', [ResourceController::class, 'getSuppliers'])->name('resources.suppliers');
         Route::get('/projects/list', [ResourceController::class, 'getProjects'])->name('resources.projects');
