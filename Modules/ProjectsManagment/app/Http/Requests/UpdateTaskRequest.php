@@ -25,10 +25,10 @@ class UpdateTaskRequest extends FormRequest
             // Optional fields for update
             'project_id' => 'sometimes|exists:projects,id',
             'task_name' => 'sometimes|string|max:255',
-            'assigned_to' => 'sometimes|exists:users,id',
+            'assigned_to' => 'sometimes|exists:employees,id',
             'due_date' => 'sometimes|date',
             'status' => 'sometimes|in:to_do,in_progress,done,blocked',
-            
+
             // Optional fields
             'milestone_id' => 'nullable|exists:project_milestones,id',
             'title' => 'sometimes|string|max:255',
@@ -39,7 +39,7 @@ class UpdateTaskRequest extends FormRequest
             'estimated_hours' => 'sometimes|integer|min:1|max:1000',
             'actual_hours' => 'sometimes|integer|min:0|max:1000',
             'progress' => 'sometimes|numeric|min:0|max:100',
-            
+
             // Records (links/URLs)
             'records' => 'sometimes|array',
             'records.*' => 'nullable|string|url|max:500',
@@ -98,7 +98,7 @@ class UpdateTaskRequest extends FormRequest
     protected function prepareForValidation()
     {
         $user = $this->user();
-        
+
         // Set updated_by
         $this->merge([
             'updated_by' => $user->id,
@@ -121,7 +121,7 @@ class UpdateTaskRequest extends FormRequest
         if ($this->has('start_date') && $this->has('due_date')) {
             $startDate = $this->start_date;
             $dueDate = $this->due_date;
-            
+
             if ($startDate && $dueDate && $startDate > $dueDate) {
                 $this->merge(['start_date' => $dueDate]);
             }

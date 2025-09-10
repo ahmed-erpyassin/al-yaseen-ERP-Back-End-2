@@ -11,6 +11,7 @@ use Modules\ProjectsManagment\Models\Project;
 use Modules\ProjectsManagment\Http\Requests\StoreTaskRequest;
 use Modules\ProjectsManagment\Http\Requests\UpdateTaskRequest;
 use Modules\Users\Models\User;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
@@ -588,24 +589,28 @@ class TaskController extends Controller
             $user = $request->user();
             $companyId = $user->company_id;
 
-            $employees = User::where('company_id', $companyId)
-                ->where('status', 'active')
-                ->select('id', 'first_name', 'second_name', 'email', 'phone')
+            // Get employees from the employees table
+            $employees = Employee::where('company_id', $companyId)
+                ->with('user') // Load related user data
+                ->select('id', 'user_id', 'first_name', 'second_name', 'third_name', 'email', 'phone1', 'job_title', 'employee_number')
                 ->orderBy('first_name')
                 ->get()
                 ->map(function ($employee) {
                     return [
                         'id' => $employee->id,
-                        'name' => trim($employee->first_name . ' ' . $employee->second_name),
+                        'user_id' => $employee->user_id,
+                        'employee_number' => $employee->employee_number,
+                        'name' => trim($employee->first_name . ' ' . $employee->second_name . ' ' . $employee->third_name),
                         'email' => $employee->email,
-                        'phone' => $employee->phone,
+                        'phone' => $employee->phone1,
+                        'job_title' => $employee->job_title,
                     ];
                 });
 
             return response()->json([
                 'success' => true,
                 'data' => $employees,
-                'message' => 'Employees retrieved successfully'
+                'message' => 'Employees retrieved successfully from employees table'
             ]);
         } catch (\Exception $e) {
             return response()->json([

@@ -25,10 +25,10 @@ class StoreTaskRequest extends FormRequest
             // Required fields
             'project_id' => 'required|exists:projects,id',
             'task_name' => 'required|string|max:255',
-            'assigned_to' => 'required|exists:users,id',
+            'assigned_to' => 'required|exists:employees,id',
             'due_date' => 'required|date|after_or_equal:today',
             'status' => 'required|in:to_do,in_progress,done,blocked',
-            
+
             // Optional fields
             'milestone_id' => 'nullable|exists:project_milestones,id',
             'title' => 'nullable|string|max:255',
@@ -39,11 +39,11 @@ class StoreTaskRequest extends FormRequest
             'estimated_hours' => 'nullable|integer|min:1|max:1000',
             'actual_hours' => 'nullable|integer|min:0|max:1000',
             'progress' => 'nullable|numeric|min:0|max:100',
-            
+
             // Records (links/URLs)
             'records' => 'nullable|array',
             'records.*' => 'nullable|string|url|max:500',
-            
+
             // System fields (auto-populated)
             'company_id' => 'sometimes|exists:companies,id',
             'branch_id' => 'sometimes|exists:branches,id',
@@ -110,7 +110,7 @@ class StoreTaskRequest extends FormRequest
     protected function prepareForValidation()
     {
         $user = $this->user();
-        
+
         // Auto-populate system fields
         $this->merge([
             'user_id' => $user->id,
