@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->unsignedBigInteger('company_id')->nullable()->unique();
+            $table->unsignedBigInteger('company_id')->nullable();
 
             $table->string('name', 100);
             $table->date('start_date');
@@ -27,7 +27,6 @@ return new class extends Migration
             $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
 
             $table->softDeletes();
-
             $table->timestamps();
         });
     }

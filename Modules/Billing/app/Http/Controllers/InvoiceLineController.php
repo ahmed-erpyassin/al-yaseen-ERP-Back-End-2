@@ -5,7 +5,7 @@ namespace Modules\Billing\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class BillingController extends Controller
+class InvoiceLineController extends Controller
 {
     /**
      * Display a listing of the resource.

@@ -11,18 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fa_attachments', function (Blueprint $table) {
+        Schema::create('invoice_taxes', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-             $table->unsignedBigInteger('company_id')->nullable();
-            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('financial_year_id')->constrained('fiscal_years')->cascadeOnDelete();
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('invoice_id')->constrained('invoices')->cascadeOnDelete();
 
-            $table->foreignId('journal_entry_id')->nullable()->constrained('journals_entries')->nullOnDelete();
-            $table->string('type', 50)->nullable();
-            $table->unsignedBigInteger('document_id')->nullable();
-
-            $table->string('file_path', 255);
+            $table->foreignId('tax_id')->constrained('tax_rates')->cascadeOnDelete();
+            $table->decimal('tax_amount', 15, 2);
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
@@ -38,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fa_attachments');
+        Schema::dropIfExists('invoice_taxes');
     }
 };
