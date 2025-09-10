@@ -35,12 +35,14 @@ class MilestoneController extends Controller
                 $query->where('status', $request->status);
             }
 
+            // Advanced search functionality
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                       ->orWhere('description', 'like', "%{$search}%")
                       ->orWhere('notes', 'like', "%{$search}%")
+                      ->orWhere('milestone_number', 'like', "%{$search}%")
                       ->orWhereHas('project', function ($projectQuery) use ($search) {
                           $projectQuery->where('name', 'like', "%{$search}%")
                                       ->orWhere('code', 'like', "%{$search}%")
@@ -49,13 +51,66 @@ class MilestoneController extends Controller
                 });
             }
 
+            // Search by milestone number
+            if ($request->has('milestone_number') && !empty($request->milestone_number)) {
+                $query->where('milestone_number', $request->milestone_number);
+            }
+
+            // Search by project number
+            if ($request->has('project_number') && !empty($request->project_number)) {
+                $query->whereHas('project', function ($projectQuery) use ($request) {
+                    $projectQuery->where('project_number', 'like', "%{$request->project_number}%");
+                });
+            }
+
+            // Search by milestone name
+            if ($request->has('milestone_name') && !empty($request->milestone_name)) {
+                $query->where('name', 'like', "%{$request->milestone_name}%");
+            }
+
+            // Search by start date (exact date)
+            if ($request->has('start_date') && !empty($request->start_date)) {
+                $query->whereDate('start_date', $request->start_date);
+            }
+
+            // Search by start date range (from/to)
+            if ($request->has('start_date_from') && !empty($request->start_date_from)) {
+                $query->whereDate('start_date', '>=', $request->start_date_from);
+            }
+            if ($request->has('start_date_to') && !empty($request->start_date_to)) {
+                $query->whereDate('start_date', '<=', $request->start_date_to);
+            }
+
+            // Search by end date (exact date)
+            if ($request->has('end_date') && !empty($request->end_date)) {
+                $query->whereDate('end_date', $request->end_date);
+            }
+
+            // Search by end date range (from/to)
+            if ($request->has('end_date_from') && !empty($request->end_date_from)) {
+                $query->whereDate('end_date', '>=', $request->end_date_from);
+            }
+            if ($request->has('end_date_to') && !empty($request->end_date_to)) {
+                $query->whereDate('end_date', '<=', $request->end_date_to);
+            }
+
             // Apply sorting
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
-            
-            $allowedSortFields = ['id', 'milestone_number', 'name', 'start_date', 'end_date', 'status', 'progress', 'created_at'];
+
+            // All sortable fields from project_milestones table
+            $allowedSortFields = [
+                'id', 'milestone_number', 'name', 'description', 'start_date', 'end_date',
+                'status', 'progress', 'notes', 'created_at', 'updated_at',
+                'user_id', 'company_id', 'branch_id', 'fiscal_year_id', 'project_id',
+                'created_by', 'updated_by', 'deleted_by'
+            ];
+
             if (in_array($sortBy, $allowedSortFields)) {
                 $query->orderBy($sortBy, $sortOrder);
+            } else {
+                // Default sorting
+                $query->orderBy('created_at', 'desc');
             }
 
             $milestones = $query->paginate($perPage);
@@ -159,7 +214,7 @@ class MilestoneController extends Controller
             $companyId = $user->company_id;
 
             $milestone = ProjectMilestone::forCompany($companyId)->findOrFail($id);
-            
+
             // Set deleted_by before soft delete
             $milestone->update(['deleted_by' => $user->id]);
             $milestone->delete();
@@ -172,6 +227,91 @@ class MilestoneController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error deleting milestone: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Restore a soft-deleted milestone.
+     */
+    public function restore($id): JsonResponse
+    {
+        try {
+            $user = request()->user();
+            $companyId = $user->company_id;
+
+            $milestone = ProjectMilestone::withTrashed()
+                ->forCompany($companyId)
+                ->findOrFail($id);
+
+            $milestone->restore();
+            $milestone->update(['deleted_by' => null]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $milestone,
+                'message' => 'Milestone restored successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error restoring milestone: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Permanently delete a milestone.
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        try {
+            $user = request()->user();
+            $companyId = $user->company_id;
+
+            $milestone = ProjectMilestone::withTrashed()
+                ->forCompany($companyId)
+                ->findOrFail($id);
+
+            $milestone->forceDelete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Milestone permanently deleted'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error permanently deleting milestone: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get trashed (soft-deleted) milestones.
+     */
+    public function getTrashed(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+            $perPage = $request->get('per_page', 15);
+
+            $milestones = ProjectMilestone::onlyTrashed()
+                ->with(['project', 'creator', 'updater', 'deleter'])
+                ->forCompany($companyId)
+                ->orderBy('deleted_at', 'desc')
+                ->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => $milestones,
+                'message' => 'Trashed milestones retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving trashed milestones: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -312,6 +452,300 @@ class MilestoneController extends Controller
                 'success' => false,
                 'message' => 'Error retrieving project milestones: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    /**
+     * Advanced search for milestones.
+     */
+    public function search(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+            $perPage = $request->get('per_page', 15);
+
+            $query = ProjectMilestone::with(['project', 'creator', 'updater'])
+                ->forCompany($companyId);
+
+            // Apply all search filters
+            $this->applySearchFilters($query, $request);
+
+            // Apply sorting
+            $this->applySorting($query, $request);
+
+            $milestones = $query->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => $milestones,
+                'message' => 'Milestone search completed successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error searching milestones: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get milestones filtered by specific field value.
+     */
+    public function getMilestonesByField(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $field = $request->get('field');
+            $value = $request->get('value');
+            $sortBy = $request->get('sort_by', 'created_at');
+            $sortOrder = $request->get('sort_order', 'desc');
+            $perPage = $request->get('per_page', 15);
+
+            if (!$field || !$value) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Field and value parameters are required'
+                ], 400);
+            }
+
+            $query = ProjectMilestone::with(['project', 'creator', 'updater'])
+                ->forCompany($companyId);
+
+            // Apply field filter
+            $allowedFields = [
+                'milestone_number', 'name', 'status', 'progress', 'project_id',
+                'start_date', 'end_date', 'created_by', 'updated_by'
+            ];
+
+            if (in_array($field, $allowedFields)) {
+                if (in_array($field, ['start_date', 'end_date'])) {
+                    $query->whereDate($field, $value);
+                } else {
+                    $query->where($field, $value);
+                }
+            }
+
+            // Apply sorting
+            $this->applySorting($query, $request);
+
+            $milestones = $query->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => $milestones,
+                'message' => "Milestones filtered by {$field} retrieved successfully"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error filtering milestones: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get all field values for dropdown filtering.
+     */
+    public function getFieldValues(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+            $field = $request->get('field');
+
+            if (!$field) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Field parameter is required'
+                ], 400);
+            }
+
+            $allowedFields = [
+                'milestone_number', 'name', 'status', 'progress', 'project_id',
+                'start_date', 'end_date'
+            ];
+
+            if (!in_array($field, $allowedFields)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid field specified'
+                ], 400);
+            }
+
+            $values = ProjectMilestone::forCompany($companyId)
+                ->select($field)
+                ->distinct()
+                ->whereNotNull($field)
+                ->orderBy($field)
+                ->pluck($field)
+                ->toArray();
+
+            return response()->json([
+                'success' => true,
+                'data' => $values,
+                'message' => "Field values for {$field} retrieved successfully"
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving field values: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get sortable fields list.
+     */
+    public function getSortableFields(): JsonResponse
+    {
+        $sortableFields = [
+            ['field' => 'id', 'label' => 'ID'],
+            ['field' => 'milestone_number', 'label' => 'Milestone Number'],
+            ['field' => 'name', 'label' => 'Milestone Name'],
+            ['field' => 'description', 'label' => 'Description'],
+            ['field' => 'start_date', 'label' => 'Start Date'],
+            ['field' => 'end_date', 'label' => 'End Date'],
+            ['field' => 'status', 'label' => 'Status'],
+            ['field' => 'progress', 'label' => 'Progress'],
+            ['field' => 'notes', 'label' => 'Notes'],
+            ['field' => 'created_at', 'label' => 'Created Date'],
+            ['field' => 'updated_at', 'label' => 'Updated Date'],
+            ['field' => 'project_id', 'label' => 'Project'],
+            ['field' => 'created_by', 'label' => 'Created By'],
+            ['field' => 'updated_by', 'label' => 'Updated By'],
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $sortableFields,
+            'message' => 'Sortable fields retrieved successfully'
+        ]);
+    }
+
+    /**
+     * Sort milestones by specified field and order.
+     */
+    public function sortMilestones(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+            $perPage = $request->get('per_page', 15);
+
+            $query = ProjectMilestone::with(['project', 'creator', 'updater'])
+                ->forCompany($companyId);
+
+            // Apply sorting
+            $this->applySorting($query, $request);
+
+            $milestones = $query->paginate($perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => $milestones,
+                'message' => 'Milestones sorted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error sorting milestones: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Apply search filters to query.
+     */
+    private function applySearchFilters($query, $request)
+    {
+        // General search
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('notes', 'like', "%{$search}%")
+                  ->orWhere('milestone_number', 'like', "%{$search}%")
+                  ->orWhereHas('project', function ($projectQuery) use ($search) {
+                      $projectQuery->where('name', 'like', "%{$search}%")
+                                  ->orWhere('code', 'like', "%{$search}%")
+                                  ->orWhere('project_number', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Specific field searches
+        if ($request->has('milestone_number') && !empty($request->milestone_number)) {
+            $query->where('milestone_number', $request->milestone_number);
+        }
+
+        if ($request->has('project_number') && !empty($request->project_number)) {
+            $query->whereHas('project', function ($projectQuery) use ($request) {
+                $projectQuery->where('project_number', 'like', "%{$request->project_number}%");
+            });
+        }
+
+        if ($request->has('milestone_name') && !empty($request->milestone_name)) {
+            $query->where('name', 'like', "%{$request->milestone_name}%");
+        }
+
+        // Date filters
+        if ($request->has('start_date') && !empty($request->start_date)) {
+            $query->whereDate('start_date', $request->start_date);
+        }
+
+        if ($request->has('start_date_from') && !empty($request->start_date_from)) {
+            $query->whereDate('start_date', '>=', $request->start_date_from);
+        }
+
+        if ($request->has('start_date_to') && !empty($request->start_date_to)) {
+            $query->whereDate('start_date', '<=', $request->start_date_to);
+        }
+
+        if ($request->has('end_date') && !empty($request->end_date)) {
+            $query->whereDate('end_date', $request->end_date);
+        }
+
+        if ($request->has('end_date_from') && !empty($request->end_date_from)) {
+            $query->whereDate('end_date', '>=', $request->end_date_from);
+        }
+
+        if ($request->has('end_date_to') && !empty($request->end_date_to)) {
+            $query->whereDate('end_date', '<=', $request->end_date_to);
+        }
+
+        // Other filters
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('project_id') && !empty($request->project_id)) {
+            $query->where('project_id', $request->project_id);
+        }
+    }
+
+    /**
+     * Apply sorting to query.
+     */
+    private function applySorting($query, $request)
+    {
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        $allowedSortFields = [
+            'id', 'milestone_number', 'name', 'description', 'start_date', 'end_date',
+            'status', 'progress', 'notes', 'created_at', 'updated_at',
+            'user_id', 'company_id', 'branch_id', 'fiscal_year_id', 'project_id',
+            'created_by', 'updated_by', 'deleted_by'
+        ];
+
+        if (in_array($sortBy, $allowedSortFields)) {
+            $query->orderBy($sortBy, $sortOrder);
+        } else {
+            $query->orderBy('created_at', 'desc');
         }
     }
 }

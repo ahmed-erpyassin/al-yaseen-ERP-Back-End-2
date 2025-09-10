@@ -86,6 +86,18 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::put('/{id}', [MilestoneController::class, 'update'])->name('milestones.update');
         Route::delete('/{id}', [MilestoneController::class, 'destroy'])->name('milestones.destroy');
 
+        // Advanced search and filtering
+        Route::post('/search', [MilestoneController::class, 'search'])->name('milestones.search');
+        Route::get('/filter/by-field', [MilestoneController::class, 'getMilestonesByField'])->name('milestones.filter-by-field');
+        Route::get('/fields/values', [MilestoneController::class, 'getFieldValues'])->name('milestones.field-values');
+        Route::get('/fields/sortable', [MilestoneController::class, 'getSortableFields'])->name('milestones.sortable-fields');
+        Route::post('/sort', [MilestoneController::class, 'sortMilestones'])->name('milestones.sort');
+
+        // Soft delete management
+        Route::post('/{id}/restore', [MilestoneController::class, 'restore'])->name('milestones.restore');
+        Route::delete('/{id}/force-delete', [MilestoneController::class, 'forceDelete'])->name('milestones.force-delete');
+        Route::get('/trashed/list', [MilestoneController::class, 'getTrashed'])->name('milestones.trashed');
+
         // Helper endpoints for dropdown data
         Route::get('/projects/list', [MilestoneController::class, 'getProjects'])->name('milestones.projects');
         Route::get('/statuses/list', [MilestoneController::class, 'getStatusOptions'])->name('milestones.statuses');
