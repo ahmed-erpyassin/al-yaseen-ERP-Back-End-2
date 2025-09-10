@@ -5,6 +5,7 @@ use Modules\ProjectsManagment\Http\Controllers\ProjectsManagmentController;
 use Modules\ProjectsManagment\Http\Controllers\TaskController;
 use Modules\ProjectsManagment\Http\Controllers\MilestoneController;
 use Modules\ProjectsManagment\Http\Controllers\ResourceController;
+use Modules\ProjectsManagment\Http\Controllers\DocumentController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -142,5 +143,42 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         // Specialized resource views
         Route::get('/project/{projectId}', [ResourceController::class, 'getProjectResources'])->name('resources.by-project');
         Route::get('/supplier/{supplierId}', [ResourceController::class, 'getSupplierResources'])->name('resources.by-supplier');
+    });
+
+    // Document Management Routes
+    Route::prefix('documents')->group(function () {
+        // Main CRUD operations
+        Route::get('/', [DocumentController::class, 'index'])->name('documents.index');
+        Route::post('/', [DocumentController::class, 'store'])->name('documents.store');
+        Route::get('/{id}', [DocumentController::class, 'show'])->name('documents.show');
+        Route::put('/{id}', [DocumentController::class, 'update'])->name('documents.update');
+        Route::delete('/{id}', [DocumentController::class, 'destroy'])->name('documents.destroy');
+
+        // File operations
+        Route::get('/{id}/download', [DocumentController::class, 'downloadDocument'])->name('documents.download');
+
+        // Advanced search and filtering
+        Route::post('/search', [DocumentController::class, 'search'])->name('documents.search');
+        Route::get('/filter/by-field', [DocumentController::class, 'getDocumentsByField'])->name('documents.filter-by-field');
+        Route::get('/fields/values', [DocumentController::class, 'getFieldValues'])->name('documents.field-values');
+        Route::get('/fields/sortable', [DocumentController::class, 'getSortableFields'])->name('documents.sortable-fields');
+        Route::post('/sort', [DocumentController::class, 'sortDocuments'])->name('documents.sort');
+
+        // Soft delete management
+        Route::post('/{id}/restore', [DocumentController::class, 'restore'])->name('documents.restore');
+        Route::delete('/{id}/force-delete', [DocumentController::class, 'forceDelete'])->name('documents.force-delete');
+        Route::get('/trashed/list', [DocumentController::class, 'getTrashed'])->name('documents.trashed');
+
+        // Helper endpoints for dropdown data
+        Route::get('/projects/list', [DocumentController::class, 'getProjects'])->name('documents.projects');
+        Route::get('/categories/list', [DocumentController::class, 'getDocumentCategories'])->name('documents.categories');
+        Route::get('/statuses/list', [DocumentController::class, 'getStatusOptions'])->name('documents.statuses');
+
+        // Utility endpoints
+        Route::post('/generate-number', [DocumentController::class, 'generateDocumentNumber'])->name('documents.generate-number');
+
+        // Specialized document views
+        Route::get('/project/{projectId}', [DocumentController::class, 'getProjectDocuments'])->name('documents.by-project');
+        Route::get('/category/{category}', [DocumentController::class, 'getDocumentsByCategory'])->name('documents.by-category');
     });
 });
