@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\ProjectsManagment\Http\Controllers\ProjectsManagmentController;
 use Modules\ProjectsManagment\Http\Controllers\TaskController;
+use Modules\ProjectsManagment\Http\Controllers\MilestoneController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -74,5 +75,23 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::post('/{taskId}/documents', [TaskController::class, 'uploadDocument'])->name('tasks.upload-document');
         Route::get('/{taskId}/documents', [TaskController::class, 'getTaskDocuments'])->name('tasks.documents');
         Route::delete('/documents/{documentId}', [TaskController::class, 'deleteDocument'])->name('tasks.delete-document');
+    });
+
+    // Milestone Management Routes
+    Route::prefix('milestones')->group(function () {
+        // Main CRUD operations
+        Route::get('/', [MilestoneController::class, 'index'])->name('milestones.index');
+        Route::post('/', [MilestoneController::class, 'store'])->name('milestones.store');
+        Route::get('/{id}', [MilestoneController::class, 'show'])->name('milestones.show');
+        Route::put('/{id}', [MilestoneController::class, 'update'])->name('milestones.update');
+        Route::delete('/{id}', [MilestoneController::class, 'destroy'])->name('milestones.destroy');
+
+        // Helper endpoints for dropdown data
+        Route::get('/projects/list', [MilestoneController::class, 'getProjects'])->name('milestones.projects');
+        Route::get('/statuses/list', [MilestoneController::class, 'getStatusOptions'])->name('milestones.statuses');
+
+        // Utility endpoints
+        Route::post('/generate-number', [MilestoneController::class, 'generateMilestoneNumber'])->name('milestones.generate-number');
+        Route::get('/project/{projectId}', [MilestoneController::class, 'getProjectMilestones'])->name('milestones.by-project');
     });
 });
