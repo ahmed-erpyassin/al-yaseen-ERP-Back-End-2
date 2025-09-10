@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\ProjectsManagment\Http\Controllers\ProjectsManagmentController;
 use Modules\ProjectsManagment\Http\Controllers\TaskController;
 use Modules\ProjectsManagment\Http\Controllers\MilestoneController;
+use Modules\ProjectsManagment\Http\Controllers\ResourceController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -105,5 +106,29 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         // Utility endpoints
         Route::post('/generate-number', [MilestoneController::class, 'generateMilestoneNumber'])->name('milestones.generate-number');
         Route::get('/project/{projectId}', [MilestoneController::class, 'getProjectMilestones'])->name('milestones.by-project');
+    });
+
+    // Resource Management Routes
+    Route::prefix('resources')->group(function () {
+        // Main CRUD operations
+        Route::get('/', [ResourceController::class, 'index'])->name('resources.index');
+        Route::post('/', [ResourceController::class, 'store'])->name('resources.store');
+        Route::get('/{id}', [ResourceController::class, 'show'])->name('resources.show');
+        Route::put('/{id}', [ResourceController::class, 'update'])->name('resources.update');
+        Route::delete('/{id}', [ResourceController::class, 'destroy'])->name('resources.destroy');
+
+        // Helper endpoints for dropdown data
+        Route::get('/suppliers/list', [ResourceController::class, 'getSuppliers'])->name('resources.suppliers');
+        Route::get('/projects/list', [ResourceController::class, 'getProjects'])->name('resources.projects');
+        Route::get('/types/list', [ResourceController::class, 'getResourceTypes'])->name('resources.types');
+        Route::get('/statuses/list', [ResourceController::class, 'getStatusOptions'])->name('resources.statuses');
+
+        // Allocation calculation endpoints
+        Route::post('/calculate-allocation', [ResourceController::class, 'calculateAllocation'])->name('resources.calculate-allocation');
+        Route::post('/calculate-percentage', [ResourceController::class, 'calculateAllocationPercentage'])->name('resources.calculate-percentage');
+
+        // Specialized resource views
+        Route::get('/project/{projectId}', [ResourceController::class, 'getProjectResources'])->name('resources.by-project');
+        Route::get('/supplier/{supplierId}', [ResourceController::class, 'getSupplierResources'])->name('resources.by-supplier');
     });
 });
