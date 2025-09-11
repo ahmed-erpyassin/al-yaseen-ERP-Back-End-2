@@ -306,4 +306,129 @@ class ProjectRiskTest extends TestCase
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['impact', 'probability', 'status']);
     }
+
+    /** @test */
+    public function it_can_search_project_risks()
+    {
+        ProjectRisk::factory()->create([
+            'company_id' => $this->company->id,
+            'project_id' => $this->project->id,
+            'title' => 'Database Security Risk',
+            'description' => 'Risk related to database security'
+        ]);
+
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->postJson('/api/v1/project-risks/search', [
+                'search' => 'Database'
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Project risks search completed successfully'
+            ]);
+    }
+
+    /** @test */
+    public function it_can_filter_by_field()
+    {
+        ProjectRisk::factory()->create([
+            'company_id' => $this->company->id,
+            'project_id' => $this->project->id,
+            'impact' => 'high'
+        ]);
+
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->getJson('/api/v1/project-risks/filter/by-field?field=impact&value=high');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Project risks filtered successfully'
+            ]);
+    }
+
+    /** @test */
+    public function it_can_sort_project_risks()
+    {
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->postJson('/api/v1/project-risks/sort', [
+                'sort_by' => 'title',
+                'sort_direction' => 'asc'
+            ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Project risks sorted successfully'
+            ]);
+    }
+
+    /** @test */
+    public function it_can_restore_soft_deleted_project_risk()
+    {
+        $projectRisk = ProjectRisk::factory()->create([
+            'company_id' => $this->company->id,
+            'project_id' => $this->project->id
+        ]);
+
+        // First delete it
+        $projectRisk->delete();
+
+        // Then restore it
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->postJson("/api/v1/project-risks/{$projectRisk->id}/restore");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Project risk restored successfully'
+            ]);
+    }
+
+    /** @test */
+    public function it_can_get_trashed_project_risks()
+    {
+        $projectRisk = ProjectRisk::factory()->create([
+            'company_id' => $this->company->id,
+            'project_id' => $this->project->id
+        ]);
+
+        $projectRisk->delete();
+
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->getJson('/api/v1/project-risks/trashed/list');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Trashed project risks retrieved successfully'
+            ]);
+    }
+
+    /** @test */
+    public function it_can_get_field_values()
+    {
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->getJson('/api/v1/project-risks/fields/values?field=impact');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Field values retrieved successfully'
+            ]);
+    }
+
+    /** @test */
+    public function it_can_get_sortable_fields()
+    {
+        $response = $this->actingAs($this->user, 'sanctum')
+            ->getJson('/api/v1/project-risks/fields/sortable');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'message' => 'Sortable fields retrieved successfully'
+            ]);
+    }
 }
