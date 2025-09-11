@@ -562,8 +562,8 @@ class ResourceController extends Controller
             }
 
             $allowedFields = [
-                'supplier_id', 'supplier_number', 'supplier_name', 'project_id',
-                'project_number', 'project_name', 'role', 'resource_type', 'status',
+                'supplier_id', 'project_id', // Use IDs instead of redundant fields
+                'role', 'resource_type', 'status',
                 'allocation_percentage', 'allocation_value'
             ];
 
@@ -618,7 +618,7 @@ class ResourceController extends Controller
             }
 
             $allowedFields = [
-                'supplier_number', 'supplier_name', 'project_number', 'project_name',
+                'supplier_id', 'project_id', // Use IDs instead of redundant fields
                 'role', 'resource_type', 'status', 'allocation_percentage', 'allocation_value'
             ];
 
@@ -657,10 +657,8 @@ class ResourceController extends Controller
     {
         $fields = [
             ['field' => 'id', 'label' => 'ID'],
-            ['field' => 'supplier_number', 'label' => 'Supplier Number'],
-            ['field' => 'supplier_name', 'label' => 'Supplier Name'],
-            ['field' => 'project_number', 'label' => 'Project Number'],
-            ['field' => 'project_name', 'label' => 'Project Name'],
+            ['field' => 'supplier_id', 'label' => 'Supplier ID'],
+            ['field' => 'project_id', 'label' => 'Project ID'],
             ['field' => 'role', 'label' => 'Role'],
             ['field' => 'resource_type', 'label' => 'Resource Type'],
             ['field' => 'status', 'label' => 'Status'],
@@ -722,10 +720,6 @@ class ResourceController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('role', 'like', "%{$search}%")
                   ->orWhere('notes', 'like', "%{$search}%")
-                  ->orWhere('supplier_name', 'like', "%{$search}%")
-                  ->orWhere('supplier_number', 'like', "%{$search}%")
-                  ->orWhere('project_name', 'like', "%{$search}%")
-                  ->orWhere('project_number', 'like', "%{$search}%")
                   ->orWhere('allocation_percentage', 'like', "%{$search}%")
                   ->orWhere('allocation_value', 'like', "%{$search}%")
                   ->orWhereHas('project', function ($projectQuery) use ($search) {
@@ -741,24 +735,13 @@ class ResourceController extends Controller
             });
         }
 
-        // Specific field searches
-        if ($request->has('supplier_number') && !empty($request->supplier_number)) {
-            $query->where(function ($q) use ($request) {
-                $q->where('supplier_number', 'like', "%{$request->supplier_number}%")
-                  ->orWhereHas('supplier', function ($supplierQuery) use ($request) {
-                      $supplierQuery->where('supplier_code', 'like', "%{$request->supplier_number}%");
-                  });
-            });
+        // Specific field searches - Use relationships instead of redundant fields
+        if ($request->has('supplier_id') && !empty($request->supplier_id)) {
+            $query->where('supplier_id', $request->supplier_id);
         }
 
-        if ($request->has('supplier_name') && !empty($request->supplier_name)) {
-            $query->where(function ($q) use ($request) {
-                $q->where('supplier_name', 'like', "%{$request->supplier_name}%")
-                  ->orWhereHas('supplier', function ($supplierQuery) use ($request) {
-                      $supplierQuery->where('supplier_name_ar', 'like', "%{$request->supplier_name}%")
-                                   ->orWhere('supplier_name_en', 'like', "%{$request->supplier_name}%");
-                  });
-            });
+        if ($request->has('project_id') && !empty($request->project_id)) {
+            $query->where('project_id', $request->project_id);
         }
 
         if ($request->has('role') && !empty($request->role)) {
@@ -801,8 +784,7 @@ class ResourceController extends Controller
         $sortOrder = $request->get('sort_order', 'desc');
 
         $allowedSortFields = [
-            'id', 'supplier_id', 'supplier_number', 'supplier_name', 'project_id',
-            'project_number', 'project_name', 'role', 'allocation_percentage',
+            'id', 'supplier_id', 'project_id', 'role', 'allocation_percentage',
             'allocation_value', 'status', 'resource_type', 'created_at', 'updated_at'
         ];
 

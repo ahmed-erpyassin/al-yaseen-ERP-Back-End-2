@@ -16,44 +16,39 @@ class ManufacturingProcessRawMaterial extends Model
     protected $fillable = [
         'manufacturing_process_id',
         'company_id',
-        
-        // Item Information
-        'item_id',
-        'item_number',
-        'item_name',
-        'item_description',
-        
-        // Unit Information
-        'unit_id',
-        'unit_name',
-        
-        // Warehouse Information
-        'warehouse_id',
-        'warehouse_name',
-        
+
+        // Item Information - Removed redundant fields
+        'item_id', // item_number, item_name, item_description removed - available via relationship
+
+        // Unit Information - Removed redundant fields
+        'unit_id', // unit_name removed - available via relationship
+
+        // Warehouse Information - Removed redundant fields
+        'warehouse_id', // warehouse_name removed - available via relationship
+
         // Quantity Information
         'consumed_quantity',
         'available_quantity',
         'reserved_quantity',
         'actual_consumed_quantity',
-        
+
         // Cost Information
         'unit_cost',
         'total_cost',
         'actual_unit_cost',
         'actual_total_cost',
-        
+
         // Status Information
         'status', // available, insufficient, reserved, consumed
         'is_available',
         'is_critical',
         'shortage_quantity',
-        
+
         // Additional Information
         'batch_number',
         'expiry_date',
         'notes',
-        
+
         // System Fields
         'created_by',
         'updated_by',
@@ -146,6 +141,48 @@ class ManufacturingProcessRawMaterial extends Model
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
+    // ✅ Accessors for redundant fields - Get data from relationships instead of stored fields
+
+    /**
+     * Get item number from relationship.
+     */
+    public function getItemNumberAttribute(): ?string
+    {
+        return $this->item?->item_number;
+    }
+
+    /**
+     * Get item name from relationship.
+     */
+    public function getItemNameAttribute(): ?string
+    {
+        return $this->item?->name;
+    }
+
+    /**
+     * Get item description from relationship.
+     */
+    public function getItemDescriptionAttribute(): ?string
+    {
+        return $this->item?->description;
+    }
+
+    /**
+     * Get unit name from relationship.
+     */
+    public function getUnitNameAttribute(): ?string
+    {
+        return $this->unit?->name;
+    }
+
+    /**
+     * Get warehouse name from relationship.
+     */
+    public function getWarehouseNameAttribute(): ?string
+    {
+        return $this->warehouse?->name;
+    }
+
     /**
      * Scope to filter by company.
      */
@@ -220,13 +257,13 @@ class ManufacturingProcessRawMaterial extends Model
     {
         $this->is_available = $this->checkAvailability();
         $this->shortage_quantity = $this->calculateShortage();
-        
+
         if ($this->is_available) {
             $this->status = 'available';
         } else {
             $this->status = 'insufficient';
         }
-        
+
         $this->save();
     }
 
@@ -246,11 +283,11 @@ class ManufacturingProcessRawMaterial extends Model
         if (!$this->checkAvailability()) {
             return false;
         }
-        
+
         $this->reserved_quantity = $this->consumed_quantity;
         $this->status = 'reserved';
         $this->save();
-        
+
         return true;
     }
 
@@ -262,13 +299,13 @@ class ManufacturingProcessRawMaterial extends Model
         if (!$this->checkAvailability()) {
             return false;
         }
-        
+
         $this->actual_consumed_quantity = $this->consumed_quantity;
         $this->actual_unit_cost = $this->unit_cost;
         $this->actual_total_cost = $this->calculateTotalCost();
         $this->status = 'consumed';
         $this->save();
-        
+
         return true;
     }
 
@@ -280,12 +317,12 @@ class ManufacturingProcessRawMaterial extends Model
         if (!$this->item_id || !$this->warehouse_id) {
             return 0;
         }
-        
+
         // Get current stock from inventory stock table
         $stock = InventoryStock::where('inventory_item_id', $this->item_id)
             ->where('warehouse_id', $this->warehouse_id)
             ->first();
-            
+
         return $stock ? $stock->available_quantity : 0;
     }
 
@@ -321,12 +358,12 @@ class ManufacturingProcessRawMaterial extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($model) {
             $model->updateAvailableQuantity();
             $model->total_cost = $model->calculateTotalCost();
         });
-        
+
         static::updating(function ($model) {
             if ($model->isDirty(['consumed_quantity', 'unit_cost'])) {
                 $model->total_cost = $model->calculateTotalCost();

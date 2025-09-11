@@ -18,11 +18,7 @@ class ProjectResource extends Model
         'branch_id',
         'fiscal_year_id',
         'project_id',
-        'supplier_id',
-        'supplier_number',
-        'supplier_name',
-        'project_number',
-        'project_name',
+        'supplier_id', // supplier_number, supplier_name removed - available via relationship
         'role',
         'allocation',
         'allocation_percentage',
@@ -33,6 +29,7 @@ class ProjectResource extends Model
         'created_by',
         'updated_by',
         'deleted_by',
+        // project_number, project_name removed - available via relationship
     ];
 
     protected $casts = [
@@ -64,6 +61,40 @@ class ProjectResource extends Model
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+    // ✅ Accessors for redundant fields - Get data from relationships instead of stored fields
+
+    /**
+     * Get supplier number from relationship.
+     */
+    public function getSupplierNumberAttribute(): ?string
+    {
+        return $this->supplier?->supplier_code;
+    }
+
+    /**
+     * Get supplier name from relationship.
+     */
+    public function getSupplierNameAttribute(): ?string
+    {
+        return $this->supplier?->supplier_name_ar ?: $this->supplier?->supplier_name_en;
+    }
+
+    /**
+     * Get project number from relationship.
+     */
+    public function getProjectNumberAttribute(): ?string
+    {
+        return $this->project?->project_number;
+    }
+
+    /**
+     * Get project name from relationship.
+     */
+    public function getProjectNameAttribute(): ?string
+    {
+        return $this->project?->name;
     }
 
     // Scopes
@@ -143,18 +174,6 @@ class ProjectResource extends Model
         parent::boot();
 
         static::saving(function ($resource) {
-            // Auto-populate supplier information if supplier_id is provided
-            if ($resource->supplier_id && $resource->supplier) {
-                $resource->supplier_number = $resource->supplier->supplier_code;
-                $resource->supplier_name = $resource->supplier->supplier_name_ar ?: $resource->supplier->supplier_name_en;
-            }
-
-            // Auto-populate project information if project_id is provided
-            if ($resource->project_id && $resource->project) {
-                $resource->project_number = $resource->project->project_number;
-                $resource->project_name = $resource->project->name;
-            }
-
             // Auto-calculate allocation percentage if allocation_value is provided
             if ($resource->allocation_value && !$resource->allocation_percentage) {
                 $resource->allocation_percentage = $resource->calculateAllocationPercentage();

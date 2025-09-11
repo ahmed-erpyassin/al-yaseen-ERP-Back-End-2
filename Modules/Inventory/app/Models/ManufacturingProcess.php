@@ -18,50 +18,44 @@ class ManufacturingProcess extends Model
         'user_id',
         'company_id',
         'branch_id',
-        
-        // Manufacturing Formula Information
-        'manufacturing_formula_id',
-        'manufacturing_formula_number',
-        'manufacturing_formula_name',
-        
-        // Item Information (Final Product)
-        'item_id',
-        'item_number',
-        'item_name',
-        
+
+        // Manufacturing Formula Information - Removed redundant fields
+        'manufacturing_formula_id', // manufacturing_formula_number, manufacturing_formula_name removed - available via relationship
+
+        // Item Information (Final Product) - Removed redundant fields
+        'item_id', // item_number, item_name removed - available via relationship
+
         // Manufacturing Details
         'manufacturing_duration',
         'manufacturing_duration_unit', // days, hours, minutes
         'produced_quantity',
         'expected_quantity',
         'actual_quantity',
-        
-        // Warehouse Information
-        'raw_materials_warehouse_id',
-        'finished_product_warehouse_id',
-        'raw_materials_warehouse_name',
-        'finished_product_warehouse_name',
-        
+
+        // Warehouse Information - Removed redundant fields
+        'raw_materials_warehouse_id', // raw_materials_warehouse_name removed - available via relationship
+        'finished_product_warehouse_id', // finished_product_warehouse_name removed - available via relationship
+
         // Process Status
         'status', // draft, in_progress, completed, cancelled
         'process_date',
         'start_date',
         'end_date',
         'completion_percentage',
-        
+
         // Cost Information
         'total_raw_material_cost',
         'labor_cost',
         'overhead_cost',
         'total_manufacturing_cost',
         'cost_per_unit',
-        
+
         // Additional Information
         'notes',
         'quality_check_passed',
         'batch_number',
         'production_order_number',
-        
+
         // System Fields
         'created_by',
         'updated_by',
@@ -155,6 +149,56 @@ class ManufacturingProcess extends Model
         return $this->hasMany(ManufacturingProcessRawMaterial::class);
     }
 
+    // ✅ Accessors for redundant fields - Get data from relationships instead of stored fields
+
+    /**
+     * Get manufacturing formula number from relationship.
+     */
+    public function getManufacturingFormulaNumberAttribute(): ?string
+    {
+        return $this->manufacturingFormula?->formula_number;
+    }
+
+    /**
+     * Get manufacturing formula name from relationship.
+     */
+    public function getManufacturingFormulaNameAttribute(): ?string
+    {
+        return $this->manufacturingFormula?->formula_name;
+    }
+
+    /**
+     * Get item number from relationship.
+     */
+    public function getItemNumberAttribute(): ?string
+    {
+        return $this->item?->item_number;
+    }
+
+    /**
+     * Get item name from relationship.
+     */
+    public function getItemNameAttribute(): ?string
+    {
+        return $this->item?->name;
+    }
+
+    /**
+     * Get raw materials warehouse name from relationship.
+     */
+    public function getRawMaterialsWarehouseNameAttribute(): ?string
+    {
+        return $this->rawMaterialsWarehouse?->name;
+    }
+
+    /**
+     * Get finished product warehouse name from relationship.
+     */
+    public function getFinishedProductWarehouseNameAttribute(): ?string
+    {
+        return $this->finishedProductWarehouse?->name;
+    }
+
     /**
      * Get the user who created the process.
      */
@@ -231,7 +275,7 @@ class ManufacturingProcess extends Model
         $rawMaterialCost = $this->rawMaterials()->sum('total_cost');
         $laborCost = $this->labor_cost ?? 0;
         $overheadCost = $this->overhead_cost ?? 0;
-        
+
         return $rawMaterialCost + $laborCost + $overheadCost;
     }
 
@@ -242,7 +286,7 @@ class ManufacturingProcess extends Model
     {
         $totalCost = $this->calculateTotalCost();
         $quantity = $this->actual_quantity ?? $this->produced_quantity ?? 1;
-        
+
         return $quantity > 0 ? $totalCost / $quantity : 0;
     }
 
@@ -263,7 +307,7 @@ class ManufacturingProcess extends Model
         } else {
             $this->completion_percentage = 0;
         }
-        
+
         $this->save();
     }
 
@@ -272,7 +316,7 @@ class ManufacturingProcess extends Model
      */
     public function canStart(): bool
     {
-        return $this->status === 'draft' && 
+        return $this->status === 'draft' &&
                $this->rawMaterials()->count() > 0 &&
                $this->checkRawMaterialAvailability();
     }
@@ -287,7 +331,7 @@ class ManufacturingProcess extends Model
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -297,7 +341,7 @@ class ManufacturingProcess extends Model
     public function getMissingRawMaterials(): array
     {
         $missing = [];
-        
+
         foreach ($this->rawMaterials as $rawMaterial) {
             if ($rawMaterial->available_quantity < $rawMaterial->consumed_quantity) {
                 $missing[] = [
@@ -310,7 +354,7 @@ class ManufacturingProcess extends Model
                 ];
             }
         }
-        
+
         return $missing;
     }
 }

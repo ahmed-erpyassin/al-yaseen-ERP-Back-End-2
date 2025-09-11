@@ -85,38 +85,7 @@ class ManufacturingProcessController extends Controller
             $data['created_by'] = $user->id;
             $data['process_date'] = now()->toDateString();
 
-            // Get manufacturing formula details
-            if (isset($data['manufacturing_formula_id'])) {
-                $formula = BomItem::find($data['manufacturing_formula_id']);
-                if ($formula) {
-                    $data['manufacturing_formula_number'] = $formula->formula_number;
-                    $data['manufacturing_formula_name'] = $formula->formula_name;
-                }
-            }
-
-            // Get item details
-            if (isset($data['item_id'])) {
-                $item = Item::find($data['item_id']);
-                if ($item) {
-                    $data['item_number'] = $item->item_number;
-                    $data['item_name'] = $item->name;
-                }
-            }
-
-            // Get warehouse details
-            if (isset($data['raw_materials_warehouse_id'])) {
-                $warehouse = Warehouse::find($data['raw_materials_warehouse_id']);
-                if ($warehouse) {
-                    $data['raw_materials_warehouse_name'] = $warehouse->name;
-                }
-            }
-
-            if (isset($data['finished_product_warehouse_id'])) {
-                $warehouse = Warehouse::find($data['finished_product_warehouse_id']);
-                if ($warehouse) {
-                    $data['finished_product_warehouse_name'] = $warehouse->name;
-                }
-            }
+            // ✅ Redundant field population removed - data will be retrieved via relationships and accessors
 
             // Set default values
             $data['status'] = $data['status'] ?? 'draft';
@@ -207,29 +176,7 @@ class ManufacturingProcessController extends Controller
             // Add system fields
             $data['updated_by'] = $user->id;
 
-            // Update item details if item_id changed
-            if (isset($data['item_id']) && $data['item_id'] !== $process->item_id) {
-                $item = Item::find($data['item_id']);
-                if ($item) {
-                    $data['item_number'] = $item->item_number;
-                    $data['item_name'] = $item->name;
-                }
-            }
-
-            // Update warehouse details if changed
-            if (isset($data['raw_materials_warehouse_id']) && $data['raw_materials_warehouse_id'] !== $process->raw_materials_warehouse_id) {
-                $warehouse = Warehouse::find($data['raw_materials_warehouse_id']);
-                if ($warehouse) {
-                    $data['raw_materials_warehouse_name'] = $warehouse->name;
-                }
-            }
-
-            if (isset($data['finished_product_warehouse_id']) && $data['finished_product_warehouse_id'] !== $process->finished_product_warehouse_id) {
-                $warehouse = Warehouse::find($data['finished_product_warehouse_id']);
-                if ($warehouse) {
-                    $data['finished_product_warehouse_name'] = $warehouse->name;
-                }
-            }
+            // ✅ Redundant field population removed - data will be retrieved via relationships and accessors
 
             // Update the process
             $process->update($data);
@@ -321,31 +268,15 @@ class ManufacturingProcessController extends Controller
                 'manufacturing_process_id' => $process->id,
                 'company_id' => $companyId,
                 'item_id' => $rawMaterial['item_id'],
-                'item_number' => $item->item_number,
-                'item_name' => $item->name,
-                'item_description' => $item->description,
+                // item_number, item_name, item_description removed - available via item relationship
                 'consumed_quantity' => $rawMaterial['consumed_quantity'],
                 'unit_cost' => $rawMaterial['unit_cost'] ?? 0,
                 'warehouse_id' => $rawMaterial['warehouse_id'] ?? $process->raw_materials_warehouse_id,
+                // warehouse_name removed - available via warehouse relationship
+                'unit_id' => $rawMaterial['unit_id'] ?? null,
+                // unit_name removed - available via unit relationship
                 'created_by' => $userId,
             ];
-
-            // Get warehouse name
-            if ($rawMaterialData['warehouse_id']) {
-                $warehouse = Warehouse::find($rawMaterialData['warehouse_id']);
-                if ($warehouse) {
-                    $rawMaterialData['warehouse_name'] = $warehouse->name;
-                }
-            }
-
-            // Get unit information
-            if (isset($rawMaterial['unit_id'])) {
-                $unit = Unit::find($rawMaterial['unit_id']);
-                if ($unit) {
-                    $rawMaterialData['unit_id'] = $unit->id;
-                    $rawMaterialData['unit_name'] = $unit->name;
-                }
-            }
 
             ManufacturingProcessRawMaterial::create($rawMaterialData);
         }
@@ -372,8 +303,6 @@ class ManufacturingProcessController extends Controller
                     'formula_number' => $formula->formula_number,
                     'formula_name' => $formula->formula_name,
                     'item_id' => $formula->item_id,
-                    'item_number' => $formula->item ? $formula->item->item_number : null,
-                    'item_name' => $formula->item ? $formula->item->name : null,
                     'produced_quantity' => $formula->produced_quantity,
                     'display_text' => $formula->formula_number . ' - ' . ($formula->formula_name ?? 'Manufacturing Formula')
                 ];
@@ -417,9 +346,6 @@ class ManufacturingProcessController extends Controller
             if ($formula->item) {
                 $itemDetails = [
                     'item_id' => $formula->item->id,
-                    'item_number' => $formula->item->item_number,
-                    'item_name' => $formula->item->name,
-                    'description' => $formula->item->description,
                     'unit_id' => $formula->item->unit_id,
                     'unit_name' => $formula->item->unit_name,
                 ];
@@ -472,11 +398,7 @@ class ManufacturingProcessController extends Controller
             $itemOptions = $items->map(function ($item) {
                 return [
                     'id' => $item->id,
-                    'item_number' => $item->item_number,
-                    'item_name' => $item->name,
-                    'description' => $item->description,
                     'unit_id' => $item->unit_id,
-                    'unit_name' => $item->unit_name,
                     'display_text' => $item->item_number . ' - ' . $item->name
                 ];
             });
@@ -511,8 +433,6 @@ class ManufacturingProcessController extends Controller
             $warehouseOptions = $warehouses->map(function ($warehouse) {
                 return [
                     'id' => $warehouse->id,
-                    'warehouse_number' => $warehouse->warehouse_number,
-                    'warehouse_name' => $warehouse->name,
                     'address' => $warehouse->address,
                     'display_text' => $warehouse->warehouse_number . ' - ' . $warehouse->name
                 ];
@@ -575,9 +495,6 @@ class ManufacturingProcessController extends Controller
 
                 $rawMaterials[] = [
                     'item_id' => $item->id,
-                    'item_number' => $item->item_number,
-                    'item_name' => $item->name,
-                    'description' => $item->description,
                     'unit_id' => $item->unit_id,
                     'unit_name' => $item->unit_name,
                     'consumed_quantity' => $component->consumed_quantity ?? 0,
@@ -721,8 +638,6 @@ class ManufacturingProcessController extends Controller
 
                 $availabilityCheck[] = [
                     'item_id' => $rawMaterial->item_id,
-                    'item_number' => $rawMaterial->item_number,
-                    'item_name' => $rawMaterial->item_name,
                     'required_quantity' => $rawMaterial->consumed_quantity,
                     'available_quantity' => $currentStock,
                     'is_available' => $isAvailable,
@@ -821,7 +736,6 @@ class ManufacturingProcessController extends Controller
                 'movement_date' => now()->toDateString(),
                 'movement_datetime' => now(),
                 'warehouse_id' => $process->raw_materials_warehouse_id,
-                'warehouse_name' => $process->raw_materials_warehouse_name,
                 'movement_description' => 'Raw materials consumed for manufacturing process #' . $process->id,
                 'status' => 'confirmed',
                 'is_confirmed' => true,
@@ -839,10 +753,7 @@ class ManufacturingProcessController extends Controller
                     'company_id' => $process->company_id,
                     'inventory_movement_id' => $outboundMovement->id,
                     'item_id' => $rawMaterial->item_id,
-                    'item_number' => $rawMaterial->item_number,
-                    'item_name' => $rawMaterial->item_name,
                     'warehouse_id' => $rawMaterial->warehouse_id,
-                    'warehouse_name' => $rawMaterial->warehouse_name,
                     'quantity' => -$rawMaterial->consumed_quantity, // Negative for outbound
                     'unit_cost' => $rawMaterial->unit_cost,
                     'total_cost' => $rawMaterial->total_cost,
@@ -860,7 +771,6 @@ class ManufacturingProcessController extends Controller
             'movement_date' => now()->toDateString(),
             'movement_datetime' => now(),
             'warehouse_id' => $process->finished_product_warehouse_id,
-            'warehouse_name' => $process->finished_product_warehouse_name,
             'movement_description' => 'Finished product from manufacturing process #' . $process->id,
             'status' => 'confirmed',
             'is_confirmed' => true,
@@ -877,10 +787,7 @@ class ManufacturingProcessController extends Controller
             'company_id' => $process->company_id,
             'inventory_movement_id' => $inboundMovement->id,
             'item_id' => $process->item_id,
-            'item_number' => $process->item_number,
-            'item_name' => $process->item_name,
             'warehouse_id' => $process->finished_product_warehouse_id,
-            'warehouse_name' => $process->finished_product_warehouse_name,
             'quantity' => $process->produced_quantity, // Positive for inbound
             'unit_cost' => $process->cost_per_unit,
             'total_cost' => $process->total_manufacturing_cost,
