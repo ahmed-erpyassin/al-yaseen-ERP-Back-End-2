@@ -6,6 +6,7 @@ use Modules\ProjectsManagment\Http\Controllers\TaskController;
 use Modules\ProjectsManagment\Http\Controllers\MilestoneController;
 use Modules\ProjectsManagment\Http\Controllers\ResourceController;
 use Modules\ProjectsManagment\Http\Controllers\DocumentController;
+use Modules\ProjectsManagment\Http\Controllers\ProjectFinancialController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -180,5 +181,36 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         // Specialized document views
         Route::get('/project/{projectId}', [DocumentController::class, 'getProjectDocuments'])->name('documents.by-project');
         Route::get('/category/{category}', [DocumentController::class, 'getDocumentsByCategory'])->name('documents.by-category');
+    });
+
+    // Project Financial Management Routes
+    Route::prefix('project-financials')->group(function () {
+        // Main CRUD operations
+        Route::get('/', [ProjectFinancialController::class, 'index'])->name('project-financials.index');
+        Route::post('/', [ProjectFinancialController::class, 'store'])->name('project-financials.store');
+        Route::get('/{id}', [ProjectFinancialController::class, 'show'])->name('project-financials.show');
+        Route::put('/{id}', [ProjectFinancialController::class, 'update'])->name('project-financials.update');
+        Route::delete('/{id}', [ProjectFinancialController::class, 'destroy'])->name('project-financials.destroy');
+
+        // Advanced search and filtering
+        Route::post('/search', [ProjectFinancialController::class, 'search'])->name('project-financials.search');
+        Route::get('/filter/by-field', [ProjectFinancialController::class, 'getProjectFinancialsByField'])->name('project-financials.filter-by-field');
+        Route::get('/fields/values', [ProjectFinancialController::class, 'getFieldValues'])->name('project-financials.field-values');
+        Route::get('/fields/sortable', [ProjectFinancialController::class, 'getSortableFields'])->name('project-financials.sortable-fields');
+        Route::post('/sort', [ProjectFinancialController::class, 'sortProjectFinancials'])->name('project-financials.sort');
+
+        // Soft delete management
+        Route::post('/{id}/restore', [ProjectFinancialController::class, 'restore'])->name('project-financials.restore');
+        Route::delete('/{id}/force-delete', [ProjectFinancialController::class, 'forceDelete'])->name('project-financials.force-delete');
+        Route::get('/trashed/list', [ProjectFinancialController::class, 'getTrashed'])->name('project-financials.trashed');
+
+        // Helper endpoints for dropdown data
+        Route::get('/projects/list', [ProjectFinancialController::class, 'getProjects'])->name('project-financials.projects');
+        Route::get('/currencies/list', [ProjectFinancialController::class, 'getCurrencies'])->name('project-financials.currencies');
+
+        // Specialized project financial views
+        Route::get('/project/{projectId}', [ProjectFinancialController::class, 'getProjectFinancials'])->name('project-financials.by-project');
+        Route::get('/reference-type/{referenceType}', [ProjectFinancialController::class, 'getByReferenceType'])->name('project-financials.by-reference-type');
+        Route::get('/date-range/{dateFrom}/{dateTo}', [ProjectFinancialController::class, 'getByDateRange'])->name('project-financials.by-date-range');
     });
 });
