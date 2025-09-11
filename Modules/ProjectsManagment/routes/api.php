@@ -7,6 +7,7 @@ use Modules\ProjectsManagment\Http\Controllers\MilestoneController;
 use Modules\ProjectsManagment\Http\Controllers\ResourceController;
 use Modules\ProjectsManagment\Http\Controllers\DocumentController;
 use Modules\ProjectsManagment\Http\Controllers\ProjectFinancialController;
+use Modules\ProjectsManagment\Http\Controllers\ProjectRiskController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -212,5 +213,24 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/project/{projectId}', [ProjectFinancialController::class, 'getProjectFinancials'])->name('project-financials.by-project');
         Route::get('/reference-type/{referenceType}', [ProjectFinancialController::class, 'getByReferenceType'])->name('project-financials.by-reference-type');
         Route::get('/date-range/{dateFrom}/{dateTo}', [ProjectFinancialController::class, 'getByDateRange'])->name('project-financials.by-date-range');
+    });
+
+    // Project Risk Management Routes
+    Route::prefix('project-risks')->group(function () {
+        // Main CRUD operations
+        Route::get('/', [ProjectRiskController::class, 'index'])->name('project-risks.index');
+        Route::post('/', [ProjectRiskController::class, 'store'])->name('project-risks.store');
+        Route::get('/{id}', [ProjectRiskController::class, 'show'])->name('project-risks.show');
+        Route::put('/{id}', [ProjectRiskController::class, 'update'])->name('project-risks.update');
+        Route::delete('/{id}', [ProjectRiskController::class, 'destroy'])->name('project-risks.destroy');
+
+        // Helper endpoints for dropdown data (bidirectional linking)
+        Route::get('/projects/list', [ProjectRiskController::class, 'getProjects'])->name('project-risks.projects');
+        Route::get('/employees/list', [ProjectRiskController::class, 'getEmployees'])->name('project-risks.employees');
+
+        // Dropdown options for risk fields
+        Route::get('/impact/options', [ProjectRiskController::class, 'getImpactOptions'])->name('project-risks.impact-options');
+        Route::get('/probability/options', [ProjectRiskController::class, 'getProbabilityOptions'])->name('project-risks.probability-options');
+        Route::get('/status/options', [ProjectRiskController::class, 'getStatusOptions'])->name('project-risks.status-options');
     });
 });
