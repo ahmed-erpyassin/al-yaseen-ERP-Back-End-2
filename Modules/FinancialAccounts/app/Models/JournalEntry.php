@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Companies\Models\Company;
 use Modules\Users\Models\User;
 
-class JournalsEntryLine extends Model
+class JournalEntry extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -18,18 +19,16 @@ class JournalsEntryLine extends Model
         'user_id',
         'company_id',
         'branch_id',
-        'journal_entry_id',
-        'currency_id',
-        'account_id',
-        'cost_center_id',
-        'project_id',
-        'debit',
-        'credit',
-        'exchange_rate',
+        'journal_id',
+        'document_id',
+        'type',
+        'entry_number',
+        'entry_date',
         'description',
+        'status',
         'created_by',
         'updated_by',
-        'deleted_by'
+        'deleted_by',
     ];
 
     public function scopeData($builder)
@@ -40,15 +39,13 @@ class JournalsEntryLine extends Model
             'user_id',
             'company_id',
             'branch_id',
-            'journal_entry_id',
-            'currency_id',
-            'account_id',
-            'cost_center_id',
-            'project_id',
-            'debit',
-            'credit',
-            'exchange_rate',
+            'journal_id',
+            'document_id',
+            'type',
+            'entry_number',
+            'entry_date',
             'description',
+            'status',
             'created_by',
             'updated_by',
             'deleted_by',
@@ -62,45 +59,46 @@ class JournalsEntryLine extends Model
     {
         $filters = array_merge([
             'search' => '',
+            'type' => null,
+            'status' => null,
         ], $filters);
 
         if ($filters['search']) {
             $builder->where(function ($query) use ($filters) {
-                $query->where('description', 'like', '%' . $filters['search'] . '%');
+                $query->where('entry_number', 'like', '%' . $filters['search'] . '%')
+                    ->orWhere('description', 'like', '%' . $filters['search'] . '%');
             });
+        }
+
+        if ($filters['type']) {
+            $builder->where('type', $filters['type']);
+        }
+
+        if ($filters['status']) {
+            $builder->where('status', $filters['status']);
         }
 
         return $builder;
     }
 
-    public function journalEntry()
+    public function user()
     {
-        return $this->belongsTo(JournalsEntry::class, 'journal_entry_id');
+        return $this->belongsTo(User::class);
     }
 
-    public function account()
+    public function company()
     {
-        return $this->belongsTo(Account::class, 'account_id');
-    }
-
-    public function costCenter()
-    {
-        return $this->belongsTo(CostCenter::class, 'cost_center_id');
-    }
-
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class, 'currency_id');
+        return $this->belongsTo(Company::class);
     }
 
     public function fiscalYear()
     {
-        return $this->belongsTo(FiscalYear::class, 'fiscal_year_id');
+        return $this->belongsTo(FiscalYear::class);
     }
 
-    public function user()
+    public function journal()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(JournalsFinancial::class, 'journal_id');
     }
 
     // المنشئ
@@ -119,5 +117,15 @@ class JournalsEntryLine extends Model
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+    public function scopeStore(Builder $builder, array $data = [])
+    {
+        return $builder->create($data);
+    }
+
+    public function scopeUpdateModel(Builder $builder, $data, $id)
+    {
+        return $builder->where('id', $id)->update($data);
     }
 }

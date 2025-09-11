@@ -81,7 +81,7 @@ class FaAttachment extends Model
 
     public function journalEntry()
     {
-        return $this->belongsTo(JournalsEntry::class);
+        return $this->belongsTo(JournalEntry::class);
     }
 
     // المنشئ

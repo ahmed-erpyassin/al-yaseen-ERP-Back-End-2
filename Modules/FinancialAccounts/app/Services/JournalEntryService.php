@@ -3,18 +3,18 @@
 namespace Modules\FinancialAccounts\Services;
 
 use Illuminate\Support\Facades\DB;
-use Modules\FinancialAccounts\Models\JournalsEntry;
+use Modules\FinancialAccounts\Models\JournalEntry;
 
 class JournalEntryService
 {
     public function getJournalEntries($user)
     {
-        return JournalsEntry::with(['account', 'currency', 'fiscalYear'])->where('company_id', $user->company?->id)->get();
+        return JournalEntry::with(['account', 'currency', 'fiscalYear'])->where('company_id', $user->company?->id)->get();
     }
 
     public function getJournalEntryById($id)
     {
-        return JournalsEntry::with(['account', 'currency', 'fiscalYear'])->where('id', $id)->firstOrFail();
+        return JournalEntry::with(['account', 'currency', 'fiscalYear'])->where('id', $id)->firstOrFail();
     }
 
     public function createJournalEntry(array $data, $user)
@@ -24,20 +24,20 @@ class JournalEntryService
             $data['company_id'] = $data['company_id'] ?? $user->company?->id;
             $data['created_by'] = $user->id;
             $data['updated_by'] = $user->id;
-            return JournalsEntry::create($data);
+            return JournalEntry::create($data);
         });
     }
 
     public function updateJournalEntry($id, array $data)
     {
-        $journalEntry = JournalsEntry::findOrFail($id);
+        $journalEntry = JournalEntry::findOrFail($id);
         $journalEntry->update($data);
         return $journalEntry;
     }
 
     public function deleteJournalEntry($id, $userId)
     {
-        $journalEntry = JournalsEntry::findOrFail($id);
+        $journalEntry = JournalEntry::findOrFail($id);
         $journalEntry->deleted_by = $userId;
         $journalEntry->save();
         $journalEntry->delete();

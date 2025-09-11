@@ -45,6 +45,15 @@ class FiscalYear extends Model
         ]);
     }
 
+    public function scopeCurrentYearId($companyId, $userId): ?int
+    {
+        $fiscalYear = self::where('company_id', $companyId)
+            ->where('user_id', $userId)
+            ->where('status', 'open')
+            ->first();
+        return $fiscalYear ? $fiscalYear->id : null;
+    }
+
     public function scopeFilters(Builder $builder, array $filters = [])
     {
         $filters = array_merge([

@@ -6,23 +6,27 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Companies\Models\Branch;
-use Modules\Companies\Models\Company;
 use Modules\Users\Models\User;
 
-class JournalsFinancial extends Model
+class JournalEntryLine extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
+        'fiscal_year_id',
         'user_id',
         'company_id',
         'branch_id',
-        'fiscal_year_id',
-        'name',
-        'code',
-        'status',
+        'journal_entry_id',
+        'currency_id',
+        'account_id',
+        'cost_center_id',
+        'project_id',
+        'debit',
+        'credit',
+        'exchange_rate',
+        'description',
         'created_by',
         'updated_by',
         'deleted_by'
@@ -32,13 +36,19 @@ class JournalsFinancial extends Model
     {
         return $builder->select([
             'id',
+            'fiscal_year_id',
             'user_id',
             'company_id',
             'branch_id',
-            'fiscal_year_id',
-            'name',
-            'code',
-            'status',
+            'journal_entry_id',
+            'currency_id',
+            'account_id',
+            'cost_center_id',
+            'project_id',
+            'debit',
+            'credit',
+            'exchange_rate',
+            'description',
             'created_by',
             'updated_by',
             'deleted_by',
@@ -52,41 +62,45 @@ class JournalsFinancial extends Model
     {
         $filters = array_merge([
             'search' => '',
-            'status' => '',
         ], $filters);
 
         if ($filters['search']) {
             $builder->where(function ($query) use ($filters) {
-                $query->where('name', 'like', '%' . $filters['search'] . '%')
-                    ->orWhere('code', 'like', '%' . $filters['search'] . '%');
+                $query->where('description', 'like', '%' . $filters['search'] . '%');
             });
-        }
-
-        if ($filters['status']) {
-            $builder->where('status', $filters['status']);
         }
 
         return $builder;
     }
 
-    public function user()
+    public function journalEntry()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(JournalEntry::class, 'journal_entry_id');
     }
 
-    public function company()
+    public function account()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Account::class, 'account_id');
     }
 
-    public function branch()
+    public function costCenter()
     {
-        return $this->belongsTo(Branch::class, 'branch_id');
+        return $this->belongsTo(CostCenter::class, 'cost_center_id');
+    }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     public function fiscalYear()
     {
         return $this->belongsTo(FiscalYear::class, 'fiscal_year_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // المنشئ

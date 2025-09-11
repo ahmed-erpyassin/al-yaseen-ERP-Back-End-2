@@ -1,51 +1,46 @@
 <?php
 
-namespace Modules\FinancialAccounts\Models;
+namespace Modules\Billing\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Companies\Models\Branch;
 use Modules\Companies\Models\Company;
+use Modules\FinancialAccounts\Models\FiscalYear;
+use Modules\FinancialAccounts\Models\TaxRate;
 use Modules\Users\Models\User;
 
-class JournalsEntry extends Model
+class InvoiceTax extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
-        'fiscal_year_id',
         'user_id',
+        'financial_year_id',
         'company_id',
         'branch_id',
-        'journal_id',
-        'document_id',
-        'type',
-        'entry_number',
-        'entry_date',
-        'description',
-        'status',
+        'invoice_id',
+        'tax_id',
+        'tax_amount',
         'created_by',
         'updated_by',
-        'deleted_by',
+        'deleted_by'
     ];
 
     public function scopeData($builder)
     {
         return $builder->select([
             'id',
-            'fiscal_year_id',
             'user_id',
+            'financial_year_id',
             'company_id',
             'branch_id',
-            'journal_id',
-            'document_id',
-            'type',
-            'entry_number',
-            'entry_date',
-            'description',
-            'status',
+            'invoice_id',
+            'tax_id',
+            'tax_amount',
             'created_by',
             'updated_by',
             'deleted_by',
@@ -59,23 +54,32 @@ class JournalsEntry extends Model
     {
         $filters = array_merge([
             'search' => '',
-            'type' => null,
-            'status' => null,
+            'company_id' => null,
+            'branch_id' => null,
+            'invoice_id' => null,
+            'tax_id' => null,
         ], $filters);
+
+        if ($filters['company_id']) {
+            $builder->where('company_id', $filters['company_id']);
+        }
+
+        if ($filters['branch_id']) {
+            $builder->where('branch_id', $filters['branch_id']);
+        }
+
+        if ($filters['invoice_id']) {
+            $builder->where('invoice_id', $filters['invoice_id']);
+        }
+
+        if ($filters['tax_id']) {
+            $builder->where('tax_id', $filters['tax_id']);
+        }
 
         if ($filters['search']) {
             $builder->where(function ($query) use ($filters) {
-                $query->where('entry_number', 'like', '%' . $filters['search'] . '%')
-                    ->orWhere('description', 'like', '%' . $filters['search'] . '%');
+                $query->where('tax_amount', 'like', '%' . $filters['search'] . '%');
             });
-        }
-
-        if ($filters['type']) {
-            $builder->where('type', $filters['type']);
-        }
-
-        if ($filters['status']) {
-            $builder->where('status', $filters['status']);
         }
 
         return $builder;
@@ -86,19 +90,29 @@ class JournalsEntry extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function tax()
+    {
+        return $this->belongsTo(TaxRate::class);
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function fiscalYear()
+    public function branch()
     {
-        return $this->belongsTo(FiscalYear::class);
+        return $this->belongsTo(Branch::class);
     }
 
-    public function journal()
+    public function financialYear()
     {
-        return $this->belongsTo(JournalsFinancial::class, 'journal_id');
+        return $this->belongsTo(FiscalYear::class, 'financial_year_id');
     }
 
     // المنشئ
