@@ -32,9 +32,9 @@ return new class extends Migration
             $table->string('postal_code');
             $table->string('tax_number');
             $table->string('notes');
-            $table->foreignId('created_by')->constrained()->onDelete('cascade');
-            $table->foreignId('updated_by')->constrained()->onDelete('cascade');
-            $table->foreignId('deleted_by')->constrained()->onDelete('cascade');
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();
