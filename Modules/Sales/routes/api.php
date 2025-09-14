@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Sales\IncomingOrderController;
-use App\Http\Controllers\Sales\OutgoingShipmentController;
-use App\Http\Controllers\Sales\ReturnInvoiceController;
-use App\Http\Controllers\Sales\ServiceController;
+use Modules\Sales\Http\Controllers\IncomingOrderController;
+use Modules\Sales\Http\Controllers\OutgoingShipmentController;
+use Modules\Sales\Http\Controllers\ReturnInvoiceController;
+use Modules\Sales\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 use Modules\Sales\Http\Controllers\InvoiceController;
 use Modules\Sales\Http\Controllers\OutgoingOfferController;

@@ -21,6 +21,7 @@ class OutgoingOfferService
             $sortOrder = $request->get('sort_order', 'desc');
 
             return Sale::query()
+                ->where('user_id', $request->user()->id)
                 ->where('type', SalesTypeEnum::QUOTATION)
                 ->when($customerSearch, function ($query, $customerSearch) {
                     $query->whereHas('customer', function ($q) use ($customerSearch) {
@@ -38,8 +39,8 @@ class OutgoingOfferService
     {
 
         try {
-            $companyId =$request->user()->company_id;
-            $userId = $request->user()->id;
+            $companyId =$request->user()->company_id ?? $request->company_id;
+            $userId = $request->user()->id ?? $request->user_id;
 
             $data = [
                 'type'       => SalesTypeEnum::QUOTATION,
