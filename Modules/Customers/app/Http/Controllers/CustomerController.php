@@ -45,7 +45,7 @@ class CustomerController extends Controller
                 'data'    => new CustomerResource($customer)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json(['error' => 'An error occurred while fetching outgoing offers.', $e->getMessage()], 500);
         }
     }
 

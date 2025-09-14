@@ -12,31 +12,25 @@ class CustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id'      => 'required|exists:users,id',
-            'company_id'   => 'required|exists:companies,id',
-            'branch_id'    => 'required|exists:branches,id',
-            'currency_id'  => 'required|exists:currencies,id',
-            'employee_id'  => 'required|exists:employees,id',
-            'country_id'   => 'required|exists:countries,id',
-            'region_id'    => 'required|exists:regions,id',
-            'city_id'      => 'required|exists:cities,id',
+            'company_id'   => 'required|integer',
+            'branch_id'    => 'required|integer',
+            'currency_id'  => 'required|integer',
+            'employee_id'  => 'required|integer',
+            'country_id'   => 'required|integer',
+            'region_id'    => 'required|integer',
+            'city_id'      => 'required|integer',
 
             'first_name'   => 'required|string|max:100',
-            'second_name'  => 'nullable|string|max:100',
-            'contact_name' => 'nullable|string|max:100',
-            'email'        => 'nullable|email|max:150',
-            'phone'        => 'nullable|string|max:50',
-            'mobile'       => 'nullable|string|max:50',
-            'address_one'  => 'nullable|string|max:255',
-            'address_two'  => 'nullable|string|max:255',
-            'postal_code'  => 'nullable|string|max:20',
-            'tax_number'   => 'nullable|string|max:50',
+            'second_name'  => 'required|string|max:100',
+            'contact_name' => 'required|string|max:100',
+            'email'        => 'required|email|max:150',
+            'phone'        => 'required|string|max:50',
+            'mobile'       => 'required|string|max:50',
+            'address_one'  => 'required|string|max:255',
+            'address_two'  => 'required|string|max:255',
+            'postal_code'  => 'required|string|max:20',
+            'tax_number'   => 'required|string|max:50',
             'notes'        => 'nullable|string|max:500',
-
-            'created_by'   => 'nullable|exists:users,id',
-            'updated_by'   => 'nullable|exists:users,id',
-            'deleted_by'   => 'nullable|exists:users,id',
-
             'status'       => 'required|in:active,inactive',
         ];
     }

@@ -30,7 +30,7 @@ class CustomerService
     {
 
         try {
-            $companyId = $request->user()->company_id;
+            $companyId = $request->user()->company_id ?? $request->company_id;
             $userId = $request->user()->id;
 
             $data = [

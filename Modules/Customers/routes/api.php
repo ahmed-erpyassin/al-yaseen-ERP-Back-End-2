@@ -8,10 +8,9 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     Route::prefix('customers')->group(function () {
         Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
         Route::post('/', [CustomerController::class, 'store'])->name('customers.store');
-        Route::get('/{supplier}', [CustomerController::class, 'show'])->name('customers.show');
-        Route::put('/{supplier}', [CustomerController::class, 'update'])->name('customers.update');
-        Route::delete('/{supplier}', [CustomerController::class, 'destroy'])->name('customers.destroy');
-
-        Route::post('/{supplier}/restore', [CustomerController::class, 'restore'])->name('customers.restore');
+        Route::get('/{customer}', [CustomerController::class, 'show'])->name('customers.show');
+        Route::put('/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+        Route::delete('/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+        Route::post('/{customer}/restore', [CustomerController::class, 'restore'])->name('customers.restore');
     });
 });

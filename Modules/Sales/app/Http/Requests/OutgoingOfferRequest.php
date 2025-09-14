@@ -12,6 +12,7 @@ class OutgoingOfferRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'branch_id'   => 'integer',
             'currency_id' => 'nullable',
             'employee_id' => 'nullable',
             'customer_id' => 'required',
