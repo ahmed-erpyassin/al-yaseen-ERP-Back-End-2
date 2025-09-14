@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Modules\Sales\app\Services\OutgoingOfferService;
 use Modules\Sales\Http\Requests\OutgoingOfferRequest;
 use Modules\Sales\Transformers\OutgoingOfferResource;
+use Modules\Sales\Models\Sale;
 
 class OutgoingOfferController extends Controller
 {
@@ -30,7 +31,11 @@ class OutgoingOfferController extends Controller
                 'data' => OutgoingOfferResource::collection($offers)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching outgoing offers.',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -39,41 +44,146 @@ class OutgoingOfferController extends Controller
      */
     public function store(OutgoingOfferRequest $request)
     {
-
         try {
             $offer = $this->outgoingOfferService->store($request);
+            return response()->json([
+                'success' => true,
+                'data' => new OutgoingOfferResource($offer->load(['customer', 'currency', 'items'])),
+                'message' => 'Outgoing offer created successfully'
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while creating outgoing offer.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        try {
+            $offer = Sale::with(['customer', 'currency', 'items', 'user', 'createdBy'])
+                ->quotations()
+                ->findOrFail($id);
+
             return response()->json([
                 'success' => true,
                 'data' => new OutgoingOfferResource($offer)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'Outgoing offer not found.',
+                'message' => $e->getMessage()
+            ], 404);
         }
-    }
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
-    {
-        return view('sales::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('sales::edit');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(OutgoingOfferRequest $request, $id)
+    {
+        try {
+            $offer = $this->outgoingOfferService->update($request, $id);
+            return response()->json([
+                'success' => true,
+                'data' => new OutgoingOfferResource($offer->load(['customer', 'currency', 'items'])),
+                'message' => 'Outgoing offer updated successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while updating outgoing offer.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+        try {
+            $this->outgoingOfferService->destroy($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Outgoing offer deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while deleting outgoing offer.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Approve the specified outgoing offer.
+     */
+    public function approve($id)
+    {
+        try {
+            $offer = $this->outgoingOfferService->approve($id);
+            return response()->json([
+                'success' => true,
+                'data' => new OutgoingOfferResource($offer),
+                'message' => 'Outgoing offer approved successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while approving outgoing offer.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Send the specified outgoing offer.
+     */
+    public function send($id)
+    {
+        try {
+            $offer = $this->outgoingOfferService->send($id);
+            return response()->json([
+                'success' => true,
+                'data' => new OutgoingOfferResource($offer),
+                'message' => 'Outgoing offer sent successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while sending outgoing offer.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Cancel the specified outgoing offer.
+     */
+    public function cancel($id)
+    {
+        try {
+            $offer = $this->outgoingOfferService->cancel($id);
+            return response()->json([
+                'success' => true,
+                'data' => new OutgoingOfferResource($offer),
+                'message' => 'Outgoing offer cancelled successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while cancelling outgoing offer.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -13,6 +13,12 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales')->group(function () {
     Route::prefix('outgoing-offers')->group(function () {
         Route::get('/', [OutgoingOfferController::class, 'index']);
         Route::post('/', [OutgoingOfferController::class, 'store']);
+        Route::get('/{id}', [OutgoingOfferController::class, 'show']);
+        Route::put('/{id}', [OutgoingOfferController::class, 'update']);
+        Route::delete('/{id}', [OutgoingOfferController::class, 'destroy']);
+        Route::patch('/{id}/approve', [OutgoingOfferController::class, 'approve']);
+        Route::patch('/{id}/send', [OutgoingOfferController::class, 'send']);
+        Route::patch('/{id}/cancel', [OutgoingOfferController::class, 'cancel']);
     });
     Route::prefix('outgoing-shipments')->group(function () {
         Route::get('/', [OutgoingShipmentController::class, 'index']);

@@ -67,4 +67,13 @@ trait LivewireHelper
             ->onConfirm($action)
             ->show();
     }
+
+    public function showDivAlert($message, $type = "success", $title = "")
+    {
+        $this->dispatch('show-div-alert', [
+            'message' => $message,
+            'type' => $type,
+            'title' => $title
+        ]);
+    }
 }

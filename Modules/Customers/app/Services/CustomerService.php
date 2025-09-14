@@ -17,12 +17,18 @@ class CustomerService
 
             return Customer::query()
                 ->when($customerSearch, function ($query, $customerSearch) {
-                    $query->where('name', 'like', '%' . $customerSearch . '%');
+                    $query->where(function ($q) use ($customerSearch) {
+                        $q->where('first_name', 'like', '%' . $customerSearch . '%')
+                          ->orWhere('second_name', 'like', '%' . $customerSearch . '%')
+                          ->orWhere('company_name', 'like', '%' . $customerSearch . '%')
+                          ->orWhere('email', 'like', '%' . $customerSearch . '%')
+                          ->orWhere('customer_number', 'like', '%' . $customerSearch . '%');
+                    });
                 })
                 ->orderBy($sortBy, $sortOrder)
                 ->get();
         } catch (\Exception $e) {
-            throw new \Exception('Error fetching outgoing offers: ' . $e->getMessage());
+            throw new \Exception('Error fetching customers: ' . $e->getMessage());
         }
     }
 
@@ -43,7 +49,7 @@ class CustomerService
 
             return $customer;
         } catch (\Exception $e) {
-            throw new \Exception('Error creating outgoing offer: ' . $e->getMessage());
+            throw new \Exception('Error creating customer: ' . $e->getMessage());
         }
     }
     public function show(Customer $customer)
@@ -57,8 +63,9 @@ class CustomerService
     public function update(CustomerRequest $request, Customer $customer)
     {
         try {
-
             $data = $request->validated();
+            // Add updated_by information
+            $data['updated_by'] = $request->user()->id;
 
             $customer->update($data);
 
@@ -68,10 +75,13 @@ class CustomerService
         }
     }
 
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer, $userId = null)
     {
         try {
+            // Add deleted_by information before soft delete
+            $customer->update(['deleted_by' => $userId]);
             $customer->delete();
+            
             return true;
         } catch (\Exception $e) {
             throw new \Exception('Error deleting customer: ' . $e->getMessage());
@@ -86,6 +96,55 @@ class CustomerService
             return true;
         } catch (\Exception $e) {
             throw new \Exception('Error restoring customer: ' . $e->getMessage());
+        }
+    }
+
+    public function findById($id)
+    {
+        try {
+            return Customer::findOrFail($id);
+        } catch (\Exception $e) {
+            throw new \Exception('Customer not found: ' . $e->getMessage());
+        }
+    }
+
+    public function getCustomersWithPagination($request, $perPage = 10)
+    {
+        try {
+            $customerSearch = $request->get('customerSearch', null);
+            $sortBy = $request->get('sort_by', 'created_at');
+            $sortOrder = $request->get('sort_order', 'desc');
+
+            return Customer::query()
+                ->when($customerSearch, function ($query, $customerSearch) {
+                    $query->where(function ($q) use ($customerSearch) {
+                        $q->where('first_name', 'like', '%' . $customerSearch . '%')
+                          ->orWhere('second_name', 'like', '%' . $customerSearch . '%')
+                          ->orWhere('company_name', 'like', '%' . $customerSearch . '%')
+                          ->orWhere('email', 'like', '%' . $customerSearch . '%')
+                          ->orWhere('customer_number', 'like', '%' . $customerSearch . '%');
+                    });
+                })
+                ->orderBy($sortBy, $sortOrder)
+                ->paginate($perPage);
+        } catch (\Exception $e) {
+            throw new \Exception('Error fetching customers with pagination: ' . $e->getMessage());
+        }
+    }
+
+    public function bulkDelete($customerIds, $userId = null)
+    {
+        try {
+            $customers = Customer::whereIn('id', $customerIds)->get();
+            
+            foreach ($customers as $customer) {
+                $customer->update(['deleted_by' => $userId]);
+                $customer->delete();
+            }
+            
+            return true;
+        } catch (\Exception $e) {
+            throw new \Exception('Error bulk deleting customers: ' . $e->getMessage());
         }
     }
 }

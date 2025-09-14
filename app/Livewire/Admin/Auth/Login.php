@@ -17,6 +17,7 @@ class Login extends Component
     public $email = '';
     public $password = '';
     public $remember = false;
+    public $isLoading = false;
 
     #[Layout('layouts.admin.auth.login', ['headerTitle' => 'نظام إدار المؤسسات - تسجيل الدخول']), Title('Admin Login')]
     public function render()
@@ -26,30 +27,41 @@ class Login extends Component
 
     public function login()
     {
-        $data = $this->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $this->isLoading = true;
+        
+        try {
+            $data = $this->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
 
-        $user = User::where('email', $data['email'])->first();
+            $user = User::where('email', $data['email'])->first();
 
-        if (!$user) {
-            $this->alertMessage('البريد الإلكتروني غير مسجل', 'error', 'center');
-            return;
+            if (!$user) {
+                $this->alertMessage('البريد الإلكتروني غير مسجل', 'error', 'center');
+                return;
+            }
+
+            if (!Hash::check($data['password'], $user->password)) {
+                $this->alertMessage('كلمة المرور غير صحيحة', 'error', 'center');
+                return;
+            }
+
+            // if (!$user->is_active) {
+            //     $this->alertMessage('حسابك غير مفعل', 'error');
+            //     return;
+            // }
+
+            Auth::guard('web')->login($user, $this->remember);
+            $this->alertMessage('تم تسجيل الدخول بنجاح', 'success', 'center');
+            
+            // Add a small delay to show success message before redirect
+            $this->dispatch('login-success');
+            
+        } catch (\Exception $e) {
+            $this->alertMessage('حدث خطأ أثناء تسجيل الدخول', 'error', 'center');
+        } finally {
+            $this->isLoading = false;
         }
-
-        if (!Hash::check($data['password'], $user->password)) {
-            $this->alertMessage('كلمة المرور غير صحيحة', 'error', 'center');
-            return;
-        }
-
-        // if (!$user->is_active) {
-        //     $this->alertMessage('حسابك غير مفعل', 'error');
-        //     return;
-        // }
-
-        Auth::guard('web')->login($user, $this->remember);
-        $this->alertMessage('تم تسجيل الدخول بنجاح', 'success', 'center');
-        return redirect()->route('admin.panel.index');
     }
 }
