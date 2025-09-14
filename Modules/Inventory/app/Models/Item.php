@@ -57,7 +57,7 @@ class Item extends Model
 
         // VAT Information (معلومات الضريبة)
         'item_subject_to_vat',
-        
+
         'notes',
 
         // Barcode Information (معلومات الباركود)
@@ -68,6 +68,12 @@ class Item extends Model
         'expiry_date',
         'image',
         'color',
+
+        // ✅ Physical Dimensions (الأبعاد الفيزيائية)
+        'length', // الطول
+        'width',  // العرض
+        'height', // الارتفاع
+
         'item_type',
 
         'active',
@@ -105,6 +111,11 @@ class Item extends Model
 
         // Product Information
         'expiry_date' => 'date',
+
+        // ✅ Physical Dimensions
+        'length' => 'decimal:2',
+        'width' => 'decimal:2',
+        'height' => 'decimal:2',
 
         'active' => 'boolean',
         'stock_tracking' => 'boolean',

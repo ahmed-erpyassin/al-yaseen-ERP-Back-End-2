@@ -19,30 +19,39 @@ use Modules\Inventory\Http\Controllers\Api\ManufacturingFormulaController;
 */
 
 Route::prefix('v1')->middleware(['api', 'auth:sanctum'])->group(function () {
-    
+
     // ✅ Manufacturing Formula Search & Management Operations
     Route::prefix('manufacturing-formulas')->group(function () {
-        
+
         // ✅ Core CRUD Operations
         Route::get('/', [ManufacturingFormulaController::class, 'index'])->name('manufacturing-formulas.index');
         Route::post('/', [ManufacturingFormulaController::class, 'store'])->name('manufacturing-formulas.store');
         Route::get('/{id}', [ManufacturingFormulaController::class, 'show'])->name('manufacturing-formulas.show');
         Route::put('/{id}', [ManufacturingFormulaController::class, 'update'])->name('manufacturing-formulas.update');
         Route::delete('/{id}', [ManufacturingFormulaController::class, 'destroy'])->name('manufacturing-formulas.destroy');
-        
+
         // ✅ Data Display and Field Selection Support
         Route::get('/fields/available', [ManufacturingFormulaController::class, 'getAvailableFields'])->name('manufacturing-formulas.available-fields');
         Route::get('/fields/values', [ManufacturingFormulaController::class, 'getFieldValues'])->name('manufacturing-formulas.field-values');
-        
+
         // ✅ Soft Delete Management
         Route::get('/trashed/list', [ManufacturingFormulaController::class, 'trashed'])->name('manufacturing-formulas.trashed');
         Route::post('/{id}/restore', [ManufacturingFormulaController::class, 'restore'])->name('manufacturing-formulas.restore');
         Route::delete('/{id}/force-delete', [ManufacturingFormulaController::class, 'forceDelete'])->name('manufacturing-formulas.force-delete');
-        
+
         // ✅ Helper Endpoints (from existing functionality)
         Route::get('/items/numbers', [ManufacturingFormulaController::class, 'getItemNumbers'])->name('manufacturing-formulas.item-numbers');
         Route::get('/items/details', [ManufacturingFormulaController::class, 'getItemDetails'])->name('manufacturing-formulas.item-details');
         Route::post('/cost/calculate', [ManufacturingFormulaController::class, 'calculateCost'])->name('manufacturing-formulas.calculate-cost');
+
+        // ✅ NEW: Field-Based Data Display System
+        Route::get('/field-based-data', [ManufacturingFormulaController::class, 'getFieldBasedData'])->name('manufacturing-formulas.field-based-data');
+        Route::get('/selectable-fields', [ManufacturingFormulaController::class, 'getSelectableFields'])->name('manufacturing-formulas.selectable-fields');
+
+        // ✅ NEW: Additional Helper Endpoints
+        Route::get('/formula-numbers', [ManufacturingFormulaController::class, 'getManufacturingFormulaNumbers'])->name('manufacturing-formulas.formula-numbers');
+        Route::get('/item-by-formula', [ManufacturingFormulaController::class, 'getItemByFormulaNumber'])->name('manufacturing-formulas.item-by-formula');
+        Route::get('/warehouses', [ManufacturingFormulaController::class, 'getWarehouses'])->name('manufacturing-formulas.warehouses');
     });
 });
 

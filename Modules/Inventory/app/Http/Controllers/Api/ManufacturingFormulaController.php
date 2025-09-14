@@ -986,4 +986,641 @@ class ManufacturingFormulaController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * ✅ Get field-based data display - Show data based on selected field.
+     * When user clicks on any field in the table, show related data.
+     */
+    public function getFieldBasedData(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+            $field = $request->get('field');
+            $value = $request->get('value');
+            $formulaId = $request->get('formula_id');
+
+            if (!$field) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Field parameter is required'
+                ], 400);
+            }
+
+            // ✅ Get the base formula if formula_id is provided
+            $baseFormula = null;
+            if ($formulaId) {
+                $baseFormula = BomItem::with(['item', 'component', 'unit'])
+                    ->where('company_id', $companyId)
+                    ->whereNotNull('formula_number')
+                    ->find($formulaId);
+            }
+
+            // ✅ Build query based on selected field
+            $query = BomItem::with([
+                'item:id,item_number,name,description,color,length,width,height,balance,minimum_limit,maximum_limit,reorder_limit',
+                'component:id,item_number,name,description',
+                'unit:id,name,code',
+                'creator:id,name',
+                'updater:id,name'
+            ])
+            ->where('company_id', $companyId)
+            ->whereNotNull('formula_number');
+
+            // ✅ Apply field-based filtering
+            $this->applyFieldBasedFilter($query, $field, $value, $baseFormula);
+
+            // ✅ Get results
+            $results = $query->orderBy('created_at', 'desc')->limit(50)->get();
+
+            // ✅ Get field-specific data
+            $fieldData = $this->getFieldSpecificData($field, $value, $companyId, $baseFormula);
+
+            // ✅ Format results with enhanced data
+            $formattedResults = $results->map(function ($formula) use ($field) {
+                return [
+                    'id' => $formula->id,
+                    'formula_number' => $formula->formula_number,
+                    'formula_name' => $formula->formula_name,
+
+                    // ✅ Item Information (from relationships - no redundant fields)
+                    'item_id' => $formula->item_id,
+                    'item_number' => $formula->item?->item_number,
+                    'item_name' => $formula->item?->name,
+                    'item_description' => $formula->item?->description,
+                    'unit' => $formula->item?->unit?->name ?? $formula->unit?->name,
+                    'balance' => $formula->item?->balance,
+                    'minimum_limit' => $formula->item?->minimum_limit,
+                    'maximum_limit' => $formula->item?->maximum_limit,
+                    'reorder_point' => $formula->item?->reorder_limit,
+                    'color' => $formula->item?->color,
+                    'length' => $formula->item?->length,
+                    'width' => $formula->item?->width,
+                    'height' => $formula->item?->height,
+
+                    // ✅ Get sale/purchase prices from Sales/Purchases tables
+                    'sale_price' => $this->getLatestSalePrice($formula->item_id),
+                    'purchase_price' => $this->getLatestPurchasePrice($formula->item_id),
+
+                    // ✅ Manufacturing Details
+                    'manufacturing_duration' => $formula->manufacturing_duration,
+                    'consumed_quantity' => $formula->consumed_quantity,
+                    'produced_quantity' => $formula->produced_quantity,
+                    'formula_date' => $formula->formula_date,
+                    'formula_time' => $formula->formula_time,
+                    'status' => $formula->status,
+                    'is_active' => $formula->is_active,
+
+                    // ✅ Highlight selected field
+                    'selected_field' => $field,
+                    'selected_field_value' => $this->getFieldValue($formula, $field),
+                    'is_match' => $this->isFieldMatch($formula, $field, $value),
+
+                    'created_at' => $formula->created_at?->format('Y-m-d H:i:s'),
+                    'updated_at' => $formula->updated_at?->format('Y-m-d H:i:s'),
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'selected_field' => $field,
+                    'selected_value' => $value,
+                    'base_formula' => $baseFormula ? [
+                        'id' => $baseFormula->id,
+                        'formula_number' => $baseFormula->formula_number,
+                        'formula_name' => $baseFormula->formula_name,
+                        'item_name' => $baseFormula->item?->name,
+                    ] : null,
+                    'field_data' => $fieldData,
+                    'formulas' => $formattedResults,
+                    'total_results' => $results->count(),
+                ],
+                'message' => "Data retrieved successfully for field: {$field}"
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error retrieving field-based data: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving field-based data: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ✅ Get all available fields for selection.
+     */
+    public function getSelectableFields(): JsonResponse
+    {
+        $fields = [
+            // ✅ Basic Formula Fields
+            ['field' => 'formula_number', 'label' => 'Formula Number', 'type' => 'string'],
+            ['field' => 'formula_name', 'label' => 'Formula Name', 'type' => 'string'],
+            ['field' => 'status', 'label' => 'Status', 'type' => 'enum'],
+            ['field' => 'is_active', 'label' => 'Active Status', 'type' => 'boolean'],
+
+            // ✅ Item Fields (from relationships)
+            ['field' => 'item_number', 'label' => 'Item Number', 'type' => 'string'],
+            ['field' => 'item_name', 'label' => 'Item Name', 'type' => 'string'],
+            ['field' => 'unit', 'label' => 'Unit', 'type' => 'string'],
+            ['field' => 'balance', 'label' => 'Balance', 'type' => 'decimal'],
+            ['field' => 'minimum_limit', 'label' => 'Minimum Limit', 'type' => 'decimal'],
+            ['field' => 'maximum_limit', 'label' => 'Maximum Limit', 'type' => 'decimal'],
+            ['field' => 'reorder_point', 'label' => 'Reorder Point', 'type' => 'decimal'],
+            ['field' => 'color', 'label' => 'Color', 'type' => 'string'],
+            ['field' => 'length', 'label' => 'Length', 'type' => 'decimal'],
+            ['field' => 'width', 'label' => 'Width', 'type' => 'decimal'],
+            ['field' => 'height', 'label' => 'Height', 'type' => 'decimal'],
+
+            // ✅ Price Fields (from Sales/Purchases tables)
+            ['field' => 'sale_price', 'label' => 'Sale Price', 'type' => 'decimal'],
+            ['field' => 'purchase_price', 'label' => 'Purchase Price', 'type' => 'decimal'],
+
+            // ✅ Manufacturing Fields
+            ['field' => 'manufacturing_duration', 'label' => 'Manufacturing Duration', 'type' => 'string'],
+            ['field' => 'consumed_quantity', 'label' => 'Consumed Quantity', 'type' => 'decimal'],
+            ['field' => 'produced_quantity', 'label' => 'Produced Quantity', 'type' => 'decimal'],
+            ['field' => 'formula_date', 'label' => 'Formula Date', 'type' => 'date'],
+            ['field' => 'formula_time', 'label' => 'Formula Time', 'type' => 'time'],
+
+            // ✅ System Fields
+            ['field' => 'created_at', 'label' => 'Created At', 'type' => 'datetime'],
+            ['field' => 'updated_at', 'label' => 'Updated At', 'type' => 'datetime'],
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $fields,
+            'message' => 'Selectable fields retrieved successfully'
+        ]);
+    }
+
+    // ✅ Private Helper Methods for Field-Based Data Display
+
+    /**
+     * Apply field-based filtering to query.
+     */
+    private function applyFieldBasedFilter($query, $field, $value, $baseFormula): void
+    {
+        if (!$value) {
+            return;
+        }
+
+        switch ($field) {
+            case 'formula_number':
+                $query->where('formula_number', 'like', '%' . $value . '%');
+                break;
+            case 'formula_name':
+                $query->where('formula_name', 'like', '%' . $value . '%');
+                break;
+            case 'status':
+                $query->where('status', $value);
+                break;
+            case 'is_active':
+                $query->where('is_active', $value);
+                break;
+            case 'item_number':
+                $query->whereHas('item', function ($q) use ($value) {
+                    $q->where('item_number', 'like', '%' . $value . '%');
+                });
+                break;
+            case 'item_name':
+                $query->whereHas('item', function ($q) use ($value) {
+                    $q->where('name', 'like', '%' . $value . '%');
+                });
+                break;
+            case 'color':
+                $query->whereHas('item', function ($q) use ($value) {
+                    $q->where('color', 'like', '%' . $value . '%');
+                });
+                break;
+            case 'manufacturing_duration':
+                $query->where('manufacturing_duration', 'like', '%' . $value . '%');
+                break;
+            case 'formula_date':
+                $query->whereDate('formula_date', $value);
+                break;
+            default:
+                // For numeric fields
+                if (is_numeric($value)) {
+                    $query->where($field, $value);
+                }
+                break;
+        }
+    }
+
+    /**
+     * Get field-specific data and statistics.
+     */
+    private function getFieldSpecificData($field, $value, $companyId, $baseFormula): array
+    {
+        $data = [
+            'field' => $field,
+            'value' => $value,
+            'statistics' => [],
+            'related_data' => [],
+        ];
+
+        try {
+            switch ($field) {
+                case 'item_number':
+                case 'item_name':
+                    $data['related_data'] = $this->getItemRelatedData($value, $companyId);
+                    break;
+                case 'color':
+                    $data['related_data'] = $this->getColorRelatedData($value, $companyId);
+                    break;
+                case 'status':
+                    $data['statistics'] = $this->getStatusStatistics($companyId);
+                    break;
+                case 'manufacturing_duration':
+                    $data['statistics'] = $this->getDurationStatistics($companyId);
+                    break;
+                case 'formula_date':
+                    $data['statistics'] = $this->getDateStatistics($companyId);
+                    break;
+                default:
+                    $data['statistics'] = $this->getGeneralFieldStatistics($field, $companyId);
+                    break;
+            }
+        } catch (\Exception $e) {
+            Log::warning("Error getting field-specific data for {$field}: " . $e->getMessage());
+        }
+
+        return $data;
+    }
+
+    /**
+     * ✅ Get latest sale price from Sales tables.
+     */
+    private function getLatestSalePrice($itemId): ?float
+    {
+        try {
+            // Get latest sale price from sales_items table
+            $latestSalePrice = DB::table('sales_items')
+                ->join('sales', 'sales_items.sale_id', '=', 'sales.id')
+                ->where('sales_items.item_id', $itemId)
+                ->where('sales.status', '!=', 'cancelled')
+                ->orderBy('sales.created_at', 'desc')
+                ->value('sales_items.unit_price');
+
+            return $latestSalePrice ? (float) $latestSalePrice : null;
+        } catch (\Exception $e) {
+            Log::warning("Error getting latest sale price for item {$itemId}: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * ✅ Get latest purchase price from Purchases tables.
+     */
+    private function getLatestPurchasePrice($itemId): ?float
+    {
+        try {
+            // Get latest purchase price from purchase_items table
+            $latestPurchasePrice = DB::table('purchase_items')
+                ->join('purchases', 'purchase_items.purchase_id', '=', 'purchases.id')
+                ->where('purchase_items.item_id', $itemId)
+                ->where('purchases.status', '!=', 'cancelled')
+                ->orderBy('purchases.created_at', 'desc')
+                ->value('purchase_items.unit_price');
+
+            return $latestPurchasePrice ? (float) $latestPurchasePrice : null;
+        } catch (\Exception $e) {
+            Log::warning("Error getting latest purchase price for item {$itemId}: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Get field value from formula object.
+     */
+    private function getFieldValue($formula, $field)
+    {
+        switch ($field) {
+            case 'item_number':
+                return $formula->item?->item_number;
+            case 'item_name':
+                return $formula->item?->name;
+            case 'unit':
+                return $formula->item?->unit?->name ?? $formula->unit?->name;
+            case 'balance':
+                return $formula->item?->balance;
+            case 'minimum_limit':
+                return $formula->item?->minimum_limit;
+            case 'maximum_limit':
+                return $formula->item?->maximum_limit;
+            case 'reorder_point':
+                return $formula->item?->reorder_limit;
+            case 'color':
+                return $formula->item?->color;
+            case 'length':
+                return $formula->item?->length;
+            case 'width':
+                return $formula->item?->width;
+            case 'height':
+                return $formula->item?->height;
+            case 'sale_price':
+                return $this->getLatestSalePrice($formula->item_id);
+            case 'purchase_price':
+                return $this->getLatestPurchasePrice($formula->item_id);
+            default:
+                return $formula->{$field} ?? null;
+        }
+    }
+
+    /**
+     * Check if field matches the given value.
+     */
+    private function isFieldMatch($formula, $field, $value): bool
+    {
+        if (!$value) {
+            return true;
+        }
+
+        $fieldValue = $this->getFieldValue($formula, $field);
+
+        if (is_string($fieldValue)) {
+            return stripos($fieldValue, $value) !== false;
+        }
+
+        return $fieldValue == $value;
+    }
+
+    /**
+     * Get item-related data.
+     */
+    private function getItemRelatedData($value, $companyId): array
+    {
+        try {
+            $items = Item::where('company_id', $companyId)
+                ->where(function ($q) use ($value) {
+                    $q->where('item_number', 'like', '%' . $value . '%')
+                      ->orWhere('name', 'like', '%' . $value . '%');
+                })
+                ->limit(10)
+                ->get(['id', 'item_number', 'name', 'description', 'color', 'balance']);
+
+            return [
+                'items' => $items->toArray(),
+                'total_items' => $items->count(),
+            ];
+        } catch (\Exception $e) {
+            return ['items' => [], 'total_items' => 0];
+        }
+    }
+
+    /**
+     * Get color-related data.
+     */
+    private function getColorRelatedData($value, $companyId): array
+    {
+        try {
+            $colors = Item::where('company_id', $companyId)
+                ->where('color', 'like', '%' . $value . '%')
+                ->distinct()
+                ->pluck('color')
+                ->filter()
+                ->take(10);
+
+            return [
+                'colors' => $colors->toArray(),
+                'total_colors' => $colors->count(),
+            ];
+        } catch (\Exception $e) {
+            return ['colors' => [], 'total_colors' => 0];
+        }
+    }
+
+    /**
+     * Get status statistics.
+     */
+    private function getStatusStatistics($companyId): array
+    {
+        try {
+            $stats = BomItem::where('company_id', $companyId)
+                ->whereNotNull('formula_number')
+                ->selectRaw('status, COUNT(*) as count')
+                ->groupBy('status')
+                ->pluck('count', 'status')
+                ->toArray();
+
+            return [
+                'status_distribution' => $stats,
+                'total_formulas' => array_sum($stats),
+            ];
+        } catch (\Exception $e) {
+            return ['status_distribution' => [], 'total_formulas' => 0];
+        }
+    }
+
+    /**
+     * Get duration statistics.
+     */
+    private function getDurationStatistics($companyId): array
+    {
+        try {
+            $durations = BomItem::where('company_id', $companyId)
+                ->whereNotNull('formula_number')
+                ->whereNotNull('manufacturing_duration')
+                ->pluck('manufacturing_duration')
+                ->countBy()
+                ->toArray();
+
+            return [
+                'duration_distribution' => $durations,
+                'unique_durations' => count($durations),
+            ];
+        } catch (\Exception $e) {
+            return ['duration_distribution' => [], 'unique_durations' => 0];
+        }
+    }
+
+    /**
+     * Get date statistics.
+     */
+    private function getDateStatistics($companyId): array
+    {
+        try {
+            $dateStats = BomItem::where('company_id', $companyId)
+                ->whereNotNull('formula_number')
+                ->whereNotNull('formula_date')
+                ->selectRaw('DATE(formula_date) as date, COUNT(*) as count')
+                ->groupBy('date')
+                ->orderBy('date', 'desc')
+                ->limit(10)
+                ->pluck('count', 'date')
+                ->toArray();
+
+            return [
+                'date_distribution' => $dateStats,
+                'total_dates' => count($dateStats),
+            ];
+        } catch (\Exception $e) {
+            return ['date_distribution' => [], 'total_dates' => 0];
+        }
+    }
+
+    /**
+     * Get general field statistics.
+     */
+    private function getGeneralFieldStatistics($field, $companyId): array
+    {
+        try {
+            $stats = BomItem::where('company_id', $companyId)
+                ->whereNotNull('formula_number')
+                ->whereNotNull($field)
+                ->selectRaw("COUNT(*) as total, AVG({$field}) as average, MIN({$field}) as minimum, MAX({$field}) as maximum")
+                ->first();
+
+            return [
+                'total' => $stats->total ?? 0,
+                'average' => $stats->average ? round($stats->average, 2) : 0,
+                'minimum' => $stats->minimum ?? 0,
+                'maximum' => $stats->maximum ?? 0,
+            ];
+        } catch (\Exception $e) {
+            return ['total' => 0, 'average' => 0, 'minimum' => 0, 'maximum' => 0];
+        }
+    }
+
+    /**
+     * ✅ Get manufacturing formula numbers for dropdown.
+     */
+    public function getManufacturingFormulaNumbers(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $formulas = BomItem::where('company_id', $companyId)
+                ->whereNotNull('formula_number')
+                ->select('id', 'formula_number', 'formula_name', 'item_id')
+                ->orderBy('formula_number')
+                ->get();
+
+            $formulaOptions = $formulas->map(function ($formula) {
+                return [
+                    'id' => $formula->id,
+                    'formula_number' => $formula->formula_number,
+                    'formula_name' => $formula->formula_name,
+                    'item_id' => $formula->item_id,
+                    'display_text' => $formula->formula_number . ($formula->formula_name ? ' - ' . $formula->formula_name : '')
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $formulaOptions,
+                'message' => 'Manufacturing formula numbers retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving manufacturing formula numbers: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ✅ Get item details by manufacturing formula number.
+     */
+    public function getItemByFormulaNumber(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+            $formulaId = $request->get('formula_id');
+
+            if (!$formulaId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Formula ID is required'
+                ], 400);
+            }
+
+            $formula = BomItem::with(['item.unit'])
+                ->where('company_id', $companyId)
+                ->findOrFail($formulaId);
+
+            $itemDetails = null;
+            if ($formula->item) {
+                $itemDetails = [
+                    'item_id' => $formula->item->id,
+                    'item_number' => $formula->item->item_number,
+                    'item_name' => $formula->item->name,
+                    'description' => $formula->item->description,
+                    'unit_id' => $formula->item->unit_id,
+                    'unit_name' => $formula->item->unit?->name,
+                    'balance' => $formula->item->balance,
+                    'color' => $formula->item->color,
+                    'length' => $formula->item->length,
+                    'width' => $formula->item->width,
+                    'height' => $formula->item->height,
+                    'sale_price' => $this->getLatestSalePrice($formula->item->id),
+                    'purchase_price' => $this->getLatestPurchasePrice($formula->item->id),
+                ];
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'formula' => [
+                        'id' => $formula->id,
+                        'formula_number' => $formula->formula_number,
+                        'formula_name' => $formula->formula_name,
+                        'produced_quantity' => $formula->produced_quantity,
+                    ],
+                    'item' => $itemDetails
+                ],
+                'message' => 'Item details retrieved successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving item details: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ✅ Get warehouses for dropdown.
+     */
+    public function getWarehouses(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $warehouses = \Modules\Inventory\Models\Warehouse::where('company_id', $companyId)
+                ->where('status', 'active')
+                ->select('id', 'warehouse_number', 'name', 'address')
+                ->orderBy('warehouse_number')
+                ->get();
+
+            $warehouseOptions = $warehouses->map(function ($warehouse) {
+                return [
+                    'id' => $warehouse->id,
+                    'warehouse_number' => $warehouse->warehouse_number,
+                    'name' => $warehouse->name,
+                    'address' => $warehouse->address,
+                    'display_text' => $warehouse->warehouse_number . ' - ' . $warehouse->name
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $warehouseOptions,
+                'message' => 'Warehouses retrieved successfully'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving warehouses: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
