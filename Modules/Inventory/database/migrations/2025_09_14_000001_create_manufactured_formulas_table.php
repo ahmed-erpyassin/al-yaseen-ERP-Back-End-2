@@ -57,6 +57,10 @@ return new class extends Migration
             $table->decimal('total_manufacturing_cost', 15, 4)->default(0);
             $table->decimal('cost_per_unit', 15, 4)->default(0);
 
+            // ✅ Pricing Information (from Suppliers table)
+            $table->decimal('sale_price', 15, 4)->default(0); // سعر البيع من جدول الموردين
+            $table->decimal('purchase_price', 15, 4)->default(0); // سعر الشراء من جدول الموردين
+
             // ✅ Date and Time Information (automatic)
             $table->date('formula_date')->default(DB::raw('CURRENT_DATE')); // تاريخ المعادلة
             $table->time('formula_time')->default(DB::raw('CURRENT_TIME')); // وقت المعادلة

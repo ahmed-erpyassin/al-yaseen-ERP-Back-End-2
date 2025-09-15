@@ -858,6 +858,28 @@ class ManufacturingFormulaController extends Controller
                 return $formula->creator ? $formula->creator->name : null;
             case 'updater_name':
                 return $formula->updater ? $formula->updater->name : null;
+            case 'unit':
+                return $formula->item?->unit?->name ?? $formula->unit?->name;
+            case 'balance':
+                return $formula->item?->balance;
+            case 'minimum_limit':
+                return $formula->item?->minimum_limit;
+            case 'maximum_limit':
+                return $formula->item?->maximum_limit;
+            case 'reorder_point':
+                return $formula->item?->reorder_limit;
+            case 'color':
+                return $formula->item?->color;
+            case 'length':
+                return $formula->item?->length;
+            case 'width':
+                return $formula->item?->width;
+            case 'height':
+                return $formula->item?->height;
+            case 'sale_price':
+                return $formula->sale_price;
+            case 'purchase_price':
+                return $formula->purchase_price;
             default:
                 return $formula->{$field} ?? null;
         }
@@ -1058,9 +1080,9 @@ class ManufacturingFormulaController extends Controller
                     'width' => $formula->item?->width,
                     'height' => $formula->item?->height,
 
-                    // ✅ Get sale/purchase prices from Sales/Purchases tables
-                    'sale_price' => $this->getLatestSalePrice($formula->item_id),
-                    'purchase_price' => $this->getLatestPurchasePrice($formula->item_id),
+                    // ✅ Get sale/purchase prices from manufactured_formulas table
+                    'sale_price' => $formula->sale_price,
+                    'purchase_price' => $formula->purchase_price,
 
                     // ✅ Manufacturing Details
                     'manufacturing_duration' => $formula->manufacturing_duration,
@@ -1252,83 +1274,48 @@ class ManufacturingFormulaController extends Controller
     }
 
     /**
-     * ✅ Get latest sale price from Sales tables.
+     * ✅ Get sale price from Suppliers table.
      */
     private function getLatestSalePrice($itemId): ?float
     {
         try {
-            // Get latest sale price from sales_items table
-            $latestSalePrice = DB::table('sales_items')
-                ->join('sales', 'sales_items.sale_id', '=', 'sales.id')
-                ->where('sales_items.item_id', $itemId)
-                ->where('sales.status', '!=', 'cancelled')
-                ->orderBy('sales.created_at', 'desc')
-                ->value('sales_items.unit_price');
+            // Get sale price from suppliers table for this item
+            $salePrice = DB::table('suppliers')
+                ->join('items', 'suppliers.item_id', '=', 'items.id')
+                ->where('suppliers.item_id', $itemId)
+                ->where('suppliers.status', 'active')
+                ->orderBy('suppliers.updated_at', 'desc')
+                ->value('suppliers.selling_price');
 
-            return $latestSalePrice ? (float) $latestSalePrice : null;
+            return $salePrice ? (float) $salePrice : null;
         } catch (\Exception $e) {
-            Log::warning("Error getting latest sale price for item {$itemId}: " . $e->getMessage());
+            Log::warning("Error getting sale price from suppliers for item {$itemId}: " . $e->getMessage());
             return null;
         }
     }
 
     /**
-     * ✅ Get latest purchase price from Purchases tables.
+     * ✅ Get purchase price from Suppliers table.
      */
     private function getLatestPurchasePrice($itemId): ?float
     {
         try {
-            // Get latest purchase price from purchase_items table
-            $latestPurchasePrice = DB::table('purchase_items')
-                ->join('purchases', 'purchase_items.purchase_id', '=', 'purchases.id')
-                ->where('purchase_items.item_id', $itemId)
-                ->where('purchases.status', '!=', 'cancelled')
-                ->orderBy('purchases.created_at', 'desc')
-                ->value('purchase_items.unit_price');
+            // Get purchase price from suppliers table for this item
+            $purchasePrice = DB::table('suppliers')
+                ->join('items', 'suppliers.item_id', '=', 'items.id')
+                ->where('suppliers.item_id', $itemId)
+                ->where('suppliers.status', 'active')
+                ->orderBy('suppliers.updated_at', 'desc')
+                ->value('suppliers.purchase_price');
 
-            return $latestPurchasePrice ? (float) $latestPurchasePrice : null;
+            return $purchasePrice ? (float) $purchasePrice : null;
         } catch (\Exception $e) {
-            Log::warning("Error getting latest purchase price for item {$itemId}: " . $e->getMessage());
+            Log::warning("Error getting purchase price from suppliers for item {$itemId}: " . $e->getMessage());
             return null;
         }
     }
 
-    /**
-     * Get field value from formula object.
-     */
-    private function getFieldValue($formula, $field)
-    {
-        switch ($field) {
-            case 'item_number':
-                return $formula->item?->item_number;
-            case 'item_name':
-                return $formula->item?->name;
-            case 'unit':
-                return $formula->item?->unit?->name ?? $formula->unit?->name;
-            case 'balance':
-                return $formula->item?->balance;
-            case 'minimum_limit':
-                return $formula->item?->minimum_limit;
-            case 'maximum_limit':
-                return $formula->item?->maximum_limit;
-            case 'reorder_point':
-                return $formula->item?->reorder_limit;
-            case 'color':
-                return $formula->item?->color;
-            case 'length':
-                return $formula->item?->length;
-            case 'width':
-                return $formula->item?->width;
-            case 'height':
-                return $formula->item?->height;
-            case 'sale_price':
-                return $this->getLatestSalePrice($formula->item_id);
-            case 'purchase_price':
-                return $this->getLatestPurchasePrice($formula->item_id);
-            default:
-                return $formula->{$field} ?? null;
-        }
-    }
+
 
     /**
      * Check if field matches the given value.
@@ -1558,8 +1545,8 @@ class ManufacturingFormulaController extends Controller
                     'length' => $formula->item->length,
                     'width' => $formula->item->width,
                     'height' => $formula->item->height,
-                    'sale_price' => $this->getLatestSalePrice($formula->item->id),
-                    'purchase_price' => $this->getLatestPurchasePrice($formula->item->id),
+                    'sale_price' => $formula->sale_price,
+                    'purchase_price' => $formula->purchase_price,
                 ];
             }
 
@@ -1620,6 +1607,112 @@ class ManufacturingFormulaController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error retrieving warehouses: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ✅ Update prices from suppliers table for a manufactured formula.
+     */
+    public function updatePricesFromSuppliers(Request $request, $id): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $formula = BomItem::where('company_id', $companyId)
+                ->whereNotNull('formula_number')
+                ->findOrFail($id);
+
+            // Get prices from suppliers table
+            $salePrice = $this->getLatestSalePrice($formula->item_id);
+            $purchasePrice = $this->getLatestPurchasePrice($formula->item_id);
+
+            // Update the manufactured formula with new prices
+            $formula->update([
+                'sale_price' => $salePrice ?? 0,
+                'purchase_price' => $purchasePrice ?? 0,
+                'updated_by' => $user->id,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'formula_id' => $formula->id,
+                    'formula_number' => $formula->formula_number,
+                    'item_name' => $formula->item?->name,
+                    'sale_price' => $formula->sale_price,
+                    'purchase_price' => $formula->purchase_price,
+                    'updated_at' => $formula->updated_at->format('Y-m-d H:i:s'),
+                ],
+                'message' => 'Prices updated successfully from suppliers table'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error updating prices from suppliers: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating prices from suppliers: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ✅ Update prices from suppliers table for all manufactured formulas.
+     */
+    public function updateAllPricesFromSuppliers(Request $request): JsonResponse
+    {
+        try {
+            $user = $request->user();
+            $companyId = $user->company_id;
+
+            $formulas = BomItem::where('company_id', $companyId)
+                ->whereNotNull('formula_number')
+                ->with('item')
+                ->get();
+
+            $updatedCount = 0;
+            $errors = [];
+
+            foreach ($formulas as $formula) {
+                try {
+                    // Get prices from suppliers table
+                    $salePrice = $this->getLatestSalePrice($formula->item_id);
+                    $purchasePrice = $this->getLatestPurchasePrice($formula->item_id);
+
+                    // Update the formula with new prices
+                    $formula->update([
+                        'sale_price' => $salePrice ?? 0,
+                        'purchase_price' => $purchasePrice ?? 0,
+                        'updated_by' => $user->id,
+                    ]);
+
+                    $updatedCount++;
+                } catch (\Exception $e) {
+                    $errors[] = [
+                        'formula_id' => $formula->id,
+                        'formula_number' => $formula->formula_number,
+                        'error' => $e->getMessage()
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'total_formulas' => $formulas->count(),
+                    'updated_count' => $updatedCount,
+                    'errors_count' => count($errors),
+                    'errors' => $errors,
+                ],
+                'message' => "Successfully updated prices for {$updatedCount} manufactured formulas"
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error updating all prices from suppliers: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating all prices from suppliers: ' . $e->getMessage()
             ], 500);
         }
     }

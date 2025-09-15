@@ -54,6 +54,10 @@ class ManufacturedFormulaModel extends Model
         'total_manufacturing_cost',
         'cost_per_unit',
 
+        // Pricing Information (from Suppliers table)
+        'sale_price',
+        'purchase_price',
+
         // Quality Control
         'quality_requirements',
         'quality_check_passed',
@@ -88,6 +92,8 @@ class ManufacturedFormulaModel extends Model
         'waste_cost' => 'decimal:2',
         'total_manufacturing_cost' => 'decimal:2',
         'cost_per_unit' => 'decimal:2',
+        'sale_price' => 'decimal:4',
+        'purchase_price' => 'decimal:4',
         'quality_check_passed' => 'boolean',
         'is_active' => 'boolean',
         'completion_percentage' => 'decimal:2',

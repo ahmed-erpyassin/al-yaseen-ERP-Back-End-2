@@ -52,6 +52,10 @@ Route::prefix('v1')->middleware(['api', 'auth:sanctum'])->group(function () {
         Route::get('/formula-numbers', [ManufacturingFormulaController::class, 'getManufacturingFormulaNumbers'])->name('manufacturing-formulas.formula-numbers');
         Route::get('/item-by-formula', [ManufacturingFormulaController::class, 'getItemByFormulaNumber'])->name('manufacturing-formulas.item-by-formula');
         Route::get('/warehouses', [ManufacturingFormulaController::class, 'getWarehouses'])->name('manufacturing-formulas.warehouses');
+
+        // ✅ NEW: Pricing Management from Suppliers Table
+        Route::post('/{id}/update-prices-from-suppliers', [ManufacturingFormulaController::class, 'updatePricesFromSuppliers'])->name('manufacturing-formulas.update-prices-from-suppliers');
+        Route::post('/update-all-prices-from-suppliers', [ManufacturingFormulaController::class, 'updateAllPricesFromSuppliers'])->name('manufacturing-formulas.update-all-prices-from-suppliers');
     });
 });
 

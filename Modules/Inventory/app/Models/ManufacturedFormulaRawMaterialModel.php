@@ -21,43 +21,47 @@ class ManufacturedFormulaRawMaterialModel extends Model
         'company_id',
         'branch_id',
         'manufactured_formula_id',
-        
+
         // Item Information (Raw Material) - Using relationships only
         'item_id', // item_number, item_name removed - available via item relationship
-        
+
         // Unit Information - Using relationships only
         'unit_id', // unit_name, unit_code removed - available via unit relationship
-        
+
         // Warehouse Information - Using relationships only
         'warehouse_id', // warehouse_name removed - available via warehouse relationship
-        
+
         // Quantity Information
         'consumed_quantity',
         'available_quantity',
         'required_quantity',
         'actual_consumed_quantity',
         'waste_quantity',
-        
+
         // Cost Information
         'unit_cost',
         'total_cost',
         'actual_cost',
-        
+
+        // Pricing Information (from Suppliers table)
+        'sale_price',
+        'purchase_price',
+
         // Material Properties
         'material_type',
         'is_critical',
         'sequence_order',
-        
+
         // Quality Control
         'quality_requirements',
         'requires_inspection',
         'inspection_passed',
-        
+
         // Additional Information
         'notes',
         'preparation_instructions',
         'usage_instructions',
-        
+
         // Audit Fields
         'created_by',
         'updated_by',
@@ -73,6 +77,8 @@ class ManufacturedFormulaRawMaterialModel extends Model
         'unit_cost' => 'decimal:4',
         'total_cost' => 'decimal:2',
         'actual_cost' => 'decimal:2',
+        'sale_price' => 'decimal:4',
+        'purchase_price' => 'decimal:4',
         'is_critical' => 'boolean',
         'requires_inspection' => 'boolean',
         'inspection_passed' => 'boolean',
@@ -188,7 +194,7 @@ class ManufacturedFormulaRawMaterialModel extends Model
     {
         $currentStock = $this->getCurrentStock();
         $isAvailable = $currentStock >= $this->consumed_quantity;
-        
+
         return [
             'item_id' => $this->item_id,
             'item_number' => $this->item?->item_number,

@@ -46,6 +46,10 @@ return new class extends Migration
             $table->decimal('unit_cost', 15, 4)->default(0); // تكلفة الوحدة
             $table->decimal('total_cost', 15, 4)->default(0); // التكلفة الإجمالية
 
+            // ✅ Pricing Information (from Suppliers table)
+            $table->decimal('sale_price', 15, 4)->default(0); // سعر البيع من جدول الموردين
+            $table->decimal('purchase_price', 15, 4)->default(0); // سعر الشراء من جدول الموردين
+
             // ✅ Status and Availability
             $table->boolean('is_available')->default(true); // متاح في المخزن
             $table->boolean('is_sufficient')->default(true); // الكمية كافية
