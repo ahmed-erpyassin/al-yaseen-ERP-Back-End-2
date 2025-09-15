@@ -19,19 +19,15 @@ return new class extends Migration
 
             // ✅ Main Item Information (Parent/Finished Product)
             $table->foreignId('item_id')->constrained('items')->cascadeOnDelete(); // Parent item (finished product)
-            $table->string('item_number')->nullable(); // Store for quick access (from Items table)
-            $table->string('item_name')->nullable(); // Store for quick access (from Items table)
+            // item_number, item_name removed - available via item relationship
 
             // ✅ Component Item Information (Raw Material/Sub-assembly)
             $table->foreignId('component_id')->constrained('items')->cascadeOnDelete(); // Component item (raw material/sub-assembly)
-            $table->string('component_item_number')->nullable(); // Store for quick access (from Items table)
-            $table->string('component_item_name')->nullable(); // Store for quick access (from Items table)
-            $table->text('component_item_description')->nullable(); // Store for quick access (from Items table)
+            // component_item_number, component_item_name, component_item_description removed - available via component relationship
 
             // ✅ Unit Information (from Units table)
             $table->foreignId('unit_id')->constrained('units')->cascadeOnDelete(); // Unit of measurement
-            $table->string('unit_name')->nullable(); // Store for quick access (from Units table)
-            $table->string('unit_code')->nullable(); // Store for quick access (from Units table)
+            // unit_name, unit_code removed - available via unit relationship
 
             // ✅ BOM Formula Information
             $table->string('formula_number')->nullable(); // Auto-generated formula number
