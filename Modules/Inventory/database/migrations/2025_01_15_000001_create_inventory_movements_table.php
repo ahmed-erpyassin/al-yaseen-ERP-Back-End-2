@@ -43,8 +43,8 @@ return new class extends Migration
             $table->text('movement_description')->nullable();
 
             // ✅ Invoice References (prepare code without creating tables)
-            $table->foreignId('inbound_invoice_id')->nullable()->constrained('purchase_invoices')->nullOnDelete(); // Reference to purchase invoices
-            $table->foreignId('outbound_invoice_id')->nullable()->constrained('sales_invoices')->nullOnDelete(); // Reference to sales invoices
+            $table->unsignedBigInteger('inbound_invoice_id')->nullable(); // Reference to purchase invoices
+            $table->unsignedBigInteger('outbound_invoice_id')->nullable(); // Reference to sales invoices
             // inbound_invoice_number, outbound_invoice_number removed - available via invoice relationships
 
             // ✅ Additional Information

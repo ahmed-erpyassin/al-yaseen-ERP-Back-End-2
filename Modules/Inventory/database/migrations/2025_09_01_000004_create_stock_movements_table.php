@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
             $table->foreignId('branch_id')->nullable()->constrained('branches')->nullOnDelete();
             $table->foreignId('warehouse_id')->constrained('warehouses')->cascadeOnDelete();
-            $table->foreignId('document_id')->nullable()->constrained('documents')->nullOnDelete(); // Document reference
+            $table->unsignedBigInteger('document_id')->nullable(); // Document reference
             $table->foreignId('item_id')->constrained('items')->cascadeOnDelete(); // Changed from inventory_item_id
             $table->foreignId('unit_id')->constrained('units')->cascadeOnDelete(); // Unit of measurement
 

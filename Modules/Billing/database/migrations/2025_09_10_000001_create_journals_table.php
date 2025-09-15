@@ -30,7 +30,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
 
             // ربط مع دفتر اليومية المالي
-            $table->foreignId('financial_journal_id')->nullable()->constrained('journals_financial')->nullOnDelete();
+            $table->foreignId('financial_journal_id')->nullable()->constrained('journals_financials')->nullOnDelete();
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();

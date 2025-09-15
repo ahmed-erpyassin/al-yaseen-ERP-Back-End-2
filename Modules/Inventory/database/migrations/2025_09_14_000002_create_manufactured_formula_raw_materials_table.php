@@ -21,7 +21,8 @@ return new class extends Migration
             $table->id();
 
             // ✅ References
-            $table->foreignId('manufactured_formula_id')->constrained('manufactured_formulas')->cascadeOnDelete();
+            $table->unsignedBigInteger('manufactured_formula_id');
+            $table->foreign('manufactured_formula_id', 'mfg_formula_raw_mat_formula_fk')->references('id')->on('manufactured_formulas')->cascadeOnDelete();
             $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
 
             // ✅ Item Information (Raw Material) - Use relationships, no redundant fields
