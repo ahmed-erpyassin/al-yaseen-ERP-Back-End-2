@@ -113,7 +113,7 @@ return new class extends Migration
             $table->boolean('requires_inspection')->default(false); // Needs quality check
 
             // ✅ Supplier Information
-            $table->foreignId('preferred_supplier_id')->nullable()->constrained('vendors')->nullOnDelete();
+            $table->foreignId('preferred_supplier_id')->nullable()->constrained('suppliers')->nullOnDelete();
             $table->string('supplier_item_code')->nullable(); // Supplier's item code
             $table->decimal('supplier_unit_price', 15, 4)->default(0); // Supplier price
             $table->integer('lead_time_days')->default(0); // Supplier lead time
