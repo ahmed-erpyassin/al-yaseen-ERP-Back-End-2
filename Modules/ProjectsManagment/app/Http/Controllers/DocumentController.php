@@ -5,12 +5,18 @@ namespace Modules\ProjectsManagment\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Modules\ProjectsManagment\Models\ProjectDocument;
 use Modules\ProjectsManagment\Models\Project;
 use Modules\ProjectsManagment\Http\Requests\StoreDocumentRequest;
 use Modules\ProjectsManagment\Http\Requests\UpdateDocumentRequest;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @group Project Management / Documents
+ *
+ * APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+ */
 class DocumentController extends Controller
 {
     /**
@@ -19,7 +25,7 @@ class DocumentController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -119,7 +125,7 @@ class DocumentController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $document = ProjectDocument::with(['project', 'creator', 'updater'])
@@ -145,7 +151,7 @@ class DocumentController extends Controller
     public function update(UpdateDocumentRequest $request, $id): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Find document with company verification
@@ -252,7 +258,7 @@ class DocumentController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
@@ -279,7 +285,7 @@ class DocumentController extends Controller
     public function getProjects(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $projects = Project::where('company_id', $companyId)
@@ -361,7 +367,7 @@ class DocumentController extends Controller
                 'project_id' => 'required|exists:projects,id'
             ]);
 
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Verify project belongs to user's company
@@ -404,7 +410,7 @@ class DocumentController extends Controller
     public function getProjectDocuments(Request $request, $projectId): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Verify project belongs to user's company
@@ -444,7 +450,7 @@ class DocumentController extends Controller
     public function downloadDocument($id): \Symfony\Component\HttpFoundation\BinaryFileResponse|JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
@@ -474,7 +480,7 @@ class DocumentController extends Controller
     public function getDocumentsByCategory(Request $request, $category): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -513,7 +519,7 @@ class DocumentController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -548,7 +554,7 @@ class DocumentController extends Controller
     public function getDocumentsByField(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $field = $request->get('field');
@@ -608,7 +614,7 @@ class DocumentController extends Controller
     public function getFieldValues(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $field = $request->get('field');
@@ -689,7 +695,7 @@ class DocumentController extends Controller
     public function sortDocuments(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -723,7 +729,7 @@ class DocumentController extends Controller
     public function restore($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $document = ProjectDocument::withTrashed()
@@ -758,7 +764,7 @@ class DocumentController extends Controller
     public function forceDelete($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $document = ProjectDocument::withTrashed()
@@ -790,7 +796,7 @@ class DocumentController extends Controller
     public function getTrashed(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 

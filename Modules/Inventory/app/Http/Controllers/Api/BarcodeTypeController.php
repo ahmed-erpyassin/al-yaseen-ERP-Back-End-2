@@ -7,6 +7,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\BarcodeType;
 
+/**
+ * @group Inventory Management / Barcode Types
+ *
+ * APIs for managing barcode types, validation, and barcode generation.
+ */
 class BarcodeTypeController extends Controller
 {
     /**

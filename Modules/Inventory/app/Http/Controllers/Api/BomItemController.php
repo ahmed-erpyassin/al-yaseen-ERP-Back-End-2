@@ -12,6 +12,11 @@ use Modules\Inventory\Http\Requests\StoreBomItemRequest;
 use Modules\Inventory\Http\Requests\UpdateBomItemRequest;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Inventory Management / BOM Items
+ *
+ * APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+ */
 class BomItemController extends Controller
 {
     /**

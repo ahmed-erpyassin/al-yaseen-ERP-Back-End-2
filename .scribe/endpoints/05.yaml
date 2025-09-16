@@ -1,0 +1,2030 @@
+name: 'Inventory Management / Items'
+description: |-
+
+  APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/search
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Search for items with advanced filtering.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/search could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/fields
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get available fields for dynamic selection.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/fields could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/columns
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get sortable columns with their Arabic labels.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/columns could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/categories
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get available categories/types for filtering.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/categories could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/warehouses
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get available warehouses for item creation.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/warehouses could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/pricing-form-data
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get pricing validation and form data.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/pricing-form-data could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/items/validate-pricing
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Validate pricing data.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      proposed_sale_price:
+        name: proposed_sale_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      proposed_discount_rate:
+        name: proposed_discount_rate
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      item_id: consequatur
+      proposed_sale_price: 45
+      proposed_discount_rate: 16
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/barcode-types
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get barcode types for dropdown.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/barcode-types could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/item-types
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get item types for dropdown.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/item-types could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/items/custom-item-type
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create custom item type.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      name_ar:
+        name: name_ar
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: amniihfqcoynlazghdtqt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      name: vmqeopfuudtdsufvyvddq
+      name_ar: amniihfqcoynlazghdtqt
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/items/validate-barcode
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Validate barcode format.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      barcode:
+        name: barcode
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      barcode_type:
+        name: barcode_type
+        description: ''
+        required: true
+        example: ITF
+        type: string
+        enumValues:
+          - C128
+          - EAN13
+          - C39
+          - UPCA
+          - ITF
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      barcode: consequatur
+      barcode_type: ITF
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/items/{item}/generate-barcode'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Generate barcode for item (PNG or SVG).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      item:
+        name: item
+        description: 'The item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      item: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      width:
+        name: width
+        description: 'Must be at least 1. Must not be greater than 10.'
+        required: false
+        example: 9
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      height:
+        name: height
+        description: 'Must be at least 10. Must not be greater than 100.'
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      format:
+        name: format
+        description: ''
+        required: false
+        example: png
+        type: string
+        enumValues:
+          - png
+          - svg
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      color:
+        name: color
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      width: 9
+      height: 13
+      format: png
+      color: consequatur
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/items/{item}/generate-barcode-svg'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Generate SVG barcode for item specifically.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      item:
+        name: item
+        description: 'The item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      item: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      width:
+        name: width
+        description: 'Must be at least 1. Must not be greater than 10.'
+        required: false
+        example: 9
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      height:
+        name: height
+        description: 'Must be at least 10. Must not be greater than 100.'
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      color:
+        name: color
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      width: 9
+      height: 13
+      color: consequatur
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/items/{item}/transactions'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get all transactions/movements for a specific item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      item:
+        name: item
+        description: 'The item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      item: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      date_from:
+        name: date_from
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-16T10:25:36'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      date_to:
+        name: date_to
+        description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
+        required: false
+        example: '2106-10-15'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      transaction_type:
+        name: transaction_type
+        description: ''
+        required: false
+        example: stock_movements
+        type: string
+        enumValues:
+          - sales
+          - purchases
+          - stock_movements
+          - all
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Must be at least 1. Must not be greater than 100.'
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      sort_by:
+        name: sort_by
+        description: ''
+        required: false
+        example: quantity
+        type: string
+        enumValues:
+          - date
+          - type
+          - quantity
+          - amount
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      sort_direction:
+        name: sort_direction
+        description: ''
+        required: false
+        example: desc
+        type: string
+        enumValues:
+          - asc
+          - desc
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      date_from: '2025-09-16T10:25:36'
+      date_to: '2106-10-15'
+      transaction_type: stock_movements
+      per_page: 13
+      sort_by: quantity
+      sort_direction: desc
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/consequatur/transactions could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/items/{item}/transactions/export'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Export item transactions to Excel.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      item:
+        name: item
+        description: 'The item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      item: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      date_from:
+        name: date_from
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-16T10:25:36'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      date_to:
+        name: date_to
+        description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
+        required: false
+        example: '2106-10-15'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      transaction_type:
+        name: transaction_type
+        description: ''
+        required: false
+        example: purchases
+        type: string
+        enumValues:
+          - sales
+          - purchases
+          - stock_movements
+          - all
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      export_type:
+        name: export_type
+        description: ''
+        required: false
+        example: transactions
+        type: string
+        enumValues:
+          - transactions
+          - summary
+          - multi_sheet
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      format:
+        name: format
+        description: ''
+        required: false
+        example: pdf
+        type: string
+        enumValues:
+          - xlsx
+          - csv
+          - pdf
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      date_from: '2025-09-16T10:25:36'
+      date_to: '2106-10-15'
+      transaction_type: purchases
+      export_type: transactions
+      format: pdf
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/consequatur/transactions/export could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/first
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get the first item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/first could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/last
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get the last item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/last could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/parents
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get parent items only.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/parents could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/items/type/{type}'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get items by type.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      type:
+        name: type
+        description: 'The type.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      type: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/type/consequatur could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/items/trashed
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get trashed (soft deleted) items.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/trashed could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/items/{id}'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified item with all available data.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/consequatur could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/items/{id}/preview'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get comprehensive preview/review data for an item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/items/consequatur/preview could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/items/{id}'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_id:
+        name: unit_id
+        description: 'The <code>id</code> of an existing record in the units table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      parent_id:
+        name: parent_id
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      item_number:
+        name: item_number
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      code:
+        name: code
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      catalog_number:
+        name: catalog_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: uydlsmsjuryvojcybzvrb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      model:
+        name: model
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: dtdsufvyvddqamniihfqc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_name:
+        name: unit_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: oynlazghdtqtqxbajwbpi
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      type:
+        name: type
+        description: ''
+        required: true
+        example: raw_material
+        type: string
+        enumValues:
+          - product
+          - service
+          - material
+          - raw_material
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      quantity:
+        name: quantity
+        description: 'Must be at least 0.'
+        required: false
+        example: 41
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      balance:
+        name: balance
+        description: ''
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      minimum_limit:
+        name: minimum_limit
+        description: 'Must be at least 0.'
+        required: false
+        example: 50
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      maximum_limit:
+        name: maximum_limit
+        description: 'Must be at least 0.'
+        required: false
+        example: 55
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      reorder_limit:
+        name: reorder_limit
+        description: 'Must be at least 0.'
+        required: false
+        example: 19
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      max_reorder_limit:
+        name: max_reorder_limit
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      first_purchase_price:
+        name: first_purchase_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      second_purchase_price:
+        name: second_purchase_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      third_purchase_price:
+        name: third_purchase_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      purchase_discount_rate:
+        name: purchase_discount_rate
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 4
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      purchase_prices_include_vat:
+        name: purchase_prices_include_vat
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      first_sale_price:
+        name: first_sale_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      second_sale_price:
+        name: second_sale_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      third_sale_price:
+        name: third_sale_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      sale_discount_rate:
+        name: sale_discount_rate
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 21
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      maximum_sale_discount_rate:
+        name: maximum_sale_discount_rate
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 24
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      minimum_allowed_sale_price:
+        name: minimum_allowed_sale_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 76
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      sale_prices_include_vat:
+        name: sale_prices_include_vat
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      item_subject_to_vat:
+        name: item_subject_to_vat
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      barcode:
+        name: barcode
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      barcode_type:
+        name: barcode_type
+        description: ''
+        required: false
+        example: C128
+        type: string
+        enumValues:
+          - C128
+          - EAN13
+          - C39
+          - UPCA
+          - ITF
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      expiry_date:
+        name: expiry_date
+        description: 'Must be a valid date. Must be a date after <code>today</code>.'
+        required: false
+        example: '2106-10-15'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      image:
+        name: image
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      color:
+        name: color
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      item_type:
+        name: item_type
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      active:
+        name: active
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      stock_tracking:
+        name: stock_tracking
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      unit_id: consequatur
+      item_number: mqeopfuudtdsufvyvddqa
+      code: mniihfqcoynlazghdtqtq
+      catalog_number: xbajwbpilpmufinllwloa
+      name: uydlsmsjuryvojcybzvrb
+      description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      model: dtdsufvyvddqamniihfqc
+      unit_name: oynlazghdtqtqxbajwbpi
+      type: raw_material
+      quantity: 41
+      balance: 11613.31890586
+      minimum_limit: 50
+      maximum_limit: 55
+      reorder_limit: 19
+      max_reorder_limit: 70
+      first_purchase_price: 70
+      second_purchase_price: 12
+      third_purchase_price: 66
+      purchase_discount_rate: 4
+      purchase_prices_include_vat: true
+      first_sale_price: 65
+      second_sale_price: 72
+      third_sale_price: 18
+      sale_discount_rate: 21
+      maximum_sale_discount_rate: 24
+      minimum_allowed_sale_price: 76
+      sale_prices_include_vat: false
+      item_subject_to_vat: false
+      notes: consequatur
+      barcode: mqeopfuudtdsufvyvddqa
+      barcode_type: C128
+      expiry_date: '2106-10-15'
+      image: mqeopfuudtdsufvyvddqa
+      color: mniihfqcoynlazghdtqtq
+      item_type: xbajwbpilpmufinllwloa
+      active: false
+      stock_tracking: true
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/items/{id}'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified item (soft delete).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/items/{id}/restore'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Restore a soft deleted item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/items/{id}/force'
+    metadata:
+      groupName: 'Inventory Management / Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Permanently delete an item (force delete).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []

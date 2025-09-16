@@ -5,10 +5,17 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Services\InventoryService;
 use Modules\Inventory\Http\Resources\InventoryResource;
 use Modules\Inventory\Http\Requests\StoreInventoryItemRequest;
 use Modules\Inventory\Http\Requests\UpdateInventoryItemRequest;
+
+/**
+ * @group Inventory Management / Inventory Items
+ *
+ * APIs for managing inventory items, stock levels, and warehouse operations.
+ */
 
 class InventoryController extends Controller
 {
@@ -20,12 +27,45 @@ class InventoryController extends Controller
     }
 
     /**
-     * Display a listing of inventory items.
+     * List Inventory Items
+     *
+     * Retrieve a paginated list of inventory items with filtering and search capabilities.
+     *
+     * @queryParam active boolean Filter by active status. Example: true
+     * @queryParam category_id integer Filter by category ID. Example: 1
+     * @queryParam supplier_id integer Filter by supplier ID. Example: 1
+     * @queryParam search string Search across item names and descriptions. Example: laptop
+     * @queryParam sort_by string Field to sort by. Example: name
+     * @queryParam sort_direction string Sort direction (asc/desc). Example: asc
+     * @queryParam per_page integer Number of items per page (default: 15). Example: 20
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "Laptop Dell XPS 13",
+     *       "sku": "DELL-XPS-13",
+     *       "category": "Electronics",
+     *       "quantity": 50,
+     *       "unit_price": 1200.00,
+     *       "supplier": "Dell Inc.",
+     *       "active": true,
+     *       "created_at": "2024-01-01T00:00:00.000000Z"
+     *     }
+     *   ],
+     *   "message": "Inventory items retrieved successfully"
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error retrieving inventory items: Database connection failed"
+     * }
      */
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
 
             // Get filters from request
             $filters = $request->only([
@@ -58,7 +98,7 @@ class InventoryController extends Controller
     {
         try {
             $data = $request->validated();
-            $user = $request->user();
+            $user = Auth::user();
 
             // Create inventory item using service
             $item = $this->inventoryService->createInventoryItem($data, $user);
@@ -82,7 +122,7 @@ class InventoryController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
 
             // Get inventory item using service
             $item = $this->inventoryService->getInventoryItemById($id, $user);
@@ -107,7 +147,7 @@ class InventoryController extends Controller
     {
         try {
             $data = $request->validated();
-            $user = $request->user();
+            $user = Auth::user();
 
             // Update inventory item using service
             $item = $this->inventoryService->updateInventoryItem($id, $data, $user);
@@ -130,7 +170,7 @@ class InventoryController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
 
             // Delete inventory item using service
             $this->inventoryService->deleteInventoryItem($id, $user);
@@ -153,7 +193,7 @@ class InventoryController extends Controller
     public function lowStock(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $perPage = $request->get('per_page', 15);
 
             // Get low stock items using service
@@ -178,7 +218,7 @@ class InventoryController extends Controller
     public function reorderItems(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $perPage = $request->get('per_page', 15);
 
             // Get reorder items using service

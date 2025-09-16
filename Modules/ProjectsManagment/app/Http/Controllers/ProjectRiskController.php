@@ -5,6 +5,7 @@ namespace Modules\ProjectsManagment\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\ProjectsManagment\Models\ProjectRisk;
 use Modules\ProjectsManagment\Models\Project;
@@ -14,6 +15,11 @@ use Modules\ProjectsManagment\Http\Requests\UpdateProjectRiskRequest;
 use Modules\ProjectsManagment\Http\Resources\ProjectRiskResource;
 use Modules\ProjectsManagment\Services\ProjectRiskService;
 
+/**
+ * @group Project Management / Risks
+ *
+ * APIs for managing project risks, including risk assessment, mitigation strategies, and risk monitoring.
+ */
 class ProjectRiskController extends Controller
 {
     protected $projectRiskService;
@@ -29,7 +35,7 @@ class ProjectRiskController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $projectRisks = $this->projectRiskService->getProjectRisks($companyId, $request->all());
@@ -55,7 +61,7 @@ class ProjectRiskController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = $request->user();
+            $user = Auth::user();
             $data = $request->validated();
 
             // Add system fields
@@ -90,7 +96,7 @@ class ProjectRiskController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectRisk = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
@@ -118,7 +124,7 @@ class ProjectRiskController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Find the project risk with relationships
@@ -203,7 +209,7 @@ class ProjectRiskController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectRisk = ProjectRisk::forCompany($companyId)->findOrFail($id);
@@ -249,7 +255,7 @@ class ProjectRiskController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectRisk = ProjectRisk::withTrashed()
@@ -301,7 +307,7 @@ class ProjectRiskController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectRisk = ProjectRisk::withTrashed()
@@ -337,7 +343,7 @@ class ProjectRiskController extends Controller
     public function getTrashed(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $query = ProjectRisk::onlyTrashed()
@@ -374,7 +380,7 @@ class ProjectRiskController extends Controller
     public function getProjects(): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projects = Project::where('company_id', $companyId)
@@ -409,7 +415,7 @@ class ProjectRiskController extends Controller
     public function getEmployees(): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $employees = Employee::where('company_id', $companyId)
@@ -508,7 +514,7 @@ class ProjectRiskController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
@@ -547,7 +553,7 @@ class ProjectRiskController extends Controller
     public function getProjectRisksByField(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $field = $request->get('field');
             $value = $request->get('value');
@@ -778,7 +784,7 @@ class ProjectRiskController extends Controller
     public function getFieldValues(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $field = $request->get('field');
 
@@ -889,7 +895,7 @@ class ProjectRiskController extends Controller
     public function sortProjectRisks(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $sortBy = $request->get('sort_by', 'created_at');
@@ -935,7 +941,7 @@ class ProjectRiskController extends Controller
     public function getStatistics(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $statistics = $this->projectRiskService->getProjectRiskStatistics($companyId);
@@ -959,7 +965,7 @@ class ProjectRiskController extends Controller
     public function getProjectRisks($projectId): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectRisks = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
@@ -992,7 +998,7 @@ class ProjectRiskController extends Controller
     public function getByStatus($status): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectRisks = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
@@ -1025,7 +1031,7 @@ class ProjectRiskController extends Controller
     public function getByImpact($impact): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectRisks = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
@@ -1058,7 +1064,7 @@ class ProjectRiskController extends Controller
     public function getByProbability($probability): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectRisks = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
