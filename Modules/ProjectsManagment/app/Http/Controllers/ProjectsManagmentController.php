@@ -5,10 +5,23 @@ namespace Modules\ProjectsManagment\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Modules\Companies\Models\Company;
+use Modules\Companies\Models\Country;
+use Modules\Customers\Models\Customer;
+use Modules\FinancialAccounts\Models\Currency;
+use Modules\ProjectsManagment\Models\Project;
 use Modules\ProjectsManagment\Services\ProjectService;
 use Modules\ProjectsManagment\Http\Resources\ProjectResource;
 use Modules\ProjectsManagment\Http\Requests\StoreProjectRequest;
 use Modules\ProjectsManagment\Http\Requests\UpdateProjectRequest;
+use Modules\Users\Models\User;
+
+/**
+ * @group Project Management / Projects
+ *
+ * APIs for managing projects, including creation, updates, search, and project lifecycle management.
+ */
 
 class ProjectsManagmentController extends Controller
 {
@@ -20,12 +33,55 @@ class ProjectsManagmentController extends Controller
     }
 
     /**
-     * Display a listing of the resource with advanced search and sorting.
+     * List Projects
+     *
+     * Retrieve a paginated list of projects with advanced search and filtering capabilities.
+     *
+     * @queryParam project_number string Filter by project number. Example: PRJ-001
+     * @queryParam project_name string Filter by project name. Example: Website Development
+     * @queryParam customer_name string Filter by customer name. Example: ABC Company
+     * @queryParam status string Filter by project status. Example: active
+     * @queryParam project_manager_name string Filter by project manager name. Example: John Doe
+     * @queryParam exact_date string Filter by exact date (Y-m-d format). Example: 2024-01-15
+     * @queryParam date_from string Filter projects from this date (Y-m-d format). Example: 2024-01-01
+     * @queryParam date_to string Filter projects to this date (Y-m-d format). Example: 2024-12-31
+     * @queryParam start_date_from string Filter by start date from (Y-m-d format). Example: 2024-01-01
+     * @queryParam start_date_to string Filter by start date to (Y-m-d format). Example: 2024-12-31
+     * @queryParam end_date_from string Filter by end date from (Y-m-d format). Example: 2024-01-01
+     * @queryParam end_date_to string Filter by end date to (Y-m-d format). Example: 2024-12-31
+     * @queryParam general_search string General search across multiple fields. Example: development
+     * @queryParam sort_field string Field to sort by. Example: created_at
+     * @queryParam sort_direction string Sort direction (asc/desc). Example: desc
+     * @queryParam per_page integer Number of items per page (default: 15). Example: 20
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "project_number": "PRJ-001",
+     *       "project_name": "Website Development",
+     *       "customer_name": "ABC Company",
+     *       "status": "active",
+     *       "project_manager_name": "John Doe",
+     *       "start_date": "2024-01-01",
+     *       "end_date": "2024-06-30",
+     *       "created_at": "2024-01-01T00:00:00.000000Z"
+     *     }
+     *   ],
+     *   "filters_applied": {},
+     *   "message": "Projects retrieved successfully"
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error retrieving projects: Database connection failed"
+     * }
      */
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
 
             // Get search filters from request
             $filters = $request->only([
@@ -55,13 +111,54 @@ class ProjectsManagmentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create Project
+     *
+     * Create a new project with the provided details.
+     *
+     * @bodyParam project_name string required The name of the project. Example: Website Development
+     * @bodyParam project_number string required Unique project number. Example: PRJ-001
+     * @bodyParam customer_name string required Name of the customer. Example: ABC Company
+     * @bodyParam project_manager_name string required Name of the project manager. Example: John Doe
+     * @bodyParam status string required Project status. Example: active
+     * @bodyParam start_date string required Project start date (Y-m-d format). Example: 2024-01-01
+     * @bodyParam end_date string required Project end date (Y-m-d format). Example: 2024-06-30
+     * @bodyParam description string Project description. Example: Complete website redesign and development
+     * @bodyParam budget numeric Project budget. Example: 50000.00
+     *
+     * @response 201 {
+     *   "success": true,
+     *   "data": {
+     *     "id": 1,
+     *     "project_number": "PRJ-001",
+     *     "project_name": "Website Development",
+     *     "customer_name": "ABC Company",
+     *     "status": "active",
+     *     "project_manager_name": "John Doe",
+     *     "start_date": "2024-01-01",
+     *     "end_date": "2024-06-30",
+     *     "created_at": "2024-01-01T00:00:00.000000Z"
+     *   },
+     *   "message": "Project created successfully"
+     * }
+     *
+     * @response 422 {
+     *   "success": false,
+     *   "message": "Validation failed",
+     *   "errors": {
+     *     "project_name": ["The project name field is required."]
+     *   }
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error creating project: Database connection failed"
+     * }
      */
     public function store(StoreProjectRequest $request): JsonResponse
     {
         try {
             $data = $request->validated();
-            $user = $request->user();
+            $user = Auth::user();
 
             // Create project using service
             $project = $this->projectService->createProject($data, $user);
@@ -86,7 +183,7 @@ class ProjectsManagmentController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
 
             // Validate search parameters
             $request->validate([
@@ -167,7 +264,7 @@ class ProjectsManagmentController extends Controller
     {
         try {
             $data = $request->validated();
-            $user = $request->user();
+            $user = Auth::user();
 
             // Update project using service
             $project = $this->projectService->updateProject($id, $data, $user);
@@ -191,17 +288,21 @@ class ProjectsManagmentController extends Controller
     public function getProjectsByField(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
 
             $request->validate([
                 'field' => 'required|string',
                 'value' => 'required',
-                'per_page' => 'nullable|integer|min:1|max:100'
+                'per_page' => 'nullable|integer|min:1|max:100',
+                'sort_field' => 'nullable|string',
+                'sort_direction' => 'nullable|in:asc,desc'
             ]);
 
             $field = $request->field;
             $value = $request->value;
             $perPage = $request->get('per_page', 15);
+            $sortField = $request->get('sort_field', 'created_at');
+            $sortDirection = $request->get('sort_direction', 'desc');
 
             // Get projects by field using service
             $projects = $this->projectService->getProjectsByField($user, $field, $value, $perPage);
@@ -234,7 +335,7 @@ class ProjectsManagmentController extends Controller
     public function getFieldValues(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $request->validate([
@@ -322,7 +423,7 @@ class ProjectsManagmentController extends Controller
     public function getCustomers(Request $request): JsonResponse
     {
         try {
-            $companyId = $request->user()->company_id;
+            $companyId = Auth::user()->company_id;
 
             $customers = Customer::where('company_id', $companyId)
                 ->where('status', 'active')
@@ -357,7 +458,7 @@ class ProjectsManagmentController extends Controller
     public function getCurrencies(Request $request): JsonResponse
     {
         try {
-            $companyId = $request->user()->company_id;
+            $companyId = Auth::user()->company_id;
 
             $currencies = Currency::where('company_id', $companyId)
                 ->select('id', 'code', 'name', 'symbol')
@@ -489,7 +590,7 @@ class ProjectsManagmentController extends Controller
     public function sortProjects(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $request->validate([
@@ -591,7 +692,7 @@ class ProjectsManagmentController extends Controller
     public function generateProjectCode(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
 
             // Generate project code using service
             $code = $this->projectService->generateProjectCode($user);
@@ -715,7 +816,7 @@ class ProjectsManagmentController extends Controller
     public function getTrashed(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $perPage = $request->get('per_page', 15);

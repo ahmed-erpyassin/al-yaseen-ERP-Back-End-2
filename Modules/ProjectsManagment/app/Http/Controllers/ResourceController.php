@@ -5,21 +5,75 @@ namespace Modules\ProjectsManagment\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Modules\ProjectsManagment\Models\ProjectResource;
 use Modules\ProjectsManagment\Models\Project;
 use Modules\Inventory\Models\Supplier;
 use Modules\ProjectsManagment\Http\Requests\StoreResourceRequest;
 use Modules\ProjectsManagment\Http\Requests\UpdateResourceRequest;
 
+/**
+ * @group Project Management / Resources
+ *
+ * APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+ */
+
 class ResourceController extends Controller
 {
     /**
-     * Display a listing of resources.
+     * List Project Resources
+     *
+     * Retrieve a paginated list of project resources with comprehensive filtering and search capabilities.
+     *
+     * @queryParam project_id integer Filter by project ID. Example: 1
+     * @queryParam supplier_id integer Filter by supplier ID. Example: 1
+     * @queryParam resource_type string Filter by resource type. Example: material
+     * @queryParam status string Filter by resource status. Example: allocated
+     * @queryParam supplier_number string Search by supplier number. Example: SUP-001
+     * @queryParam supplier_name string Search by supplier name. Example: ABC Supplier
+     * @queryParam project_number string Search by project number. Example: PRJ-001
+     * @queryParam project_name string Search by project name. Example: Website Development
+     * @queryParam allocation_from numeric Filter resources with allocation from this value. Example: 1000.00
+     * @queryParam allocation_to numeric Filter resources with allocation to this value. Example: 5000.00
+     * @queryParam date_from string Filter by date from (Y-m-d format). Example: 2024-01-01
+     * @queryParam date_to string Filter by date to (Y-m-d format). Example: 2024-12-31
+     * @queryParam sort_field string Field to sort by. Example: created_at
+     * @queryParam sort_direction string Sort direction (asc/desc). Example: desc
+     * @queryParam per_page integer Number of items per page (default: 15). Example: 20
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "project": {
+     *         "id": 1,
+     *         "project_number": "PRJ-001",
+     *         "project_name": "Website Development"
+     *       },
+     *       "supplier": {
+     *         "id": 1,
+     *         "supplier_number": "SUP-001",
+     *         "supplier_name": "ABC Supplier"
+     *       },
+     *       "resource_type": "material",
+     *       "allocation": 2500.00,
+     *       "status": "allocated",
+     *       "created_at": "2024-01-01T00:00:00.000000Z"
+     *     }
+     *   ],
+     *   "message": "Resources retrieved successfully"
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error retrieving resources: Database connection failed"
+     * }
      */
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -106,7 +160,7 @@ class ResourceController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $resource = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
@@ -132,7 +186,7 @@ class ResourceController extends Controller
     public function update(UpdateResourceRequest $request, $id): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $resource = ProjectResource::forCompany($companyId)->findOrFail($id);
@@ -183,7 +237,7 @@ class ResourceController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $resource = ProjectResource::forCompany($companyId)->findOrFail($id);
@@ -210,7 +264,7 @@ class ResourceController extends Controller
     public function getSuppliers(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $suppliers = Supplier::where('company_id', $companyId)
@@ -253,7 +307,7 @@ class ResourceController extends Controller
     public function getProjects(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $projects = Project::where('company_id', $companyId)
@@ -335,7 +389,7 @@ class ResourceController extends Controller
                 'allocation_percentage' => 'required|numeric|min:0|max:100'
             ]);
 
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $project = Project::where('id', $request->project_id)
@@ -387,7 +441,7 @@ class ResourceController extends Controller
                 'allocation_value' => 'required|numeric|min:0'
             ]);
 
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $project = Project::where('id', $request->project_id)
@@ -434,7 +488,7 @@ class ResourceController extends Controller
     public function getProjectResources(Request $request, $projectId): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Verify project belongs to user's company
@@ -473,7 +527,7 @@ class ResourceController extends Controller
     public function getSupplierResources(Request $request, $supplierId): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Verify supplier belongs to user's company
@@ -512,7 +566,7 @@ class ResourceController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -547,7 +601,7 @@ class ResourceController extends Controller
     public function getResourcesByField(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $field = $request->get('field');
@@ -605,7 +659,7 @@ class ResourceController extends Controller
     public function getFieldValues(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $field = $request->get('field');
@@ -681,7 +735,7 @@ class ResourceController extends Controller
     public function sortResources(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -806,7 +860,7 @@ class ResourceController extends Controller
     public function restore($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $resource = ProjectResource::withTrashed()
@@ -841,7 +895,7 @@ class ResourceController extends Controller
     public function forceDelete($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $resource = ProjectResource::withTrashed()
@@ -868,7 +922,7 @@ class ResourceController extends Controller
     public function getTrashed(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 

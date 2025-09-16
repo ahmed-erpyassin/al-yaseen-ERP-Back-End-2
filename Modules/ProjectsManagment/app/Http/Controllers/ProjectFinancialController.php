@@ -5,6 +5,7 @@ namespace Modules\ProjectsManagment\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Modules\ProjectsManagment\Models\ProjectFinancial;
 use Modules\ProjectsManagment\Models\Project;
 use Modules\FinancialAccounts\Models\Currency;
@@ -12,6 +13,11 @@ use Modules\ProjectsManagment\Http\Requests\StoreProjectFinancialRequest;
 use Modules\ProjectsManagment\Http\Requests\UpdateProjectFinancialRequest;
 use Modules\ProjectsManagment\Http\Resources\ProjectFinancialResource;
 
+/**
+ * @group Project Management / Financials
+ *
+ * APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+ */
 class ProjectFinancialController extends Controller
 {
     /**
@@ -20,7 +26,7 @@ class ProjectFinancialController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -107,7 +113,7 @@ class ProjectFinancialController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectFinancial = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
@@ -133,7 +139,7 @@ class ProjectFinancialController extends Controller
     public function update(UpdateProjectFinancialRequest $request, $id): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectFinancial = ProjectFinancial::forCompany($companyId)->findOrFail($id);
@@ -169,7 +175,7 @@ class ProjectFinancialController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectFinancial = ProjectFinancial::forCompany($companyId)->findOrFail($id);
@@ -196,7 +202,7 @@ class ProjectFinancialController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -231,7 +237,7 @@ class ProjectFinancialController extends Controller
     public function getProjectFinancialsByField(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $field = $request->get('field');
             $value = $request->get('value');
@@ -286,7 +292,7 @@ class ProjectFinancialController extends Controller
     public function getFieldValues(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $field = $request->get('field');
 
@@ -368,7 +374,7 @@ class ProjectFinancialController extends Controller
     public function sortProjectFinancials(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -399,7 +405,7 @@ class ProjectFinancialController extends Controller
     public function restore($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectFinancial = ProjectFinancial::withTrashed()
@@ -427,7 +433,7 @@ class ProjectFinancialController extends Controller
     public function forceDelete($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectFinancial = ProjectFinancial::withTrashed()
@@ -454,7 +460,7 @@ class ProjectFinancialController extends Controller
     public function getTrashed(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -483,7 +489,7 @@ class ProjectFinancialController extends Controller
     public function getProjects(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projects = Project::where('company_id', $companyId)
@@ -649,7 +655,7 @@ class ProjectFinancialController extends Controller
     public function getProjectFinancials($projectId): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectFinancials = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
@@ -677,7 +683,7 @@ class ProjectFinancialController extends Controller
     public function getByReferenceType($referenceType): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectFinancials = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
@@ -705,7 +711,7 @@ class ProjectFinancialController extends Controller
     public function getByDateRange($dateFrom, $dateTo): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projectFinancials = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])

@@ -9,6 +9,11 @@ use Modules\Inventory\Models\Unit;
 use Modules\Inventory\Http\Requests\StoreUnitRequest;
 use Modules\Inventory\Http\Requests\UpdateUnitRequest;
 
+/**
+ * @group Inventory Management / Units
+ *
+ * APIs for managing units of measure, including creation, updates, and unit conversions.
+ */
 class UnitController extends Controller
 {
     /**
@@ -17,7 +22,7 @@ class UnitController extends Controller
     public function index(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $query = Unit::with([
             'company',
             'branch',
@@ -67,7 +72,7 @@ class UnitController extends Controller
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $userId = auth()->id() ?? $request->user_id;
-        
+
         $data = $request->validated();
         $data['company_id'] = $companyId;
         $data['user_id'] = $userId;
@@ -89,7 +94,7 @@ class UnitController extends Controller
     public function show($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $unit = Unit::with(['company', 'branch', 'user', 'items', 'itemUnits'])
             ->forCompany($companyId)
             ->findOrFail($id);
@@ -108,12 +113,12 @@ class UnitController extends Controller
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $userId = auth()->id() ?? $request->user_id;
-        
+
         $unit = Unit::forCompany($companyId)->findOrFail($id);
-        
+
         $data = $request->validated();
         $data['updated_by'] = $userId;
-        
+
         $unit->update($data);
         $unit->load(['company', 'branch', 'user']);
 
@@ -130,9 +135,9 @@ class UnitController extends Controller
     public function destroy($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $unit = Unit::forCompany($companyId)->findOrFail($id);
-        
+
         // Check if unit has items
         if ($unit->items()->exists() || $unit->itemUnits()->exists()) {
             return response()->json([
@@ -155,7 +160,7 @@ class UnitController extends Controller
     public function first(): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $unit = Unit::with(['company', 'branch', 'user'])
             ->forCompany($companyId)
             ->orderBy('name')
@@ -181,7 +186,7 @@ class UnitController extends Controller
     public function last(): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $unit = Unit::with(['company', 'branch', 'user'])
             ->forCompany($companyId)
             ->orderBy('name', 'desc')

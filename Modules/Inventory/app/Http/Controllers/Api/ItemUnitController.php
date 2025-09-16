@@ -9,6 +9,11 @@ use Modules\Inventory\Models\ItemUnit;
 use Modules\Inventory\Http\Requests\StoreItemUnitRequest;
 use Modules\Inventory\Http\Requests\UpdateItemUnitRequest;
 
+/**
+ * @group Inventory Management / Item Units
+ *
+ * APIs for managing item unit relationships, conversions, and unit-specific operations.
+ */
 class ItemUnitController extends Controller
 {
     /**
@@ -17,7 +22,7 @@ class ItemUnitController extends Controller
     public function index(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $query = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
             ->forCompany($companyId);
 
@@ -65,7 +70,7 @@ class ItemUnitController extends Controller
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $userId = auth()->id() ?? $request->user_id;
-        
+
         $data = $request->validated();
         $data['company_id'] = $companyId;
         $data['user_id'] = $userId;
@@ -94,7 +99,7 @@ class ItemUnitController extends Controller
     public function show($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $itemUnit = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
             ->forCompany($companyId)
             ->findOrFail($id);
@@ -113,9 +118,9 @@ class ItemUnitController extends Controller
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $userId = auth()->id() ?? $request->user_id;
-        
+
         $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
-        
+
         $data = $request->validated();
         $data['updated_by'] = $userId;
 
@@ -126,7 +131,7 @@ class ItemUnitController extends Controller
                 ->where('id', '!=', $id)
                 ->update(['is_default' => false]);
         }
-        
+
         $itemUnit->update($data);
         $itemUnit->load(['company', 'branch', 'user', 'item', 'unit']);
 
@@ -143,16 +148,16 @@ class ItemUnitController extends Controller
     public function destroy($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
-        
+
         // Don't allow deletion of default unit if it's the only one
         if ($itemUnit->is_default) {
             $otherUnits = ItemUnit::where('item_id', $itemUnit->item_id)
                 ->where('company_id', $companyId)
                 ->where('id', '!=', $id)
                 ->count();
-                
+
             if ($otherUnits == 0) {
                 return response()->json([
                     'success' => false,
@@ -175,7 +180,7 @@ class ItemUnitController extends Controller
     public function byItem($itemId): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $itemUnits = ItemUnit::with(['unit'])
             ->forCompany($companyId)
             ->forItem($itemId)
@@ -196,14 +201,14 @@ class ItemUnitController extends Controller
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
         $userId = auth()->id() ?? request()->user_id;
-        
+
         $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
-        
+
         // Unset other defaults for the same item
         ItemUnit::where('item_id', $itemUnit->item_id)
             ->where('company_id', $companyId)
             ->update(['is_default' => false]);
-            
+
         // Set this as default
         $itemUnit->update([
             'is_default' => true,
