@@ -17,11 +17,35 @@ class InventoryDatabaseSeeder extends Seeder
         $this->command->info('⚠️  Skipping BarcodeTypesSeeder and ItemTypesSeeder (already exist)');
 
         $this->call([
+            // Basic setup seeders
+            DepartmentWarehouseSeeder::class,
+            CurrencySeeder::class,
+            SupplierSeeder::class,
             UnitSeeder::class,
+            ItemCategorySeeder::class,
+
+            // Warehouse and item seeders
             WarehouseSeeder::class,
             ItemSeeder::class,
             InventoryItemSeeder::class,
+
+            // Stock and movement seeders
+            InventoryStockSeeder::class,
             StockMovementSeeder::class,
+            InventoryMovementSeeder::class,
+            InventoryMovementDataSeeder::class,
+
+            // Purchase order seeders
+            PurchaseOrderSeeder::class,
+            PurchaseOrderItemSeeder::class,
+
+            // Transfer seeders
+            StockTransferSeeder::class,
+            StockTransferItemSeeder::class,
+
+            // Adjustment seeders
+            InventoryAdjustmentSeeder::class,
+            InventoryAdjustmentItemSeeder::class,
         ]);
 
         $this->command->info('✅ Inventory Management Module seeded successfully!');
