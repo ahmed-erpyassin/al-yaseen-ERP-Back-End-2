@@ -50,6 +50,6 @@ class Login extends Component
 
         Auth::guard('web')->login($user, $this->remember);
         $this->alertMessage('تم تسجيل الدخول بنجاح', 'success', 'center');
-        return redirect()->route('admin.panel.index');
+        return redirect()->route('admin.panel.index', ['lang' => app()->getLocale()]);
     }
 }

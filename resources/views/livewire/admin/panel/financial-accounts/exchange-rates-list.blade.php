@@ -123,10 +123,10 @@
                         <td>{{ $rate->currency->code ?? '-' }} - {{ $rate->currency->name ?? '-' }}</td>
                         <td>{{ $rate->rate }}</td>
                         <td>{{ $rate->rate_date }}</td>
-                        <td>{{ $rate->company->name ?? $rate->company_id }}</td>
+                        <td>{{ $rate->company->title ?? $rate->company_id }}</td>
                         <td>{{ $rate->branch->name ?? $rate->branch_id }}</td>
                         <td>{{ $rate->user->full_name ?? '-' }}</td>
-                        <td>{{ $rate->createdBy->full_name ?? '-' }}</td>
+                        <td>{{ $rate->creator?->full_name ?? '-' }}</td>
                         <td>
                             <!-- Edit Icon -->
                             <span wire:loading.remove wire:target="edit({{ $rate->id }})">

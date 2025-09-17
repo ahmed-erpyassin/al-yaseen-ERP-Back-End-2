@@ -27,6 +27,7 @@
             </a>
 
             <ul class="sidenav-collapse">
+
                 <li class="sidenav-item">
                     <a class="sidenav-link"
                         href="{{ route('admin.panel.users.list', ['lang' => app()->getLocale()]) }}">
@@ -34,6 +35,18 @@
                         <span>{{ __('Users') }}</span>
                     </a>
                 </li>
+
+                {{-- //Roles --}}
+
+                <li class="sidenav-item">
+                    <a class="sidenav-link"
+                        href="{{ route('admin.panel.users.roles.list', ['lang' => app()->getLocale()]) }}">
+                        <i class="fas fa-user-tag fa-fw {{ $locale ? 'me-2' : 'me-2' }}"></i>
+                        <span>{{ __('Roles') }}</span>
+                    </a>
+                </li>
+
+
             </ul>
         </li>
 

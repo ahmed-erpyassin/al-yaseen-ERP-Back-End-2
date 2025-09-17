@@ -109,9 +109,9 @@
                         <td>{{ $currency->name }}</td>
                         <td>{{ $currency->symbol }}</td>
                         <td>{{ $currency->decimal_places }}</td>
-                        <td>{{ $currency->company->name ?? $currency->company_id }}</td>
-                        <td>{{ $currency->user->full_name ?? '-' }}</td>
-                        <td>{{ $currency->createdBy->full_name ?? '-' }}</td>
+                        <td>{{ $currency->company->title ?? $currency->company_id }}</td>
+                        <td>{{ $currency->user?->full_name ?? '-' }}</td>
+                        <td>{{ $currency->creator?->full_name ?? '-' }}</td>
                         <td>
                             <!-- Edit Icon -->
                             <span wire:loading.remove wire:target="edit({{ $currency->id }})">

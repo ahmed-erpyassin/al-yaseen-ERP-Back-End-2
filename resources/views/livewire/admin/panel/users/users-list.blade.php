@@ -6,9 +6,11 @@
         <!-- Breadcrumb -->
         <nav class="d-flex">
             <h6 class="mb-0">
-                <a href="{{ route('admin.panel.index') }}" class="text-reset">{{ __('Home') }}</a>
+                <a href="{{ route('admin.panel.index', ['lang' => app()->getLocale()]) }}"
+                    class="text-reset">{{ __('Home') }}</a>
                 <span>/</span>
-                <a href="{{ route('admin.panel.users.list') }}" class="text-reset"><u>{{ __('Users') }}</u></a>
+                <a href="{{ route('admin.panel.users.list', ['lang' => app()->getLocale()]) }}"
+                    class="text-reset"><u>{{ __('Users') }}</u></a>
             </h6>
         </nav>
         <!-- Breadcrumb -->
@@ -108,10 +110,33 @@
                         <td>{{ $user->full_name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone }}</td>
-                        <td>{{ $user->role }}</td>
-                        <td>{{ $user->status }}</td>
-                        <td>{{ $user->type }}</td>
-                        <td>{{ $user->created_by }}</td>
+                        <td>{{ $user->roles->first()?->name }}</td>
+                        <td>
+                            @php
+                                $statusColors = [
+                                    'active' => 'success',
+                                    'inactive' => 'secondary',
+                                    'suspended' => 'danger',
+                                    'pending' => 'warning',
+                                ];
+                            @endphp
+                            <span class="badge badge-{{ $statusColors[$user->status] ?? 'light' }}">
+                                    {{ ucfirst($user->status) }}
+                            </span>
+                        </td>
+                        <td>
+                            @php
+                                $typeColors = [
+                                    'super_admin' => 'primary',
+                                    'admin' => 'info',
+                                    'customer' => 'dark',
+                                ];
+                            @endphp
+                            <span class="badge badge-{{ $typeColors[$user->type] ?? 'light' }}">
+                                {{ __(ucwords(str_replace('_', ' ', $user->type))) }}
+                            </span>
+                        </td>
+                        <td>{{ $user->creator?->full_name }}</td>
                         <td>
                             <!-- Edit Icon -->
                             <span wire:loading.remove wire:target="edit({{ $user->id }})">
@@ -148,6 +173,20 @@
                                 <span class="spinner-border spinner-border-sm text-primary me-2 ms-2"
                                     role="status"></span>
                             </span>
+
+                            <!-- Manage User Roles Icon -->
+                            <span wire:loading.remove wire:target="manageUserRoles({{ $user->id }})">
+                                <a href="#" wire:click="manageUserRoles({{ $user->id }})"
+                                    class="text-warning fa-lg me-2 ms-2"
+                                    title="{{ __('Manage User Roles & Permissions') }}">
+                                    <x-icons.manage-user-roles />
+                                </a>
+                            </span>
+                            <span wire:loading wire:target="manageUserRoles({{ $user->id }})">
+                                <span class="spinner-border spinner-border-sm text-warning me-2 ms-2"
+                                    role="status"></span>
+                            </span>
+
                         </td>
                     </tr>
                 @empty

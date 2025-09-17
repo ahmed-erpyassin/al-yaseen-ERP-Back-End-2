@@ -65,6 +65,11 @@ class ExchangeRate extends Model
         }
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function currency()
     {
         return $this->belongsTo(Currency::class);

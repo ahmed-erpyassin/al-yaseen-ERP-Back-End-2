@@ -15,7 +15,6 @@ use Modules\Inventory\Http\Controllers\Api\InventoryMovementController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
-
     // Inventory Items Routes
     Route::prefix('inventory-items')->group(function () {
         Route::get('/', [InventoryController::class, 'index'])->name('inventory.items.index');

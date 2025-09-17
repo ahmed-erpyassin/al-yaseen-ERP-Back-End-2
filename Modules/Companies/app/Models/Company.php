@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\FinancialAccounts\Models\Currency;
+use Modules\FinancialAccounts\Models\FiscalYear;
 use Modules\Users\Models\User;
 
 class Company extends Model
@@ -130,6 +132,8 @@ class Company extends Model
         if ($filters['updated_by'] !== null) {
             $builder->where('updated_by', $filters['updated_by']);
         }
+
+        return $builder;
     }
 
     /*
@@ -146,16 +150,16 @@ class Company extends Model
     }
 
     // العملة
-    // public function currency()
-    // {
-    //     return $this->belongsTo(Currency::class);
-    // }
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
 
-    // // السنة المالية
-    // public function financialYear()
-    // {
-    //     return $this->belongsTo(FinancialYear::class);
-    // }
+    // السنة المالية
+    public function fiscalYear()
+    {
+        return $this->belongsTo(FiscalYear::class);
+    }
 
     // المجال (Industry)
     public function industry()

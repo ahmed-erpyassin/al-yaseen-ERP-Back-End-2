@@ -16,6 +16,27 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // إنشاء الدور لو مش موجود
+        $customerRole = Role::firstOrCreate([
+            'name' => 'customer',
+            'guard_name' => 'api'
+        ]);
+
+        // اجلب الصلاحيات الخاصة بالـ api فقط
+        $apiPermissions = Permission::where('guard_name', 'api')
+            ->whereIn('name', [
+                'api.users.index',
+                'api.users.show',
+                // الصلاحيات المسموح بها للعميل
+                'access_customers',
+                'access_sales',
+                'access_billing',
+            ])
+            ->get();
+
+        // اربط الصلاحيات بالدور
+        $customerRole->syncPermissions($apiPermissions);
+
         // إنشاء المستخدم الرئيسي
         $user = User::firstOrCreate([
             'email' => 'admin@example.com',
@@ -54,6 +75,13 @@ class UserSeeder extends Seeder
         ]);
 
         $company = Company::firstOrCreate([
+            'currency_id'                           => 1,
+            'financial_year_id'                     => 1,
+            'industry_id'                           => 1,
+            'business_type_id'                      => 1,
+            'country_id'                            => 1,
+            'region_id'                             => 1,
+            'city_id'                               => 1,
             'user_id'                               => $user->id,
             'title'                                 => 'Yassin ERP Company',
             'commercial_registeration_number'       => 'YERPC-001',

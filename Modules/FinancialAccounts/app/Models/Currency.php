@@ -50,6 +50,7 @@ class Currency extends Model
         $filters = array_merge([
             'search' => '',
             'status' => null,
+            'decimal_places' => null
         ], $filters);
 
         if ($filters['search']) {
@@ -62,6 +63,12 @@ class Currency extends Model
         if ($filters['status']) {
             $builder->where('status', $filters['status']);
         }
+
+        if ($filters['decimal_places']) {
+            $builder->where('decimal_places', $filters['decimal_places']);
+        }
+
+        return $builder;
     }
 
     /*
@@ -69,6 +76,11 @@ class Currency extends Model
     | العلاقات
     |--------------------------------------------------------------------------
     */
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function company()
     {

@@ -6,9 +6,11 @@
         <!-- Breadcrumb -->
         <nav class="d-flex">
             <h6 class="mb-0">
-                <a href="{{ route('admin.panel.index', ['lang' => app()->getLocale()]) }}" class="text-reset">{{ __('Home') }}</a>
+                <a href="{{ route('admin.panel.index', ['lang' => app()->getLocale()]) }}"
+                    class="text-reset">{{ __('Home') }}</a>
                 <span>/</span>
-                <a href="{{ route('admin.panel.companies.list', ['lang' => app()->getLocale()]) }}" class="text-reset"><u>{{ __('Companies') }}</u></a>
+                <a href="{{ route('admin.panel.companies.list', ['lang' => app()->getLocale()]) }}"
+                    class="text-reset"><u>{{ __('Companies') }}</u></a>
             </h6>
         </nav>
         <!-- Breadcrumb -->
@@ -116,10 +118,10 @@
                         <td>{{ $company->commercial_registeration_number }}</td>
                         <td>{{ $company->email }}</td>
                         <td>{{ $company->mobile }}</td>
-                        <td>{{ optional($company->industry)->name }}</td>
-                        <td>{{ optional($company->country)->name }}</td>
+                        <td>{{ optional($company->industry)?->name ?? '-' }}</td>
+                        <td>{{ optional($company->country)?->name ?? '-' }}</td>
                         <td>{{ $company->status }}</td>
-                        <td>{{ optional($company->createdBy)->full_name }}</td>
+                        <td>{{ optional($company->creator)->full_name }}</td>
                         <td>
                             <!-- Edit Icon -->
                             <span wire:loading.remove wire:target="edit({{ $company->id }})">

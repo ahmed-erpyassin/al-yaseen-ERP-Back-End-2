@@ -24,8 +24,6 @@ class UserService
         $user = Auth::user();
 
         return User::data()
-            ->whereNot('type', 'super_admin')
-            ->whereNot('id', $user->id)
             ->filters($filters)
             ->reorder($sort_field, $sort_direction)
             ->paginate($paginate);

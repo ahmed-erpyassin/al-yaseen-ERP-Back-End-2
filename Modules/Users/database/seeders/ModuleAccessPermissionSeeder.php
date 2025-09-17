@@ -12,17 +12,17 @@ class ModuleAccessPermissionSeeder extends Seeder
     {
         // قائمة الموديولات
         $modules = [
-            'Users'                => 'المستخدمين',
-            'Companies'            => 'الشركات والفروع',
-            'Customers'            => 'العملاء',
-            'Suppliers'            => 'الموردون',
-            'HumanResources'       => 'الموارد البشرية',
-            'FinancialAccounts'    => 'الحسابات المالية',
-            'Inventory'            => 'المخزون',
-            'Purchases'            => 'المشتريات',
-            'Sales'                => 'المبيعات',
-            'ProjectsManagement'   => 'إدارة المشاريع',
-            'Billing'              => 'الفواتير',
+            'Users'               =>  'users',
+            'Companies'            => 'companies',
+            'Customers'            => 'customers',
+            'Suppliers'            => 'suppliers',
+            'HumanResources'       => 'human resources',
+            'FinancialAccounts'    => 'financial accounts',
+            'Inventory'            => 'inventory',
+            'Purchases'            => 'purchases',
+            'Sales'                => 'sales',
+            'ProjectsManagement'   => 'projects management',
+            'Billing'              => 'billing',
         ];
 
         foreach ($modules as $key => $label) {
@@ -32,7 +32,7 @@ class ModuleAccessPermissionSeeder extends Seeder
                     'guard_name' => $guard,
                 ], [
                     'group' => $key,
-                    'label' => 'الوصول إلى ' . $label,
+                    'label' => 'Access to ' . $label,
                 ]);
             }
         }
