@@ -9,6 +9,11 @@ use Modules\Inventory\Models\StockMovement;
 use Modules\Inventory\Models\InventoryStock;
 use Modules\Inventory\Http\Requests\StoreStockMovementRequest;
 
+/**
+ * @group Inventory Management / Stock Movements
+ *
+ * APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+ */
 class StockMovementController extends Controller
 {
     /**
@@ -17,7 +22,7 @@ class StockMovementController extends Controller
     public function index(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $query = StockMovement::with(['item', 'warehouse', 'user', 'unit', 'branch'])
             ->forCompany($companyId);
 
@@ -73,7 +78,7 @@ class StockMovementController extends Controller
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $userId = auth()->id() ?? $request->user_id;
-        
+
         $data = $request->validated();
         $data['company_id'] = $companyId;
         $data['user_id'] = $userId;
@@ -100,7 +105,7 @@ class StockMovementController extends Controller
     public function show($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $movement = StockMovement::with(['item', 'warehouse', 'user', 'unit', 'branch'])
             ->forCompany($companyId)
             ->findOrFail($id);
@@ -118,7 +123,7 @@ class StockMovementController extends Controller
     public function byItem($itemId): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $movements = StockMovement::with(['warehouse', 'user', 'unit', 'branch'])
             ->forCompany($companyId)
             ->forItem($itemId)
@@ -138,7 +143,7 @@ class StockMovementController extends Controller
     public function byWarehouse($warehouseId): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $movements = StockMovement::with(['item', 'user', 'unit', 'branch'])
             ->forCompany($companyId)
             ->forWarehouse($warehouseId)
@@ -158,7 +163,7 @@ class StockMovementController extends Controller
     public function stockSummary(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $summary = InventoryStock::with(['inventoryItem', 'warehouse'])
             ->forCompany($companyId)
             ->get()

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('branch_id')->nullable()->constrained('branches')->nullOnDelete();
             $table->foreignId('unit_id')->constrained('units')->cascadeOnDelete();
             $table->foreignId('parent_id')->nullable()->constrained('items')->nullOnDelete();
-            
+
             // Item Information
             $table->string('item_number')->unique(); // رقم الصنف
             $table->string('code'); // كود الصنف
@@ -76,6 +76,11 @@ return new class extends Migration
             $table->string('image')->nullable(); // الصورة
             $table->string('color')->nullable(); // اللون
 
+            // ✅ Physical Dimensions (الأبعاد الفيزيائية)
+            $table->decimal('length', 10, 2)->nullable(); // الطول
+            $table->decimal('width', 10, 2)->nullable(); // العرض
+            $table->decimal('height', 10, 2)->nullable(); // الارتفاع
+
             // Item Type (نوع الصنف)
             $table->string('item_type')->default('goods'); // نوع الصنف (خدمة/بضائع/عمل/أصل/تحويل/حد أدنى)
 
@@ -83,7 +88,7 @@ return new class extends Migration
 
             // Stock Tracking
             $table->boolean('stock_tracking')->default(true); // تتبع المخزون
-            
+
             // Audit Fields
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();

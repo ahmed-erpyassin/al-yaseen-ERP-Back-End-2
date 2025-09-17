@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('inventory_adjustment_id')->constrained('inventory_adjustments')->cascadeOnDelete();
             $table->foreignId('inventory_item_id')->constrained('inventory_items')->cascadeOnDelete();
-            
+
             // Quantity Information
             $table->decimal('system_quantity', 12, 2); // الكمية في النظام
             $table->decimal('physical_quantity', 12, 2); // الكمية الفعلية
             $table->decimal('difference_quantity', 12, 2); // فرق الكمية
             $table->decimal('unit_cost', 12, 2)->nullable(); // تكلفة الوحدة
             $table->decimal('total_cost', 12, 2)->nullable(); // التكلفة الإجمالية
-            
+
             // Additional Information
             $table->text('notes')->nullable(); // ملاحظات
             $table->string('batch_number')->nullable(); // رقم الدفعة
@@ -35,7 +35,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->index(['inventory_adjustment_id', 'inventory_item_id']);
+            $table->index(['inventory_adjustment_id', 'inventory_item_id'], 'inv_adj_items_adj_id_item_id_idx');
         });
     }
 

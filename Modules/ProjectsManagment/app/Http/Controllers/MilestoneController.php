@@ -5,11 +5,17 @@ namespace Modules\ProjectsManagment\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Modules\ProjectsManagment\Models\ProjectMilestone;
 use Modules\ProjectsManagment\Models\Project;
 use Modules\ProjectsManagment\Http\Requests\StoreMilestoneRequest;
 use Modules\ProjectsManagment\Http\Requests\UpdateMilestoneRequest;
 
+/**
+ * @group Project Management / Milestones
+ *
+ * APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
+ */
 class MilestoneController extends Controller
 {
     /**
@@ -18,7 +24,7 @@ class MilestoneController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -157,7 +163,7 @@ class MilestoneController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $milestone = ProjectMilestone::with(['project', 'creator', 'updater'])
@@ -183,7 +189,7 @@ class MilestoneController extends Controller
     public function update(UpdateMilestoneRequest $request, $id): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $milestone = ProjectMilestone::forCompany($companyId)->findOrFail($id);
@@ -210,7 +216,7 @@ class MilestoneController extends Controller
     public function destroy($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $milestone = ProjectMilestone::forCompany($companyId)->findOrFail($id);
@@ -237,7 +243,7 @@ class MilestoneController extends Controller
     public function restore($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $milestone = ProjectMilestone::withTrashed()
@@ -266,7 +272,7 @@ class MilestoneController extends Controller
     public function forceDelete($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $milestone = ProjectMilestone::withTrashed()
@@ -293,7 +299,7 @@ class MilestoneController extends Controller
     public function getTrashed(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -322,7 +328,7 @@ class MilestoneController extends Controller
     public function getProjects(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $projects = Project::where('company_id', $companyId)
@@ -382,7 +388,7 @@ class MilestoneController extends Controller
                 'project_id' => 'required|exists:projects,id'
             ]);
 
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $projectId = $request->project_id;
 
@@ -423,7 +429,7 @@ class MilestoneController extends Controller
     public function getProjectMilestones(Request $request, $projectId): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             // Verify project belongs to user's company
@@ -461,7 +467,7 @@ class MilestoneController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -495,7 +501,7 @@ class MilestoneController extends Controller
     public function getMilestonesByField(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
 
             $field = $request->get('field');
@@ -552,7 +558,7 @@ class MilestoneController extends Controller
     public function getFieldValues(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $field = $request->get('field');
 
@@ -631,7 +637,7 @@ class MilestoneController extends Controller
     public function sortMilestones(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user =Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 

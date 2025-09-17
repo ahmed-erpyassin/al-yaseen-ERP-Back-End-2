@@ -14,6 +14,11 @@ use Modules\Inventory\Http\Requests\StoreInventoryMovementRequest;
 use Modules\Inventory\Http\Requests\UpdateInventoryMovementRequest;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Inventory Management / Inventory Movements
+ *
+ * APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+ */
 class InventoryMovementController extends Controller
 {
     /**
@@ -22,7 +27,7 @@ class InventoryMovementController extends Controller
     public function index(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $query = InventoryMovement::with([
             'company', 'user', 'warehouse', 'movementData.item', 'movementData.unit',
             'vendor', 'customer', 'creator', 'updater'
@@ -257,9 +262,9 @@ class InventoryMovementController extends Controller
     public function show($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $movement = InventoryMovement::with([
-            'company', 'user', 'warehouse', 
+            'company', 'user', 'warehouse',
             'movementData.item', 'movementData.unit', 'movementData.warehouse',
             'vendor', 'customer', 'inboundInvoice', 'outboundInvoice',
             'creator', 'updater', 'confirmer'

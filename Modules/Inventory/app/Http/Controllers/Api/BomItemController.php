@@ -12,6 +12,11 @@ use Modules\Inventory\Http\Requests\StoreBomItemRequest;
 use Modules\Inventory\Http\Requests\UpdateBomItemRequest;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Inventory Management / BOM Items
+ *
+ * APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+ */
 class BomItemController extends Controller
 {
     /**
@@ -32,9 +37,14 @@ class BomItemController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->whereRaw('LOWER(formula_number) LIKE ?', ["%{$search}%"])
                   ->orWhereRaw('LOWER(formula_name) LIKE ?', ["%{$search}%"])
-                  ->orWhereRaw('LOWER(item_name) LIKE ?', ["%{$search}%"])
-                  ->orWhereRaw('LOWER(component_item_name) LIKE ?', ["%{$search}%"])
-                  ->orWhereRaw('LOWER(component_item_number) LIKE ?', ["%{$search}%"]);
+                  ->orWhereHas('item', function ($itemQuery) use ($search) {
+                      $itemQuery->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
+                               ->orWhereRaw('LOWER(item_number) LIKE ?', ["%{$search}%"]);
+                  })
+                  ->orWhereHas('component', function ($componentQuery) use ($search) {
+                      $componentQuery->whereRaw('LOWER(name) LIKE ?', ["%{$search}%"])
+                                    ->orWhereRaw('LOWER(item_number) LIKE ?', ["%{$search}%"]);
+                  });
             });
         }
 
@@ -103,7 +113,7 @@ class BomItemController extends Controller
         $sortDirection = $request->get('sort_direction', 'asc');
 
         $sortableColumns = [
-            'id', 'formula_number', 'formula_name', 'item_name', 'component_item_name',
+            'id', 'formula_number', 'formula_name', 'item_id', 'component_id',
             'quantity', 'required_quantity', 'unit_cost', 'total_cost', 'sequence_order',
             'component_type', 'is_critical', 'status', 'formula_date', 'created_at', 'updated_at'
         ];
@@ -155,11 +165,9 @@ class BomItemController extends Controller
             $data['formula_time'] = now()->toTimeString();
             $data['formula_datetime'] = now();
 
-            // ✅ Get main item information from Items table
+            // ✅ Get additional item information (non-redundant fields only)
             $item = Item::find($data['item_id']);
             if ($item) {
-                $data['item_number'] = $item->item_number;
-                $data['item_name'] = $item->name;
                 $data['balance'] = $item->balance ?? 0;
                 $data['minimum_limit'] = $item->minimum_limit ?? 0;
                 $data['maximum_limit'] = $item->maximum_limit ?? 0;
@@ -173,26 +181,16 @@ class BomItemController extends Controller
                 $this->setHistoricalPrices($data, $item->id);
             }
 
-            // ✅ Get component item information from Items table
+            // ✅ Get component item information (non-redundant fields only)
             $component = Item::find($data['component_id']);
             if ($component) {
-                $data['component_item_number'] = $component->item_number;
-                $data['component_item_name'] = $component->name;
-                $data['component_item_description'] = $component->description;
                 $data['component_balance'] = $component->balance ?? 0;
                 $data['component_minimum_limit'] = $component->minimum_limit ?? 0;
                 $data['component_maximum_limit'] = $component->maximum_limit ?? 0;
                 $data['reorder_level'] = $component->minimum_reorder_level ?? 0;
             }
 
-            // ✅ Get unit information from Units table
-            if (!empty($data['unit_id'])) {
-                $unit = Unit::find($data['unit_id']);
-                if ($unit) {
-                    $data['unit_name'] = $unit->name;
-                    $data['unit_code'] = $unit->code;
-                }
-            }
+            // ✅ Unit information will be retrieved via relationship (no redundant fields needed)
 
             // ✅ Set default values for new fields
             $data['required_quantity'] = $data['required_quantity'] ?? $data['quantity'];
@@ -239,7 +237,7 @@ class BomItemController extends Controller
     public function show($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $bomItem = BomItem::with(['company', 'branch', 'user', 'item', 'component', 'unit'])
             ->forCompany($companyId)
             ->findOrFail($id);
@@ -258,12 +256,12 @@ class BomItemController extends Controller
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $userId = auth()->id() ?? $request->user_id;
-        
+
         $bomItem = BomItem::forCompany($companyId)->findOrFail($id);
-        
+
         $data = $request->validated();
         $data['updated_by'] = $userId;
-        
+
         $bomItem->update($data);
         $bomItem->load(['company', 'branch', 'user', 'item', 'component', 'unit']);
 
@@ -280,7 +278,7 @@ class BomItemController extends Controller
     public function destroy($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $bomItem = BomItem::forCompany($companyId)->findOrFail($id);
         $bomItem->delete();
 
@@ -296,7 +294,7 @@ class BomItemController extends Controller
     public function byItem($itemId): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $bomItems = BomItem::with(['component', 'unit'])
             ->forCompany($companyId)
             ->forItem($itemId)
@@ -315,7 +313,7 @@ class BomItemController extends Controller
     public function byComponent($componentId): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $bomItems = BomItem::with(['item', 'unit'])
             ->forCompany($companyId)
             ->forComponent($componentId)
@@ -341,7 +339,7 @@ class BomItemController extends Controller
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $itemId = $request->get('item_id');
         $productionQuantity = $request->get('production_quantity');
-        
+
         $bomItems = BomItem::with(['component', 'unit'])
             ->forCompany($companyId)
             ->forItem($itemId)
@@ -435,7 +433,7 @@ class BomItemController extends Controller
         }
 
         $allowedFields = [
-            'status', 'item_name', 'component_item_name', 'component_type',
+            'status', 'item_id', 'component_id', 'component_type',
             'is_active', 'is_critical', 'formula_name'
         ];
 

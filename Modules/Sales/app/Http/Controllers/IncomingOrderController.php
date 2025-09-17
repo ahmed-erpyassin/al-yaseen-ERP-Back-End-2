@@ -5,6 +5,7 @@ namespace Modules\Sales\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Sales\app\Services\IncomingOrderService;
+use Modules\Sales\Http\Requests\IncomingOrderRequest;
 use Modules\Sales\Transformers\IncomingOrderResource;
 
 class IncomingOrderController extends Controller
@@ -37,7 +38,7 @@ class IncomingOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(IncomingOrderRequest $request)
     {
         try {
             $order = $this->incomingOrderService->store($request);

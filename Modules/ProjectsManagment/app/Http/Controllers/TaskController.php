@@ -5,6 +5,8 @@ namespace Modules\ProjectsManagment\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
+use Modules\ProjectsManagment\Models\ProjectMilestone;
 use Modules\ProjectsManagment\Models\ProjectTask;
 use Modules\ProjectsManagment\Models\TaskDocument;
 use Modules\ProjectsManagment\Models\Project;
@@ -13,7 +15,13 @@ use Modules\ProjectsManagment\Http\Requests\UpdateTaskRequest;
 use Modules\Users\Models\User;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
+/**
+ * @group Project Management / Tasks
+ *
+ * APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+ */
 class TaskController extends Controller
 {
     /**
@@ -22,7 +30,7 @@ class TaskController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Get filter parameters
@@ -90,7 +98,7 @@ class TaskController extends Controller
                 'per_page' => 'nullable|integer|min:1|max:100'
             ]);
 
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
@@ -184,7 +192,7 @@ class TaskController extends Controller
     public function myTasks(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $perPage = $request->get('per_page', 15);
 
             $query = ProjectTask::with([
@@ -218,7 +226,7 @@ class TaskController extends Controller
     public function dailyDueTasks(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $perPage = $request->get('per_page', 15);
             $today = now()->toDateString();
 
@@ -255,7 +263,7 @@ class TaskController extends Controller
     public function overdueTasks(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $perPage = $request->get('per_page', 15);
             $today = now()->toDateString();
 
@@ -274,8 +282,8 @@ class TaskController extends Controller
 
             // Calculate days overdue for each task
             $tasks->getCollection()->transform(function ($task) use ($today) {
-                $dueDate = \Carbon\Carbon::parse($task->due_date);
-                $todayDate = \Carbon\Carbon::parse($today);
+                $dueDate = Carbon::parse($task->due_date);
+                $todayDate = Carbon::parse($today);
                 $task->days_overdue = $todayDate->diffInDays($dueDate);
                 return $task;
             });
@@ -308,7 +316,7 @@ class TaskController extends Controller
                 'sort_order' => 'nullable|in:asc,desc'
             ]);
 
-            $user = $request->user();
+            $user = Auth::user();
             $field = $request->field;
             $value = $request->value;
             $perPage = $request->get('per_page', 15);
@@ -399,7 +407,7 @@ class TaskController extends Controller
                 'per_page' => 'nullable|integer|min:1|max:100'
             ]);
 
-            $user = $request->user();
+            $user = Auth::user();
             $sortBy = $request->sort_by;
             $sortOrder = $request->sort_order;
             $perPage = $request->get('per_page', 15);
@@ -471,7 +479,7 @@ class TaskController extends Controller
             ])->findOrFail($id);
 
             // Check company access
-            $user = request()->user();
+            $user = Auth::user();
             if ($task->company_id !== $user->company_id) {
                 return response()->json([
                     'success' => false,
@@ -501,7 +509,7 @@ class TaskController extends Controller
             $task = ProjectTask::findOrFail($id);
 
             // Check company access
-            $user = $request->user();
+            $user = Auth::user();
             if ($task->company_id !== $user->company_id) {
                 return response()->json([
                     'success' => false,
@@ -555,7 +563,7 @@ class TaskController extends Controller
             $task = ProjectTask::findOrFail($id);
 
             // Check company access
-            $user = request()->user();
+            $user = Auth::user();
             if ($task->company_id !== $user->company_id) {
                 return response()->json([
                     'success' => false,
@@ -586,7 +594,7 @@ class TaskController extends Controller
     public function getEmployees(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Get employees from the employees table
@@ -664,7 +672,7 @@ class TaskController extends Controller
     public function getProjectTasks(Request $request, $projectId): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             // Verify project access
@@ -706,7 +714,7 @@ class TaskController extends Controller
                 'file' => 'required|file|max:10240', // 10MB max
             ]);
 
-            $user = $request->user();
+            $user = Auth::user();
             $task = ProjectTask::where('id', $taskId)
                 ->where('company_id', $user->company_id)
                 ->firstOrFail();
@@ -752,7 +760,7 @@ class TaskController extends Controller
     public function getTaskDocuments($taskId): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user =Auth::user();
             $task = ProjectTask::where('id', $taskId)
                 ->where('company_id', $user->company_id)
                 ->firstOrFail();
@@ -782,7 +790,7 @@ class TaskController extends Controller
     public function deleteDocument($documentId): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
             $document = TaskDocument::where('id', $documentId)
                 ->where('company_id', $user->company_id)
                 ->firstOrFail();
@@ -849,7 +857,7 @@ class TaskController extends Controller
             case 'assigned_to':
             case 'created_by':
                 // You might want to fetch user name here
-                $user = \Modules\Users\Models\User::find($value);
+                $user = User::find($value);
                 $displayName = $user ? $user->name : "User #{$value}";
                 break;
             case 'project_id':

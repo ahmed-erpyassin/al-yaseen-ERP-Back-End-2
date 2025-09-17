@@ -5,59 +5,90 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Modules\Inventory\Models\InventoryItem;
+use Illuminate\Support\Facades\Auth;
+use Modules\Inventory\Services\InventoryService;
+use Modules\Inventory\Http\Resources\InventoryResource;
 use Modules\Inventory\Http\Requests\StoreInventoryItemRequest;
 use Modules\Inventory\Http\Requests\UpdateInventoryItemRequest;
 
+/**
+ * @group Inventory Management / Inventory Items
+ *
+ * APIs for managing inventory items, stock levels, and warehouse operations.
+ */
+
 class InventoryController extends Controller
 {
+    protected $inventoryService;
+
+    public function __construct(InventoryService $inventoryService)
+    {
+        $this->inventoryService = $inventoryService;
+    }
+
     /**
-     * Display a listing of inventory items.
+     * List Inventory Items
+     *
+     * Retrieve a paginated list of inventory items with filtering and search capabilities.
+     *
+     * @queryParam active boolean Filter by active status. Example: true
+     * @queryParam category_id integer Filter by category ID. Example: 1
+     * @queryParam supplier_id integer Filter by supplier ID. Example: 1
+     * @queryParam search string Search across item names and descriptions. Example: laptop
+     * @queryParam sort_by string Field to sort by. Example: name
+     * @queryParam sort_direction string Sort direction (asc/desc). Example: asc
+     * @queryParam per_page integer Number of items per page (default: 15). Example: 20
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "Laptop Dell XPS 13",
+     *       "sku": "DELL-XPS-13",
+     *       "category": "Electronics",
+     *       "quantity": 50,
+     *       "unit_price": 1200.00,
+     *       "supplier": "Dell Inc.",
+     *       "active": true,
+     *       "created_at": "2024-01-01T00:00:00.000000Z"
+     *     }
+     *   ],
+     *   "message": "Inventory items retrieved successfully"
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error retrieving inventory items: Database connection failed"
+     * }
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        try {
+            $user = Auth::user();
 
-        $query = InventoryItem::with(['company', 'stock.warehouse'])
-            ->forCompany($companyId);
+            // Get filters from request
+            $filters = $request->only([
+                'active', 'category_id', 'supplier_id', 'search',
+                'sort_by', 'sort_direction'
+            ]);
 
-        // Apply filters
-        if ($request->has('active')) {
-            $query->where('active', $request->boolean('active'));
+            $perPage = $request->get('per_page', 15);
+
+            // Get inventory items using service
+            $items = $this->inventoryService->getInventoryItems($user, $filters, $perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => InventoryResource::collection($items),
+                'message' => 'Inventory items retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving inventory items: ' . $e->getMessage()
+            ], 500);
         }
-
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->get('category_id'));
-        }
-
-        if ($request->has('supplier_id')) {
-            $query->where('supplier_id', $request->get('supplier_id'));
-        }
-
-        if ($request->has('search')) {
-            $search = $request->get('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('item_name_ar', 'like', "%{$search}%")
-                  ->orWhere('item_name_en', 'like', "%{$search}%")
-                  ->orWhere('item_number', 'like', "%{$search}%")
-                  ->orWhere('barcode', 'like', "%{$search}%");
-            });
-        }
-
-        // Sorting
-        $sortBy = $request->get('sort_by', 'item_name_ar');
-        $sortDirection = $request->get('sort_direction', 'asc');
-        $query->orderBy($sortBy, $sortDirection);
-
-        // Pagination
-        $perPage = $request->get('per_page', 15);
-        $items = $query->paginate($perPage);
-
-        return response()->json([
-            'success' => true,
-            'data' => $items,
-            'message' => 'Inventory items retrieved successfully'
-        ]);
     }
 
     /**
@@ -65,19 +96,24 @@ class InventoryController extends Controller
      */
     public function store(StoreInventoryItemRequest $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        try {
+            $data = $request->validated();
+            $user = Auth::user();
 
-        $data = $request->validated();
-        $data['company_id'] = $companyId;
+            // Create inventory item using service
+            $item = $this->inventoryService->createInventoryItem($data, $user);
 
-        $item = InventoryItem::create($data);
-        $item->load(['company']);
-
-        return response()->json([
-            'success' => true,
-            'data' => $item,
-            'message' => 'Inventory item created successfully'
-        ], 201);
+            return response()->json([
+                'success' => true,
+                'data' => new InventoryResource($item),
+                'message' => 'Inventory item created successfully'
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating inventory item: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -85,17 +121,23 @@ class InventoryController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        try {
+            $user = Auth::user();
 
-        $item = InventoryItem::with(['company', 'stock.warehouse', 'stockMovements.user'])
-            ->forCompany($companyId)
-            ->findOrFail($id);
+            // Get inventory item using service
+            $item = $this->inventoryService->getInventoryItemById($id, $user);
 
-        return response()->json([
-            'success' => true,
-            'data' => $item,
-            'message' => 'Inventory item retrieved successfully'
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => new InventoryResource($item),
+                'message' => 'Inventory item retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving inventory item: ' . $e->getMessage()
+            ], 404);
+        }
     }
 
     /**
@@ -103,17 +145,23 @@ class InventoryController extends Controller
      */
     public function update(UpdateInventoryItemRequest $request, $id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        try {
+            $data = $request->validated();
+            $user = Auth::user();
 
-        $item = InventoryItem::forCompany($companyId)->findOrFail($id);
-        $item->update($request->validated());
-        $item->load(['company']);
-
-        return response()->json([
-            'success' => true,
-            'data' => $item,
-            'message' => 'Inventory item updated successfully'
-        ]);
+            // Update inventory item using service
+            $item = $this->inventoryService->updateInventoryItem($id, $data, $user);
+            return response()->json([
+                'success' => true,
+                'data' => new InventoryResource($item),
+                'message' => 'Inventory item updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating inventory item: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -121,24 +169,22 @@ class InventoryController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        try {
+            $user = Auth::user();
 
-        $item = InventoryItem::forCompany($companyId)->findOrFail($id);
+            // Delete inventory item using service
+            $this->inventoryService->deleteInventoryItem($id, $user);
 
-        // Check if item has stock or movements
-        if ($item->stock()->exists() || $item->stockMovements()->exists()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Inventory item deleted successfully'
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Cannot delete item with existing stock or movements'
-            ], 422);
+                'message' => 'Error deleting inventory item: ' . $e->getMessage()
+            ], 500);
         }
-
-        $item->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Inventory item deleted successfully'
-        ]);
     }
 
     /**
@@ -146,18 +192,24 @@ class InventoryController extends Controller
      */
     public function lowStock(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        try {
+            $user = Auth::user();
+            $perPage = $request->get('per_page', 15);
 
-        $items = InventoryItem::with(['company', 'stock.warehouse'])
-            ->forCompany($companyId)
-            ->whereColumn('quantity', '<=', 'minimum_limit')
-            ->get();
+            // Get low stock items using service
+            $items = $this->inventoryService->getLowStockItems($user, $perPage);
 
-        return response()->json([
-            'success' => true,
-            'data' => $items,
-            'message' => 'Low stock items retrieved successfully'
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => InventoryResource::collection($items),
+                'message' => 'Low stock items retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving low stock items: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -165,17 +217,23 @@ class InventoryController extends Controller
      */
     public function reorderItems(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        try {
+            $user = Auth::user();
+            $perPage = $request->get('per_page', 15);
 
-        $items = InventoryItem::with(['company', 'stock.warehouse'])
-            ->forCompany($companyId)
-            ->whereColumn('quantity', '<=', 'reorder_limit')
-            ->get();
+            // Get reorder items using service
+            $items = $this->inventoryService->getReorderItems($user, $perPage);
 
-        return response()->json([
-            'success' => true,
-            'data' => $items,
-            'message' => 'Items needing reorder retrieved successfully'
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => InventoryResource::collection($items),
+                'message' => 'Items needing reorder retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving reorder items: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

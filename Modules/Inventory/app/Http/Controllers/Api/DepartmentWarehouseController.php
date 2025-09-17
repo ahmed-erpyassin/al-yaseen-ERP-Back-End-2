@@ -9,6 +9,11 @@ use Modules\Inventory\Models\DepartmentWarehouse;
 use Modules\Inventory\Http\Requests\StoreDepartmentWarehouseRequest;
 use Modules\Inventory\Http\Requests\UpdateDepartmentWarehouseRequest;
 
+/**
+ * @group Inventory Management / Department Warehouses
+ *
+ * APIs for managing department-warehouse relationships and access control.
+ */
 class DepartmentWarehouseController extends Controller
 {
     /**
@@ -17,7 +22,7 @@ class DepartmentWarehouseController extends Controller
     public function index(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $query = DepartmentWarehouse::with(['company'])
             ->forCompany($companyId);
 
@@ -59,7 +64,7 @@ class DepartmentWarehouseController extends Controller
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $userId = auth()->id() ?? $request->user_id;
-        
+
         $data = $request->validated();
         $data['company_id'] = $companyId;
         $data['created_by'] = $userId;
@@ -80,7 +85,7 @@ class DepartmentWarehouseController extends Controller
     public function show($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $department = DepartmentWarehouse::with(['company', 'warehouses'])
             ->forCompany($companyId)
             ->findOrFail($id);
@@ -99,12 +104,12 @@ class DepartmentWarehouseController extends Controller
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
         $userId = auth()->id() ?? $request->user_id;
-        
+
         $department = DepartmentWarehouse::forCompany($companyId)->findOrFail($id);
-        
+
         $data = $request->validated();
         $data['updated_by'] = $userId;
-        
+
         $department->update($data);
         $department->load(['company']);
 
@@ -121,9 +126,9 @@ class DepartmentWarehouseController extends Controller
     public function destroy($id): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $department = DepartmentWarehouse::forCompany($companyId)->findOrFail($id);
-        
+
         // Check if department has warehouses
         if ($department->warehouses()->exists()) {
             return response()->json([
@@ -146,7 +151,7 @@ class DepartmentWarehouseController extends Controller
     public function first(): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $department = DepartmentWarehouse::with(['company'])
             ->forCompany($companyId)
             ->orderBy('department_name_ar')
@@ -172,7 +177,7 @@ class DepartmentWarehouseController extends Controller
     public function last(): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $department = DepartmentWarehouse::with(['company'])
             ->forCompany($companyId)
             ->orderBy('department_name_ar', 'desc')

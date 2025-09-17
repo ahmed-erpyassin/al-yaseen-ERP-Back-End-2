@@ -16,14 +16,14 @@ class BomItem extends Model
         // ✅ Basic Information
         'user_id', 'company_id', 'branch_id',
 
-        // ✅ Main Item Information (Parent/Finished Product)
-        'item_id', 'item_number', 'item_name',
+        // ✅ Main Item Information (Parent/Finished Product) - Removed redundant fields
+        'item_id', // item_number, item_name removed - available via relationship
 
-        // ✅ Component Item Information (Raw Material/Sub-assembly)
-        'component_id', 'component_item_number', 'component_item_name', 'component_item_description',
+        // ✅ Component Item Information (Raw Material/Sub-assembly) - Removed redundant fields
+        'component_id', // component_item_number, component_item_name, component_item_description removed - available via relationship
 
-        // ✅ Unit Information
-        'unit_id', 'unit_name', 'unit_code',
+        // ✅ Unit Information - Removed redundant fields
+        'unit_id', // unit_name, unit_code removed - available via relationship
 
         // ✅ BOM Formula Information
         'formula_number', 'formula_name', 'formula_description',
@@ -201,6 +201,64 @@ class BomItem extends Model
     public function preferredSupplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class, 'preferred_supplier_id');
+    }
+
+    // ✅ Accessors for redundant fields - Get data from relationships instead of stored fields
+
+    /**
+     * Get item number from relationship.
+     */
+    public function getItemNumberAttribute(): ?string
+    {
+        return $this->item?->item_number;
+    }
+
+    /**
+     * Get item name from relationship.
+     */
+    public function getItemNameAttribute(): ?string
+    {
+        return $this->item?->name;
+    }
+
+    /**
+     * Get component item number from relationship.
+     */
+    public function getComponentItemNumberAttribute(): ?string
+    {
+        return $this->component?->item_number;
+    }
+
+    /**
+     * Get component item name from relationship.
+     */
+    public function getComponentItemNameAttribute(): ?string
+    {
+        return $this->component?->name;
+    }
+
+    /**
+     * Get component item description from relationship.
+     */
+    public function getComponentItemDescriptionAttribute(): ?string
+    {
+        return $this->component?->description;
+    }
+
+    /**
+     * Get unit name from relationship.
+     */
+    public function getUnitNameAttribute(): ?string
+    {
+        return $this->unit?->name;
+    }
+
+    /**
+     * Get unit code from relationship.
+     */
+    public function getUnitCodeAttribute(): ?string
+    {
+        return $this->unit?->code;
     }
 
     /**

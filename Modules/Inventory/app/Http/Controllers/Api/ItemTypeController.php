@@ -7,6 +7,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\ItemType;
 
+/**
+ * @group Inventory Management / Item Types
+ *
+ * APIs for managing item types, categories, and item classification.
+ */
 class ItemTypeController extends Controller
 {
     /**
@@ -15,7 +20,7 @@ class ItemTypeController extends Controller
     public function index(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $query = ItemType::forCompany($companyId)->active();
 
         // Apply search
@@ -191,7 +196,7 @@ class ItemTypeController extends Controller
     public function getOptions(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $itemTypes = ItemType::forCompany($companyId)
             ->active()
             ->orderBy('sort_order', 'asc')

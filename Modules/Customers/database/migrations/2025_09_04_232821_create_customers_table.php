@@ -21,6 +21,8 @@ return new class extends Migration
             $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('region_id');
             $table->unsignedBigInteger('city_id');
+            $table->string('customer_number');
+            $table->string('company_name');
             $table->string('first_name');
             $table->string('second_name');
             $table->string('contact_name');
@@ -30,11 +32,15 @@ return new class extends Migration
             $table->string('address_one');
             $table->string('address_two');
             $table->string('postal_code');
+            $table->string('licensed_operator');
             $table->string('tax_number');
-            $table->string('notes');
-            $table->foreignId('created_by')->constrained()->onDelete('cascade');
-            $table->foreignId('updated_by')->constrained()->onDelete('cascade');
-            $table->foreignId('deleted_by')->constrained()->onDelete('cascade');
+            $table->text('notes')->nullable();
+            $table->string('code');
+            $table->string('invoice_type');
+            $table->string('category');
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();

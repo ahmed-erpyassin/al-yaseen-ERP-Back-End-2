@@ -14,15 +14,60 @@ use Modules\Inventory\Exports\ItemTransactionsExport;
 use Modules\Inventory\Exports\ItemTransactionsMultiSheetExport;
 use Modules\Inventory\Exports\ItemTransactionsSummaryExport;
 
+/**
+ * @group Inventory Management / Items
+ *
+ * APIs for managing inventory items, including creation, updates, search, and transaction tracking.
+ */
+
 class ItemController extends Controller
 {
     /**
-     * Display a listing of items.
+     * List Items
+     *
+     * Retrieve a paginated list of inventory items with comprehensive filtering options.
+     *
+     * @queryParam type string Filter by item type. Example: product
+     * @queryParam branch_id integer Filter by branch ID. Example: 1
+     * @queryParam unit_id integer Filter by unit ID. Example: 1
+     * @queryParam parent_id integer Filter by parent item ID. Example: 1
+     * @queryParam stock_tracking boolean Filter by stock tracking enabled. Example: true
+     * @queryParam search string Search across item names and descriptions. Example: laptop
+     * @queryParam company_id integer Filter by company ID. Example: 1
+     * @queryParam per_page integer Number of items per page (default: 15). Example: 20
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "Laptop Dell XPS 13",
+     *       "code": "DELL-XPS-13",
+     *       "type": "product",
+     *       "unit": {
+     *         "id": 1,
+     *         "name": "Piece"
+     *       },
+     *       "stock_tracking": true,
+     *       "company": {
+     *         "id": 1,
+     *         "name": "ABC Company"
+     *       },
+     *       "created_at": "2024-01-01T00:00:00.000000Z"
+     *     }
+     *   ],
+     *   "message": "Items retrieved successfully"
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error retrieving items: Database connection failed"
+     * }
      */
     public function index(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $query = Item::with(['company', 'branch', 'user', 'unit', 'parent', 'itemUnits.unit'])
             ->forCompany($companyId);
 
@@ -607,7 +652,7 @@ class ItemController extends Controller
     public function first(): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $item = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
             ->forCompany($companyId)
             ->orderBy('name')
@@ -633,7 +678,7 @@ class ItemController extends Controller
     public function last(): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $item = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
             ->forCompany($companyId)
             ->orderBy('name', 'desc')
@@ -659,7 +704,7 @@ class ItemController extends Controller
     public function byType($type): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $items = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
             ->forCompany($companyId)
             ->byType($type)
@@ -1586,10 +1631,7 @@ class ItemController extends Controller
                     'fields' => ['tax_rate'],
                     'module' => 'sales'
                 ],
-                'purchase_items' => [
-                    'fields' => ['tax_rate'],
-                    'module' => 'purchases'
-                ],
+              
                 'tax_rates' => [
                     'fields' => ['rate'],
                     'module' => 'invoices'

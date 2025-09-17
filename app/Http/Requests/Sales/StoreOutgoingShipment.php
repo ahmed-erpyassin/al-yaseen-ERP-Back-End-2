@@ -22,15 +22,14 @@ class StoreOutgoingShipment extends FormRequest
     public function rules(): array
     {
         return [
-            'company_id'    => 'required|exists:companies,id',
-            'user_id'       => 'required|exists:users,id',
-            'notebook'      => 'required|string|max:255',
-            'invoice_number' => 'required|string|max:255|unique:outgoing_shipments,invoice_number',
-            'invoice_date'  => 'required|date',
-            'invoice_time'  => 'nullable|date_format:H:i',
-            'due_date'      => 'nullable|date',
-            'client_id'     => 'required|exists:clients,id',
-            'notes'         => 'nullable|string',
+            'company_id'            => 'required',
+            'notebook'              => 'required|string|max:255',
+            'invoice_number'        => 'required|string|max:255|unique:sales,invoice_number',
+            'invoice_date'          => 'required|date',
+            'invoice_time'          => 'nullable|date_format:H:i',
+            'due_date'              => 'nullable|date',
+            'client_id'             => 'required|exists:clients,id',
+            'notes'                 => 'nullable|string',
             'items'                 => 'required|array|min:1',
             'items.*.item_number'   => 'required|string|max:255',
             'items.*.item_name'     => 'required|string|max:255',

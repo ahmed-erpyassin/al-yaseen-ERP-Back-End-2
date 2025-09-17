@@ -10,6 +10,11 @@ use Modules\Inventory\Http\Requests\StoreWarehouseRequest;
 use Modules\Inventory\Http\Requests\UpdateWarehouseRequest;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Inventory Management / Warehouses
+ *
+ * APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+ */
 class WarehouseController extends Controller
 {
     /**
@@ -18,7 +23,7 @@ class WarehouseController extends Controller
     public function index(Request $request): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? $request->company_id;
-        
+
         $query = Warehouse::with([
             'company', 'branch', 'user', 'departmentWarehouse',
             'warehouseKeeper', 'salesAccount', 'purchaseAccount'  // ✅ Include all relationships
@@ -320,7 +325,7 @@ class WarehouseController extends Controller
     public function first(): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $warehouse = Warehouse::with(['company', 'branch', 'user', 'departmentWarehouse'])
             ->forCompany($companyId)
             ->orderBy('name')
@@ -346,7 +351,7 @@ class WarehouseController extends Controller
     public function last(): JsonResponse
     {
         $companyId = auth()->user()->company_id ?? request()->company_id;
-        
+
         $warehouse = Warehouse::with(['company', 'branch', 'user', 'departmentWarehouse'])
             ->forCompany($companyId)
             ->orderBy('name', 'desc')

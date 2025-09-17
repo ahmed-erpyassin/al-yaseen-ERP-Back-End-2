@@ -6,6 +6,8 @@ use Modules\ProjectsManagment\Http\Controllers\TaskController;
 use Modules\ProjectsManagment\Http\Controllers\MilestoneController;
 use Modules\ProjectsManagment\Http\Controllers\ResourceController;
 use Modules\ProjectsManagment\Http\Controllers\DocumentController;
+use Modules\ProjectsManagment\Http\Controllers\ProjectFinancialController;
+use Modules\ProjectsManagment\Http\Controllers\ProjectRiskController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -180,5 +182,76 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         // Specialized document views
         Route::get('/project/{projectId}', [DocumentController::class, 'getProjectDocuments'])->name('documents.by-project');
         Route::get('/category/{category}', [DocumentController::class, 'getDocumentsByCategory'])->name('documents.by-category');
+    });
+
+    // Project Financial Management Routes
+    Route::prefix('project-financials')->group(function () {
+        // Main CRUD operations
+        Route::get('/', [ProjectFinancialController::class, 'index'])->name('project-financials.index');
+        Route::post('/', [ProjectFinancialController::class, 'store'])->name('project-financials.store');
+        Route::get('/{id}', [ProjectFinancialController::class, 'show'])->name('project-financials.show');
+        Route::put('/{id}', [ProjectFinancialController::class, 'update'])->name('project-financials.update');
+        Route::delete('/{id}', [ProjectFinancialController::class, 'destroy'])->name('project-financials.destroy');
+
+        // Advanced search and filtering
+        Route::post('/search', [ProjectFinancialController::class, 'search'])->name('project-financials.search');
+        Route::get('/filter/by-field', [ProjectFinancialController::class, 'getProjectFinancialsByField'])->name('project-financials.filter-by-field');
+        Route::get('/fields/values', [ProjectFinancialController::class, 'getFieldValues'])->name('project-financials.field-values');
+        Route::get('/fields/sortable', [ProjectFinancialController::class, 'getSortableFields'])->name('project-financials.sortable-fields');
+        Route::post('/sort', [ProjectFinancialController::class, 'sortProjectFinancials'])->name('project-financials.sort');
+
+        // Soft delete management
+        Route::post('/{id}/restore', [ProjectFinancialController::class, 'restore'])->name('project-financials.restore');
+        Route::delete('/{id}/force-delete', [ProjectFinancialController::class, 'forceDelete'])->name('project-financials.force-delete');
+        Route::get('/trashed/list', [ProjectFinancialController::class, 'getTrashed'])->name('project-financials.trashed');
+
+        // Helper endpoints for dropdown data
+        Route::get('/projects/list', [ProjectFinancialController::class, 'getProjects'])->name('project-financials.projects');
+        Route::get('/currencies/list', [ProjectFinancialController::class, 'getCurrencies'])->name('project-financials.currencies');
+
+        // Specialized project financial views
+        Route::get('/project/{projectId}', [ProjectFinancialController::class, 'getProjectFinancials'])->name('project-financials.by-project');
+        Route::get('/reference-type/{referenceType}', [ProjectFinancialController::class, 'getByReferenceType'])->name('project-financials.by-reference-type');
+        Route::get('/date-range/{dateFrom}/{dateTo}', [ProjectFinancialController::class, 'getByDateRange'])->name('project-financials.by-date-range');
+    });
+
+    // Project Risk Management Routes
+    Route::prefix('project-risks')->group(function () {
+        // Main CRUD operations
+        Route::get('/', [ProjectRiskController::class, 'index'])->name('project-risks.index');
+        Route::post('/', [ProjectRiskController::class, 'store'])->name('project-risks.store');
+        Route::get('/{id}', [ProjectRiskController::class, 'show'])->name('project-risks.show');
+        Route::put('/{id}', [ProjectRiskController::class, 'update'])->name('project-risks.update');
+        Route::delete('/{id}', [ProjectRiskController::class, 'destroy'])->name('project-risks.destroy');
+
+        // Advanced search and filtering
+        Route::post('/search', [ProjectRiskController::class, 'search'])->name('project-risks.search');
+        Route::get('/filter/by-field', [ProjectRiskController::class, 'getProjectRisksByField'])->name('project-risks.filter-by-field');
+        Route::get('/fields/values', [ProjectRiskController::class, 'getFieldValues'])->name('project-risks.field-values');
+        Route::get('/fields/sortable', [ProjectRiskController::class, 'getSortableFields'])->name('project-risks.sortable-fields');
+        Route::post('/sort', [ProjectRiskController::class, 'sortProjectRisks'])->name('project-risks.sort');
+
+        // Soft delete management
+        Route::post('/{id}/restore', [ProjectRiskController::class, 'restore'])->name('project-risks.restore');
+        Route::delete('/{id}/force-delete', [ProjectRiskController::class, 'forceDelete'])->name('project-risks.force-delete');
+        Route::get('/trashed/list', [ProjectRiskController::class, 'getTrashed'])->name('project-risks.trashed');
+
+        // Helper endpoints for dropdown data (bidirectional linking)
+        Route::get('/projects/list', [ProjectRiskController::class, 'getProjects'])->name('project-risks.projects');
+        Route::get('/employees/list', [ProjectRiskController::class, 'getEmployees'])->name('project-risks.employees');
+
+        // Dropdown options for risk fields
+        Route::get('/impact/options', [ProjectRiskController::class, 'getImpactOptions'])->name('project-risks.impact-options');
+        Route::get('/probability/options', [ProjectRiskController::class, 'getProbabilityOptions'])->name('project-risks.probability-options');
+        Route::get('/status/options', [ProjectRiskController::class, 'getStatusOptions'])->name('project-risks.status-options');
+
+        // Statistics and analytics
+        Route::get('/statistics/summary', [ProjectRiskController::class, 'getStatistics'])->name('project-risks.statistics');
+
+        // Specialized project risk views
+        Route::get('/project/{projectId}', [ProjectRiskController::class, 'getProjectRisks'])->name('project-risks.by-project');
+        Route::get('/status/{status}', [ProjectRiskController::class, 'getByStatus'])->name('project-risks.by-status');
+        Route::get('/impact/{impact}', [ProjectRiskController::class, 'getByImpact'])->name('project-risks.by-impact');
+        Route::get('/probability/{probability}', [ProjectRiskController::class, 'getByProbability'])->name('project-risks.by-probability');
     });
 });

@@ -11,6 +11,19 @@ class InventoryDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->command->info('🚀 Seeding Inventory Management Module...');
+
+        // Skip existing seeders that might have duplicate data
+        $this->command->info('⚠️  Skipping BarcodeTypesSeeder and ItemTypesSeeder (already exist)');
+
+        $this->call([
+            UnitSeeder::class,
+            WarehouseSeeder::class,
+            ItemSeeder::class,
+            InventoryItemSeeder::class,
+            StockMovementSeeder::class,
+        ]);
+
+        $this->command->info('✅ Inventory Management Module seeded successfully!');
     }
 }

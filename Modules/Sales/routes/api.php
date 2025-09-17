@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Sales\IncomingOrderController;
-use App\Http\Controllers\Sales\OutgoingShipmentController;
-use App\Http\Controllers\Sales\ReturnInvoiceController;
-use App\Http\Controllers\Sales\ServiceController;
+use Modules\Sales\Http\Controllers\IncomingOrderController;
+use Modules\Sales\Http\Controllers\OutgoingShipmentController;
+use Modules\Sales\Http\Controllers\ReturnInvoiceController;
+use Modules\Sales\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 use Modules\Sales\Http\Controllers\InvoiceController;
 use Modules\Sales\Http\Controllers\OutgoingOfferController;
@@ -13,6 +13,12 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales')->group(function () {
     Route::prefix('outgoing-offers')->group(function () {
         Route::get('/', [OutgoingOfferController::class, 'index']);
         Route::post('/', [OutgoingOfferController::class, 'store']);
+        Route::get('/{id}', [OutgoingOfferController::class, 'show']);
+        Route::put('/{id}', [OutgoingOfferController::class, 'update']);
+        Route::delete('/{id}', [OutgoingOfferController::class, 'destroy']);
+        Route::patch('/{id}/approve', [OutgoingOfferController::class, 'approve']);
+        Route::patch('/{id}/send', [OutgoingOfferController::class, 'send']);
+        Route::patch('/{id}/cancel', [OutgoingOfferController::class, 'cancel']);
     });
     Route::prefix('outgoing-shipments')->group(function () {
         Route::get('/', [OutgoingShipmentController::class, 'index']);
