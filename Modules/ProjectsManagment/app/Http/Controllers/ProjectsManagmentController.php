@@ -720,8 +720,10 @@ class ProjectsManagmentController extends Controller
      */
     public function destroy($id): JsonResponse
     {
+       
         try {
-            $user = request()->user();
+            $user = Auth::user();
+
 
             // Delete project using service
             $this->projectService->deleteProject($id, $user);
@@ -744,7 +746,7 @@ class ProjectsManagmentController extends Controller
     public function restore($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
             $project = Project::withTrashed()->findOrFail($id);
 
             // Check if user has permission to restore this project
@@ -781,7 +783,7 @@ class ProjectsManagmentController extends Controller
     public function forceDelete($id): JsonResponse
     {
         try {
-            $user = request()->user();
+            $user = Auth::user();
             $project = Project::withTrashed()->findOrFail($id);
 
             // Check if user has permission to permanently delete this project
