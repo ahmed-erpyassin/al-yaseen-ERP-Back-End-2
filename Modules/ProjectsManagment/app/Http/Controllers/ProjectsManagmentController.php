@@ -238,11 +238,16 @@ class ProjectsManagmentController extends Controller
      */
     public function show($id): JsonResponse
     {
+     
         try {
-            $user = request()->user();
+            $user = Auth::user();
+
+          //  var_dump( $user);
 
             // Get project using service
             $project = $this->projectService->getProjectById($id, $user);
+         //   var_dump($project);
+      //   dd($project);
 
             return response()->json([
                 'success' => true,
