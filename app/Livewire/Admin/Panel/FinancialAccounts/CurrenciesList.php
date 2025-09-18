@@ -24,6 +24,9 @@ class CurrenciesList extends Component
     public $search = "";
     public $filters = [];
 
+    public $status = null;
+    public $decimal_places = null;
+
     public function updatedSelectAll($value)
     {
         if ($value) {
@@ -43,6 +46,8 @@ class CurrenciesList extends Component
     {
         $this->filters = [
             'search' => $this->search,
+            'status' => $this->status,
+            'decimal_places' => $this->decimal_places
         ];
 
         $service = $this->setService('CurrencyService');

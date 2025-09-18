@@ -113,7 +113,7 @@
                                 <span class="badge bg-danger">{{ __('Closed') }}</span>
                             @endif
                         </td>
-                        <td>{{ $year->company->name ?? $year->company_id }}</td>
+                        <td>{{ $year->company->title ?? $year->company_id }}</td>
                         <td>{{ $year->user->full_name ?? '-' }}</td>
                         <td>{{ $year->createdBy->full_name ?? '-' }}</td>
                         <td>

@@ -62,4 +62,10 @@ class UsersList extends Component
         session(['user_id' => $id]);
         // return redirect()->route('sales.orders.edit');
     }
+
+    public function manageUserRoles($id)
+    {
+        session(['user_id' => $id]);
+        return redirect()->route('admin.panel.users.manage-user-roles');
+    }
 }

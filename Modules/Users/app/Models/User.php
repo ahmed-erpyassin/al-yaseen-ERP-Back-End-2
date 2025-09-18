@@ -11,13 +11,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Companies\Models\Company;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
-
-    protected $guard_name = 'web';
 
     protected $fillable = [
         'first_name',
@@ -46,6 +45,20 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone_verified_at' => 'datetime',
         'otp_expires_at' => 'datetime',
     ];
+
+    // لتعيين دور لمستخدم API
+    public function assignRoleApi($roleName)
+    {
+        $role = Role::findByName($roleName, 'api'); // تحديد guard api
+        $this->assignRole($role);
+    }
+
+    // لتعيين دور لمستخدم Web
+    public function assignRoleWeb($roleName)
+    {
+        $role = Role::findByName($roleName, 'web'); // تحديد guard web
+        $this->assignRole($role);
+    }
 
     // Relationships
 
@@ -78,6 +91,8 @@ class User extends Authenticatable implements MustVerifyEmail
             'type',
             'email_verified_at',
             'phone_verified_at',
+            'created_by',
+            'updated_by',
             'created_at',
             'updated_at',
         ]);
@@ -132,4 +147,9 @@ class User extends Authenticatable implements MustVerifyEmail
         }
         return false;
     }
+
+    // public function getRoleAttribute()
+    // {
+    //     return $this->getRoleNames()->first();
+    // }
 }

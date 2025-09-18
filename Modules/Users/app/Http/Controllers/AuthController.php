@@ -41,6 +41,9 @@ class AuthController extends Controller
 
             $user->update(['created_by' => $user->id, 'updated_by' => $user->id]);
 
+            // ✅ إضافة الدور للعميل (مهم guard = api)
+            $user->assignRoleApi('customer');
+
             event(new Registered($user));
 
             // إرسال OTP للهاتف
