@@ -63,7 +63,7 @@ class Login extends Component
         } finally {
             $this->isLoading = false;
         }
-<<<<<<< HEAD
+
 
         if (!Hash::check($data['password'], $user->password)) {
             $this->alertMessage('كلمة المرور غير صحيحة', 'error', 'center');
@@ -78,7 +78,6 @@ class Login extends Component
         Auth::guard('web')->login($user, $this->remember);
         $this->alertMessage('تم تسجيل الدخول بنجاح', 'success', 'center');
         return redirect()->route('admin.panel.index', ['lang' => app()->getLocale()]);
-=======
->>>>>>> 56a415e00609a938cf99a948504f31b441f9b3ba
+
     }
 }

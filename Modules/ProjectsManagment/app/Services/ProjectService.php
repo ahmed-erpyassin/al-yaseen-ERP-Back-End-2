@@ -128,7 +128,9 @@ class ProjectService
      */
     public function deleteProject(int $id, $user): bool
     {
+
         return DB::transaction(function () use ($id, $user) {
+           
             $project = Project::findOrFail($id);
 
             // Set deleted_by before soft delete
