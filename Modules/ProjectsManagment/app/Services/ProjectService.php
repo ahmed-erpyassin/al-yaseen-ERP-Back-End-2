@@ -18,8 +18,7 @@ class ProjectService
     {
         $query = Project::with([
                 'customer', 'currency', 'manager', 'country', 'company', 'branch'
-            ])
-            ->forCompany($user->company_id);
+            ]);
 
         // Apply filters
         $this->applyFilters($query, $filters);
@@ -84,7 +83,6 @@ class ProjectService
                 'fiscalYear', 'costCenter', 'creator', 'updater', 'deleter',
                 'milestones', 'tasks', 'resources', 'documents', 'financials', 'risks'
             ])
-            ->forCompany($user->company_id)
             ->findOrFail($id);
     }
 
@@ -94,7 +92,7 @@ class ProjectService
     public function updateProject(int $id, array $data, $user): Project
     {
         return DB::transaction(function () use ($id, $data, $user) {
-            $project = Project::forCompany($user->company_id)->findOrFail($id);
+            $project = Project::findOrFail($id);
 
             // Set updated_by
             $data['updated_by'] = $user->id;
@@ -131,7 +129,7 @@ class ProjectService
     public function deleteProject(int $id, $user): bool
     {
         return DB::transaction(function () use ($id, $user) {
-            $project = Project::forCompany($user->company_id)->findOrFail($id);
+            $project = Project::findOrFail($id);
 
             // Set deleted_by before soft delete
             $project->update(['deleted_by' => $user->id]);
@@ -147,7 +145,6 @@ class ProjectService
     {
         return DB::transaction(function () use ($id, $user) {
             $project = Project::withTrashed()
-                ->forCompany($user->company_id)
                 ->findOrFail($id);
 
             $result = $project->restore();
@@ -166,7 +163,6 @@ class ProjectService
     public function forceDeleteProject(int $id, $user): bool
     {
         $project = Project::withTrashed()
-            ->forCompany($user->company_id)
             ->findOrFail($id);
 
         return $project->forceDelete();
@@ -179,7 +175,6 @@ class ProjectService
     {
         return Project::onlyTrashed()
             ->with(['customer', 'currency', 'manager', 'country', 'company', 'branch', 'deleter'])
-            ->forCompany($user->company_id)
             ->orderBy('deleted_at', 'desc')
             ->paginate($perPage);
     }
@@ -191,8 +186,7 @@ class ProjectService
     {
         $query = Project::with([
                 'customer', 'currency', 'manager', 'country', 'company', 'branch'
-            ])
-            ->forCompany($user->company_id);
+            ]);
 
         // Apply search filters
         $this->applySearchFilters($query, $searchParams);
@@ -229,8 +223,7 @@ class ProjectService
     {
         $query = Project::with([
                 'customer', 'currency', 'manager', 'country', 'company', 'branch'
-            ])
-            ->forCompany($user->company_id);
+            ]);
 
         if ($field === 'start_date' || $field === 'end_date' || $field === 'created_at') {
             $query->whereDate($field, $value);
@@ -246,8 +239,7 @@ class ProjectService
      */
     public function getFieldValues($user, string $field): array
     {
-        return Project::forCompany($user->company_id)
-            ->whereNotNull($field)
+        return Project::whereNotNull($field)
             ->where($field, '!=', '')
             ->distinct()
             ->pluck($field)
