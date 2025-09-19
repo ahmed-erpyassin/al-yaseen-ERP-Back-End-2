@@ -354,6 +354,7 @@ class ProjectsManagmentController extends Controller
         }
     }
     /**
+
      * Get unique values for a specific field for dropdown/selection
      */
     public function getFieldValues(Request $request): JsonResponse
@@ -420,6 +421,8 @@ class ProjectsManagmentController extends Controller
         try {
             $customer = Customer::with(['currency', 'country'])->findOrFail($customerId);
 
+        
+
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -435,7 +438,8 @@ class ProjectsManagmentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Customer not found'
+                'message' => 'Customer not found',
+                'error'=> $e->getMessage()
             ], 404);
         }
     }
@@ -443,13 +447,13 @@ class ProjectsManagmentController extends Controller
     /**
      * Get all customers for dropdown
      */
-    public function getCustomers(Request $request): JsonResponse
+   public function getCustomers(Request $request): JsonResponse
     {
         try {
-            $companyId = Auth::user()->company_id;
+          //  $companyId = Auth::user()->company_id;
 
-            $customers = Customer::where('company_id', $companyId)
-                ->where('status', 'active')
+            $customers = Customer::where('status', 'active')
+             
                 ->select('id', 'first_name', 'second_name', 'email', 'phone')
                 ->orderBy('first_name')
                 ->get()
@@ -475,7 +479,7 @@ class ProjectsManagmentController extends Controller
         }
     }
 
-    /**
+   /**
      * Get all currencies for dropdown
      */
 
