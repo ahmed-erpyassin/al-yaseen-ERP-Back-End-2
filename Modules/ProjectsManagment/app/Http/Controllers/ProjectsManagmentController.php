@@ -333,8 +333,7 @@ class ProjectsManagmentController extends Controller
             ], 500);
         }
     }
-
-    /**
+/**
      * Get unique values for a specific field for dropdown/selection
      */
     public function getFieldValues(Request $request): JsonResponse
@@ -368,8 +367,7 @@ class ProjectsManagmentController extends Controller
             }
 
             // Get unique values for the field
-            $values = Project::forCompany($companyId)
-                ->whereNotNull($field)
+            $values = Project::whereNotNull($field)
                 ->where($field, '!=', '')
                 ->distinct()
                 ->pluck($field)
@@ -394,6 +392,7 @@ class ProjectsManagmentController extends Controller
         }
     }
 
+
     /**
      * Get customer data when customer is selected
      */
@@ -401,6 +400,8 @@ class ProjectsManagmentController extends Controller
     {
         try {
             $customer = Customer::with(['currency', 'country'])->findOrFail($customerId);
+
+        
 
             return response()->json([
                 'success' => true,
@@ -417,7 +418,8 @@ class ProjectsManagmentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Customer not found'
+                'message' => 'Customer not found',
+                'error'=> $e->getMessage()
             ], 404);
         }
     }
@@ -425,13 +427,13 @@ class ProjectsManagmentController extends Controller
     /**
      * Get all customers for dropdown
      */
-    public function getCustomers(Request $request): JsonResponse
+   public function getCustomers(Request $request): JsonResponse
     {
         try {
-            $companyId = Auth::user()->company_id;
+          //  $companyId = Auth::user()->company_id;
 
-            $customers = Customer::where('company_id', $companyId)
-                ->where('status', 'active')
+            $customers = Customer::where('status', 'active')
+             
                 ->select('id', 'first_name', 'second_name', 'email', 'phone')
                 ->orderBy('first_name')
                 ->get()
@@ -457,16 +459,21 @@ class ProjectsManagmentController extends Controller
         }
     }
 
-    /**
+   /**
      * Get all currencies for dropdown
      */
+
     public function getCurrencies(Request $request): JsonResponse
     {
         try {
-            $companyId = Auth::user()->company_id;
+            // $user = Auth::user();
+            // $companyId = Auth::user()->company_id;
 
-            $currencies = Currency::where('company_id', $companyId)
-                ->select('id', 'code', 'name', 'symbol')
+            //         $currencies = Currency::where('company_id', $companyId)
+            //             ->select('id', 'code', 'name', 'symbol')
+            //             ->orderBy('name')
+            //             ->get();
+            $currencies = Currency::select('id', 'code', 'name', 'symbol')
                 ->orderBy('name')
                 ->get();
 
@@ -749,13 +756,14 @@ class ProjectsManagmentController extends Controller
             $user = Auth::user();
             $project = Project::withTrashed()->findOrFail($id);
 
-            // Check if user has permission to restore this project
-            if ($project->company_id !== $user->company_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized to restore this project'
-                ], 403);
-            }
+
+            // // Check if user has permission to restore this project
+            // if ($project->company_id !== $user->company_id) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Unauthorized to restore this project'
+            //     ], 403);
+            // }
 
             // Restore the project
             $project->restore();
@@ -786,13 +794,13 @@ class ProjectsManagmentController extends Controller
             $user = Auth::user();
             $project = Project::withTrashed()->findOrFail($id);
 
-            // Check if user has permission to permanently delete this project
-            if ($project->company_id !== $user->company_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized to permanently delete this project'
-                ], 403);
-            }
+            // // Check if user has permission to permanently delete this project
+            // if ($project->company_id !== $user->company_id) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Unauthorized to permanently delete this project'
+            //     ], 403);
+            // }
 
             // Additional authorization check - only admin or project creator can force delete
             if ($user->role !== 'admin' && $project->user_id !== $user->id) {
@@ -824,13 +832,13 @@ class ProjectsManagmentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            //$companyId = $user->company_id;
 
             $perPage = $request->get('per_page', 15);
 
             $trashedProjects = Project::onlyTrashed()
                 ->with(['customer', 'currency', 'manager', 'country', 'company', 'deleter'])
-                ->forCompany($companyId)
+                //->forCompany($companyId)
                 ->orderBy('deleted_at', 'desc')
                 ->paginate($perPage);
 
