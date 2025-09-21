@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Modules\ProjectsManagment\Models\ProjectDocument;
 use Modules\ProjectsManagment\Models\Project;
 use Modules\ProjectsManagment\Http\Requests\StoreDocumentRequest;
-use Modules\ProjectsManagment\Http\Requests\UpdateDocumentRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
@@ -157,7 +156,7 @@ class DocumentController extends Controller
     /**
      * Update the specified document.
      */
-    public function update(UpdateDocumentRequest $request, $id): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         try {
             $user = Auth::user();
@@ -167,12 +166,25 @@ class DocumentController extends Controller
             // $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
 
             $document = ProjectDocument::findOrFail($id);
-
             // Store original data for audit trail
             $originalData = $document->toArray();
-            $validatedData = $request->validated();
 
-            // Auto-populate project data if project_id is provided
+            // Handle JSON data properly - merge JSON data with regular request data
+            $jsonData = $request->json()->all();
+            $request->merge($jsonData);
+
+            // Validate the merged request data
+            $validatedData = $request->validate([
+                'project_id' => 'sometimes|exists:projects,id',
+                'title' => 'sometimes|string|max:255',
+                'description' => 'nullable|string|max:2000',
+                'document_category' => 'nullable|in:contract,specification,drawing,report,invoice,correspondence,other',
+                'status' => 'nullable|in:active,archived,deleted',
+                'version' => 'nullable|string|max:20',
+                'file' => 'nullable|file|max:20480|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,jpg,jpeg,png,gif,zip,rar',
+            ]);
+
+            // Validate project_id exists if provided (but don't auto-populate project data)
             if (isset($validatedData['project_id']) && $validatedData['project_id'] !== $document->project_id) {
                 $project = Project::where('id', $validatedData['project_id'])
                     // ->where('company_id', $companyId)
@@ -185,8 +197,8 @@ class DocumentController extends Controller
                     ], 400);
                 }
 
-                $validatedData['project_number'] = $project->project_number;
-                $validatedData['project_name'] = $project->name;
+                // Don't auto-populate project_number and project_name
+                // Only validate that the project exists
             }
 
             // Handle file upload if new file is provided
@@ -299,10 +311,10 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
-            $projects = Project::where('company_id', $companyId)
-                ->where('status', '!=', 'cancelled')
+            $projects = Project::where('status', '!=', 'cancelled')
+              
                 ->select('id', 'code', 'project_number', 'name')
                 ->orderBy('name')
                 ->get()
@@ -381,11 +393,11 @@ class DocumentController extends Controller
             ]);
 
             $user = Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             // Verify project belongs to user's company
             $project = Project::where('id', $request->project_id)
-                ->where('company_id', $companyId)
+               // ->where('company_id', $companyId)
                 ->first();
 
             if (!$project) {
@@ -424,12 +436,14 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             // Verify project belongs to user's company
             $project = Project::where('id', $projectId)
-                ->where('company_id', $companyId)
+              //  ->where('company_id', $companyId)
                 ->first();
+
+             //  var_dump($project);
 
             if (!$project) {
                 return response()->json([
@@ -586,10 +600,13 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
-            $validCategories = ['contract', 'specification', 'drawing', 'report', 'invoice', 'correspondence', 'other'];
+            $validCategories = [
+                'contract', 'specification', 'drawing', 'report', 'invoice', 'correspondence', 'other',
+                'requirements', 'technical', 'documentation', 'design', 'testing', 'deployment'
+            ];
 
             if (!in_array($category, $validCategories)) {
                 return response()->json([
@@ -599,7 +616,7 @@ class DocumentController extends Controller
             }
 
             $documents = ProjectDocument::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId)
+              //  ->forCompany($companyId)
                 ->byCategory($category)
                 ->active()
                 ->orderBy('created_at', 'desc')
@@ -625,12 +642,12 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             // Build query
-            $query = ProjectDocument::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId);
+            $query = ProjectDocument::with(['project', 'creator', 'updater']);
+               // ->forCompany($companyId);
 
             // Apply advanced search filters
             $this->applySearchFilters($query, $request);
@@ -660,7 +677,7 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+         //   $companyId = $user->company_id;
 
             $field = $request->get('field');
             $value = $request->get('value');
@@ -686,8 +703,8 @@ class DocumentController extends Controller
                 ], 400);
             }
 
-            $query = ProjectDocument::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId);
+            $query = ProjectDocument::with(['project', 'creator', 'updater']);
+           //     ->forCompany($companyId);
 
             // Apply field filter
             if (in_array($field, ['document_number', 'project_id'])) {
@@ -720,7 +737,7 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             $field = $request->get('field');
 
@@ -744,8 +761,7 @@ class DocumentController extends Controller
                 ], 400);
             }
 
-            $values = ProjectDocument::forCompany($companyId)
-                ->whereNotNull($field)
+            $values = ProjectDocument::whereNotNull($field)
                 ->where($field, '!=', '')
                 ->distinct()
                 ->pluck($field)
@@ -801,14 +817,14 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            //$companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
 
-            $query = ProjectDocument::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId);
+            $query = ProjectDocument::with(['project', 'creator', 'updater']);
+                //->forCompany($companyId);
 
             // Apply sorting
             $this->applySorting($query, $request);
@@ -835,10 +851,10 @@ class DocumentController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             $document = ProjectDocument::withTrashed()
-                ->forCompany($companyId)
+                //->forCompany($companyId)
                 ->findOrFail($id);
 
             if (!$document->trashed()) {
@@ -870,10 +886,10 @@ class DocumentController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             $document = ProjectDocument::withTrashed()
-                ->forCompany($companyId)
+             //   ->forCompany($companyId)
                 ->findOrFail($id);
 
             // Delete file if exists
@@ -902,12 +918,12 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             $documents = ProjectDocument::onlyTrashed()
                 ->with(['project', 'creator', 'updater', 'deleter'])
-                ->forCompany($companyId)
+               // ->forCompany($companyId)
                 ->orderBy('deleted_at', 'desc')
                 ->paginate($perPage);
 
