@@ -97,10 +97,10 @@ class ProjectRiskController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
 
             $projectRisk = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId)
+               // ->forCompany($companyId)
                 ->findOrFail($id);
 
             return response()->json([
@@ -125,11 +125,11 @@ class ProjectRiskController extends Controller
             DB::beginTransaction();
 
             $user = Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
 
             // Find the project risk with relationships
             $projectRisk = ProjectRisk::with(['project', 'assignedEmployee', 'creator'])
-                ->forCompany($companyId)
+                //->forCompany($companyId)
                 ->findOrFail($id);
 
             // Check if the record is soft deleted
