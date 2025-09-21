@@ -74,13 +74,16 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             // Build query
-            $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
+            //     ->forCompany($companyId);
 
+            $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater']);
+                
+                
             // Apply filters
             if ($request->has('project_id') && !empty($request->project_id)) {
                 $query->where('project_id', $request->project_id);
@@ -161,11 +164,15 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
+
+            // $resource = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
+            //     ->forCompany($companyId)
+            //     ->findOrFail($id);
+
 
             $resource = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
-                ->forCompany($companyId)
-                ->findOrFail($id);
+            ->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -187,9 +194,10 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $resource = ProjectResource::forCompany($companyId)->findOrFail($id);
+            // $resource = ProjectResource::forCompany($companyId)->findOrFail($id);
+            $resource = ProjectResource::findOrFail($id);
 
             // Store original data for audit trail
             $originalData = $resource->toArray();
@@ -238,9 +246,11 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $resource = ProjectResource::forCompany($companyId)->findOrFail($id);
+            // $resource = ProjectResource::forCompany($companyId)->findOrFail($id);
+            $resource = ProjectResource::findOrFail($id);
+
 
             // Set deleted_by before soft delete
             $resource->update(['deleted_by' => $user->id]);
@@ -265,10 +275,9 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $suppliers = Supplier::where('company_id', $companyId)
-                ->where('active', true)
+            $suppliers = Supplier::where('active', true)
                 ->select('id', 'supplier_code', 'supplier_name_ar', 'supplier_name_en', 'contact_person', 'phone', 'email')
                 ->orderBy('supplier_name_ar')
                 ->get()
@@ -308,10 +317,9 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $projects = Project::where('company_id', $companyId)
-                ->where('status', '!=', 'cancelled')
+            $projects = Project::where('status', '!=', 'cancelled')
                 ->select('id', 'code', 'project_number', 'name', 'project_value', 'currency_price')
                 ->orderBy('name')
                 ->get()
@@ -390,11 +398,14 @@ class ResourceController extends Controller
             ]);
 
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
+
+            // $project = Project::where('id', $request->project_id)
+            //     ->where('company_id', $companyId)
+            //     ->first();
 
             $project = Project::where('id', $request->project_id)
-                ->where('company_id', $companyId)
-                ->first();
+                ->first();                
 
             if (!$project) {
                 return response()->json([
@@ -442,12 +453,16 @@ class ResourceController extends Controller
             ]);
 
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
+
+            // $project = Project::where('id', $request->project_id)
+            //     ->where('company_id', $companyId)
+            //     ->first();
 
             $project = Project::where('id', $request->project_id)
-                ->where('company_id', $companyId)
                 ->first();
-
+                
+                
             if (!$project) {
                 return response()->json([
                     'success' => false,
@@ -489,11 +504,14 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             // Verify project belongs to user's company
+            // $project = Project::where('id', $projectId)
+            //     ->where('company_id', $companyId)
+            //     ->first();
+
             $project = Project::where('id', $projectId)
-                ->where('company_id', $companyId)
                 ->first();
 
             if (!$project) {
@@ -528,12 +546,16 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             // Verify supplier belongs to user's company
+            // $supplier = Supplier::where('id', $supplierId)
+            //     ->where('company_id', $companyId)
+            //     ->first();
+
             $supplier = Supplier::where('id', $supplierId)
-                ->where('company_id', $companyId)
                 ->first();
+
 
             if (!$supplier) {
                 return response()->json([
@@ -567,12 +589,14 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             // Build query
-            $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
+            $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater']);                
 
             // Apply advanced search filters
             $this->applySearchFilters($query, $request);
@@ -602,7 +626,7 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $field = $request->get('field');
             $value = $request->get('value');
@@ -628,8 +652,10 @@ class ResourceController extends Controller
                 ], 400);
             }
 
-            $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
+            $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater']);
 
             // Apply field filter
             if (in_array($field, ['allocation_percentage', 'allocation_value'])) {
@@ -660,7 +686,7 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $field = $request->get('field');
 
@@ -683,8 +709,7 @@ class ResourceController extends Controller
                 ], 400);
             }
 
-            $values = ProjectResource::forCompany($companyId)
-                ->whereNotNull($field)
+            $values = ProjectResource::whereNotNull($field)
                 ->where($field, '!=', '')
                 ->distinct()
                 ->pluck($field)
@@ -736,14 +761,16 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
 
-            $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
+            $query = ProjectResource::with(['project', 'supplier', 'creator', 'updater']);
 
             // Apply sorting
             $this->applySorting($query, $request);
@@ -861,11 +888,14 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $resource = ProjectResource::withTrashed()
-                ->where('company_id', $companyId)
                 ->findOrFail($id);
+
+            // $resource = ProjectResource::withTrashed()
+            //     ->where('company_id', $companyId)
+            //     ->findOrFail($id);                
 
             if (!$resource->trashed()) {
                 return response()->json([
@@ -896,12 +926,16 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
+
+            // $resource = ProjectResource::withTrashed()
+            //     ->where('company_id', $companyId)
+            //     ->findOrFail($id);
 
             $resource = ProjectResource::withTrashed()
-                ->where('company_id', $companyId)
                 ->findOrFail($id);
-
+                
+                
             $resource->forceDelete();
 
             return response()->json([
@@ -923,12 +957,12 @@ class ResourceController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             $resources = ProjectResource::onlyTrashed()
                 ->with(['project', 'supplier', 'creator', 'updater', 'deleter'])
-                ->where('company_id', $companyId)
+                // ->where('company_id', $companyId)
                 ->orderBy('deleted_at', 'desc')
                 ->paginate($perPage);
 

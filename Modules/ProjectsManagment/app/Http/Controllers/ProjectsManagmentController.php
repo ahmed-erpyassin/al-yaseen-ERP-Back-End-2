@@ -421,8 +421,6 @@ class ProjectsManagmentController extends Controller
         try {
             $customer = Customer::with(['currency', 'country'])->findOrFail($customerId);
 
-        
-
             return response()->json([
                 'success' => true,
                 'data' => [

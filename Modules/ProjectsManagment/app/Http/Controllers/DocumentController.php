@@ -26,12 +26,15 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             // Build query
-            $query = ProjectDocument::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId);
+            $query = ProjectDocument::with(['project', 'creator', 'updater']);
+
+            // $query = ProjectDocument::with(['project', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
 
             // Apply filters
             if ($request->has('project_id') && !empty($request->project_id)) {
@@ -126,11 +129,15 @@ class DocumentController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $document = ProjectDocument::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId)
                 ->findOrFail($id);
+
+            // $document = ProjectDocument::with(['project', 'creator', 'updater'])
+            //     ->forCompany($companyId)
+            //     ->findOrFail($id);
+
 
             return response()->json([
                 'success' => true,
@@ -145,6 +152,7 @@ class DocumentController extends Controller
         }
     }
 
+
     /**
      * Update the specified document.
      */
@@ -152,10 +160,12 @@ class DocumentController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             // Find document with company verification
-            $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
+            // $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
+
+            $document = ProjectDocument::findOrFail($id);
 
             // Store original data for audit trail
             $originalData = $document->toArray();
@@ -164,7 +174,7 @@ class DocumentController extends Controller
             // Auto-populate project data if project_id is provided
             if (isset($validatedData['project_id']) && $validatedData['project_id'] !== $document->project_id) {
                 $project = Project::where('id', $validatedData['project_id'])
-                    ->where('company_id', $companyId)
+                    // ->where('company_id', $companyId)
                     ->first();
 
                 if (!$project) {
@@ -215,13 +225,13 @@ class DocumentController extends Controller
             $document->load(['project', 'creator', 'updater']);
 
             // Log the update for audit trail
-            \Log::info('Document updated', [
-                'document_id' => $document->id,
-                'updated_by' => $user->id,
-                'original_data' => $originalData,
-                'new_data' => $document->fresh()->toArray(),
-                'company_id' => $companyId
-            ]);
+            // \Log::info('Document updated', [
+            //     'document_id' => $document->id,
+            //     'updated_by' => $user->id,
+            //     'original_data' => $originalData,
+            //     'new_data' => $document->fresh()->toArray(),
+            //     // 'company_id' => $companyId
+            // ]);
 
             return response()->json([
                 'success' => true,
@@ -259,9 +269,11 @@ class DocumentController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
+            // $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
+            $document = ProjectDocument::findOrFail($id);
+
 
             // Set deleted_by before soft delete
             $document->update(['deleted_by' => $user->id]);
@@ -451,9 +463,10 @@ class DocumentController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
+            $document = ProjectDocument::findOrFail($id);
+            // $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
 
             if (!$document->file_path || !Storage::disk('public')->exists($document->file_path)) {
                 return response()->json([

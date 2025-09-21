@@ -21,17 +21,46 @@ class ProjectSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get required data
+        // Clear existing projects
+        $this->command->info('🧹 Clearing existing projects...');
+        Project::query()->delete();
+
+        // Get basic required data
         $user = User::first();
         $company = Company::first();
-        $currency = Currency::first();
-        $country = Country::first();
-        $customer = Customer::first();
 
         if (!$user || !$company) {
-            $this->command->warn('⚠️  Users or Companies not found. Please seed Users and Companies modules first.');
+            $this->command->error('❌ Users or Companies not found. Please seed these first.');
             return;
         }
+
+        // Get or create currency
+        $currency = Currency::first();
+        if (!$currency) {
+            $currency = Currency::create([
+                'name' => 'US Dollar',
+                'code' => 'USD',
+                'symbol' => '$',
+                'exchange_rate' => 1.00,
+                'is_base' => true,
+                'status' => 'active',
+            ]);
+            $this->command->info('💰 Created default USD currency');
+        }
+
+        // Get customers
+        $customers = Customer::take(5)->get();
+        if ($customers->isEmpty()) {
+            $this->command->error('❌ No customers found. Please seed Customers module first.');
+            return;
+        }
+
+        // Get country
+        $country = Country::first();
+
+        $this->command->info("✅ Ready to seed projects:");
+        $this->command->info("   - Currency ID: {$currency->id} ({$currency->code})");
+        $this->command->info("   - Customers: {$customers->count()} available");
 
         // Create required Branch if not exists
         $branch = Branch::firstOrCreate([
@@ -40,7 +69,7 @@ class ProjectSeeder extends Seeder
         ], [
             'user_id' => $user->id,
             'company_id' => $company->id,
-            'currency_id' => $currency?->id,
+            'currency_id' => $currency->id,
             'manager_id' => $user->id,
             'financial_year_id' => null,
             'country_id' => $country?->id,
@@ -91,7 +120,8 @@ class ProjectSeeder extends Seeder
             'updated_by' => $user->id,
         ]);
 
-        $projects = [
+        // Create projects with proper customer_id and currency_id
+        $projectsData = [
             [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
@@ -99,8 +129,8 @@ class ProjectSeeder extends Seeder
                 'fiscal_year_id' => $fiscalYear->id,
                 'cost_center_id' => $costCenter->id,
                 'manager_id' => $user->id,
-                'customer_id' => $customer?->id,
-                'currency_id' => $currency?->id,
+                'customer_id' => $customers->get(0)->id,
+                'currency_id' => $currency->id,
                 'country_id' => $country?->id,
                 'code' => 'PRJ-001',
                 'project_number' => 'P2024-001',
@@ -113,9 +143,9 @@ class ProjectSeeder extends Seeder
                 'project_value' => 180000.00,
                 'actual_cost' => 45000.00,
                 'progress' => 25.50,
-                'customer_name' => $customer?->name ?? 'Al-Yaseen Company',
-                'customer_email' => $customer?->email ?? 'info@al-yaseen.com',
-                'customer_phone' => $customer?->phone ?? '+966501234567',
+                'customer_name' => $customers->get(0)->company_name,
+                'customer_email' => $customers->get(0)->email,
+                'customer_phone' => $customers->get(0)->phone,
                 'licensed_operator' => 'Tech Solutions Ltd',
                 'currency_price' => 1.00,
                 'include_vat' => true,
@@ -133,8 +163,8 @@ class ProjectSeeder extends Seeder
                 'fiscal_year_id' => $fiscalYear->id,
                 'cost_center_id' => $costCenter->id,
                 'manager_id' => $user->id,
-                'customer_id' => $customer?->id,
-                'currency_id' => $currency?->id,
+                'customer_id' => $customers->get(1)->id,
+                'currency_id' => $currency->id,
                 'country_id' => $country?->id,
                 'code' => 'PRJ-002',
                 'project_number' => 'P2024-002',
@@ -147,9 +177,9 @@ class ProjectSeeder extends Seeder
                 'project_value' => 90000.00,
                 'actual_cost' => 18000.00,
                 'progress' => 15.75,
-                'customer_name' => $customer?->name ?? 'Mobile Tech Co',
-                'customer_email' => $customer?->email ?? 'contact@mobiletech.com',
-                'customer_phone' => $customer?->phone ?? '+966502345678',
+                'customer_name' => $customers->get(1)->company_name,
+                'customer_email' => $customers->get(1)->email,
+                'customer_phone' => $customers->get(1)->phone,
                 'licensed_operator' => 'Mobile Solutions Inc',
                 'currency_price' => 1.00,
                 'include_vat' => true,
@@ -167,8 +197,8 @@ class ProjectSeeder extends Seeder
                 'fiscal_year_id' => $fiscalYear->id,
                 'cost_center_id' => $costCenter->id,
                 'manager_id' => $user->id,
-                'customer_id' => $customer?->id,
-                'currency_id' => $currency?->id,
+                'customer_id' => $customers->get(2)->id,
+                'currency_id' => $currency->id,
                 'country_id' => $country?->id,
                 'code' => 'PRJ-003',
                 'project_number' => 'P2024-003',
@@ -181,9 +211,9 @@ class ProjectSeeder extends Seeder
                 'project_value' => 42000.00,
                 'actual_cost' => 0.00,
                 'progress' => 0.00,
-                'customer_name' => $customer?->name ?? 'Data Corp',
-                'customer_email' => $customer?->email ?? 'admin@datacorp.com',
-                'customer_phone' => $customer?->phone ?? '+966503456789',
+                'customer_name' => $customers->get(2)->company_name,
+                'customer_email' => $customers->get(2)->email,
+                'customer_phone' => $customers->get(2)->phone,
                 'licensed_operator' => 'Data Solutions LLC',
                 'currency_price' => 1.00,
                 'include_vat' => false,
@@ -201,8 +231,8 @@ class ProjectSeeder extends Seeder
                 'fiscal_year_id' => $fiscalYear->id,
                 'cost_center_id' => $costCenter->id,
                 'manager_id' => $user->id,
-                'customer_id' => $customer?->id,
-                'currency_id' => $currency?->id,
+                'customer_id' => $customers->get(3)->id,
+                'currency_id' => $currency->id,
                 'country_id' => $country?->id,
                 'code' => 'PRJ-004',
                 'project_number' => 'P2024-004',
@@ -215,9 +245,9 @@ class ProjectSeeder extends Seeder
                 'project_value' => 72000.00,
                 'actual_cost' => 24000.00,
                 'progress' => 40.00,
-                'customer_name' => $customer?->name ?? 'Integration Systems',
-                'customer_email' => $customer?->email ?? 'support@integration.com',
-                'customer_phone' => $customer?->phone ?? '+966504567890',
+                'customer_name' => $customers->get(3)->company_name,
+                'customer_email' => $customers->get(3)->email,
+                'customer_phone' => $customers->get(3)->phone,
                 'licensed_operator' => 'Integration Partners',
                 'currency_price' => 1.00,
                 'include_vat' => true,
@@ -235,8 +265,8 @@ class ProjectSeeder extends Seeder
                 'fiscal_year_id' => $fiscalYear->id,
                 'cost_center_id' => $costCenter->id,
                 'manager_id' => $user->id,
-                'customer_id' => $customer?->id,
-                'currency_id' => $currency?->id,
+                'customer_id' => $customers->get(4)->id,
+                'currency_id' => $currency->id,
                 'country_id' => $country?->id,
                 'code' => 'PRJ-005',
                 'project_number' => 'P2024-005',
@@ -249,9 +279,9 @@ class ProjectSeeder extends Seeder
                 'project_value' => 30000.00,
                 'actual_cost' => 0.00,
                 'progress' => 0.00,
-                'customer_name' => $customer?->name ?? 'Training Solutions',
-                'customer_email' => $customer?->email ?? 'training@solutions.com',
-                'customer_phone' => $customer?->phone ?? '+966505678901',
+                'customer_name' => $customers->get(4)->company_name,
+                'customer_email' => $customers->get(4)->email,
+                'customer_phone' => $customers->get(4)->phone,
                 'licensed_operator' => 'Education Partners',
                 'currency_price' => 1.00,
                 'include_vat' => false,
@@ -264,10 +294,12 @@ class ProjectSeeder extends Seeder
             ],
         ];
 
-        foreach ($projects as $projectData) {
-            Project::create($projectData);
+        // Create each project
+        foreach ($projectsData as $projectData) {
+            $project = Project::create($projectData);
+            $this->command->info("   ✓ Created project: {$project->name} (Customer: {$project->customer_name}, Currency ID: {$project->currency_id})");
         }
 
-        $this->command->info('✅ Projects seeded successfully!');
+        $this->command->info('✅ All 5 projects seeded successfully with customer_id and currency_id!');
     }
 }
