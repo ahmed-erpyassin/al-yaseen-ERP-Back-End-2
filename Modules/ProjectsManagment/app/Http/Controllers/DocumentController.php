@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Modules\ProjectsManagment\Models\ProjectDocument;
 use Modules\ProjectsManagment\Models\Project;
 use Modules\ProjectsManagment\Http\Requests\StoreDocumentRequest;
-use Modules\ProjectsManagment\Http\Requests\UpdateDocumentRequest;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -156,7 +155,7 @@ class DocumentController extends Controller
     /**
      * Update the specified document.
      */
-    public function update(UpdateDocumentRequest $request, $id): JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         try {
             $user = Auth::user();
@@ -166,12 +165,25 @@ class DocumentController extends Controller
             // $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
 
             $document = ProjectDocument::findOrFail($id);
-
             // Store original data for audit trail
             $originalData = $document->toArray();
-            $validatedData = $request->validated();
 
-            // Auto-populate project data if project_id is provided
+            // Handle JSON data properly - merge JSON data with regular request data
+            $jsonData = $request->json()->all();
+            $request->merge($jsonData);
+
+            // Validate the merged request data
+            $validatedData = $request->validate([
+                'project_id' => 'sometimes|exists:projects,id',
+                'title' => 'sometimes|string|max:255',
+                'description' => 'nullable|string|max:2000',
+                'document_category' => 'nullable|in:contract,specification,drawing,report,invoice,correspondence,other',
+                'status' => 'nullable|in:active,archived,deleted',
+                'version' => 'nullable|string|max:20',
+                'file' => 'nullable|file|max:20480|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,jpg,jpeg,png,gif,zip,rar',
+            ]);
+
+            // Validate project_id exists if provided (but don't auto-populate project data)
             if (isset($validatedData['project_id']) && $validatedData['project_id'] !== $document->project_id) {
                 $project = Project::where('id', $validatedData['project_id'])
                     // ->where('company_id', $companyId)
@@ -184,8 +196,8 @@ class DocumentController extends Controller
                     ], 400);
                 }
 
-                $validatedData['project_number'] = $project->project_number;
-                $validatedData['project_name'] = $project->name;
+                // Don't auto-populate project_number and project_name
+                // Only validate that the project exists
             }
 
             // Handle file upload if new file is provided
