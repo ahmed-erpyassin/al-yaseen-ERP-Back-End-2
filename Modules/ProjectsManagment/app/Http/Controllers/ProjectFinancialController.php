@@ -27,12 +27,14 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             // Build query
-            $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
+            $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater']);                
 
             // Apply filters
             if ($request->has('project_id') && !empty($request->project_id)) {
@@ -114,11 +116,15 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
+
+            // $projectFinancial = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
+            //     ->forCompany($companyId)
+            //     ->findOrFail($id);
 
             $projectFinancial = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
-                ->forCompany($companyId)
                 ->findOrFail($id);
+
 
             return response()->json([
                 'success' => true,
@@ -140,9 +146,11 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $projectFinancial = ProjectFinancial::forCompany($companyId)->findOrFail($id);
+            // $projectFinancial = ProjectFinancial::forCompany($companyId)->findOrFail($id);
+
+            $projectFinancial = ProjectFinancial::findOrFail($id);
 
             // Store original data for audit trail
             $originalData = $projectFinancial->toArray();
@@ -176,9 +184,11 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $projectFinancial = ProjectFinancial::forCompany($companyId)->findOrFail($id);
+            // $projectFinancial = ProjectFinancial::forCompany($companyId)->findOrFail($id);
+
+            $projectFinancial = ProjectFinancial::findOrFail($id);
 
             // Set deleted_by before soft delete
             $projectFinancial->update(['deleted_by' => $user->id]);
@@ -203,12 +213,14 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             // Build query
-            $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
+            $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater']);
 
             // Apply advanced search filters
             $this->applySearchFilters($query, $request);
@@ -238,7 +250,7 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $field = $request->get('field');
             $value = $request->get('value');
             $perPage = $request->get('per_page', 15);
@@ -262,8 +274,10 @@ class ProjectFinancialController extends Controller
                 ], 400);
             }
 
-            $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
+            $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater']);            
 
             if ($field === 'date') {
                 $query->whereDate($field, $value);
@@ -293,7 +307,7 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $field = $request->get('field');
 
             if (!$field) {
@@ -314,8 +328,7 @@ class ProjectFinancialController extends Controller
                 ], 400);
             }
 
-            $values = ProjectFinancial::forCompany($companyId)
-                ->whereNotNull($field)
+            $values = ProjectFinancial::whereNotNull($field)
                 ->where($field, '!=', '')
                 ->distinct()
                 ->pluck($field)
@@ -375,11 +388,13 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
-            $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
+            $query = ProjectFinancial::with(['project', 'currency', 'creator', 'updater']);
 
             // Apply sorting
             $this->applySorting($query, $request);
@@ -406,11 +421,15 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
+
+            // $projectFinancial = ProjectFinancial::withTrashed()
+            //     ->forCompany($companyId)
+            //     ->findOrFail($id);
 
             $projectFinancial = ProjectFinancial::withTrashed()
-                ->forCompany($companyId)
                 ->findOrFail($id);
+
 
             $projectFinancial->restore();
             $projectFinancial->update(['deleted_by' => null]);
@@ -434,10 +453,13 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
+
+            // $projectFinancial = ProjectFinancial::withTrashed()
+            //     ->forCompany($companyId)
+            //     ->findOrFail($id);
 
             $projectFinancial = ProjectFinancial::withTrashed()
-                ->forCompany($companyId)
                 ->findOrFail($id);
 
             $projectFinancial->forceDelete();
@@ -461,12 +483,12 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             $trashedProjectFinancials = ProjectFinancial::onlyTrashed()
                 ->with(['project', 'currency', 'creator', 'updater', 'deleter'])
-                ->forCompany($companyId)
+                // ->forCompany($companyId)
                 ->orderBy('deleted_at', 'desc')
                 ->paginate($perPage);
 
@@ -490,10 +512,9 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $projects = Project::where('company_id', $companyId)
-                ->select('id', 'project_number', 'name', 'project_value', 'currency_id')
+            $projects = Project::select('id', 'project_number', 'name', 'project_value', 'currency_id')
                 ->orderBy('name')
                 ->get()
                 ->map(function ($project) {
@@ -526,15 +547,16 @@ class ProjectFinancialController extends Controller
     public function getCurrencies(Request $request): JsonResponse
     {
         try {
-            $currencies = Currency::select('id', 'currency_code', 'currency_name_ar', 'currency_name_en')
-                ->orderBy('currency_name_ar')
+            $currencies = Currency::select('id', 'code', 'name', 'symbol')
+                ->orderBy('name')
                 ->get()
                 ->map(function ($currency) {
                     return [
                         'id' => $currency->id,
-                        'currency_code' => $currency->currency_code,
-                        'name' => $currency->currency_name_ar ?: $currency->currency_name_en,
-                        'display_name' => $currency->currency_code . ' - ' . ($currency->currency_name_ar ?: $currency->currency_name_en)
+                        'currency_code' => $currency->code,
+                        'name' => $currency->name,
+                        'symbol' => $currency->symbol,
+                        'display_name' => $currency->code . ' - ' . $currency->name
                     ];
                 });
 
@@ -569,9 +591,8 @@ class ProjectFinancialController extends Controller
                                   ->orWhere('project_number', 'like', "%{$search}%");
                   })
                   ->orWhereHas('currency', function ($currencyQuery) use ($search) {
-                      $currencyQuery->where('currency_code', 'like', "%{$search}%")
-                                   ->orWhere('currency_name_ar', 'like', "%{$search}%")
-                                   ->orWhere('currency_name_en', 'like', "%{$search}%");
+                      $currencyQuery->where('code', 'like', "%{$search}%")
+                                   ->orWhere('name', 'like', "%{$search}%");
                   });
             });
         }
@@ -656,10 +677,10 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $projectFinancials = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
-                ->forCompany($companyId)
+                // ->forCompany($companyId)
                 ->where('project_id', $projectId)
                 ->orderBy('date', 'desc')
                 ->get();
@@ -684,10 +705,10 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $projectFinancials = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
-                ->forCompany($companyId)
+                // ->forCompany($companyId)
                 ->where('reference_type', $referenceType)
                 ->orderBy('date', 'desc')
                 ->get();
@@ -712,10 +733,10 @@ class ProjectFinancialController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $projectFinancials = ProjectFinancial::with(['project', 'currency', 'creator', 'updater'])
-                ->forCompany($companyId)
+                // ->forCompany($companyId)
                 ->whereDate('date', '>=', $dateFrom)
                 ->whereDate('date', '<=', $dateTo)
                 ->orderBy('date', 'desc')

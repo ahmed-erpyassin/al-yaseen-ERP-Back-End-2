@@ -11,6 +11,7 @@ use Modules\ProjectsManagment\Models\Project;
 use Modules\ProjectsManagment\Http\Requests\StoreDocumentRequest;
 use Modules\ProjectsManagment\Http\Requests\UpdateDocumentRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @group Project Management / Documents
@@ -462,24 +463,115 @@ class DocumentController extends Controller
     public function downloadDocument($id): \Symfony\Component\HttpFoundation\BinaryFileResponse|JsonResponse
     {
         try {
-            $user =Auth::user();
+            $user = Auth::user();
             // $companyId = $user->company_id;
 
             $document = ProjectDocument::findOrFail($id);
             // $document = ProjectDocument::forCompany($companyId)->findOrFail($id);
 
-            if (!$document->file_path || !Storage::disk('public')->exists($document->file_path)) {
+            // Debug information
+            Log::info('Download attempt', [
+                'document_id' => $id,
+                'file_path' => $document->file_path,
+                'file_name' => $document->file_name,
+                'user_id' => $user->id
+            ]);
+
+            // Check if file_path exists
+            if (!$document->file_path) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'File not found'
+                    'message' => 'File path not found in database'
                 ], 404);
             }
 
-            $filePath = Storage::disk('public')->path($document->file_path);
+            // Try multiple storage locations and methods
+            $possiblePaths = [
+                $document->file_path,                           // Original path
+                'documents/' . basename($document->file_path),  // In documents folder
+                'uploads/' . basename($document->file_path),    // In uploads folder
+                basename($document->file_path)                  // Root of storage
+            ];
+
+            $foundPath = null;
+            $fullPath = null;
+
+            foreach ($possiblePaths as $path) {
+                if (Storage::disk('public')->exists($path)) {
+                    $foundPath = $path;
+                    $fullPath = Storage::disk('public')->path($path);
+                    break;
+                }
+            }
+
+            // If not found in public disk, try default disk
+            if (!$foundPath) {
+                foreach ($possiblePaths as $path) {
+                    if (Storage::exists($path)) {
+                        $foundPath = $path;
+                        $fullPath = Storage::path($path);
+                        break;
+                    }
+                }
+            }
+
+            // If still not found, try direct file system check
+            if (!$foundPath) {
+                $directPaths = [
+                    storage_path('app/public/' . $document->file_path),
+                    storage_path('app/' . $document->file_path),
+                    public_path('storage/' . $document->file_path),
+                    public_path($document->file_path)
+                ];
+
+                foreach ($directPaths as $directPath) {
+                    if (file_exists($directPath) && is_readable($directPath)) {
+                        $fullPath = $directPath;
+                        $foundPath = $document->file_path;
+                        break;
+                    }
+                }
+            }
+
+            if (!$foundPath || !$fullPath || !file_exists($fullPath)) {
+                // Log detailed error information
+                Log::error('File not found', [
+                    'document_id' => $id,
+                    'file_path' => $document->file_path,
+                    'searched_paths' => $possiblePaths,
+                    'storage_public_path' => Storage::disk('public')->path(''),
+                    'storage_default_path' => Storage::path(''),
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'File not found in storage',
+                    'debug' => [
+                        'file_path' => $document->file_path,
+                        'searched_locations' => $possiblePaths
+                    ]
+                ], 404);
+            }
+
             $fileName = $document->file_name ?: basename($document->file_path);
 
-            return response()->download($filePath, $fileName);
+            // Log successful download
+            Log::info('File download successful', [
+                'document_id' => $id,
+                'found_path' => $foundPath,
+                'full_path' => $fullPath,
+                'file_name' => $fileName
+            ]);
+
+            return response()->download($fullPath, $fileName);
+
         } catch (\Exception $e) {
+            Log::error('Document download error', [
+                'document_id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error downloading document: ' . $e->getMessage()
