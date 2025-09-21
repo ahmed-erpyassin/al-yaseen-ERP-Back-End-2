@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\StockMovement;
 use Modules\Inventory\Models\InventoryStock;
 use Modules\Inventory\Http\Requests\StoreStockMovementRequest;
@@ -21,7 +22,7 @@ class StockMovementController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = StockMovement::with(['item', 'warehouse', 'user', 'unit', 'branch'])
             ->forCompany($companyId);
@@ -76,8 +77,8 @@ class StockMovementController extends Controller
      */
     public function store(StoreStockMovementRequest $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         $data = $request->validated();
         $data['company_id'] = $companyId;
@@ -104,7 +105,7 @@ class StockMovementController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movement = StockMovement::with(['item', 'warehouse', 'user', 'unit', 'branch'])
             ->forCompany($companyId)
@@ -122,7 +123,7 @@ class StockMovementController extends Controller
      */
     public function byItem($itemId): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movements = StockMovement::with(['warehouse', 'user', 'unit', 'branch'])
             ->forCompany($companyId)
@@ -142,7 +143,7 @@ class StockMovementController extends Controller
      */
     public function byWarehouse($warehouseId): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movements = StockMovement::with(['item', 'user', 'unit', 'branch'])
             ->forCompany($companyId)
@@ -162,7 +163,7 @@ class StockMovementController extends Controller
      */
     public function stockSummary(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $summary = InventoryStock::with(['inventoryItem', 'warehouse'])
             ->forCompany($companyId)

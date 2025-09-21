@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\ItemUnit;
 use Modules\Inventory\Http\Requests\StoreItemUnitRequest;
 use Modules\Inventory\Http\Requests\UpdateItemUnitRequest;
@@ -21,7 +22,7 @@ class ItemUnitController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
             ->forCompany($companyId);
@@ -68,8 +69,8 @@ class ItemUnitController extends Controller
      */
     public function store(StoreItemUnitRequest $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         $data = $request->validated();
         $data['company_id'] = $companyId;
@@ -98,7 +99,7 @@ class ItemUnitController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $itemUnit = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
             ->forCompany($companyId)
@@ -116,8 +117,8 @@ class ItemUnitController extends Controller
      */
     public function update(UpdateItemUnitRequest $request, $id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
 
@@ -147,7 +148,7 @@ class ItemUnitController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
 
@@ -179,7 +180,7 @@ class ItemUnitController extends Controller
      */
     public function byItem($itemId): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $itemUnits = ItemUnit::with(['unit'])
             ->forCompany($companyId)
@@ -199,8 +200,8 @@ class ItemUnitController extends Controller
      */
     public function setDefault($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
-        $userId = auth()->id() ?? request()->user_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
         $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
 
@@ -227,7 +228,7 @@ class ItemUnitController extends Controller
      */
     public function getByType(Request $request, $itemId, $type): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $itemUnits = ItemUnit::with(['unit:id,name,symbol', 'item:id,name'])
             ->forCompany($companyId)
@@ -252,7 +253,7 @@ class ItemUnitController extends Controller
      */
     public function getComprehensiveData(Request $request, $itemId): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $itemUnits = ItemUnit::with(['unit:id,name,symbol', 'item:id,name'])
             ->forCompany($companyId)
@@ -300,7 +301,7 @@ class ItemUnitController extends Controller
      */
     public function getItemUnitContainsOptions(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
         $options = ItemUnit::getAllContainsOptions($companyId);
 
         return response()->json([
@@ -322,7 +323,7 @@ class ItemUnitController extends Controller
             'quantity' => 'required|numeric|min:0',
         ]);
 
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $fromUnit = ItemUnit::forCompany($companyId)->findOrFail($request->from_unit_id);
         $toUnit = ItemUnit::forCompany($companyId)->findOrFail($request->to_unit_id);
@@ -367,7 +368,7 @@ class ItemUnitController extends Controller
      */
     public function getFormData(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $data = [
             'unit_type_options' => ItemUnit::UNIT_TYPE_OPTIONS,

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Companies\Models\Company;
 use Modules\Companies\Models\Branch;
-use App\Models\User;
+use Modules\Users\Models\User;
 
 class ManufacturedFormulaModel extends Model
 {

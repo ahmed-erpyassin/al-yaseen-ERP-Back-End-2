@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\Unit;
 use Modules\Inventory\Http\Requests\StoreUnitRequest;
 use Modules\Inventory\Http\Requests\UpdateUnitRequest;
@@ -21,7 +22,7 @@ class UnitController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = Unit::with([
             'company',
@@ -70,8 +71,8 @@ class UnitController extends Controller
      */
     public function store(StoreUnitRequest $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         $data = $request->validated();
         $data['company_id'] = $companyId;
@@ -93,7 +94,7 @@ class UnitController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $unit = Unit::with(['company', 'branch', 'user', 'items', 'itemUnits'])
             ->forCompany($companyId)
@@ -111,8 +112,8 @@ class UnitController extends Controller
      */
     public function update(UpdateUnitRequest $request, $id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         $unit = Unit::forCompany($companyId)->findOrFail($id);
 
@@ -134,7 +135,7 @@ class UnitController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $unit = Unit::forCompany($companyId)->findOrFail($id);
 
@@ -159,7 +160,7 @@ class UnitController extends Controller
      */
     public function first(): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $unit = Unit::with(['company', 'branch', 'user'])
             ->forCompany($companyId)
@@ -185,7 +186,7 @@ class UnitController extends Controller
      */
     public function last(): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $unit = Unit::with(['company', 'branch', 'user'])
             ->forCompany($companyId)
@@ -226,7 +227,7 @@ class UnitController extends Controller
      */
     public function getAllUnitOptions(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
         $options = Unit::getAllUnitOptions($companyId);
 
         return response()->json([
@@ -242,7 +243,7 @@ class UnitController extends Controller
      */
     public function getContainsOptions(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
         $options = Unit::getAllContainsOptions($companyId);
 
         return response()->json([
@@ -258,7 +259,7 @@ class UnitController extends Controller
      */
     public function getUnitsForDropdown(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $units = Unit::forCompany($companyId)
             ->where('status', 'active')
@@ -288,7 +289,7 @@ class UnitController extends Controller
      */
     public function getWarehousesForDropdown(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $warehouses = \Modules\Inventory\Models\Warehouse::forCompany($companyId)
             ->select('id', 'name', 'code', 'address', 'is_default')
@@ -319,7 +320,7 @@ class UnitController extends Controller
      */
     public function getUnitFormData(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $data = [
             'unit_options' => Unit::getAllUnitOptions($companyId),

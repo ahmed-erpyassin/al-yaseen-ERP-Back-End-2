@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\ItemType;
 
 /**
@@ -19,7 +20,7 @@ class ItemTypeController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = ItemType::forCompany($companyId)->active();
 
@@ -64,7 +65,7 @@ class ItemTypeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -107,7 +108,7 @@ class ItemTypeController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
         $itemType = ItemType::forCompany($companyId)->findOrFail($id);
 
         return response()->json([
@@ -123,7 +124,7 @@ class ItemTypeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
         $itemType = ItemType::forCompany($companyId)->findOrFail($id);
 
         // Prevent updating system types
@@ -160,7 +161,7 @@ class ItemTypeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
         $itemType = ItemType::forCompany($companyId)->findOrFail($id);
 
         // Prevent deleting system types
@@ -195,7 +196,7 @@ class ItemTypeController extends Controller
      */
     public function getOptions(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $itemTypes = ItemType::forCompany($companyId)
             ->active()
