@@ -217,6 +217,9 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
     // Project Risk Management Routes
     Route::prefix('project-risks')->group(function () {
+        // Statistics and analytics (must come before {id} routes)
+        Route::get('/statistics', [ProjectRiskController::class, 'getStatistics'])->name('project-risks.statistics');
+
         // Main CRUD operations
         Route::get('/', [ProjectRiskController::class, 'index'])->name('project-risks.index');
         Route::post('/', [ProjectRiskController::class, 'store'])->name('project-risks.store');
@@ -245,8 +248,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/probability/options', [ProjectRiskController::class, 'getProbabilityOptions'])->name('project-risks.probability-options');
         Route::get('/status/options', [ProjectRiskController::class, 'getStatusOptions'])->name('project-risks.status-options');
 
-        // Statistics and analytics
-        Route::get('/statistics/summary', [ProjectRiskController::class, 'getStatistics'])->name('project-risks.statistics');
+
 
         // Specialized project risk views
         Route::get('/project/{projectId}', [ProjectRiskController::class, 'getProjectRisks'])->name('project-risks.by-project');

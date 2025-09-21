@@ -13,10 +13,14 @@ class ProjectRiskService
     /**
      * Get paginated project risks with filtering and relationships.
      */
-    public function getProjectRisks(int $companyId, array $filters = []): LengthAwarePaginator
+    public function getProjectRisks($companyId = null, array $filters = []): LengthAwarePaginator
     {
-        $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-            ->forCompany($companyId);
+        $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater']);
+
+        // Apply company filter only if provided (for backward compatibility)
+        if ($companyId) {
+            $query->forCompany($companyId);
+        }
 
         // Apply filters
         $query = $this->applyFilters($query, $filters);
@@ -103,10 +107,10 @@ class ProjectRiskService
     /**
      * Get project risk statistics.
      */
-    public function getProjectRiskStatistics(int $companyId, int $projectId = null): array
+    public function getProjectRiskStatistics(int $projectId = null): array
     {
-        $query = ProjectRisk::forCompany($companyId);
-        
+        $query = ProjectRisk::query();
+
         if ($projectId) {
             $query->forProject($projectId);
         }
@@ -132,7 +136,7 @@ class ProjectRiskService
             'by_status' => $byStatus,
             'by_impact' => $byImpact,
             'by_probability' => $byProbability,
-            'high_risk_count' => $this->getHighRiskCount($companyId, $projectId),
+            'high_risk_count' => $this->getHighRiskCount($projectId),
         ];
     }
 
@@ -230,10 +234,10 @@ class ProjectRiskService
     /**
      * Get count of high-risk items.
      */
-    private function getHighRiskCount(int $companyId, int $projectId = null): int
+    private function getHighRiskCount(int $projectId = null): int
     {
-        $query = ProjectRisk::forCompany($companyId);
-        
+        $query = ProjectRisk::query();
+
         if ($projectId) {
             $query->forProject($projectId);
         }
