@@ -2,8 +2,11 @@
 
 namespace Modules\Inventory\Models;
 
-use App\Models\Company;
-use App\Models\User;
+use Modules\Companies\Models\Company;
+use Modules\Companies\Models\Branch;
+use Modules\Users\Models\User;
+use Modules\HumanResources\Models\Employee;
+use Modules\FinancialAccounts\Models\Account;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -91,7 +94,7 @@ class Warehouse extends Model
      */
     public function warehouseKeeper(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Employee::class, 'warehouse_keeper_id');
+        return $this->belongsTo(Employee::class, 'warehouse_keeper_id');
     }
 
     /**
@@ -99,7 +102,7 @@ class Warehouse extends Model
      */
     public function salesAccount(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Account::class, 'sales_account_id');
+        return $this->belongsTo(Account::class, 'sales_account_id');
     }
 
     /**
@@ -107,7 +110,7 @@ class Warehouse extends Model
      */
     public function purchaseAccount(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Account::class, 'purchase_account_id');
+        return $this->belongsTo(Account::class, 'purchase_account_id');
     }
 
     /**

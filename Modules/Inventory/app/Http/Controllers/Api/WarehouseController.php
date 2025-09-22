@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\Warehouse;
 use Modules\Inventory\Http\Requests\StoreWarehouseRequest;
 use Modules\Inventory\Http\Requests\UpdateWarehouseRequest;
@@ -22,7 +23,7 @@ class WarehouseController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = Warehouse::with([
             'company', 'branch', 'user', 'departmentWarehouse',
@@ -115,7 +116,7 @@ class WarehouseController extends Controller
      */
     public function filterByField(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $request->validate([
             'field' => 'required|string',
@@ -177,8 +178,8 @@ class WarehouseController extends Controller
      */
     public function store(StoreWarehouseRequest $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         // ✅ Get validated data
         $data = $request->validated();
@@ -220,7 +221,7 @@ class WarehouseController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         // ✅ Load warehouse with all relationships for comprehensive preview
         $warehouse = Warehouse::with([
@@ -258,8 +259,8 @@ class WarehouseController extends Controller
      */
     public function update(UpdateWarehouseRequest $request, $id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         $warehouse = Warehouse::forCompany($companyId)->findOrFail($id);
 
@@ -294,8 +295,8 @@ class WarehouseController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
-        $userId = auth()->id() ?? request()->user_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
         $warehouse = Warehouse::forCompany($companyId)->findOrFail($id);
 
@@ -324,7 +325,7 @@ class WarehouseController extends Controller
      */
     public function first(): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $warehouse = Warehouse::with(['company', 'branch', 'user', 'departmentWarehouse'])
             ->forCompany($companyId)
@@ -350,7 +351,7 @@ class WarehouseController extends Controller
      */
     public function last(): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $warehouse = Warehouse::with(['company', 'branch', 'user', 'departmentWarehouse'])
             ->forCompany($companyId)
@@ -376,7 +377,7 @@ class WarehouseController extends Controller
      */
     public function trashed(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = Warehouse::onlyTrashed()
             ->with(['company', 'branch', 'warehouseKeeper', 'deleter'])
@@ -408,7 +409,7 @@ class WarehouseController extends Controller
      */
     public function restore($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $warehouse = Warehouse::onlyTrashed()
             ->forCompany($companyId)
@@ -429,7 +430,7 @@ class WarehouseController extends Controller
      */
     public function forceDelete($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $warehouse = Warehouse::onlyTrashed()
             ->forCompany($companyId)
@@ -449,7 +450,7 @@ class WarehouseController extends Controller
      */
     public function getFormData(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         try {
             $data = [

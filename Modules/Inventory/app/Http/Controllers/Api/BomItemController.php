@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\BomItem;
 use Modules\Inventory\Models\Item;
 use Modules\Inventory\Models\Unit;
@@ -24,7 +25,7 @@ class BomItemController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = BomItem::with([
             'company', 'branch', 'user', 'item', 'component', 'unit', 'preferredSupplier',
@@ -141,8 +142,8 @@ class BomItemController extends Controller
      */
     public function store(StoreBomItemRequest $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         try {
             DB::beginTransaction();
@@ -236,7 +237,7 @@ class BomItemController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $bomItem = BomItem::with(['company', 'branch', 'user', 'item', 'component', 'unit'])
             ->forCompany($companyId)
@@ -254,8 +255,8 @@ class BomItemController extends Controller
      */
     public function update(UpdateBomItemRequest $request, $id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         $bomItem = BomItem::forCompany($companyId)->findOrFail($id);
 
@@ -277,7 +278,7 @@ class BomItemController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $bomItem = BomItem::forCompany($companyId)->findOrFail($id);
         $bomItem->delete();
@@ -293,7 +294,7 @@ class BomItemController extends Controller
      */
     public function byItem($itemId): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $bomItems = BomItem::with(['component', 'unit'])
             ->forCompany($companyId)
@@ -312,7 +313,7 @@ class BomItemController extends Controller
      */
     public function byComponent($componentId): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $bomItems = BomItem::with(['item', 'unit'])
             ->forCompany($companyId)
@@ -336,7 +337,7 @@ class BomItemController extends Controller
             'production_quantity' => 'required|numeric|min:0.01'
         ]);
 
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
         $itemId = $request->get('item_id');
         $productionQuantity = $request->get('production_quantity');
 
@@ -419,7 +420,7 @@ class BomItemController extends Controller
      */
     public function filterByField(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $field = $request->get('field');
         $value = $request->get('value');
@@ -471,7 +472,7 @@ class BomItemController extends Controller
      */
     public function first(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $sortBy = $request->get('sort_by', 'sequence_order');
         $sortDirection = 'asc';
@@ -502,7 +503,7 @@ class BomItemController extends Controller
      */
     public function last(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $sortBy = $request->get('sort_by', 'sequence_order');
         $sortDirection = 'desc';

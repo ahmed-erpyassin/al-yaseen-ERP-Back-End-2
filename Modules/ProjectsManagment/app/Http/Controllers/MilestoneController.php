@@ -25,12 +25,12 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             // Build query
-            $query = ProjectMilestone::with(['project'])
-                ->forCompany($companyId);
+            // $query = ProjectMilestone::with(['project'])->forCompany($companyId);
+           $query = ProjectMilestone::with(['project']);
 
             // Apply filters
             if ($request->has('project_id') && !empty($request->project_id)) {
@@ -164,10 +164,10 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $milestone = ProjectMilestone::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId)
+                // ->forCompany($companyId)
                 ->findOrFail($id);
 
             return response()->json([
@@ -190,9 +190,10 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $milestone = ProjectMilestone::forCompany($companyId)->findOrFail($id);
+            // $milestone = ProjectMilestone::forCompany($companyId)->findOrFail($id);
+             $milestone = ProjectMilestone::findOrFail($id);
             $milestone->update($request->validated());
 
             $milestone->load(['project']);
@@ -217,9 +218,10 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $milestone = ProjectMilestone::forCompany($companyId)->findOrFail($id);
+            // $milestone = ProjectMilestone::forCompany($companyId)->findOrFail($id);
+            $milestone = ProjectMilestone::findOrFail($id);
 
             // Set deleted_by before soft delete
             $milestone->update(['deleted_by' => $user->id]);
@@ -244,11 +246,13 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $milestone = ProjectMilestone::withTrashed()
-                ->forCompany($companyId)
-                ->findOrFail($id);
+            // $milestone = ProjectMilestone::withTrashed()
+            //     ->forCompany($companyId)
+            //     ->findOrFail($id);
+
+            $milestone = ProjectMilestone::withTrashed()->findOrFail($id);
 
             $milestone->restore();
             $milestone->update(['deleted_by' => null]);
@@ -273,11 +277,14 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $milestone = ProjectMilestone::withTrashed()
-                ->forCompany($companyId)
                 ->findOrFail($id);
+
+            // $milestone = ProjectMilestone::withTrashed()
+            //     ->forCompany($companyId)
+            //     ->findOrFail($id);
 
             $milestone->forceDelete();
 
@@ -300,14 +307,20 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
+
+            // $milestones = ProjectMilestone::onlyTrashed()
+            //     ->with(['project', 'creator', 'updater', 'deleter'])
+            //     ->forCompany($companyId)
+            //     ->orderBy('deleted_at', 'desc')
+            //     ->paginate($perPage);
+
 
             $milestones = ProjectMilestone::onlyTrashed()
                 ->with(['project', 'creator', 'updater', 'deleter'])
-                ->forCompany($companyId)
                 ->orderBy('deleted_at', 'desc')
-                ->paginate($perPage);
+                ->paginate($perPage);    
 
             return response()->json([
                 'success' => true,
@@ -329,10 +342,9 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $projects = Project::where('company_id', $companyId)
-                ->where('status', '!=', 'cancelled')
+            $projects = Project::where('status', '!=', 'cancelled')
                 ->select('id', 'code', 'project_number', 'name')
                 ->orderBy('name')
                 ->get()
@@ -389,12 +401,15 @@ class MilestoneController extends Controller
             ]);
 
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $projectId = $request->project_id;
 
             // Verify project belongs to user's company
+            // $project = Project::where('id', $projectId)
+            //     ->where('company_id', $companyId)
+            //     ->first();
+
             $project = Project::where('id', $projectId)
-                ->where('company_id', $companyId)
                 ->first();
 
             if (!$project) {
@@ -430,12 +445,15 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             // Verify project belongs to user's company
+            // $project = Project::where('id', $projectId)
+            //     ->where('company_id', $companyId)
+            //     ->first();
+
             $project = Project::where('id', $projectId)
-                ->where('company_id', $companyId)
-                ->first();
+            ->first();
 
             if (!$project) {
                 return response()->json([
@@ -468,11 +486,11 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
-            $query = ProjectMilestone::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectMilestone::with(['project', 'creator', 'updater'])->forCompany($companyId);
+            $query = ProjectMilestone::with(['project', 'creator', 'updater']);
 
             // Apply all search filters
             $this->applySearchFilters($query, $request);
@@ -502,7 +520,7 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $field = $request->get('field');
             $value = $request->get('value');
@@ -517,8 +535,8 @@ class MilestoneController extends Controller
                 ], 400);
             }
 
-            $query = ProjectMilestone::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectMilestone::with(['project', 'creator', 'updater'])->forCompany($companyId);
+            $query = ProjectMilestone::with(['project', 'creator', 'updater']);
 
             // Apply field filter
             $allowedFields = [
@@ -559,7 +577,7 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $field = $request->get('field');
 
             if (!$field) {
@@ -581,8 +599,7 @@ class MilestoneController extends Controller
                 ], 400);
             }
 
-            $values = ProjectMilestone::forCompany($companyId)
-                ->select($field)
+            $values = ProjectMilestone::select($field)
                 ->distinct()
                 ->whereNotNull($field)
                 ->orderBy($field)
@@ -638,11 +655,13 @@ class MilestoneController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
-            $query = ProjectMilestone::with(['project', 'creator', 'updater'])
-                ->forCompany($companyId);
+            // $query = ProjectMilestone::with(['project', 'creator', 'updater'])
+            //     ->forCompany($companyId);
+
+            $query = ProjectMilestone::with(['project', 'creator', 'updater']);
 
             // Apply sorting
             $this->applySorting($query, $request);

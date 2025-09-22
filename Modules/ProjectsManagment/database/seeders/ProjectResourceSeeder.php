@@ -22,12 +22,22 @@ class ProjectResourceSeeder extends Seeder
         $user = User::first();
         $company = Company::first();
         $projects = Project::all();
-        $supplier = Supplier::first();
+        $suppliers = Supplier::all();
 
         if (!$user || !$company || $projects->isEmpty()) {
             $this->command->warn('⚠️  Required data not found. Please seed Projects first.');
             return;
         }
+
+        if ($suppliers->isEmpty()) {
+            $this->command->warn('⚠️  No suppliers found. Please seed Suppliers first.');
+            return;
+        }
+
+        // Helper function to get supplier by index (cycling through available suppliers)
+        $getSupplier = function($index) use ($suppliers) {
+            return $suppliers->get($index % $suppliers->count());
+        };
 
         $resources = [];
 
@@ -39,7 +49,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project1->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(0)->id,
                     'role' => 'Senior Developer',
                     'allocation' => 'Full-time',
                     'allocation_percentage' => 100.00,
@@ -54,7 +64,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project1->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(1)->id,
                     'role' => 'Frontend Developer',
                     'allocation' => 'Full-time',
                     'allocation_percentage' => 100.00,
@@ -69,7 +79,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project1->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(2)->id,
                     'role' => 'Database Administrator',
                     'allocation' => 'Part-time',
                     'allocation_percentage' => 50.00,
@@ -84,7 +94,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project1->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(3)->id,
                     'role' => 'Development Server',
                     'allocation' => 'Dedicated',
                     'allocation_percentage' => 100.00,
@@ -106,7 +116,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project2->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(4)->id,
                     'role' => 'Mobile Developer',
                     'allocation' => 'Full-time',
                     'allocation_percentage' => 100.00,
@@ -121,7 +131,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project2->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(0)->id,
                     'role' => 'UI/UX Designer',
                     'allocation' => 'Part-time',
                     'allocation_percentage' => 30.00,
@@ -136,7 +146,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project2->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(1)->id,
                     'role' => 'Testing Devices',
                     'allocation' => 'Shared',
                     'allocation_percentage' => 25.00,
@@ -158,7 +168,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project3->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(2)->id,
                     'role' => 'Data Analyst',
                     'allocation' => 'Full-time',
                     'allocation_percentage' => 100.00,
@@ -173,7 +183,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project3->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(3)->id,
                     'role' => 'Migration Specialist',
                     'allocation' => 'Full-time',
                     'allocation_percentage' => 100.00,
@@ -188,7 +198,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project3->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(4)->id,
                     'role' => 'Migration Server',
                     'allocation' => 'Temporary',
                     'allocation_percentage' => 100.00,
@@ -210,7 +220,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project4->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(0)->id,
                     'role' => 'Integration Specialist',
                     'allocation' => 'Full-time',
                     'allocation_percentage' => 100.00,
@@ -225,7 +235,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project4->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(1)->id,
                     'role' => 'Systems Analyst',
                     'allocation' => 'Part-time',
                     'allocation_percentage' => 60.00,
@@ -240,7 +250,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project4->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(2)->id,
                     'role' => 'Integration Tools',
                     'allocation' => 'Licensed',
                     'allocation_percentage' => 100.00,
@@ -262,7 +272,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project5->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(3)->id,
                     'role' => 'Technical Writer',
                     'allocation' => 'Full-time',
                     'allocation_percentage' => 100.00,
@@ -277,7 +287,7 @@ class ProjectResourceSeeder extends Seeder
                     'user_id' => $user->id,
                     'company_id' => $company->id,
                     'project_id' => $project5->id,
-                    'supplier_id' => $supplier?->id,
+                    'supplier_id' => $getSupplier(4)->id,
                     'role' => 'Training Coordinator',
                     'allocation' => 'Part-time',
                     'allocation_percentage' => 50.00,

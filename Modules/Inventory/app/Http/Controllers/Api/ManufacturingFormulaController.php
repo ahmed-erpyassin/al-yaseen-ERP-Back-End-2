@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\BomItem;
 use Modules\Inventory\Models\Item;
 use Modules\Inventory\Models\Unit;
@@ -201,7 +202,7 @@ class ManufacturingFormulaController extends Controller
      */
     public function getItemNumbers(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $items = Item::where('company_id', $companyId)
             ->select('id', 'item_number', 'name', 'description')
@@ -228,7 +229,7 @@ class ManufacturingFormulaController extends Controller
      */
     public function getItemDetails(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
         $itemNumber = $request->get('item_number');
         $itemName = $request->get('item_name');
 
@@ -298,8 +299,8 @@ class ManufacturingFormulaController extends Controller
      */
     public function store(StoreManufacturingFormulaRequest $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         try {
             DB::beginTransaction();

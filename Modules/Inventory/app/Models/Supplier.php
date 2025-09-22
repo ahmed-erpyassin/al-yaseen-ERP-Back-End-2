@@ -2,7 +2,7 @@
 
 namespace Modules\Inventory\Models;
 
-use App\Models\Company;
+use Modules\Companies\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

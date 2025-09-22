@@ -5,6 +5,7 @@ namespace Modules\Inventory\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\InventoryMovement;
 use Modules\Inventory\Models\InventoryMovementData;
 use Modules\Inventory\Models\Item;
@@ -26,7 +27,7 @@ class InventoryMovementController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = InventoryMovement::with([
             'company', 'user', 'warehouse', 'movementData.item', 'movementData.unit',
@@ -120,8 +121,8 @@ class InventoryMovementController extends Controller
      */
     public function store(StoreInventoryMovementRequest $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         try {
             DB::beginTransaction();
@@ -261,7 +262,7 @@ class InventoryMovementController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movement = InventoryMovement::with([
             'company', 'user', 'warehouse',
@@ -395,8 +396,8 @@ class InventoryMovementController extends Controller
      */
     public function update(UpdateInventoryMovementRequest $request, $id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
-        $userId = auth()->id() ?? $request->user_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
 
         try {
             DB::beginTransaction();
@@ -471,8 +472,8 @@ class InventoryMovementController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
-        $userId = auth()->id() ?? request()->user_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
         try {
             DB::beginTransaction();
@@ -516,8 +517,8 @@ class InventoryMovementController extends Controller
      */
     public function confirm($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
-        $userId = auth()->id() ?? request()->user_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
         try {
             DB::beginTransaction();
@@ -569,7 +570,7 @@ class InventoryMovementController extends Controller
      */
     public function getFormData(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         try {
             $data = [
@@ -801,7 +802,7 @@ class InventoryMovementController extends Controller
      */
     public function filterByField(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $request->validate([
             'field' => 'required|string',
@@ -867,8 +868,8 @@ class InventoryMovementController extends Controller
      */
     public function duplicate($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
-        $userId = auth()->id() ?? request()->user_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
         try {
             DB::beginTransaction();
@@ -970,7 +971,7 @@ class InventoryMovementController extends Controller
      */
     public function trashed(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = InventoryMovement::onlyTrashed()
             ->with(['company', 'warehouse', 'deleter'])
@@ -1003,7 +1004,7 @@ class InventoryMovementController extends Controller
      */
     public function restore($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movement = InventoryMovement::onlyTrashed()
             ->forCompany($companyId)
@@ -1024,7 +1025,7 @@ class InventoryMovementController extends Controller
      */
     public function forceDelete($id): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? request()->company_id;
+        $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movement = InventoryMovement::onlyTrashed()
             ->forCompany($companyId)
@@ -1044,7 +1045,7 @@ class InventoryMovementController extends Controller
      */
     public function first(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $sortBy = $request->get('sort_by', 'movement_date');
         $sortDirection = 'asc'; // First = ascending
@@ -1078,7 +1079,7 @@ class InventoryMovementController extends Controller
      */
     public function last(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $sortBy = $request->get('sort_by', 'movement_date');
         $sortDirection = 'desc'; // Last = descending
@@ -1112,7 +1113,7 @@ class InventoryMovementController extends Controller
      */
     public function getMovementData($id, Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $movement = InventoryMovement::forCompany($companyId)->findOrFail($id);
 
@@ -1153,7 +1154,7 @@ class InventoryMovementController extends Controller
      */
     public function getNextMovementNumber(Request $request): JsonResponse
     {
-        $companyId = auth()->user()->company_id ?? $request->company_id;
+        $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $request->validate([
             'warehouse_id' => 'required|integer',

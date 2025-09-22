@@ -97,10 +97,10 @@ class ProjectRiskController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
 
             $projectRisk = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId)
+               // ->forCompany($companyId)
                 ->findOrFail($id);
 
             return response()->json([
@@ -125,11 +125,11 @@ class ProjectRiskController extends Controller
             DB::beginTransaction();
 
             $user = Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
 
             // Find the project risk with relationships
             $projectRisk = ProjectRisk::with(['project', 'assignedEmployee', 'creator'])
-                ->forCompany($companyId)
+                //->forCompany($companyId)
                 ->findOrFail($id);
 
             // Check if the record is soft deleted
@@ -210,9 +210,9 @@ class ProjectRiskController extends Controller
             DB::beginTransaction();
 
             $user =Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
 
-            $projectRisk = ProjectRisk::forCompany($companyId)->findOrFail($id);
+            $projectRisk = ProjectRisk::findOrFail($id);
 
             // Check if already deleted
             if ($projectRisk->trashed()) {
@@ -256,10 +256,10 @@ class ProjectRiskController extends Controller
             DB::beginTransaction();
 
             $user =Auth::user();
-            $companyId = $user->company_id;
+            //$companyId = $user->company_id;
 
             $projectRisk = ProjectRisk::withTrashed()
-                ->forCompany($companyId)
+               // ->forCompany($companyId)
                 ->findOrFail($id);
 
             if (!$projectRisk->trashed()) {
@@ -308,10 +308,10 @@ class ProjectRiskController extends Controller
             DB::beginTransaction();
 
             $user =Auth::user();
-            $companyId = $user->company_id;
+            //$companyId = $user->company_id;
 
             $projectRisk = ProjectRisk::withTrashed()
-                ->forCompany($companyId)
+                //->forCompany($companyId)
                 ->findOrFail($id);
 
             $projectRisk->forceDelete();
@@ -344,11 +344,11 @@ class ProjectRiskController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
 
             $query = ProjectRisk::onlyTrashed()
-                ->with(['project', 'assignedEmployee', 'creator', 'updater', 'deleter'])
-                ->forCompany($companyId);
+                ->with(['project', 'assignedEmployee', 'creator', 'updater', 'deleter']);
+               // ->forCompany($companyId);
 
             // Apply sorting
             $query = $this->applySorting($query, $request->all());
@@ -381,10 +381,9 @@ class ProjectRiskController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
-            $projects = Project::where('company_id', $companyId)
-                ->select('id', 'project_number', 'name')
+            $projects = Project::select('id', 'project_number', 'name')
                 ->orderBy('project_number')
                 ->get()
                 ->map(function ($project) {
@@ -416,10 +415,10 @@ class ProjectRiskController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
-            $employees = Employee::where('company_id', $companyId)
-                ->select('id', 'employee_number', 'first_name', 'second_name', 'third_name')
+            $employees = Employee::select('id', 'employee_number', 'first_name', 'second_name', 'third_name')
+            
                 ->orderBy('first_name')
                 ->get()
                 ->map(function ($employee) {
@@ -515,10 +514,10 @@ class ProjectRiskController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
-            $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId);
+            $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater']);
+                //->forCompany($companyId);
 
             // Apply search filters
             $query = $this->applySearchFilters($query, $request->all());
@@ -554,7 +553,7 @@ class ProjectRiskController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
             $field = $request->get('field');
             $value = $request->get('value');
 
@@ -565,8 +564,8 @@ class ProjectRiskController extends Controller
                 ], 400);
             }
 
-            $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId);
+            $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater']);
+               // ->forCompany($companyId);
 
             // Apply field-specific filtering
             $query = $this->applyFieldFilter($query, $field, $value);
@@ -576,6 +575,8 @@ class ProjectRiskController extends Controller
 
             $perPage = $request->get('per_page', 15);
             $projectRisks = $query->paginate($perPage);
+
+          //  var_dump( $query->toSql());
 
             // Transform using resource
             $projectRisks->getCollection()->transform(function ($projectRisk) {
@@ -785,7 +786,7 @@ class ProjectRiskController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+          //  $companyId = $user->company_id;
             $field = $request->get('field');
 
             if (!$field) {
@@ -808,8 +809,8 @@ class ProjectRiskController extends Controller
                     $values = ProjectRisk::getStatusOptions();
                     break;
                 case 'title':
-                    $values = ProjectRisk::forCompany($companyId)
-                        ->distinct()
+                    $values = ProjectRisk::distinct()
+                        
                         ->pluck('title')
                         ->filter()
                         ->map(function ($title) {
@@ -818,8 +819,8 @@ class ProjectRiskController extends Controller
                         ->values();
                     break;
                 case 'project_number':
-                    $values = Project::where('company_id', $companyId)
-                        ->distinct()
+                    $values = Project::distinct()
+                       
                         ->pluck('project_number')
                         ->filter()
                         ->map(function ($number) {
@@ -828,8 +829,8 @@ class ProjectRiskController extends Controller
                         ->values();
                     break;
                 case 'project_name':
-                    $values = Project::where('company_id', $companyId)
-                        ->distinct()
+                    $values = Project::distinct()
+                   
                         ->pluck('name')
                         ->filter()
                         ->map(function ($name) {
@@ -896,13 +897,13 @@ class ProjectRiskController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             $sortBy = $request->get('sort_by', 'created_at');
             $sortDirection = $request->get('sort_direction', 'desc');
 
-            $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId);
+            $query = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater']);
+               // ->forCompany($companyId);
 
             // Apply sorting
             $query = $this->applySorting($query, [
@@ -937,19 +938,22 @@ class ProjectRiskController extends Controller
 
     /**
      * Get project risk statistics and summary data.
+     * Can be filtered by project_id if provided.
      */
     public function getStatistics(Request $request): JsonResponse
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            $projectId = $request->get('project_id'); // Optional project filter
 
-            $statistics = $this->projectRiskService->getProjectRiskStatistics($companyId);
+            $statistics = $this->projectRiskService->getProjectRiskStatistics($projectId);
 
             return response()->json([
                 'success' => true,
                 'data' => $statistics,
-                'message' => 'Project risk statistics retrieved successfully'
+                'message' => $projectId
+                    ? "Project risk statistics for project ID {$projectId} retrieved successfully"
+                    : 'Project risk statistics retrieved successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -966,10 +970,10 @@ class ProjectRiskController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             $projectRisks = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId)
+               // ->forCompany($companyId)
                 ->forProject($projectId)
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -999,10 +1003,10 @@ class ProjectRiskController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             $projectRisks = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId)
+              //  ->forCompany($companyId)
                 ->byStatus($status)
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -1032,10 +1036,10 @@ class ProjectRiskController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+           // $companyId = $user->company_id;
 
             $projectRisks = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId)
+               // ->forCompany($companyId)
                 ->byImpact($impact)
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -1065,10 +1069,10 @@ class ProjectRiskController extends Controller
     {
         try {
             $user =Auth::user();
-            $companyId = $user->company_id;
+         //   $companyId = $user->company_id;
 
             $projectRisks = ProjectRisk::with(['project', 'assignedEmployee', 'creator', 'updater'])
-                ->forCompany($companyId)
+               // ->forCompany($companyId)
                 ->byProbability($probability)
                 ->orderBy('created_at', 'desc')
                 ->get();

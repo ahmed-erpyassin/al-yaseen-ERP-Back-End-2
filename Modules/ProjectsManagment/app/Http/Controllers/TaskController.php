@@ -31,7 +31,7 @@ class TaskController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             // Get filter parameters
             $projectId = $request->get('project_id');
@@ -40,9 +40,18 @@ class TaskController extends Controller
             $perPage = $request->get('per_page', 15);
 
             // Build query
+            // $query = ProjectTask::with([
+            //     'project', 'milestone', 'assignedUser', 'creator', 'documents'
+            // ])->forCompany($companyId);
+
             $query = ProjectTask::with([
-                'project', 'milestone', 'assignedUser', 'creator', 'documents'
-            ])->forCompany($companyId);
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator',
+                'documents'
+            ]);
+
 
             // Apply filters
             if ($projectId) {
@@ -99,13 +108,28 @@ class TaskController extends Controller
             ]);
 
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $perPage = $request->get('per_page', 15);
 
             // Build query with relationships
+            // $query = ProjectTask::with([
+            //     'project',
+            //     'milestone',
+            //     'assignedUser',
+            //     'creator',
+            //     'updater',
+            //     'documents'
+            // ])->forCompany($companyId);
+
             $query = ProjectTask::with([
-                'project', 'milestone', 'assignedUser', 'creator', 'updater', 'documents'
-            ])->forCompany($companyId);
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator',
+                'updater',
+                'documents'
+            ]);
+
 
             // Search by exact due date
             if ($request->filled('due_date')) {
@@ -150,15 +174,15 @@ class TaskController extends Controller
                 $searchTerm = $request->search_term;
                 $query->where(function ($q) use ($searchTerm) {
                     $q->where('task_name', 'LIKE', "%{$searchTerm}%")
-                      ->orWhere('title', 'LIKE', "%{$searchTerm}%")
-                      ->orWhere('description', 'LIKE', "%{$searchTerm}%")
-                      ->orWhere('notes', 'LIKE', "%{$searchTerm}%")
-                      ->orWhereHas('project', function ($projectQuery) use ($searchTerm) {
-                          $projectQuery->where('name', 'LIKE', "%{$searchTerm}%");
-                      })
-                      ->orWhereHas('assignedUser', function ($userQuery) use ($searchTerm) {
-                          $userQuery->where('name', 'LIKE', "%{$searchTerm}%");
-                      });
+                        ->orWhere('title', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('description', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('notes', 'LIKE', "%{$searchTerm}%")
+                        ->orWhereHas('project', function ($projectQuery) use ($searchTerm) {
+                            $projectQuery->where('name', 'LIKE', "%{$searchTerm}%");
+                        })
+                        ->orWhereHas('assignedUser', function ($userQuery) use ($searchTerm) {
+                            $userQuery->where('name', 'LIKE', "%{$searchTerm}%");
+                        });
                 });
             }
 
@@ -173,8 +197,15 @@ class TaskController extends Controller
                 'success' => true,
                 'data' => $tasks,
                 'search_criteria' => $request->only([
-                    'due_date', 'due_date_from', 'due_date_to', 'created_by',
-                    'assigned_to', 'priority', 'status', 'project_id', 'search_term'
+                    'due_date',
+                    'due_date_from',
+                    'due_date_to',
+                    'created_by',
+                    'assigned_to',
+                    'priority',
+                    'status',
+                    'project_id',
+                    'search_term'
                 ]),
                 'message' => 'Task search completed successfully'
             ]);
@@ -195,10 +226,21 @@ class TaskController extends Controller
             $user = Auth::user();
             $perPage = $request->get('per_page', 15);
 
+            // $query = ProjectTask::with([
+            //     'project',
+            //     'milestone',
+            //     'creator',
+            //     'documents'
+            // ])->where('company_id', $user->company_id)
+            //     ->where('assigned_to', $user->id);
+
+
             $query = ProjectTask::with([
-                'project', 'milestone', 'creator', 'documents'
-            ])->where('company_id', $user->company_id)
-              ->where('assigned_to', $user->id);
+                'project',
+                'milestone',
+                'creator',
+                'documents'
+            ]);
 
             // Apply sorting
             $sortBy = $request->get('sort_by', 'due_date');
@@ -231,10 +273,15 @@ class TaskController extends Controller
             $today = now()->toDateString();
 
             $query = ProjectTask::with([
-                'project', 'milestone', 'assignedUser', 'creator', 'documents'
-            ])->where('company_id', $user->company_id)
-              ->whereDate('due_date', $today)
-              ->whereNotIn('status', ['done']); // Exclude completed tasks
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator',
+                'documents'
+                ])            
+                // ])->where('company_id', $user->company_id)
+                ->whereDate('due_date', $today)
+                ->whereNotIn('status', ['done']); // Exclude completed tasks
 
             // Apply sorting
             $sortBy = $request->get('sort_by', 'priority');
@@ -267,11 +314,36 @@ class TaskController extends Controller
             $perPage = $request->get('per_page', 15);
             $today = now()->toDateString();
 
+            // Debug: Check what today's date is
+            // var_dump("Today: " . $today);
+
+            // First, let's check if there are any tasks at all
+            $totalTasks = ProjectTask::count();
+            // var_dump("Total tasks in database: " . $totalTasks);
+
+            // Check tasks with due dates before today
+            $tasksBeforeToday = ProjectTask::whereDate('due_date', '<', $today)->count();
+            // var_dump("Tasks with due_date < today: " . $tasksBeforeToday);
+
+            // Check tasks that are not done
+            $tasksNotDone = ProjectTask::whereNotIn('status', ['done'])->count();
+            // var_dump("Tasks not done: " . $tasksNotDone);
+
             $query = ProjectTask::with([
-                'project', 'milestone', 'assignedUser', 'creator', 'documents'
-            ])->where('company_id', $user->company_id)
-              ->whereDate('due_date', '<', $today)
-              ->whereNotIn('status', ['done']); // Exclude completed tasks
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator',
+                'documents'
+            ])
+                ->whereDate('due_date', '<', $today)
+                ->whereNotIn('status', ['done']); // Exclude completed tasks
+
+            // Debug: Get the SQL query
+            $sql = $query->toSql();
+            $bindings = $query->getBindings();
+            // var_dump("SQL: " . $sql);
+            // var_dump("Bindings: ", $bindings);
 
             // Apply sorting (most overdue first)
             $sortBy = $request->get('sort_by', 'due_date');
@@ -279,6 +351,12 @@ class TaskController extends Controller
             $query->orderBy($sortBy, $sortOrder);
 
             $tasks = $query->paginate($perPage);
+
+            // Debug: Check count before pagination
+            $overdueCount = ProjectTask::whereDate('due_date', '<', $today)
+                ->whereNotIn('status', ['done'])
+                ->count();
+            // var_dump("Overdue tasks count: " . $overdueCount);
 
             // Calculate days overdue for each task
             $tasks->getCollection()->transform(function ($task) use ($today) {
@@ -321,10 +399,25 @@ class TaskController extends Controller
             $value = $request->value;
             $perPage = $request->get('per_page', 15);
 
-            $query = ProjectTask::with([
-                'project', 'milestone', 'assignedUser', 'creator', 'updater', 'documents'
-            ])->where('company_id', $user->company_id);
+            // $query = ProjectTask::with([
+            //     'project',
+            //     'milestone',
+            //     'assignedUser',
+            //     'creator',
+            //     'updater',
+            //     'documents'
+            // ])->where('company_id', $user->company_id);
 
+            $query = ProjectTask::with([
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator',
+                'updater',
+                'documents'
+            ]);
+            
+            
             // Apply field filter
             if ($field === 'due_date') {
                 $query->whereDate($field, $value);
@@ -413,8 +506,14 @@ class TaskController extends Controller
             $perPage = $request->get('per_page', 15);
 
             $query = ProjectTask::with([
-                'project', 'milestone', 'assignedUser', 'creator', 'updater', 'documents'
-            ])->where('company_id', $user->company_id);
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator',
+                'updater',
+                'documents'
+            ]);
+            // ->where('company_id', $user->company_id);
 
             // Apply sorting
             $query->orderBy($sortBy, $sortOrder);
@@ -452,7 +551,10 @@ class TaskController extends Controller
 
             // Load relationships for response
             $task->load([
-                'project', 'milestone', 'assignedUser', 'creator'
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator'
             ]);
 
             return response()->json([
@@ -475,17 +577,20 @@ class TaskController extends Controller
     {
         try {
             $task = ProjectTask::with([
-                'project', 'milestone', 'assignedUser', 'creator', 'updater', 'documents'
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator',
+                'updater',
+                'documents'
             ])->findOrFail($id);
 
-            // Check company access
-            $user = Auth::user();
-            if ($task->company_id !== $user->company_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized to view this task'
-                ], 403);
-            }
+
+
+            // return response()->json([
+            //     'success' => false,
+            //     'message' => 'Unauthorized to view this task'
+            // ], 403);
 
             return response()->json([
                 'success' => true,
@@ -508,14 +613,7 @@ class TaskController extends Controller
         try {
             $task = ProjectTask::findOrFail($id);
 
-            // Check company access
             $user = Auth::user();
-            if ($task->company_id !== $user->company_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized to update this task'
-                ], 403);
-            }
 
             $data = $request->validated();
 
@@ -537,7 +635,12 @@ class TaskController extends Controller
 
             // Load relationships for response
             $task->load([
-                'project', 'milestone', 'assignedUser', 'creator', 'updater', 'documents'
+                'project',
+                'milestone',
+                'assignedUser',
+                'creator',
+                'updater',
+                'documents'
             ]);
 
             return response()->json([
@@ -562,14 +665,7 @@ class TaskController extends Controller
         try {
             $task = ProjectTask::findOrFail($id);
 
-            // Check company access
             $user = Auth::user();
-            if ($task->company_id !== $user->company_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized to delete this task'
-                ], 403);
-            }
 
             // Set deleted_by before soft delete
             $task->deleted_by = $user->id;
@@ -595,12 +691,19 @@ class TaskController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            $companyId = $user->company_id ?? null;
+
+            // Build the query
+            $query = Employee::query();
+
+            // Apply company filter if company_id exists
+            if ($companyId) {
+                $query->where('company_id', $companyId);
+            }
 
             // Get employees from the employees table
-            $employees = Employee::where('company_id', $companyId)
-                ->with('user') // Load related user data
-                ->select('id', 'user_id', 'first_name', 'second_name', 'third_name', 'email', 'phone1', 'job_title', 'employee_number')
+            $employees = $query
+                ->select('id', 'user_id', 'first_name', 'second_name', 'third_name', 'email', 'phone1', 'job_title_id', 'employee_number')
                 ->orderBy('first_name')
                 ->get()
                 ->map(function ($employee) {
@@ -611,14 +714,14 @@ class TaskController extends Controller
                         'name' => trim($employee->first_name . ' ' . $employee->second_name . ' ' . $employee->third_name),
                         'email' => $employee->email,
                         'phone' => $employee->phone1,
-                        'job_title' => $employee->job_title,
+                        'job_title_id' => $employee->job_title_id,
                     ];
                 });
 
             return response()->json([
                 'success' => true,
                 'data' => $employees,
-                'message' => 'Employees retrieved successfully from employees table'
+                'message' => 'Employees retrieved successfully'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -673,25 +776,56 @@ class TaskController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            $companyId = $user->company_id ?? null;
 
-            // Verify project access
-            $project = Project::where('id', $projectId)
-                ->where('company_id', $companyId)
-                ->firstOrFail();
+            // Debug: Check what projectId we received
+            // var_dump("Requested Project ID: " . $projectId);
 
-            $tasks = ProjectTask::with([
-                'milestone', 'assignedUser', 'creator'
-            ])
-            ->forProject($projectId)
-            ->forCompany($companyId)
-            ->orderBy('created_at', 'desc')
-            ->get();
+            // Verify project exists
+            $query = Project::where('id', $projectId);
+
+            // Apply company filter if company_id exists
+            if ($companyId) {
+                $query->where('company_id', $companyId);
+            }
+
+            $project = $query->first();
+
+            if (!$project) {
+                // Get available projects for better error message
+                $availableProjects = Project::select('id', 'name')
+                    ->when($companyId, function($q) use ($companyId) {
+                        return $q->where('company_id', $companyId);
+                    })
+                    ->get();
+
+                return response()->json([
+                    'success' => false,
+                    'message' => "Project with ID {$projectId} not found.",
+                    'available_projects' => $availableProjects,
+                    'requested_project_id' => $projectId
+                ], 404);
+            }
+
+            // Get tasks for this project
+            $tasksQuery = ProjectTask::with([
+                'milestone',
+                'assignedUser',
+                'creator'
+            ])->forProject($projectId);
+
+            // Apply company filter if company_id exists
+            if ($companyId) {
+                $tasksQuery->forCompany($companyId);
+            }
+
+            $tasks = $tasksQuery->orderBy('created_at', 'desc')->get();
 
             return response()->json([
                 'success' => true,
                 'data' => $tasks,
                 'project' => $project,
+                'total_tasks' => $tasks->count(),
                 'message' => 'Project tasks retrieved successfully'
             ]);
         } catch (\Exception $e) {
@@ -710,14 +844,30 @@ class TaskController extends Controller
         try {
             $request->validate([
                 'title' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'file' => 'required|file|max:10240', // 10MB max
+                'description' => 'nullable|string|max:1000',
+                'file' => 'required|file|max:10240|mimes:pdf,doc,docx,txt,jpg,jpeg,png,gif,zip,rar', // 10MB max with allowed types
             ]);
 
             $user = Auth::user();
-            $task = ProjectTask::where('id', $taskId)
-                ->where('company_id', $user->company_id)
-                ->firstOrFail();
+            $companyId = $user->company_id ?? 1; // Default to 1 if not set
+
+            // Find the task (optionally filter by company if needed)
+            $taskQuery = ProjectTask::where('id', $taskId);
+
+            // Apply company filter if company_id exists
+            if ($user->company_id) {
+                $taskQuery->where('company_id', $user->company_id);
+            }
+
+            $task = $taskQuery->first();
+
+            if (!$task) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Task with ID {$taskId} not found or you don't have access to it.",
+                    'task_id' => $taskId
+                ], 404);
+            }
 
             // Handle file upload
             $file = $request->file('file');
@@ -727,7 +877,7 @@ class TaskController extends Controller
             // Create document record
             $document = TaskDocument::create([
                 'user_id' => $user->id,
-                'company_id' => $user->company_id,
+                'company_id' => $companyId,
                 'branch_id' => $user->branch_id ?? 1,
                 'fiscal_year_id' => $user->fiscal_year_id ?? 1,
                 'project_id' => $task->project_id,
@@ -744,9 +894,31 @@ class TaskController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $document,
+                'task' => [
+                    'id' => $task->id,
+                    'name' => $task->task_name,
+                    'project_id' => $task->project_id
+                ],
+                'file_info' => [
+                    'original_name' => $file->getClientOriginalName(),
+                    'size' => $file->getSize(),
+                    'type' => $file->getClientMimeType(),
+                    'path' => $filePath
+                ],
                 'message' => 'Document uploaded successfully'
             ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
+            // Clean up uploaded file if document creation failed
+            if (isset($filePath) && Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->delete($filePath);
+            }
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error uploading document: ' . $e->getMessage()
@@ -760,13 +932,13 @@ class TaskController extends Controller
     public function getTaskDocuments($taskId): JsonResponse
     {
         try {
-            $user =Auth::user();
+            $user = Auth::user();
             $task = ProjectTask::where('id', $taskId)
-                ->where('company_id', $user->company_id)
+                // ->where('company_id', $user->company_id)
                 ->firstOrFail();
 
             $documents = TaskDocument::forTask($taskId)
-                ->forCompany($user->company_id)
+                // ->forCompany($user->company_id)
                 ->with('creator')
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -791,9 +963,40 @@ class TaskController extends Controller
     {
         try {
             $user = Auth::user();
-            $document = TaskDocument::where('id', $documentId)
-                ->where('company_id', $user->company_id)
-                ->firstOrFail();
+
+            // Find the document with proper validation
+            $documentQuery = TaskDocument::where('id', $documentId);
+
+            // Apply company filter if company_id exists
+            if ($user->company_id) {
+                $documentQuery->where('company_id', $user->company_id);
+            }
+
+            $document = $documentQuery->first();
+
+            if (!$document) {
+                // Get available documents for better error message
+                $availableDocuments = TaskDocument::select('id', 'title', 'task_id')
+                    ->when($user->company_id, function($q) use ($user) {
+                        return $q->where('company_id', $user->company_id);
+                    })
+                    ->get();
+
+                return response()->json([
+                    'success' => false,
+                    'message' => "Document with ID {$documentId} not found or you don't have access to it.",
+                    'document_id' => $documentId,
+                    'available_documents' => $availableDocuments
+                ], 404);
+            }
+
+            // Store document info for response
+            $documentInfo = [
+                'id' => $document->id,
+                'title' => $document->title,
+                'file_name' => $document->file_name,
+                'task_id' => $document->task_id
+            ];
 
             // Delete file from storage
             if ($document->file_path && Storage::disk('public')->exists($document->file_path)) {
@@ -807,7 +1010,8 @@ class TaskController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Document deleted successfully'
+                'message' => 'Document deleted successfully',
+                'deleted_document' => $documentInfo
             ]);
         } catch (\Exception $e) {
             return response()->json([

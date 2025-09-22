@@ -2,9 +2,9 @@
 
 namespace Modules\Inventory\Models;
 
-use App\Models\Company;
-use App\Models\User;
-use App\Models\Currency;
+use Modules\Companies\Models\Company;
+use Modules\Users\Models\User;
+use Modules\FinancialAccounts\Models\Currency;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
