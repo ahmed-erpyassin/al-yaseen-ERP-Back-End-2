@@ -23,12 +23,13 @@ class WarehouseController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = Warehouse::with([
             'company', 'branch', 'user', 'departmentWarehouse',
             'warehouseKeeper', 'salesAccount', 'purchaseAccount'  // ✅ Include all relationships
-        ])->forCompany($companyId);
+        ]);
+        // ->forCompany($companyId);
 
         // Apply filters
         if ($request->has('active')) {
@@ -116,7 +117,7 @@ class WarehouseController extends Controller
      */
     public function filterByField(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $request->validate([
             'field' => 'required|string',
@@ -147,7 +148,8 @@ class WarehouseController extends Controller
         $query = Warehouse::with([
             'company', 'branch', 'user', 'departmentWarehouse',
             'warehouseKeeper', 'salesAccount', 'purchaseAccount'
-        ])->forCompany($companyId);
+        ]);
+        // ->forCompany($companyId);
 
         // ✅ Apply field-specific filter (case-insensitive)
         $query->whereRaw("LOWER({$field}) LIKE ?", ['%' . strtolower($value) . '%']);
@@ -221,37 +223,61 @@ class WarehouseController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        try {
+            $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        // ✅ Load warehouse with all relationships for comprehensive preview
-        $warehouse = Warehouse::with([
-            'company', 'branch', 'user', 'departmentWarehouse',
-            'warehouseKeeper', 'salesAccount', 'purchaseAccount',
-            'stock.inventoryItem', 'stockMovements', 'creator', 'updater'
-        ])->forCompany($companyId)->findOrFail($id);
+            // ✅ Load warehouse with all relationships for comprehensive preview
+            $warehouse = Warehouse::with([
+                'company', 'branch', 'user', 'departmentWarehouse',
+                'warehouseKeeper', 'salesAccount', 'purchaseAccount',
+                'stock.inventoryItem', 'stockMovements', 'creator', 'updater'
+            ])->forCompany($companyId)->find($id);
 
-        // ✅ Add computed attributes for display
-        $warehouseData = $warehouse->toArray();
-        $warehouseData['display_name'] = $warehouse->display_name;
-        $warehouseData['warehouse_keeper_name'] = $warehouse->warehouse_keeper_name;
-        $warehouseData['warehouse_keeper_number'] = $warehouse->warehouse_keeper_number;
-        $warehouseData['sales_account_name'] = $warehouse->sales_account_name;
-        $warehouseData['purchase_account_name'] = $warehouse->purchase_account_name;
+            if (!$warehouse) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Warehouse with ID {$id} not found for this company",
+                    'message_ar' => "المخزن برقم {$id} غير موجود لهذه الشركة",
+                    'available_warehouses' => Warehouse::forCompany($companyId)->pluck('name', 'id')
+                ], 404);
+            }
 
-        // ✅ Add summary statistics
-        $warehouseData['statistics'] = [
-            'total_stock_items' => $warehouse->stock->count(),
-            'total_stock_movements' => $warehouse->stockMovements->count(),
-            'total_stock_value' => $warehouse->stock->sum('total_value'),
-            'last_movement_date' => $warehouse->stockMovements->max('movement_date'),
-        ];
+            // ✅ Add computed attributes for display
+            $warehouseData = $warehouse->toArray();
+            $warehouseData['display_name'] = $warehouse->display_name;
+            $warehouseData['warehouse_keeper_name'] = $warehouse->warehouse_keeper_name;
+            $warehouseData['warehouse_keeper_number'] = $warehouse->warehouse_keeper_number;
+            $warehouseData['sales_account_name'] = $warehouse->sales_account_name;
+            $warehouseData['purchase_account_name'] = $warehouse->purchase_account_name;
 
-        return response()->json([
-            'success' => true,
-            'data' => $warehouseData,
-            'message' => 'Warehouse retrieved successfully',
-            'message_ar' => 'تم استرداد بيانات المخزن بنجاح'
-        ]);
+            // ✅ Add summary statistics
+            $warehouseData['statistics'] = [
+                'total_stock_items' => $warehouse->stock->count(),
+                'total_stock_movements' => $warehouse->stockMovements->count(),
+                'total_quantity' => $warehouse->stock->sum('quantity'),
+                'total_available_quantity' => $warehouse->stock->sum('available_quantity'),
+                'last_movement_date' => $warehouse->stockMovements->max('transaction_date'),
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $warehouseData,
+                'message' => 'Warehouse retrieved successfully',
+                'message_ar' => 'تم استرداد بيانات المخزن بنجاح'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving warehouse: ' . $e->getMessage(),
+                'message_ar' => 'خطأ في استرداد بيانات المخزن: ' . $e->getMessage(),
+                'error_details' => [
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => config('app.debug') ? $e->getTraceAsString() : null
+                ]
+            ], 500);
+        }
     }
 
     /**
@@ -259,10 +285,12 @@ class WarehouseController extends Controller
      */
     public function update(UpdateWarehouseRequest $request, $id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
         $userId = Auth::id() ?? $request->user_id;
 
-        $warehouse = Warehouse::forCompany($companyId)->findOrFail($id);
+        $warehouse = Warehouse::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         // ✅ Validate and prepare all editable fields
         $data = $request->validated();
@@ -295,10 +323,12 @@ class WarehouseController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
-        $warehouse = Warehouse::forCompany($companyId)->findOrFail($id);
+        $warehouse = Warehouse::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         // Check if warehouse has stock
         if ($warehouse->stock()->exists()) {
@@ -325,10 +355,10 @@ class WarehouseController extends Controller
      */
     public function first(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $warehouse = Warehouse::with(['company', 'branch', 'user', 'departmentWarehouse'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->orderBy('name')
             ->first();
 
@@ -351,10 +381,10 @@ class WarehouseController extends Controller
      */
     public function last(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $warehouse = Warehouse::with(['company', 'branch', 'user', 'departmentWarehouse'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->orderBy('name', 'desc')
             ->first();
 
@@ -377,11 +407,11 @@ class WarehouseController extends Controller
      */
     public function trashed(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = Warehouse::onlyTrashed()
-            ->with(['company', 'branch', 'warehouseKeeper', 'deleter'])
-            ->forCompany($companyId);
+            ->with(['company', 'branch', 'warehouseKeeper', 'deleter']);
+            // ->forCompany($companyId);
 
         // Apply search to trashed items
         if ($request->has('search')) {
@@ -409,10 +439,10 @@ class WarehouseController extends Controller
      */
     public function restore($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $warehouse = Warehouse::onlyTrashed()
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->findOrFail($id);
 
         $warehouse->restore();
@@ -430,10 +460,10 @@ class WarehouseController extends Controller
      */
     public function forceDelete($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $warehouse = Warehouse::onlyTrashed()
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->findOrFail($id);
 
         $warehouse->forceDelete();
@@ -450,21 +480,19 @@ class WarehouseController extends Controller
      */
     public function getFormData(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-
         try {
             $data = [
                 // ✅ Employees dropdown (for Warehouse Keeper)
-                'employees' => $this->getEmployeesDropdown($companyId),
+                'employees' => $this->getEmployeesDropdown(),
 
                 // ✅ Accounts dropdown (for Sales and Purchase accounts)
-                'accounts' => $this->getAccountsDropdown($companyId),
+                'accounts' => $this->getAccountsDropdown(),
 
                 // ✅ Branches dropdown
-                'branches' => $this->getBranchesDropdown($companyId),
+                'branches' => $this->getBranchesDropdown(),
 
                 // ✅ Department Warehouses dropdown
-                'department_warehouses' => $this->getDepartmentWarehousesDropdown($companyId),
+                'department_warehouses' => $this->getDepartmentWarehousesDropdown(),
 
                 // ✅ Inventory valuation methods
                 'inventory_valuation_methods' => Warehouse::INVENTORY_VALUATION_METHODS,
@@ -481,43 +509,30 @@ class WarehouseController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => true,
-                'data' => [
-                    'employees' => [],
-                    'accounts' => [],
-                    'branches' => [],
-                    'department_warehouses' => [],
-                    'inventory_valuation_methods' => Warehouse::INVENTORY_VALUATION_METHODS,
-                    'status_options' => Warehouse::STATUS_OPTIONS,
-                ],
-                'message' => 'Form data retrieved (some dropdowns may be empty)',
-                'message_ar' => 'تم استرداد بيانات النموذج (بعض القوائم قد تكون فارغة)'
-            ]);
+                'success' => false,
+                'message' => 'Failed to retrieve form data: ' . $e->getMessage(),
+                'message_ar' => 'فشل في استرداد بيانات النموذج: ' . $e->getMessage()
+            ], 500);
         }
     }
 
     /**
      * ✅ Get employees for dropdown (can be empty if employees table doesn't exist).
      */
-    private function getEmployeesDropdown($companyId): array
+    private function getEmployeesDropdown(): array
     {
         try {
-            if (!class_exists('\App\Models\Employee')) {
-                return [];
-            }
-
             return DB::table('employees')
-                ->where('company_id', $companyId)
-                ->where('status', 'active')
-                ->select('id', 'name', 'employee_number')
-                ->orderBy('name')
+                ->select('id', 'first_name', 'second_name', 'employee_number')
+                ->orderBy('first_name')
                 ->get()
                 ->map(function ($employee) {
+                    $fullName = trim($employee->first_name . ' ' . $employee->second_name);
                     return [
                         'value' => $employee->id,
-                        'label' => $employee->name . ' (' . $employee->employee_number . ')',
+                        'label' => $fullName . ' (' . $employee->employee_number . ')',
                         'employee_number' => $employee->employee_number,
-                        'name' => $employee->name,
+                        'name' => $fullName,
                     ];
                 })
                 ->toArray();
@@ -529,24 +544,18 @@ class WarehouseController extends Controller
     /**
      * ✅ Get accounts for dropdown (can be empty if accounts table doesn't exist).
      */
-    private function getAccountsDropdown($companyId): array
+    private function getAccountsDropdown(): array
     {
         try {
-            if (!class_exists('\App\Models\Account')) {
-                return [];
-            }
-
             return DB::table('accounts')
-                ->where('company_id', $companyId)
-                ->where('status', 'active')
-                ->select('id', 'name', 'account_number')
+                ->select('id', 'name', 'code')
                 ->orderBy('name')
                 ->get()
                 ->map(function ($account) {
                     return [
                         'value' => $account->id,
-                        'label' => $account->name . ' (' . $account->account_number . ')',
-                        'account_number' => $account->account_number,
+                        'label' => $account->name . ' (' . $account->code . ')',
+                        'code' => $account->code,
                         'name' => $account->name,
                     ];
                 })
@@ -559,21 +568,22 @@ class WarehouseController extends Controller
     /**
      * ✅ Get branches for dropdown.
      */
-    private function getBranchesDropdown($companyId): array
+    private function getBranchesDropdown(): array
     {
         try {
             return DB::table('branches')
-                ->where('company_id', $companyId)
-                ->where('status', 'active')
-                ->select('id', 'name', 'code')
-                ->orderBy('name')
+                ->select('id', 'branch_name_ar', 'branch_name_en', 'branch_code')
+                ->orderBy('branch_name_ar')
                 ->get()
                 ->map(function ($branch) {
+                    $name = $branch->branch_name_ar ?: $branch->branch_name_en;
                     return [
                         'value' => $branch->id,
-                        'label' => $branch->name . ' (' . $branch->code . ')',
-                        'code' => $branch->code,
-                        'name' => $branch->name,
+                        'label' => $name . ($branch->branch_code ? ' (' . $branch->branch_code . ')' : ''),
+                        'code' => $branch->branch_code,
+                        'name' => $name,
+                        'name_ar' => $branch->branch_name_ar,
+                        'name_en' => $branch->branch_name_en,
                     ];
                 })
                 ->toArray();
@@ -585,21 +595,23 @@ class WarehouseController extends Controller
     /**
      * ✅ Get department warehouses for dropdown.
      */
-    private function getDepartmentWarehousesDropdown($companyId): array
+    private function getDepartmentWarehousesDropdown(): array
     {
         try {
             return DB::table('department_warehouses')
-                ->where('company_id', $companyId)
-                ->where('status', 'active')
-                ->select('id', 'name', 'code')
-                ->orderBy('name')
+                ->where('active', true)
+                ->select('id', 'department_name_ar', 'department_name_en', 'department_number')
+                ->orderBy('department_name_ar')
                 ->get()
                 ->map(function ($dept) {
+                    $name = $dept->department_name_ar ?: $dept->department_name_en;
                     return [
                         'value' => $dept->id,
-                        'label' => $dept->name . ' (' . $dept->code . ')',
-                        'code' => $dept->code,
-                        'name' => $dept->name,
+                        'label' => $name . ($dept->department_number ? ' (' . $dept->department_number . ')' : ''),
+                        'code' => $dept->department_number,
+                        'name' => $name,
+                        'name_ar' => $dept->department_name_ar,
+                        'name_en' => $dept->department_name_en,
                     ];
                 })
                 ->toArray();

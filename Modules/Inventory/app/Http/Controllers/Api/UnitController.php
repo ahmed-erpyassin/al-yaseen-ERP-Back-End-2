@@ -22,15 +22,16 @@ class UnitController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = Unit::with([
             'company',
             'branch',
             'user',
             'defaultHandlingUnit:id,name,symbol',
-            'defaultWarehouse:id,name,code'
-        ])->forCompany($companyId);
+            'defaultWarehouse:id,name,warehouse_number'
+        ]);
+        // ->forCompany($companyId);
 
         // Apply filters
         if ($request->has('status')) {
@@ -71,11 +72,11 @@ class UnitController extends Controller
      */
     public function store(StoreUnitRequest $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
         $userId = Auth::id() ?? $request->user_id;
 
         $data = $request->validated();
-        $data['company_id'] = $companyId;
+        // $data['company_id'] = $companyId;
         $data['user_id'] = $userId;
         $data['created_by'] = $userId;
 
@@ -94,10 +95,10 @@ class UnitController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $unit = Unit::with(['company', 'branch', 'user', 'items', 'itemUnits'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->findOrFail($id);
 
         return response()->json([
@@ -112,10 +113,12 @@ class UnitController extends Controller
      */
     public function update(UpdateUnitRequest $request, $id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
         $userId = Auth::id() ?? $request->user_id;
 
-        $unit = Unit::forCompany($companyId)->findOrFail($id);
+        $unit = Unit::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         $data = $request->validated();
         $data['updated_by'] = $userId;
@@ -135,9 +138,11 @@ class UnitController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $unit = Unit::forCompany($companyId)->findOrFail($id);
+        $unit = Unit::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         // Check if unit has items
         if ($unit->items()->exists() || $unit->itemUnits()->exists()) {
@@ -160,10 +165,10 @@ class UnitController extends Controller
      */
     public function first(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $unit = Unit::with(['company', 'branch', 'user'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->orderBy('name')
             ->first();
 
@@ -186,10 +191,10 @@ class UnitController extends Controller
      */
     public function last(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $unit = Unit::with(['company', 'branch', 'user'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->orderBy('name', 'desc')
             ->first();
 
@@ -229,6 +234,7 @@ class UnitController extends Controller
     {
         $companyId = Auth::user()->company_id ?? $request->company_id;
         $options = Unit::getAllUnitOptions($companyId);
+        // $options = Unit::getAllUnitOptions();
 
         return response()->json([
             'success' => true,
@@ -245,6 +251,7 @@ class UnitController extends Controller
     {
         $companyId = Auth::user()->company_id ?? $request->company_id;
         $options = Unit::getAllContainsOptions($companyId);
+        // $options = Unit::getAllContainsOptions();
 
         return response()->json([
             'success' => true,
@@ -259,10 +266,11 @@ class UnitController extends Controller
      */
     public function getUnitsForDropdown(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $units = Unit::forCompany($companyId)
-            ->where('status', 'active')
+        $units = Unit::
+        // forCompany($companyId)->
+        where('status', 'active')
             ->select('id', 'name', 'symbol', 'code')
             ->orderBy('name')
             ->get()
@@ -291,19 +299,20 @@ class UnitController extends Controller
     {
         $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $warehouses = \Modules\Inventory\Models\Warehouse::forCompany($companyId)
-            ->select('id', 'name', 'code', 'address', 'is_default')
-            ->orderBy('is_default', 'desc')
+        $warehouses = \Modules\Inventory\Models\Warehouse::
+            forCompany($companyId)->
+            select('id', 'name', 'warehouse_number', 'address', 'status')
+            ->where('status', 'active')
             ->orderBy('name')
             ->get()
             ->map(function ($warehouse) {
                 return [
                     'id' => $warehouse->id,
                     'name' => $warehouse->name,
-                    'display_name' => $warehouse->name . ($warehouse->code ? " ({$warehouse->code})" : ''),
-                    'code' => $warehouse->code,
+                    'display_name' => $warehouse->name . ($warehouse->warehouse_number ? " ({$warehouse->warehouse_number})" : ''),
+                    'warehouse_number' => $warehouse->warehouse_number,
                     'address' => $warehouse->address,
-                    'is_default' => $warehouse->is_default,
+                    'status' => $warehouse->status,
                 ];
             });
 

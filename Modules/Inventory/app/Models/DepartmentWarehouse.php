@@ -61,6 +61,30 @@ class DepartmentWarehouse extends Model
     }
 
     /**
+     * Get the department name (prioritize Arabic).
+     */
+    public function getNameAttribute()
+    {
+        return $this->department_name_ar ?: $this->department_name_en;
+    }
+
+    /**
+     * Get the department code.
+     */
+    public function getCodeAttribute()
+    {
+        return $this->department_number;
+    }
+
+    /**
+     * Get the status as string.
+     */
+    public function getStatusAttribute()
+    {
+        return $this->active ? 'active' : 'inactive';
+    }
+
+    /**
      * Scope to get active departments only.
      */
     public function scopeActive($query)
