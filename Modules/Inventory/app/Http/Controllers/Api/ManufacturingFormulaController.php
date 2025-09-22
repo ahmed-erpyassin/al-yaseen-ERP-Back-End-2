@@ -15,6 +15,12 @@ use Modules\Inventory\Http\Resources\ManufacturingFormulaResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @group Inventory Management / ManufacturingFormula
+ *
+ *
+ */
+
 class ManufacturingFormulaController extends Controller
 {
     /**
@@ -24,6 +30,12 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = $request->user();
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
             $companyId = $user->company_id;
 
             $query = BomItem::with(['item', 'creator', 'updater'])
@@ -69,6 +81,12 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = $request->user();
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
             $companyId = $user->company_id;
 
             $formula = BomItem::with(['item', 'creator', 'updater'])
@@ -98,6 +116,14 @@ class ManufacturingFormulaController extends Controller
             DB::beginTransaction();
 
             $user = $request->user();
+            if (!$user) {
+                Log::warning('Authentication failed in update method - user is null');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
+
             $companyId = $user->company_id;
 
             $formula = BomItem::where('company_id', $companyId)
@@ -167,6 +193,12 @@ class ManufacturingFormulaController extends Controller
             DB::beginTransaction();
 
             $user = $request->user();
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User not authenticated'
+                ], 401);
+            }
             $companyId = $user->company_id;
 
             $formula = BomItem::where('company_id', $companyId)
@@ -299,8 +331,16 @@ class ManufacturingFormulaController extends Controller
      */
     public function store(StoreManufacturingFormulaRequest $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $userId = Auth::id() ?? $request->user_id;
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        $companyId = $user->company_id ?? $request->company_id;
+        $userId = $user->id ?? $request->user_id;
 
         try {
             DB::beginTransaction();
@@ -1060,7 +1100,7 @@ class ManufacturingFormulaController extends Controller
             $fieldData = $this->getFieldSpecificData($field, $value, $companyId, $baseFormula);
 
             // ✅ Format results with enhanced data
-            $formattedResults = $results->map(function ($formula) use ($field) {
+            $formattedResults = $results->map(function ($formula) use ($field, $value) {
                 return [
                     'id' => $formula->id,
                     'formula_number' => $formula->formula_number,

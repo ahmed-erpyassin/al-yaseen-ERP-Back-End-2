@@ -328,7 +328,7 @@ endpoints:
         name: format
         description: ''
         required: false
-        example: png
+        example: svg
         type: string
         enumValues:
           - png
@@ -351,7 +351,7 @@ endpoints:
       barcode_type_id: consequatur
       width: 5
       height: 16
-      format: png
+      format: svg
       color: consequatur
     fileParameters: []
     responses: []

@@ -561,7 +561,7 @@ endpoints:
         name: item_subject_to_vat
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -666,7 +666,7 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -716,7 +716,7 @@ endpoints:
       maximum_sale_discount_rate: 17
       minimum_allowed_sale_price: 1
       sale_prices_include_vat: true
-      item_subject_to_vat: false
+      item_subject_to_vat: true
       notes: consequatur
       barcode: mqeopfuudtdsufvyvddqa
       barcode_type: C128
@@ -726,7 +726,7 @@ endpoints:
       item_type: xbajwbpilpmufinllwloa
       custom_item_type: uydlsmsjuryvojcybzvrb
       custom_item_type_ar: yickznkygloigmkwxphlv
-      active: true
+      active: false
       stock_tracking: true
     fileParameters: []
     responses: []
@@ -936,7 +936,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: raw_material
+        example: material
         type: string
         enumValues:
           - product
@@ -1050,7 +1050,7 @@ endpoints:
         name: purchase_prices_include_vat
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1160,7 +1160,7 @@ endpoints:
         name: barcode_type
         description: ''
         required: false
-        example: EAN13
+        example: UPCA
         type: string
         enumValues:
           - C128
@@ -1225,7 +1225,7 @@ endpoints:
         name: stock_tracking
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1240,7 +1240,7 @@ endpoints:
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       model: dtdsufvyvddqamniihfqc
       unit_name: oynlazghdtqtqxbajwbpi
-      type: raw_material
+      type: material
       quantity: 41
       balance: 11613.31890586
       minimum_limit: 50
@@ -1251,7 +1251,7 @@ endpoints:
       second_purchase_price: 12
       third_purchase_price: 66
       purchase_discount_rate: 4
-      purchase_prices_include_vat: false
+      purchase_prices_include_vat: true
       first_sale_price: 65
       second_sale_price: 72
       third_sale_price: 18
@@ -1262,13 +1262,13 @@ endpoints:
       item_subject_to_vat: false
       notes: consequatur
       barcode: mqeopfuudtdsufvyvddqa
-      barcode_type: EAN13
+      barcode_type: UPCA
       expiry_date: '2106-10-22'
       image: mqeopfuudtdsufvyvddqa
       color: mniihfqcoynlazghdtqtq
       item_type: xbajwbpilpmufinllwloa
       active: true
-      stock_tracking: true
+      stock_tracking: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -1864,7 +1864,7 @@ endpoints:
         name: barcode_type
         description: ''
         required: true
-        example: C128
+        example: UPCA
         type: string
         enumValues:
           - C128
@@ -1877,7 +1877,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       barcode: consequatur
-      barcode_type: C128
+      barcode_type: UPCA
     fileParameters: []
     responses: []
     responseFields: []
@@ -1949,7 +1949,7 @@ endpoints:
         name: format
         description: ''
         required: false
-        example: svg
+        example: png
         type: string
         enumValues:
           - png
@@ -1970,7 +1970,7 @@ endpoints:
     cleanBodyParameters:
       width: 9
       height: 13
-      format: svg
+      format: png
       color: consequatur
     fileParameters: []
     responses: []
@@ -2104,7 +2104,7 @@ endpoints:
         name: date_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T13:43:35'
+        example: '2025-09-22T14:42:32'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2124,7 +2124,7 @@ endpoints:
         name: transaction_type
         description: ''
         required: false
-        example: purchases
+        example: sales
         type: string
         enumValues:
           - sales
@@ -2148,7 +2148,7 @@ endpoints:
         name: sort_by
         description: ''
         required: false
-        example: quantity
+        example: type
         type: string
         enumValues:
           - date
@@ -2162,7 +2162,7 @@ endpoints:
         name: sort_direction
         description: ''
         required: false
-        example: asc
+        example: desc
         type: string
         enumValues:
           - asc
@@ -2171,12 +2171,12 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
-      date_from: '2025-09-22T13:43:35'
+      date_from: '2025-09-22T14:42:32'
       date_to: '2106-10-22'
-      transaction_type: purchases
+      transaction_type: sales
       per_page: 13
-      sort_by: quantity
-      sort_direction: asc
+      sort_by: type
+      sort_direction: desc
     fileParameters: []
     responses:
       -
@@ -2237,7 +2237,7 @@ endpoints:
         name: date_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T13:43:35'
+        example: '2025-09-22T14:42:32'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2257,7 +2257,7 @@ endpoints:
         name: transaction_type
         description: ''
         required: false
-        example: stock_movements
+        example: purchases
         type: string
         enumValues:
           - sales
@@ -2284,7 +2284,7 @@ endpoints:
         name: format
         description: ''
         required: false
-        example: pdf
+        example: xlsx
         type: string
         enumValues:
           - xlsx
@@ -2294,11 +2294,11 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
-      date_from: '2025-09-22T13:43:35'
+      date_from: '2025-09-22T14:42:32'
       date_to: '2106-10-22'
-      transaction_type: stock_movements
+      transaction_type: purchases
       export_type: multi_sheet
-      format: pdf
+      format: xlsx
     fileParameters: []
     responses:
       -

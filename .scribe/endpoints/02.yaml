@@ -496,7 +496,7 @@ endpoints:
         name: inventory_valuation_method
         description: ''
         required: true
-        example: no_value
+        example: natural_division
         type: string
         enumValues:
           - natural_division
@@ -530,7 +530,7 @@ endpoints:
       phone_number: atbxspzmrazsroyjpxmqe
       purchase_account: sedyghenqcopwvownkbam
       sale_account: lnfngefbeilfzsyuxoezb
-      inventory_valuation_method: no_value
+      inventory_valuation_method: natural_division
       status: inactive
     fileParameters: []
     responses: []

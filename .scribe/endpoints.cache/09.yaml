@@ -269,7 +269,7 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -280,7 +280,7 @@ endpoints:
       name_ar: amniihfqcoynlazghdtqt
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       description_ar: consequatur
-      is_active: true
+      is_active: false
     fileParameters: []
     responses: []
     responseFields: []

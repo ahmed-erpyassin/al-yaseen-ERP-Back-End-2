@@ -35,6 +35,9 @@ tags:
     name: 'Inventory Management / Items'
     description: "\nAPIs for managing inventory items, including creation, updates, search, and transaction tracking."
   -
+    name: 'Inventory Management / ManufacturingFormula'
+    description: "\_*\n\_*\n\_"
+  -
     name: 'Inventory Management / Stock Movements'
     description: "\nAPIs for managing stock movements, including transfers, adjustments, and movement tracking."
   -
@@ -138,524 +141,6 @@ paths:
       description: ''
       parameters: []
       responses: {  }
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/catalog-all:
-    get:
-      summary: 'Display a listing of manufacturing formulas with advanced search and filtering.'
-      operationId: displayAListingOfManufacturingFormulasWithAdvancedSearchAndFiltering
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/establish-formula:
-    post:
-      summary: '✅ Store Manufacturing Formula via API.'
-      operationId: StoreManufacturingFormulaViaAPI
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                item_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the items table.'
-                  example: consequatur
-                  nullable: false
-                consumed_quantity:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 45
-                  nullable: false
-                produced_quantity:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 56
-                  nullable: false
-                labor_cost:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 16
-                  nullable: false
-                operating_cost:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 50
-                  nullable: false
-                waste_cost:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 55
-                  nullable: false
-                unit_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the units table.'
-                  example: null
-                  nullable: true
-                formula_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: fuudtdsufvyvddqamniih
-                  nullable: true
-                formula_description:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: fqcoynlazghdtqtqxbajw
-                  nullable: true
-                formula_number:
-                  type: string
-                  description: 'Must not be greater than 50 characters.'
-                  example: bpilpmufinllwloauydls
-                  nullable: true
-                selected_purchase_price_type:
-                  type: string
-                  description: ''
-                  example: first
-                  nullable: true
-                  enum:
-                    - first
-                    - second
-                    - third
-                batch_size:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 42
-                  nullable: true
-                production_time_minutes:
-                  type: integer
-                  description: 'Must be at least 0.'
-                  example: 64
-                  nullable: true
-                preparation_time_minutes:
-                  type: integer
-                  description: 'Must be at least 0.'
-                  example: 34
-                  nullable: true
-                production_notes:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: uryvojcybzvrbyickznky
-                  nullable: true
-                preparation_notes:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: gloigmkwxphlvazjrcnfb
-                  nullable: true
-                usage_instructions:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: aqywuxhgjjmzuxjubqouz
-                  nullable: true
-                tolerance_percentage:
-                  type: number
-                  description: 'Must be at least 0. Must not be greater than 100.'
-                  example: 18
-                  nullable: true
-                quality_requirements:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: wiwxtrkimfcatbxspzmra
-                  nullable: true
-                requires_inspection:
-                  type: boolean
-                  description: ''
-                  example: true
-                  nullable: true
-                status:
-                  type: string
-                  description: ''
-                  example: active
-                  nullable: true
-                  enum:
-                    - draft
-                    - active
-                    - inactive
-                    - archived
-                is_active:
-                  type: boolean
-                  description: ''
-                  example: false
-                  nullable: true
-                effective_from:
-                  type: string
-                  description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:36'
-                  nullable: true
-                effective_to:
-                  type: string
-                  description: 'Must be a valid date. Must be a date after <code>effective_from</code>.'
-                  example: '2106-10-22'
-                  nullable: true
-                company_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the companies table.'
-                  example: null
-                  nullable: true
-                user_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the users table.'
-                  example: null
-                  nullable: true
-                branch_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the branches table.'
-                  example: null
-                  nullable: true
-              required:
-                - item_id
-                - consumed_quantity
-                - produced_quantity
-                - labor_cost
-                - operating_cost
-                - waste_cost
-  '/api/v1/manufacturing-formulas/examine-formula/{id}':
-    get:
-      summary: 'Display the specified manufacturing formula.'
-      operationId: displayTheSpecifiedManufacturingFormula
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the examine formula.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  '/api/v1/manufacturing-formulas/remove-formula/{id}':
-    delete:
-      summary: 'Remove the specified manufacturing formula (soft delete).'
-      operationId: removeTheSpecifiedManufacturingFormulasoftDelete
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the remove formula.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  /api/v1/manufacturing-formulas/item-numbers:
-    get:
-      summary: '✅ Get all Item Numbers for dropdown simulation.'
-      operationId: GetAllItemNumbersForDropdownSimulation
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/item-details:
-    get:
-      summary: '✅ Get Item details by Item Number or Name.'
-      operationId: GetItemDetailsByItemNumberOrName
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/calculate-cost:
-    post:
-      summary: '✅ Calculate Final Cost for existing formula (API endpoint).'
-      operationId: CalculateFinalCostForExistingFormulaAPIEndpoint
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/available-fields:
-    get:
-      summary: 'Get all available fields for dynamic data display.'
-      operationId: getAllAvailableFieldsForDynamicDataDisplay
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/field-values:
-    get:
-      summary: 'Get field values for dropdown filtering.'
-      operationId: getFieldValuesForDropdownFiltering
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/selectable-fields:
-    get:
-      summary: '✅ Get all available fields for selection.'
-      operationId: GetAllAvailableFieldsForSelection
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/field-based-data:
-    get:
-      summary: '✅ Get field-based data display - Show data based on selected field.'
-      operationId: GetFieldBasedDataDisplayShowDataBasedOnSelectedField
-      description: 'When user clicks on any field in the table, show related data.'
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/formula-numbers:
-    get:
-      summary: '✅ Get manufacturing formula numbers for dropdown.'
-      operationId: GetManufacturingFormulaNumbersForDropdown
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/item-by-formula-number:
-    get:
-      summary: '✅ Get item details by manufacturing formula number.'
-      operationId: GetItemDetailsByManufacturingFormulaNumber
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  /api/v1/manufacturing-formulas/warehouses:
-    get:
-      summary: '✅ Get warehouses for dropdown.'
-      operationId: GetWarehousesForDropdown
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - Endpoints
-  '/api/v1/manufacturing-formulas/update-prices-from-suppliers/{id}':
-    put:
-      summary: '✅ Update prices from suppliers table for a manufactured formula.'
-      operationId: UpdatePricesFromSuppliersTableForAManufacturedFormula
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the update prices from supplier.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  /api/v1/manufacturing-formulas/update-all-prices-from-suppliers:
-    put:
-      summary: '✅ Update prices from suppliers table for all manufactured formulas.'
-      operationId: UpdatePricesFromSuppliersTableForAllManufacturedFormulas
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-  '/api/v1/manufacturing-formulas/{id}/restore-formula':
-    post:
-      summary: 'Restore a soft deleted manufacturing formula.'
-      operationId: restoreASoftDeletedManufacturingFormula
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the manufacturing formula.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  '/api/v1/manufacturing-formulas/{id}/permanently-remove':
-    delete:
-      summary: 'Force delete a manufacturing formula (permanent deletion).'
-      operationId: forceDeleteAManufacturingFormulapermanentDeletion
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - Endpoints
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the manufacturing formula.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  /api/v1/manufacturing-formulas/deleted-formulas:
-    get:
-      summary: 'Get trashed (soft deleted) manufacturing formulas.'
-      operationId: getTrashedsoftDeletedManufacturingFormulas
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
       tags:
         - Endpoints
   /api/v1/bom-items/list-components:
@@ -1141,7 +626,7 @@ paths:
                 format:
                   type: string
                   description: ''
-                  example: png
+                  example: svg
                   nullable: true
                   enum:
                     - png
@@ -1273,7 +758,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
               required:
                 - department_number
@@ -1682,7 +1167,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
               required:
                 - item_number
@@ -1792,7 +1277,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
               required:
                 - item_number
@@ -1954,7 +1439,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: outbound
+                  example: inventory_count
                   nullable: false
                   enum:
                     - outbound
@@ -1965,243 +1450,12 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:35'
+                  example: '2025-09-22T14:42:32'
                   nullable: true
                 movement_time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:43:35'
-                  nullable: true
-                vendor_id:
-                  type: integer
-                  description: ''
-                  example: 17
-                  nullable: true
-                customer_id:
-                  type: integer
-                  description: ''
-                  example: 17
-                  nullable: true
-                vendor_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: true
-                customer_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mniihfqcoynlazghdtqtq
-                  nullable: true
-                movement_description:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: xbajwbpilpmufinllwloa
-                  nullable: true
-                inbound_invoice_id:
-                  type: integer
-                  description: ''
-                  example: 17
-                  nullable: true
-                outbound_invoice_id:
-                  type: integer
-                  description: ''
-                  example: 17
-                  nullable: true
-                inbound_invoice_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: true
-                outbound_invoice_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mniihfqcoynlazghdtqtq
-                  nullable: true
-                user_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: xbajwbpilpmufinllwloa
-                  nullable: true
-                shipment_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: uydlsmsjuryvojcybzvrb
-                  nullable: true
-                invoice_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: yickznkygloigmkwxphlv
-                  nullable: true
-                reference:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: azjrcnfbaqywuxhgjjmzu
-                  nullable: true
-                warehouse_id:
-                  type: integer
-                  description: ''
-                  example: 17
-                  nullable: false
-                status:
-                  type: string
-                  description: ''
-                  example: confirmed
-                  nullable: true
-                  enum:
-                    - draft
-                    - confirmed
-                    - cancelled
-                movement_data:
-                  type: array
-                  description: 'Must have at least 1 items.'
-                  example:
-                    - []
-                  items:
-                    type: object
-                    properties:
-                      item_id:
-                        type: integer
-                        description: ''
-                        example: 17
-                        nullable: false
-                      unit_id:
-                        type: integer
-                        description: ''
-                        example: 17
-                        nullable: true
-                      quantity:
-                        type: number
-                        description: 'Must be at least 0.0001.'
-                        example: 45
-                        nullable: false
-                      unit_cost:
-                        type: number
-                        description: 'Must be at least 0.'
-                        example: 56
-                        nullable: true
-                      unit_price:
-                        type: number
-                        description: 'Must be at least 0.'
-                        example: 16
-                        nullable: true
-                      inventory_count:
-                        type: number
-                        description: 'Must be at least 0.'
-                        example: 50
-                        nullable: true
-                      notes:
-                        type: string
-                        description: 'Must not be greater than 500 characters.'
-                        example: pfuudtdsufvyvddqamnii
-                        nullable: true
-                      batch_number:
-                        type: string
-                        description: 'Must not be greater than 255 characters.'
-                        example: hfqcoynlazghdtqtqxbaj
-                        nullable: true
-                      expiry_date:
-                        type: string
-                        description: 'Must be a valid date.'
-                        example: '2025-09-22T13:43:35'
-                        nullable: true
-                      serial_number:
-                        type: string
-                        description: 'Must not be greater than 255 characters.'
-                        example: wbpilpmufinllwloauydl
-                        nullable: true
-                      location_code:
-                        type: string
-                        description: 'Must not be greater than 255 characters.'
-                        example: smsjuryvojcybzvrbyick
-                        nullable: true
-                      shelf_number:
-                        type: string
-                        description: 'Must not be greater than 255 characters.'
-                        example: znkygloigmkwxphlvazjr
-                        nullable: true
-                      bin_number:
-                        type: string
-                        description: 'Must not be greater than 255 characters.'
-                        example: cnfbaqywuxhgjjmzuxjub
-                        nullable: true
-                    required:
-                      - item_id
-                      - quantity
-              required:
-                - movement_type
-                - warehouse_id
-                - movement_data
-  '/api/v1/inventory-movements/review-movement/{id}':
-    get:
-      summary: '✅ Display the specified inventory movement.'
-      operationId: DisplayTheSpecifiedInventoryMovement
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - 'Inventory Management / Inventory Movements'
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the review movement.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  '/api/v1/inventory-movements/adjust-movement/{id}':
-    put:
-      summary: '✅ Update the specified inventory movement.'
-      operationId: UpdateTheSpecifiedInventoryMovement
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - 'Inventory Management / Inventory Movements'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                movement_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: vmqeopfuudtdsufvyvddq
-                  nullable: true
-                movement_type:
-                  type: string
-                  description: ''
-                  example: manufacturing
-                  nullable: false
-                  enum:
-                    - outbound
-                    - inbound
-                    - transfer
-                    - manufacturing
-                    - inventory_count
-                movement_date:
-                  type: string
-                  description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:35'
-                  nullable: true
-                movement_time:
-                  type: string
-                  description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:43:35'
+                  example: '14:42:32'
                   nullable: true
                 vendor_id:
                   type: integer
@@ -2284,6 +1538,237 @@ paths:
                     - cancelled
                 movement_data:
                   type: array
+                  description: 'Must have at least 1 items.'
+                  example:
+                    - []
+                  items:
+                    type: object
+                    properties:
+                      item_id:
+                        type: integer
+                        description: ''
+                        example: 17
+                        nullable: false
+                      unit_id:
+                        type: integer
+                        description: ''
+                        example: 17
+                        nullable: true
+                      quantity:
+                        type: number
+                        description: 'Must be at least 0.0001.'
+                        example: 45
+                        nullable: false
+                      unit_cost:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 56
+                        nullable: true
+                      unit_price:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 16
+                        nullable: true
+                      inventory_count:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 50
+                        nullable: true
+                      notes:
+                        type: string
+                        description: 'Must not be greater than 500 characters.'
+                        example: pfuudtdsufvyvddqamnii
+                        nullable: true
+                      batch_number:
+                        type: string
+                        description: 'Must not be greater than 255 characters.'
+                        example: hfqcoynlazghdtqtqxbaj
+                        nullable: true
+                      expiry_date:
+                        type: string
+                        description: 'Must be a valid date.'
+                        example: '2025-09-22T14:42:32'
+                        nullable: true
+                      serial_number:
+                        type: string
+                        description: 'Must not be greater than 255 characters.'
+                        example: wbpilpmufinllwloauydl
+                        nullable: true
+                      location_code:
+                        type: string
+                        description: 'Must not be greater than 255 characters.'
+                        example: smsjuryvojcybzvrbyick
+                        nullable: true
+                      shelf_number:
+                        type: string
+                        description: 'Must not be greater than 255 characters.'
+                        example: znkygloigmkwxphlvazjr
+                        nullable: true
+                      bin_number:
+                        type: string
+                        description: 'Must not be greater than 255 characters.'
+                        example: cnfbaqywuxhgjjmzuxjub
+                        nullable: true
+                    required:
+                      - item_id
+                      - quantity
+              required:
+                - movement_type
+                - warehouse_id
+                - movement_data
+  '/api/v1/inventory-movements/review-movement/{id}':
+    get:
+      summary: '✅ Display the specified inventory movement.'
+      operationId: DisplayTheSpecifiedInventoryMovement
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / Inventory Movements'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the review movement.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/inventory-movements/adjust-movement/{id}':
+    put:
+      summary: '✅ Update the specified inventory movement.'
+      operationId: UpdateTheSpecifiedInventoryMovement
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Inventory Movements'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                movement_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: vmqeopfuudtdsufvyvddq
+                  nullable: true
+                movement_type:
+                  type: string
+                  description: ''
+                  example: inventory_count
+                  nullable: false
+                  enum:
+                    - outbound
+                    - inbound
+                    - transfer
+                    - manufacturing
+                    - inventory_count
+                movement_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-22T14:42:32'
+                  nullable: true
+                movement_time:
+                  type: string
+                  description: 'Must be a valid date in the format <code>H:i:s</code>.'
+                  example: '14:42:32'
+                  nullable: true
+                vendor_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                customer_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                vendor_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: true
+                customer_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mniihfqcoynlazghdtqtq
+                  nullable: true
+                movement_description:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: xbajwbpilpmufinllwloa
+                  nullable: true
+                inbound_invoice_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                outbound_invoice_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                inbound_invoice_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: true
+                outbound_invoice_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mniihfqcoynlazghdtqtq
+                  nullable: true
+                user_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: xbajwbpilpmufinllwloa
+                  nullable: true
+                shipment_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: uydlsmsjuryvojcybzvrb
+                  nullable: true
+                invoice_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: yickznkygloigmkwxphlv
+                  nullable: true
+                reference:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: azjrcnfbaqywuxhgjjmzu
+                  nullable: true
+                warehouse_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: false
+                status:
+                  type: string
+                  description: ''
+                  example: confirmed
+                  nullable: true
+                  enum:
+                    - draft
+                    - confirmed
+                    - cancelled
+                movement_data:
+                  type: array
                   description: ''
                   example: null
                   items:
@@ -2338,7 +1823,7 @@ paths:
                       expiry_date:
                         type: string
                         description: 'Must be a valid date.'
-                        example: '2025-09-22T13:43:35'
+                        example: '2025-09-22T14:42:32'
                         nullable: true
                       serial_number:
                         type: string
@@ -2363,7 +1848,7 @@ paths:
                       _delete:
                         type: boolean
                         description: ''
-                        example: true
+                        example: false
                         nullable: true
                     required:
                       - item_id
@@ -2577,7 +2062,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: outbound
+                  example: transfer
                   nullable: false
                   enum:
                     - outbound
@@ -2818,7 +2303,7 @@ paths:
                 is_active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
               required:
                 - name
@@ -2930,7 +2415,7 @@ paths:
                 is_default:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
                 unit_type:
                   type: string
@@ -2949,7 +2434,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: piece
+                  example: kilo
                   nullable: false
                   enum:
                     - piece
@@ -3016,7 +2501,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: ton
+                  example: piece
                   nullable: true
                   enum:
                     - piece
@@ -3092,7 +2577,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: inactive
+                  example: active
                   nullable: false
                   enum:
                     - active
@@ -3178,7 +2663,7 @@ paths:
                 unit_type:
                   type: string
                   description: ''
-                  example: balance
+                  example: second
                   nullable: false
                   enum:
                     - balance
@@ -3192,7 +2677,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: piece
+                  example: ton
                   nullable: false
                   enum:
                     - piece
@@ -3223,7 +2708,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: carton
+                  example: piece
                   nullable: true
                   enum:
                     - piece
@@ -3259,7 +2744,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: kilo
+                  example: ton
                   nullable: true
                   enum:
                     - piece
@@ -3990,7 +3475,7 @@ paths:
                 item_subject_to_vat:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
                 notes:
                   type: string
@@ -4046,7 +3531,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 stock_tracking:
                   type: boolean
@@ -4158,7 +3643,7 @@ paths:
                 type:
                   type: string
                   description: ''
-                  example: raw_material
+                  example: material
                   nullable: false
                   enum:
                     - product
@@ -4218,7 +3703,7 @@ paths:
                 purchase_prices_include_vat:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
                 first_sale_price:
                   type: number
@@ -4273,7 +3758,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: EAN13
+                  example: UPCA
                   nullable: true
                   enum:
                     - C128
@@ -4309,7 +3794,7 @@ paths:
                 stock_tracking:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
               required:
                 - unit_id
@@ -4598,7 +4083,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: C128
+                  example: UPCA
                   nullable: false
                   enum:
                     - C128
@@ -4638,7 +4123,7 @@ paths:
                 format:
                   type: string
                   description: ''
-                  example: svg
+                  example: png
                   nullable: true
                   enum:
                     - png
@@ -4728,7 +4213,7 @@ paths:
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:35'
+                  example: '2025-09-22T14:42:32'
                   nullable: true
                 date_to:
                   type: string
@@ -4738,7 +4223,7 @@ paths:
                 transaction_type:
                   type: string
                   description: ''
-                  example: purchases
+                  example: sales
                   nullable: true
                   enum:
                     - sales
@@ -4753,7 +4238,7 @@ paths:
                 sort_by:
                   type: string
                   description: ''
-                  example: quantity
+                  example: type
                   nullable: true
                   enum:
                     - date
@@ -4763,7 +4248,7 @@ paths:
                 sort_direction:
                   type: string
                   description: ''
-                  example: asc
+                  example: desc
                   nullable: true
                   enum:
                     - asc
@@ -4808,7 +4293,7 @@ paths:
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:35'
+                  example: '2025-09-22T14:42:32'
                   nullable: true
                 date_to:
                   type: string
@@ -4818,7 +4303,7 @@ paths:
                 transaction_type:
                   type: string
                   description: ''
-                  example: stock_movements
+                  example: purchases
                   nullable: true
                   enum:
                     - sales
@@ -4837,7 +4322,7 @@ paths:
                 format:
                   type: string
                   description: ''
-                  example: pdf
+                  example: xlsx
                   nullable: true
                   enum:
                     - xlsx
@@ -5032,6 +4517,524 @@ paths:
         required: true
         schema:
           type: string
+  /api/v1/manufacturing-formulas/catalog-all:
+    get:
+      summary: 'Display a listing of manufacturing formulas with advanced search and filtering.'
+      operationId: displayAListingOfManufacturingFormulasWithAdvancedSearchAndFiltering
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/establish-formula:
+    post:
+      summary: '✅ Store Manufacturing Formula via API.'
+      operationId: StoreManufacturingFormulaViaAPI
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the items table.'
+                  example: consequatur
+                  nullable: false
+                consumed_quantity:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 45
+                  nullable: false
+                produced_quantity:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 56
+                  nullable: false
+                labor_cost:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 16
+                  nullable: false
+                operating_cost:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 50
+                  nullable: false
+                waste_cost:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 55
+                  nullable: false
+                unit_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the units table.'
+                  example: null
+                  nullable: true
+                formula_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: fuudtdsufvyvddqamniih
+                  nullable: true
+                formula_description:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: fqcoynlazghdtqtqxbajw
+                  nullable: true
+                formula_number:
+                  type: string
+                  description: 'Must not be greater than 50 characters.'
+                  example: bpilpmufinllwloauydls
+                  nullable: true
+                selected_purchase_price_type:
+                  type: string
+                  description: ''
+                  example: third
+                  nullable: true
+                  enum:
+                    - first
+                    - second
+                    - third
+                batch_size:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 42
+                  nullable: true
+                production_time_minutes:
+                  type: integer
+                  description: 'Must be at least 0.'
+                  example: 64
+                  nullable: true
+                preparation_time_minutes:
+                  type: integer
+                  description: 'Must be at least 0.'
+                  example: 34
+                  nullable: true
+                production_notes:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: uryvojcybzvrbyickznky
+                  nullable: true
+                preparation_notes:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: gloigmkwxphlvazjrcnfb
+                  nullable: true
+                usage_instructions:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: aqywuxhgjjmzuxjubqouz
+                  nullable: true
+                tolerance_percentage:
+                  type: number
+                  description: 'Must be at least 0. Must not be greater than 100.'
+                  example: 18
+                  nullable: true
+                quality_requirements:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: wiwxtrkimfcatbxspzmra
+                  nullable: true
+                requires_inspection:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: true
+                status:
+                  type: string
+                  description: ''
+                  example: draft
+                  nullable: true
+                  enum:
+                    - draft
+                    - active
+                    - inactive
+                    - archived
+                is_active:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: true
+                effective_from:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-22T14:42:32'
+                  nullable: true
+                effective_to:
+                  type: string
+                  description: 'Must be a valid date. Must be a date after <code>effective_from</code>.'
+                  example: '2106-10-22'
+                  nullable: true
+                company_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: null
+                  nullable: true
+                user_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the users table.'
+                  example: null
+                  nullable: true
+                branch_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the branches table.'
+                  example: null
+                  nullable: true
+              required:
+                - item_id
+                - consumed_quantity
+                - produced_quantity
+                - labor_cost
+                - operating_cost
+                - waste_cost
+  '/api/v1/manufacturing-formulas/examine-formula/{id}':
+    get:
+      summary: 'Display the specified manufacturing formula.'
+      operationId: displayTheSpecifiedManufacturingFormula
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the examine formula.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/manufacturing-formulas/remove-formula/{id}':
+    delete:
+      summary: 'Remove the specified manufacturing formula (soft delete).'
+      operationId: removeTheSpecifiedManufacturingFormulasoftDelete
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the remove formula.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  /api/v1/manufacturing-formulas/item-numbers:
+    get:
+      summary: '✅ Get all Item Numbers for dropdown simulation.'
+      operationId: GetAllItemNumbersForDropdownSimulation
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/item-details:
+    get:
+      summary: '✅ Get Item details by Item Number or Name.'
+      operationId: GetItemDetailsByItemNumberOrName
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/calculate-cost:
+    post:
+      summary: '✅ Calculate Final Cost for existing formula (API endpoint).'
+      operationId: CalculateFinalCostForExistingFormulaAPIEndpoint
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/available-fields:
+    get:
+      summary: 'Get all available fields for dynamic data display.'
+      operationId: getAllAvailableFieldsForDynamicDataDisplay
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/field-values:
+    get:
+      summary: 'Get field values for dropdown filtering.'
+      operationId: getFieldValuesForDropdownFiltering
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/selectable-fields:
+    get:
+      summary: '✅ Get all available fields for selection.'
+      operationId: GetAllAvailableFieldsForSelection
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/field-based-data:
+    get:
+      summary: '✅ Get field-based data display - Show data based on selected field.'
+      operationId: GetFieldBasedDataDisplayShowDataBasedOnSelectedField
+      description: 'When user clicks on any field in the table, show related data.'
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/formula-numbers:
+    get:
+      summary: '✅ Get manufacturing formula numbers for dropdown.'
+      operationId: GetManufacturingFormulaNumbersForDropdown
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/item-by-formula-number:
+    get:
+      summary: '✅ Get item details by manufacturing formula number.'
+      operationId: GetItemDetailsByManufacturingFormulaNumber
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  /api/v1/manufacturing-formulas/warehouses:
+    get:
+      summary: '✅ Get warehouses for dropdown.'
+      operationId: GetWarehousesForDropdown
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  '/api/v1/manufacturing-formulas/update-prices-from-suppliers/{id}':
+    put:
+      summary: '✅ Update prices from suppliers table for a manufactured formula.'
+      operationId: UpdatePricesFromSuppliersTableForAManufacturedFormula
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update prices from supplier.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  /api/v1/manufacturing-formulas/update-all-prices-from-suppliers:
+    put:
+      summary: '✅ Update prices from suppliers table for all manufactured formulas.'
+      operationId: UpdatePricesFromSuppliersTableForAllManufacturedFormulas
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+  '/api/v1/manufacturing-formulas/{id}/restore-formula':
+    post:
+      summary: 'Restore a soft deleted manufacturing formula.'
+      operationId: restoreASoftDeletedManufacturingFormula
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the manufacturing formula.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/manufacturing-formulas/{id}/permanently-remove':
+    delete:
+      summary: 'Force delete a manufacturing formula (permanent deletion).'
+      operationId: forceDeleteAManufacturingFormulapermanentDeletion
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the manufacturing formula.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  /api/v1/manufacturing-formulas/deleted-formulas:
+    get:
+      summary: 'Get trashed (soft deleted) manufacturing formulas.'
+      operationId: getTrashedsoftDeletedManufacturingFormulas
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Inventory Management / ManufacturingFormula'
   /api/v1/stock-movements/track-all:
     get:
       summary: 'Display a listing of stock movements.'
@@ -5122,7 +5125,7 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:35'
+                  example: '2025-09-22T14:42:31'
                   nullable: true
               required:
                 - inventory_item_id
@@ -5310,7 +5313,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: carton
+                  example: piece
                   nullable: false
                   enum:
                     - piece
@@ -5382,7 +5385,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: liter
+                  example: kilo
                   nullable: true
                   enum:
                     - piece
@@ -5428,7 +5431,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: false
                   enum:
                     - active
@@ -5553,7 +5556,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: ton
+                  example: carton
                   nullable: true
                   enum:
                     - piece
@@ -5589,7 +5592,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: kilo
+                  example: carton
                   nullable: true
                   enum:
                     - piece
@@ -6086,7 +6089,7 @@ paths:
                 inventory_valuation_method:
                   type: string
                   description: ''
-                  example: no_value
+                  example: natural_division
                   nullable: false
                   enum:
                     - natural_division
@@ -6382,7 +6385,7 @@ paths:
                 document_category:
                   type: string
                   description: ''
-                  example: correspondence
+                  example: other
                   nullable: true
                   enum:
                     - contract
@@ -6404,7 +6407,7 @@ paths:
                 upload_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:36'
+                  example: '2025-09-22T14:42:33'
                   nullable: true
                 version:
                   type: string
@@ -6866,7 +6869,7 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:36'
+                  example: '2025-09-22T14:42:33'
                   nullable: false
                 description:
                   type: string
@@ -6990,7 +6993,7 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:36'
+                  example: '2025-09-22T14:42:33'
                   nullable: false
                 description:
                   type: string
@@ -7362,7 +7365,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: in_progress
+                  example: not_started
                   nullable: false
                   enum:
                     - not_started
@@ -7472,12 +7475,12 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:36'
+                  example: '2025-09-22T14:42:33'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: completed
+                  example: not_started
                   nullable: false
                   enum:
                     - not_started
@@ -8408,7 +8411,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:36'
+                  example: '2025-09-22T14:42:33'
                   nullable: false
                 end_date:
                   type: string
@@ -8418,7 +8421,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: open
+                  example: closed
                   nullable: false
                   enum:
                     - draft
@@ -9115,7 +9118,7 @@ paths:
                 resource_type:
                   type: string
                   description: ''
-                  example: consultant
+                  example: internal
                   nullable: false
                   enum:
                     - supplier
@@ -9160,7 +9163,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: true
                   enum:
                     - active
@@ -9255,7 +9258,7 @@ paths:
                 resource_type:
                   type: string
                   description: ''
-                  example: internal
+                  example: consultant
                   nullable: false
                   enum:
                     - supplier
@@ -9300,7 +9303,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: completed
                   nullable: true
                   enum:
                     - active
@@ -9714,7 +9717,7 @@ paths:
                 impact:
                   type: string
                   description: ''
-                  example: low
+                  example: high
                   nullable: false
                   enum:
                     - low
@@ -9723,7 +9726,7 @@ paths:
                 probability:
                   type: string
                   description: ''
-                  example: high
+                  example: low
                   nullable: false
                   enum:
                     - low
@@ -9818,7 +9821,7 @@ paths:
                 impact:
                   type: string
                   description: ''
-                  example: low
+                  example: medium
                   nullable: false
                   enum:
                     - low
@@ -9827,7 +9830,7 @@ paths:
                 probability:
                   type: string
                   description: ''
-                  example: low
+                  example: high
                   nullable: false
                   enum:
                     - low
@@ -9841,7 +9844,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: closed
+                  example: mitigated
                   nullable: false
                   enum:
                     - open
@@ -10308,7 +10311,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: to_do
+                  example: blocked
                   nullable: false
                   enum:
                     - to_do
@@ -10458,7 +10461,7 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:36'
+                  example: '2025-09-22T14:42:33'
                   nullable: false
                 status:
                   type: string
@@ -10493,7 +10496,7 @@ paths:
                 priority:
                   type: string
                   description: ''
-                  example: urgent
+                  example: low
                   nullable: false
                   enum:
                     - low
@@ -10503,7 +10506,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T13:43:36'
+                  example: '2025-09-22T14:42:33'
                   nullable: false
                 estimated_hours:
                   type: integer

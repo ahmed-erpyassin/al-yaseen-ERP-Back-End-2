@@ -172,7 +172,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T13:43:35'
+        example: '2025-09-22T14:42:31'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -188,7 +188,7 @@ endpoints:
       unit_cost: 56
       total_cost: 16
       notes: consequatur
-      movement_date: '2025-09-22T13:43:35'
+      movement_date: '2025-09-22T14:42:31'
     fileParameters: []
     responses: []
     responseFields: []

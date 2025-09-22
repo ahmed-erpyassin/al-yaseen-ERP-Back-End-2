@@ -1,21 +1,21 @@
-name: 'Project Management / Documents'
+name: 'Project Management / Resources'
 description: |-
 
-  APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+  APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-documents/gather-all
+    uri: api/v1/project-resources/load-all
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of documents.'
-      description: ''
+      title: 'List Project Resources'
+      description: 'Retrieve a paginated list of project resources with comprehensive filtering and search capabilities.'
       authenticated: true
       deprecated: false
       custom: []
@@ -25,20 +25,215 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      project_id:
+        name: project_id
+        description: 'Filter by project ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      supplier_id:
+        name: supplier_id
+        description: 'Filter by supplier ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      resource_type:
+        name: resource_type
+        description: 'Filter by resource type.'
+        required: false
+        example: material
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      status:
+        name: status
+        description: 'Filter by resource status.'
+        required: false
+        example: allocated
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      supplier_number:
+        name: supplier_number
+        description: 'Search by supplier number.'
+        required: false
+        example: SUP-001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      supplier_name:
+        name: supplier_name
+        description: 'Search by supplier name.'
+        required: false
+        example: 'ABC Supplier'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      project_number:
+        name: project_number
+        description: 'Search by project number.'
+        required: false
+        example: PRJ-001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      project_name:
+        name: project_name
+        description: 'Search by project name.'
+        required: false
+        example: 'Website Development'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      allocation_from:
+        name: allocation_from
+        description: 'numeric Filter resources with allocation from this value.'
+        required: false
+        example: '1000.00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      allocation_to:
+        name: allocation_to
+        description: 'numeric Filter resources with allocation to this value.'
+        required: false
+        example: '5000.00'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      date_from:
+        name: date_from
+        description: 'Filter by date from (Y-m-d format).'
+        required: false
+        example: '2024-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      date_to:
+        name: date_to
+        description: 'Filter by date to (Y-m-d format).'
+        required: false
+        example: '2024-12-31'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      sort_field:
+        name: sort_field
+        description: 'Field to sort by.'
+        required: false
+        example: created_at
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      sort_direction:
+        name: sort_direction
+        description: 'Sort direction (asc/desc).'
+        required: false
+        example: desc
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Number of items per page (default: 15).'
+        required: false
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      project_id: 1
+      supplier_id: 1
+      resource_type: material
+      status: allocated
+      supplier_number: SUP-001
+      supplier_name: 'ABC Supplier'
+      project_number: PRJ-001
+      project_name: 'Website Development'
+      allocation_from: '1000.00'
+      allocation_to: '5000.00'
+      date_from: '2024-01-01'
+      date_to: '2024-12-31'
+      sort_field: created_at
+      sort_direction: desc
+      per_page: 20
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": [
+              {
+                "id": 1,
+                "project": {
+                  "id": 1,
+                  "project_number": "PRJ-001",
+                  "project_name": "Website Development"
+                },
+                "supplier": {
+                  "id": 1,
+                  "supplier_number": "SUP-001",
+                  "supplier_name": "ABC Supplier"
+                },
+                "resource_type": "material",
+                "allocation": 2500.00,
+                "status": "allocated",
+                "created_at": "2024-01-01T00:00:00.000000Z"
+              }
+            ],
+            "message": "Resources retrieved successfully"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error retrieving resources: Database connection failed"
+          }
+        headers: []
+        description: ''
         custom: []
     responseFields: []
     auth:
@@ -52,22 +247,22 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-documents/compose-new
+    uri: api/v1/project-resources/construct-new
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Store a newly created document.'
+      title: 'Store a newly created resource.'
       description: ''
       authenticated: true
       deprecated: false
       custom: []
     headers:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: multipart/form-data
+      Content-Type: application/json
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
@@ -84,8 +279,18 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      title:
-        name: title
+      supplier_id:
+        name: supplier_id
+        description: 'The <code>id</code> of an existing record in the suppliers table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      role:
+        name: role
         description: 'Must not be greater than 255 characters.'
         required: true
         example: mqeopfuudtdsufvyvddqa
@@ -94,21 +299,45 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      file:
-        name: file
-        description: 'Must be a file. Must not be greater than 20480 kilobytes.'
+      resource_type:
+        name: resource_type
+        description: ''
         required: true
-        example: null
-        type: file
-        enumValues: []
+        example: internal
+        type: string
+        enumValues:
+          - supplier
+          - internal
+          - contractor
+          - consultant
         exampleWasSpecified: false
         nullable: false
+        custom: []
+      supplier_number:
+        name: supplier_number
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_name:
+        name: supplier_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
         custom: []
       project_number:
         name: project_number
         description: 'Must not be greater than 100 characters.'
         required: false
-        example: mniihfqcoynlazghdtqtq
+        example: uydlsmsjuryvojcybzvrb
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -118,36 +347,39 @@ endpoints:
         name: project_name
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: xbajwbpilpmufinllwloa
+        example: yickznkygloigmkwxphlv
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      description:
-        name: description
+      allocation_percentage:
+        name: allocation_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allocation_value:
+        name: allocation_value
+        description: 'Must be at least 0.'
+        required: false
+        example: 87
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
         description: 'Must not be greater than 2000 characters.'
         required: false
-        example: 'A qui ducimus nihil laudantium nihil autem omnis.'
+        example: jrcnfbaqywuxhgjjmzuxj
         type: string
         enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      document_category:
-        name: document_category
-        description: ''
-        required: false
-        example: correspondence
-        type: string
-        enumValues:
-          - contract
-          - specification
-          - drawing
-          - report
-          - invoice
-          - correspondence
-          - other
         exampleWasSpecified: false
         nullable: true
         custom: []
@@ -155,30 +387,20 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: active
+        example: inactive
         type: string
         enumValues:
           - active
-          - archived
-          - deleted
+          - inactive
+          - completed
         exampleWasSpecified: false
         nullable: true
         custom: []
-      upload_date:
-        name: upload_date
-        description: 'Must be a valid date.'
+      allocation:
+        name: allocation
+        description: 'Must not be greater than 500 characters.'
         required: false
-        example: '2025-09-22T13:43:36'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      version:
-        name: version
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: ryvojcybzvrbyickz
+        example: ubqouzswiwxtrkimfcatb
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -216,16 +438,19 @@ endpoints:
         custom: []
     cleanBodyParameters:
       project_id: consequatur
-      title: mqeopfuudtdsufvyvddqa
-      project_number: mniihfqcoynlazghdtqtq
-      project_name: xbajwbpilpmufinllwloa
-      description: 'A qui ducimus nihil laudantium nihil autem omnis.'
-      document_category: correspondence
-      status: active
-      upload_date: '2025-09-22T13:43:36'
-      version: ryvojcybzvrbyickz
-    fileParameters:
-      file: null
+      supplier_id: consequatur
+      role: mqeopfuudtdsufvyvddqa
+      resource_type: internal
+      supplier_number: mniihfqcoynlazghdtqtq
+      supplier_name: xbajwbpilpmufinllwloa
+      project_number: uydlsmsjuryvojcybzvrb
+      project_name: yickznkygloigmkwxphlv
+      allocation_percentage: 1
+      allocation_value: 87
+      notes: jrcnfbaqywuxhgjjmzuxj
+      status: inactive
+      allocation: ubqouzswiwxtrkimfcatb
+    fileParameters: []
     responses: []
     responseFields: []
     auth:
@@ -239,15 +464,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/project-documents/read/{id}'
+    uri: 'api/v1/project-resources/display/{id}'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified document.'
+      title: 'Display the specified resource.'
       description: ''
       authenticated: true
       deprecated: false
@@ -259,7 +484,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the read.'
+        description: 'The ID of the display.'
         required: true
         example: consequatur
         type: string
@@ -296,15 +521,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/project-documents/amend/{id}'
+    uri: 'api/v1/project-resources/alter/{id}'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified document.'
+      title: 'Update the specified resource.'
       description: ''
       authenticated: true
       deprecated: false
@@ -316,7 +541,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the amend.'
+        description: 'The ID of the alter.'
         required: true
         example: consequatur
         type: string
@@ -328,8 +553,156 @@ endpoints:
       id: consequatur
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      project_id:
+        name: project_id
+        description: 'The <code>id</code> of an existing record in the projects table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      supplier_id:
+        name: supplier_id
+        description: 'The <code>id</code> of an existing record in the suppliers table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      role:
+        name: role
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      resource_type:
+        name: resource_type
+        description: ''
+        required: false
+        example: consultant
+        type: string
+        enumValues:
+          - supplier
+          - internal
+          - contractor
+          - consultant
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      supplier_number:
+        name: supplier_number
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: amniihfqcoynlazghdtqt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_name:
+        name: supplier_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: qxbajwbpilpmufinllwlo
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      project_number:
+        name: project_number
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: auydlsmsjuryvojcybzvr
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      project_name:
+        name: project_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: byickznkygloigmkwxphl
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allocation_percentage:
+        name: allocation_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 22
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allocation_value:
+        name: allocation_value
+        description: 'Must be at least 0.'
+        required: false
+        example: 0
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: 'Must not be greater than 2000 characters.'
+        required: false
+        example: zjrcnfbaqywuxhgjjmzux
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: false
+        example: completed
+        type: string
+        enumValues:
+          - active
+          - inactive
+          - completed
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allocation:
+        name: allocation
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: jubqouzswiwxtrkimfcat
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      role: vmqeopfuudtdsufvyvddq
+      resource_type: consultant
+      supplier_number: amniihfqcoynlazghdtqt
+      supplier_name: qxbajwbpilpmufinllwlo
+      project_number: auydlsmsjuryvojcybzvr
+      project_name: byickznkygloigmkwxphl
+      allocation_percentage: 22
+      allocation_value: 0
+      notes: zjrcnfbaqywuxhgjjmzux
+      status: completed
+      allocation: jubqouzswiwxtrkimfcat
     fileParameters: []
     responses: []
     responseFields: []
@@ -344,15 +717,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/project-documents/erase/{id}'
+    uri: 'api/v1/project-resources/purge/{id}'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified document (soft delete).'
+      title: 'Remove the specified resource (soft delete).'
       description: ''
       authenticated: true
       deprecated: false
@@ -364,7 +737,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the erase.'
+        description: 'The ID of the purge.'
         required: true
         example: consequatur
         type: string
@@ -380,63 +753,6 @@ endpoints:
     cleanBodyParameters: []
     fileParameters: []
     responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/project-documents/{id}/file-download'
-    metadata:
-      groupName: 'Project Management / Documents'
-      groupDescription: |-
-
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Download a document file.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the project document.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
     responseFields: []
     auth:
       - headers
@@ -449,15 +765,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-documents/advanced-search
+    uri: api/v1/project-resources/advanced-search
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Advanced search for documents.'
+      title: 'Advanced search for resources.'
       description: ''
       authenticated: true
       deprecated: false
@@ -486,15 +802,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-documents/filter-by-field
+    uri: api/v1/project-resources/filter-by-field
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get documents by specific field value.'
+      title: 'Get resources by specific field value.'
       description: ''
       authenticated: true
       deprecated: false
@@ -532,12 +848,12 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-documents/field-values
+    uri: api/v1/project-resources/field-values
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
       title: 'Get unique values for a specific field.'
@@ -578,15 +894,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-documents/sortable-fields
+    uri: api/v1/project-resources/sortable-fields
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get sortable fields for documents.'
+      title: 'Get sortable fields for resources.'
       description: ''
       authenticated: true
       deprecated: false
@@ -624,15 +940,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-documents/apply-sort
+    uri: api/v1/project-resources/apply-sort
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Sort documents by specified field and order.'
+      title: 'Sort resources by specified field and order.'
       description: ''
       authenticated: true
       deprecated: false
@@ -661,15 +977,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/v1/project-documents/{id}/restore-document'
+    uri: 'api/v1/project-resources/{id}/restore-resource'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Restore a soft-deleted document.'
+      title: 'Restore a soft-deleted resource.'
       description: ''
       authenticated: true
       deprecated: false
@@ -681,7 +997,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the project document.'
+        description: 'The ID of the project resource.'
         required: true
         example: consequatur
         type: string
@@ -709,15 +1025,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/project-documents/{id}/permanent-delete'
+    uri: 'api/v1/project-resources/{id}/permanent-delete'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Permanently delete a document.'
+      title: 'Permanently delete a resource.'
       description: ''
       authenticated: true
       deprecated: false
@@ -729,7 +1045,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the project document.'
+        description: 'The ID of the project resource.'
         required: true
         example: consequatur
         type: string
@@ -757,15 +1073,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-documents/deleted-documents
+    uri: api/v1/project-resources/deleted-resources
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get trashed documents.'
+      title: 'Get trashed (soft-deleted) resources.'
       description: ''
       authenticated: true
       deprecated: false
@@ -803,12 +1119,58 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-documents/project-options
+    uri: api/v1/project-resources/supplier-options
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get suppliers for dropdown (with supplier number and name).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/project-resources/project-options
+    metadata:
+      groupName: 'Project Management / Resources'
+      groupDescription: |-
+
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
       title: 'Get projects for dropdown (with project number and name).'
@@ -849,15 +1211,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-documents/category-options
+    uri: api/v1/project-resources/type-options
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get document category options.'
+      title: 'Get resource type options.'
       description: ''
       authenticated: true
       deprecated: false
@@ -895,15 +1257,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-documents/status-options
+    uri: api/v1/project-resources/status-options
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get document status options.'
+      title: 'Get resource status options.'
       description: ''
       authenticated: true
       deprecated: false
@@ -941,15 +1303,52 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-documents/number-generation
+    uri: api/v1/project-resources/allocation-calculation
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Generate next document number for a project.'
+      title: 'Calculate allocation based on project value and percentage.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/project-resources/percentage-calculation
+    metadata:
+      groupName: 'Project Management / Resources'
+      groupDescription: |-
+
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Calculate allocation percentage based on project value and allocation value.'
       description: ''
       authenticated: true
       deprecated: false
@@ -978,15 +1377,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/project-documents/by-project/{projectId}'
+    uri: 'api/v1/project-resources/by-project/{projectId}'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get documents for a specific project.'
+      title: 'Get resources for a specific project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1035,15 +1434,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/project-documents/by-category/{category}'
+    uri: 'api/v1/project-resources/by-supplier/{supplierId}'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Resources'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get documents by category.'
+      title: 'Get resources for a specific supplier.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1053,8 +1452,8 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      category:
-        name: category
+      supplierId:
+        name: supplierId
         description: ''
         required: true
         example: consequatur
@@ -1064,7 +1463,7 @@ endpoints:
         nullable: false
         custom: []
     cleanUrlParameters:
-      category: consequatur
+      supplierId: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

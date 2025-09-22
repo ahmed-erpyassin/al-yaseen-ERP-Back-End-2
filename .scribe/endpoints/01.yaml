@@ -289,7 +289,7 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -307,7 +307,7 @@ endpoints:
       minimum_limit: 34
       reorder_limit: 71
       notes: consequatur
-      active: true
+      active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -526,7 +526,7 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -544,7 +544,7 @@ endpoints:
       minimum_limit: 34
       reorder_limit: 71
       notes: consequatur
-      active: false
+      active: true
     fileParameters: []
     responses: []
     responseFields: []

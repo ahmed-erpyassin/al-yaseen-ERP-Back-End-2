@@ -138,7 +138,7 @@ endpoints:
         name: balance_unit
         description: ''
         required: true
-        example: carton
+        example: piece
         type: string
         enumValues:
           - piece
@@ -268,7 +268,7 @@ endpoints:
         name: third_unit
         description: ''
         required: false
-        example: liter
+        example: kilo
         type: string
         enumValues:
           - piece
@@ -353,7 +353,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: active
+        example: inactive
         type: string
         enumValues:
           - active
@@ -367,7 +367,7 @@ endpoints:
       symbol: qxbajwbpi
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       decimal_places: 1
-      balance_unit: carton
+      balance_unit: piece
       custom_balance_unit: tdsufvyvddqamniihfqco
       length: 85
       width: 45
@@ -379,13 +379,13 @@ endpoints:
       custom_second_unit_contains: jcybzvrbyickznkygloig
       second_unit_content: consequatur
       second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: liter
+      third_unit: kilo
       custom_third_unit: mniihfqcoynlazghdtqtq
       third_unit_contains: xbajwbpilpmufinllwloa
       custom_third_unit_contains: uydlsmsjuryvojcybzvrb
       third_unit_content: consequatur
       third_unit_item_number: mqeopfuudtdsufvyvddqa
-      status: active
+      status: inactive
     fileParameters: []
     responses: []
     responseFields: []
@@ -619,7 +619,7 @@ endpoints:
         name: second_unit
         description: ''
         required: false
-        example: ton
+        example: carton
         type: string
         enumValues:
           - piece
@@ -684,7 +684,7 @@ endpoints:
         name: third_unit
         description: ''
         required: false
-        example: kilo
+        example: carton
         type: string
         enumValues:
           - piece
@@ -789,13 +789,13 @@ endpoints:
       width: 45
       height: 40
       quantity_factor: 1
-      second_unit: ton
+      second_unit: carton
       custom_second_unit: zghdtqtqxbajwbpilpmuf
       second_unit_contains: inllwloauydlsmsjuryvo
       custom_second_unit_contains: jcybzvrbyickznkygloig
       second_unit_content: consequatur
       second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: kilo
+      third_unit: carton
       custom_third_unit: mniihfqcoynlazghdtqtq
       third_unit_contains: xbajwbpilpmufinllwloa
       custom_third_unit_contains: uydlsmsjuryvojcybzvrb
