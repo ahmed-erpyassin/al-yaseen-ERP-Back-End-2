@@ -60,10 +60,9 @@ Route::prefix('admin/')->as('admin.')->middleware(['auth', 'web'])->group(functi
         });
 
 
-
         Route::get('logout', function () {
             Auth::guard('web')->logout();
-            return redirect()->route('auth.login');
+            return redirect()->route('login');
         })->name('logout');
     });
 });
