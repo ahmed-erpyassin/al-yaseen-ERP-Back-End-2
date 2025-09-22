@@ -16,7 +16,7 @@ trait LivewireHelper
     {
         // Success
         if ($type == "success") {
-            LivewireAlert::title("العملية نجحت")
+            LivewireAlert::title(__("Operation Successful"))
                 ->text($message)
                 ->success()
                 ->toast()
@@ -27,7 +27,7 @@ trait LivewireHelper
 
         // Error
         if ($type == "error") {
-            LivewireAlert::title("العملية فشلت")
+            LivewireAlert::title(__("Operation Failed"))
                 ->text($message)
                 ->error()
                 ->toast()
@@ -38,7 +38,7 @@ trait LivewireHelper
 
         // Info
         if ($type == "info") {
-            LivewireAlert::title("معلومات")
+            LivewireAlert::title(__("Information"))
                 ->text($message)
                 ->info()
                 ->toast()
@@ -49,7 +49,7 @@ trait LivewireHelper
 
         // Warning
         if ($type == "warning") {
-            LivewireAlert::title("تحذير")
+            LivewireAlert::title(__("Warning"))
                 ->text($message)
                 ->warning()
                 ->toast()
@@ -62,8 +62,8 @@ trait LivewireHelper
     public function alertConfirm($message, $action)
     {
         LivewireAlert::title($message)
-            ->withConfirmButton('نعم بالتأكيد')
-            ->withCancelButton('إلغاء')
+            ->withConfirmButton(__("Yes, proceed"))
+            ->withCancelButton(__("Cancel"))
             ->onConfirm($action)
             ->show();
     }

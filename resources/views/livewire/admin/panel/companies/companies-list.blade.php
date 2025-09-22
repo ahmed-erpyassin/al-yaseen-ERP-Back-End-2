@@ -123,29 +123,33 @@
                         <td>{{ $company->status }}</td>
                         <td>{{ optional($company->creator)->full_name }}</td>
                         <td>
-                            <!-- Edit Icon -->
-                            <span wire:loading.remove wire:target="edit({{ $company->id }})">
-                                <a href="#edit" wire:click="edit({{ $company->id }})"
-                                    class="text-dark fa-lg me-2 ms-2" title="{{ __('Edit') }}">
-                                    <x-icons.edit />
-                                </a>
-                            </span>
-                            <span wire:loading wire:target="edit({{ $company->id }})">
-                                <span class="spinner-border spinner-border-sm text-dark me-2 ms-2"
-                                    role="status"></span>
-                            </span>
 
-                            <!-- Delete Icon -->
-                            <span wire:loading.remove wire:target="confirmDelete({{ $company->id }})">
-                                <a href="#" wire:click="confirmDelete({{ $company->id }})"
-                                    class="text-danger fa-lg me-2 ms-2" title="{{ __('Delete') }}">
-                                    <x-icons.delete />
-                                </a>
-                            </span>
-                            <span wire:loading wire:target="confirmDelete({{ $company->id }})">
-                                <span class="spinner-border spinner-border-sm text-danger me-2 ms-2"
-                                    role="status"></span>
-                            </span>
+                            @if (Auth::user()->id == $company?->user?->id)
+                                <!-- Edit Icon -->
+                                <span wire:loading.remove wire:target="edit({{ $company->id }})">
+                                    <a href="#edit" wire:click="edit({{ $company->id }})"
+                                        class="text-dark fa-lg me-2 ms-2" title="{{ __('Edit') }}">
+                                        <x-icons.edit />
+                                    </a>
+                                </span>
+                                <span wire:loading wire:target="edit({{ $company->id }})">
+                                    <span class="spinner-border spinner-border-sm text-dark me-2 ms-2"
+                                        role="status"></span>
+                                </span>
+
+                                <!-- Delete Icon -->
+                                <span wire:loading.remove wire:target="confirmDelete({{ $company->id }})">
+                                    <a href="#" wire:click="confirmDelete({{ $company->id }})"
+                                        class="text-danger fa-lg me-2 ms-2" title="{{ __('Delete') }}">
+                                        <x-icons.delete />
+                                    </a>
+                                </span>
+                                <span wire:loading wire:target="confirmDelete({{ $company->id }})">
+                                    <span class="spinner-border spinner-border-sm text-danger me-2 ms-2"
+                                        role="status"></span>
+                                </span>
+                            @endif
+
 
                             <!-- Show Icon -->
                             <span wire:loading.remove wire:target="show({{ $company->id }})">

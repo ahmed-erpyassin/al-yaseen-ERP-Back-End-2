@@ -2,6 +2,7 @@
 
 use App\Livewire\Admin\Auth\Login;
 use App\Livewire\Admin\Panel\Companies\CompaniesList;
+use App\Livewire\Admin\Panel\Companies\ShowCompany;
 use App\Livewire\Admin\Panel\FinancialAccounts\CurrenciesList;
 use App\Livewire\Admin\Panel\FinancialAccounts\ExchangeRatesList;
 use App\Livewire\Admin\Panel\FinancialAccounts\FiscalYearsList;
@@ -37,6 +38,7 @@ Route::prefix('admin/')->as('admin.')->middleware(['auth', 'web'])->group(functi
 
         Route::prefix('companies')->as('companies.')->group(function () {
             Route::get('/', CompaniesList::class)->name('list');
+            Route::get('/show', ShowCompany::class)->name('show');
         });
 
         Route::prefix('financial-accounts')->as('financial-accounts.')->group(function () {
@@ -58,10 +60,9 @@ Route::prefix('admin/')->as('admin.')->middleware(['auth', 'web'])->group(functi
         });
 
 
-
         Route::get('logout', function () {
             Auth::guard('web')->logout();
-            return redirect()->route('auth.login');
+            return redirect()->route('login');
         })->name('logout');
     });
 });

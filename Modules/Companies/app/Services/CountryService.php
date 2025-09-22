@@ -22,7 +22,7 @@ class CountryService
     {
         return Country::with([
             'regions.cities' // الدولة ترجع معها المناطق + المدن
-        ])->where('user_id', $user->id)->get();
+        ])->get();
     }
 
     public function getCountryById($id)

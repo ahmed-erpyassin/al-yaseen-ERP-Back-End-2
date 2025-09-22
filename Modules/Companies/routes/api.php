@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\V1\CountriesController;
 use Illuminate\Support\Facades\Route;
 use Modules\Companies\app\Http\Controllers\BusinessTypesController;
+use Modules\Companies\app\Http\Controllers\CountriesController;
 use Modules\Companies\app\Http\Controllers\IndustriesController;
 use Modules\Companies\Http\Controllers\BranchesController;
 use Modules\Companies\Http\Controllers\CitiesController;
