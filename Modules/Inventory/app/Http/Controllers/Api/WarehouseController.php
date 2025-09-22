@@ -201,6 +201,9 @@ class WarehouseController extends Controller
             $data['warehouse_number'] = $this->generateWarehouseNumber($companyId);
         }
 
+        // ✅ Validate and clean foreign key references
+        $data = $this->validateForeignKeys($data);
+
         // ✅ Create warehouse with all fields
         $warehouse = Warehouse::create($data);
 
@@ -644,5 +647,53 @@ class WarehouseController extends Controller
         }
 
         return "{$prefix}{$year}{$month}-{$nextNumber}";
+    }
+
+    /**
+     * ✅ Validate and clean foreign key references
+     */
+    private function validateForeignKeys(array $data): array
+    {
+        // Check branch_id exists
+        if (!empty($data['branch_id'])) {
+            $branchExists = DB::table('branches')->where('id', $data['branch_id'])->exists();
+            if (!$branchExists) {
+                $data['branch_id'] = null;
+            }
+        }
+
+        // Check department_warehouse_id exists
+        if (!empty($data['department_warehouse_id'])) {
+            $deptExists = DB::table('department_warehouses')->where('id', $data['department_warehouse_id'])->exists();
+            if (!$deptExists) {
+                $data['department_warehouse_id'] = null;
+            }
+        }
+
+        // Check warehouse_keeper_id exists
+        if (!empty($data['warehouse_keeper_id'])) {
+            $keeperExists = DB::table('employees')->where('id', $data['warehouse_keeper_id'])->exists();
+            if (!$keeperExists) {
+                $data['warehouse_keeper_id'] = null;
+            }
+        }
+
+        // Check sales_account_id exists
+        if (!empty($data['sales_account_id'])) {
+            $salesAccountExists = DB::table('accounts')->where('id', $data['sales_account_id'])->exists();
+            if (!$salesAccountExists) {
+                $data['sales_account_id'] = null;
+            }
+        }
+
+        // Check purchase_account_id exists
+        if (!empty($data['purchase_account_id'])) {
+            $purchaseAccountExists = DB::table('accounts')->where('id', $data['purchase_account_id'])->exists();
+            if (!$purchaseAccountExists) {
+                $data['purchase_account_id'] = null;
+            }
+        }
+
+        return $data;
     }
 }
