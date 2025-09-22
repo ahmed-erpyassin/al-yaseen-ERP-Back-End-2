@@ -1,20 +1,20 @@
-name: 'Inventory Management / Inventory Movements'
+name: 'Inventory Management / BOM Items'
 description: |-
 
-  APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+  APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/inventory-movements/form-data
+    uri: api/v1/bom-items/list-components
     metadata:
-      groupName: 'Inventory Management / Inventory Movements'
+      groupName: 'Inventory Management / BOM Items'
       groupDescription: |-
 
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Get form data for inventory movement.'
+      title: '✅ Display a listing of BOM items with enhanced search and filtering.'
       description: ''
       authenticated: true
       deprecated: false
@@ -32,11 +32,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-movements/form-data could not be found."
-          }
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -54,16 +51,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: api/v1/inventory-movements/filter-by-field
+      - POST
+    uri: api/v1/bom-items/create-component
     metadata:
-      groupName: 'Inventory Management / Inventory Movements'
+      groupName: 'Inventory Management / BOM Items'
       groupDescription: |-
 
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Filter inventory movements by specific field value (Selection-Driven Display).'
+      title: '✅ Store a newly created BOM item with all Manufacturing Formula fields.'
       description: ''
       authenticated: true
       deprecated: false
@@ -77,9 +74,19 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      field:
-        name: field
-        description: ''
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
         required: true
         example: consequatur
         type: string
@@ -87,9 +94,9 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      value:
-        name: value
-        description: ''
+      component_id:
+        name: component_id
+        description: 'The value and <code>item_id</code> must be different. The <code>id</code> of an existing record in the items table.'
         required: true
         example: consequatur
         type: string
@@ -97,281 +104,33 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      per_page:
-        name: per_page
-        description: 'Must be at least 1. Must not be greater than 100.'
-        required: false
-        example: 13
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      sort_by:
-        name: sort_by
-        description: ''
-        required: false
+      unit_id:
+        name: unit_id
+        description: 'The <code>id</code> of an existing record in the units table.'
+        required: true
         example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
-        custom: []
-      sort_direction:
-        name: sort_direction
-        description: ''
-        required: false
-        example: asc
-        type: string
-        enumValues:
-          - asc
-          - desc
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-    cleanBodyParameters:
-      field: consequatur
-      value: consequatur
-      per_page: 13
-      sort_by: consequatur
-      sort_direction: asc
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-movements/filter-by-field could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-movements/trashed
-    metadata:
-      groupName: 'Inventory Management / Inventory Movements'
-      groupDescription: |-
-
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get trashed inventory movements (soft deleted).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-movements/trashed could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-movements/first
-    metadata:
-      groupName: 'Inventory Management / Inventory Movements'
-      groupDescription: |-
-
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get first inventory movement (First/Last sorting).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-movements/first could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-movements/last
-    metadata:
-      groupName: 'Inventory Management / Inventory Movements'
-      groupDescription: |-
-
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get last inventory movement (First/Last sorting).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-movements/last could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-movements/next-movement-number
-    metadata:
-      groupName: 'Inventory Management / Inventory Movements'
-      groupDescription: |-
-
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get next sequential movement number for preview.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      warehouse_id:
-        name: warehouse_id
-        description: ''
-        required: true
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
         nullable: false
         custom: []
-      movement_type:
-        name: movement_type
-        description: ''
+      quantity:
+        name: quantity
+        description: 'Must be at least 0.000001.'
         required: true
-        example: transfer
-        type: string
-        enumValues:
-          - outbound
-          - inbound
-          - transfer
-          - manufacturing
-          - inventory_count
+        example: 45
+        type: number
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      warehouse_id: 17
-      movement_type: transfer
+      item_id: consequatur
+      component_id: consequatur
+      unit_id: consequatur
+      quantity: 45
     fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-movements/next-movement-number could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
+    responses: []
     responseFields: []
     auth:
       - headers
@@ -384,15 +143,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/inventory-movements/{id}'
+    uri: 'api/v1/bom-items/view-component/{id}'
     metadata:
-      groupName: 'Inventory Management / Inventory Movements'
+      groupName: 'Inventory Management / BOM Items'
       groupDescription: |-
 
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Display the specified inventory movement.'
+      title: 'Display the specified BOM item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -404,7 +163,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the inventory movement.'
+        description: 'The ID of the view component.'
         required: true
         example: consequatur
         type: string
@@ -421,71 +180,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-movements/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/inventory-movements/{id}/movement-data'
-    metadata:
-      groupName: 'Inventory Management / Inventory Movements'
-      groupDescription: |-
-
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get movement data with sorting (First/Last for movement data table).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory movement.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-movements/consequatur/movement-data could not be found."
-          }
+        status: 401
+        content: '{"message":"Unauthenticated."}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -504,15 +200,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/inventory-movements/{id}'
+    uri: 'api/v1/bom-items/update-component/{id}'
     metadata:
-      groupName: 'Inventory Management / Inventory Movements'
+      groupName: 'Inventory Management / BOM Items'
       groupDescription: |-
 
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Update the specified inventory movement.'
+      title: 'Update the specified BOM item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -524,7 +220,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the inventory movement.'
+        description: 'The ID of the update component.'
         required: true
         example: consequatur
         type: string
@@ -537,247 +233,49 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      movement_number:
-        name: movement_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: vmqeopfuudtdsufvyvddq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      movement_type:
-        name: movement_type
-        description: ''
-        required: true
-        example: inbound
-        type: string
-        enumValues:
-          - outbound
-          - inbound
-          - transfer
-          - manufacturing
-          - inventory_count
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      movement_date:
-        name: movement_date
-        description: 'Must be a valid date.'
-        required: false
-        example: '2025-09-16T10:25:37'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      movement_time:
-        name: movement_time
-        description: 'Must be a valid date in the format <code>H:i:s</code>.'
-        required: false
-        example: '10:25:37'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      vendor_id:
-        name: vendor_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      customer_id:
-        name: customer_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      vendor_name:
-        name: vendor_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      customer_name:
-        name: customer_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mniihfqcoynlazghdtqtq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      movement_description:
-        name: movement_description
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: xbajwbpilpmufinllwloa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      inbound_invoice_id:
-        name: inbound_invoice_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      outbound_invoice_id:
-        name: outbound_invoice_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      inbound_invoice_number:
-        name: inbound_invoice_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      outbound_invoice_number:
-        name: outbound_invoice_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mniihfqcoynlazghdtqtq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      user_number:
-        name: user_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: xbajwbpilpmufinllwloa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      shipment_number:
-        name: shipment_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: uydlsmsjuryvojcybzvrb
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      invoice_number:
-        name: invoice_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: yickznkygloigmkwxphlv
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      reference:
-        name: reference
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: azjrcnfbaqywuxhgjjmzu
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      warehouse_id:
-        name: warehouse_id
-        description: ''
-        required: true
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      status:
-        name: status
-        description: ''
-        required: false
-        example: cancelled
-        type: string
-        enumValues:
-          - draft
-          - confirmed
-          - cancelled
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      movement_data:
-        name: movement_data
-        description: ''
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
         required: false
         example: null
-        type: 'object[]'
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      'movement_data[].id':
-        name: 'movement_data[].id'
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].item_id':
-        name: 'movement_data[].item_id'
-        description: ''
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
         required: true
-        example: 17
-        type: integer
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      'movement_data[].unit_id':
-        name: 'movement_data[].unit_id'
-        description: ''
-        required: false
-        example: 17
-        type: integer
+      component_id:
+        name: component_id
+        description: 'The value and <code>item_id</code> must be different. The <code>id</code> of an existing record in the items table.'
+        required: true
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
-      'movement_data[].quantity':
-        name: 'movement_data[].quantity'
-        description: 'Must be at least 0.0001.'
+      unit_id:
+        name: unit_id
+        description: 'The <code>id</code> of an existing record in the units table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      quantity:
+        name: quantity
+        description: 'Must be at least 0.000001.'
         required: true
         example: 45
         type: number
@@ -785,153 +283,232 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      'movement_data[].unit_cost':
-        name: 'movement_data[].unit_cost'
-        description: 'Must be at least 0.'
-        required: false
-        example: 56
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].unit_price':
-        name: 'movement_data[].unit_price'
-        description: 'Must be at least 0.'
-        required: false
-        example: 16
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].inventory_count':
-        name: 'movement_data[].inventory_count'
-        description: 'Must be at least 0.'
-        required: false
-        example: 50
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].notes':
-        name: 'movement_data[].notes'
-        description: 'Must not be greater than 500 characters.'
-        required: false
-        example: pfuudtdsufvyvddqamnii
+    cleanBodyParameters:
+      item_id: consequatur
+      component_id: consequatur
+      unit_id: consequatur
+      quantity: 45
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/bom-items/delete-component/{id}'
+    metadata:
+      groupName: 'Inventory Management / BOM Items'
+      groupDescription: |-
+
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified BOM item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the delete component.'
+        required: true
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
-      'movement_data[].batch_number':
-        name: 'movement_data[].batch_number'
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: hfqcoynlazghdtqtqxbaj
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].expiry_date':
-        name: 'movement_data[].expiry_date'
-        description: 'Must be a valid date.'
-        required: false
-        example: '2025-09-16T10:25:37'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].serial_number':
-        name: 'movement_data[].serial_number'
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: wbpilpmufinllwloauydl
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].location_code':
-        name: 'movement_data[].location_code'
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: smsjuryvojcybzvrbyick
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].shelf_number':
-        name: 'movement_data[].shelf_number'
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: znkygloigmkwxphlvazjr
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[].bin_number':
-        name: 'movement_data[].bin_number'
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: cnfbaqywuxhgjjmzuxjub
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      'movement_data[]._delete':
-        name: 'movement_data[]._delete'
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/bom-items/by-item/{itemId}'
+    metadata:
+      groupName: 'Inventory Management / BOM Items'
+      groupDescription: |-
+
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get BOM items for a specific item (Bill of Materials).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      itemId:
+        name: itemId
         description: ''
-        required: false
-        example: true
-        type: boolean
+        required: true
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      itemId: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/bom-items/by-component/{componentId}'
+    metadata:
+      groupName: 'Inventory Management / BOM Items'
+      groupDescription: |-
+
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get items that use a specific component.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      componentId:
+        name: componentId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      componentId: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/bom-items/compute-requirements
+    metadata:
+      groupName: 'Inventory Management / BOM Items'
+      groupDescription: |-
+
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Calculate material requirements for production.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      production_quantity:
+        name: production_quantity
+        description: 'Must be at least 0.01.'
+        required: true
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
         custom: []
     cleanBodyParameters:
-      movement_number: vmqeopfuudtdsufvyvddq
-      movement_type: inbound
-      movement_date: '2025-09-16T10:25:37'
-      movement_time: '10:25:37'
-      vendor_id: 17
-      customer_id: 17
-      vendor_name: mqeopfuudtdsufvyvddqa
-      customer_name: mniihfqcoynlazghdtqtq
-      movement_description: xbajwbpilpmufinllwloa
-      inbound_invoice_id: 17
-      outbound_invoice_id: 17
-      inbound_invoice_number: mqeopfuudtdsufvyvddqa
-      outbound_invoice_number: mniihfqcoynlazghdtqtq
-      user_number: xbajwbpilpmufinllwloa
-      shipment_number: uydlsmsjuryvojcybzvrb
-      invoice_number: yickznkygloigmkwxphlv
-      reference: azjrcnfbaqywuxhgjjmzu
-      warehouse_id: 17
-      status: cancelled
-      movement_data:
-        -
-          id: 17
-          item_id: 17
-          unit_id: 17
-          quantity: 45
-          unit_cost: 56
-          unit_price: 16
-          inventory_count: 50
-          notes: pfuudtdsufvyvddqamnii
-          batch_number: hfqcoynlazghdtqtqxbaj
-          expiry_date: '2025-09-16T10:25:37'
-          serial_number: wbpilpmufinllwloauydl
-          location_code: smsjuryvojcybzvrbyick
-          shelf_number: znkygloigmkwxphlvazjr
-          bin_number: cnfbaqywuxhgjjmzuxjub
-          _delete: true
+      item_id: consequatur
+      production_quantity: 45
     fileParameters: []
     responses: []
     responseFields: []
@@ -945,16 +522,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - DELETE
-    uri: 'api/v1/inventory-movements/{id}'
+      - GET
+    uri: api/v1/bom-items/filter-by-criteria
     metadata:
-      groupName: 'Inventory Management / Inventory Movements'
+      groupName: 'Inventory Management / BOM Items'
       groupDescription: |-
 
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Remove the specified inventory movement (soft delete).'
+      title: '! Filter BOM items by field value.'
       description: ''
       authenticated: true
       deprecated: false
@@ -963,25 +540,23 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory movement.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth:
       - headers
@@ -993,16 +568,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - POST
-    uri: 'api/v1/inventory-movements/{id}/confirm'
+      - GET
+    uri: api/v1/bom-items/first-component
     metadata:
-      groupName: 'Inventory Management / Inventory Movements'
+      groupName: 'Inventory Management / BOM Items'
       groupDescription: |-
 
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Confirm inventory movement.'
+      title: '! Get first BOM item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1011,25 +586,23 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory movement.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth:
       - headers
@@ -1041,16 +614,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - POST
-    uri: 'api/v1/inventory-movements/{id}/duplicate'
+      - GET
+    uri: api/v1/bom-items/last-component
     metadata:
-      groupName: 'Inventory Management / Inventory Movements'
+      groupName: 'Inventory Management / BOM Items'
       groupDescription: |-
 
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Duplicate inventory movement with new date and time.'
+      title: '! Get last BOM item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1059,121 +632,23 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory movement.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: 'api/v1/inventory-movements/{id}/restore'
-    metadata:
-      groupName: 'Inventory Management / Inventory Movements'
-      groupDescription: |-
-
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Restore a soft deleted inventory movement.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory movement.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
         custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/inventory-movements/{id}/force'
-    metadata:
-      groupName: 'Inventory Management / Inventory Movements'
-      groupDescription: |-
-
-        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Permanently delete an inventory movement.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory movement.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
     responseFields: []
     auth:
       - headers

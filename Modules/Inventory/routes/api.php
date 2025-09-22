@@ -12,6 +12,7 @@ use Modules\Inventory\Http\Controllers\Api\BomItemController;
 use Modules\Inventory\Http\Controllers\Api\BarcodeTypeController;
 use Modules\Inventory\Http\Controllers\Api\ItemTypeController;
 use Modules\Inventory\Http\Controllers\Api\InventoryMovementController;
+use Modules\Inventory\Http\Controllers\Api\ManufacturingFormulaController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
@@ -242,6 +243,39 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::post('/{id}/replicate-movement', [InventoryMovementController::class, 'duplicate'])->name('inventory-mgmt.inv-movements.replicate-movement');
         Route::post('/{id}/reactivate-movement', [InventoryMovementController::class, 'restore'])->name('inventory-mgmt.inv-movements.reactivate-movement');
         Route::delete('/{id}/permanently-remove', [InventoryMovementController::class, 'forceDelete'])->name('inventory-mgmt.inv-movements.permanently-remove');
+    });
+
+    // Manufacturing Formula Routes
+    Route::prefix('manufacturing-formulas')->group(function () {
+        // Main CRUD operations
+        Route::get('/catalog-all', [ManufacturingFormulaController::class, 'index'])->name('inventory-mgmt.manufacturing-formulas.catalog-all');
+        Route::post('/establish-formula', [ManufacturingFormulaController::class, 'store'])->name('inventory-mgmt.manufacturing-formulas.establish-formula');
+        Route::get('/examine-formula/{id}', [ManufacturingFormulaController::class, 'show'])->name('inventory-mgmt.manufacturing-formulas.examine-formula');
+        Route::put('/modify-formula/{id}', [ManufacturingFormulaController::class, 'update'])->name('inventory-mgmt.manufacturing-formulas.modify-formula');
+        Route::delete('/remove-formula/{id}', [ManufacturingFormulaController::class, 'destroy'])->name('inventory-mgmt.manufacturing-formulas.remove-formula');
+
+        // Data retrieval and configuration
+        Route::get('/item-numbers', [ManufacturingFormulaController::class, 'getItemNumbers'])->name('inventory-mgmt.manufacturing-formulas.item-numbers');
+        Route::get('/item-details', [ManufacturingFormulaController::class, 'getItemDetails'])->name('inventory-mgmt.manufacturing-formulas.item-details');
+        Route::post('/calculate-cost', [ManufacturingFormulaController::class, 'calculateCost'])->name('inventory-mgmt.manufacturing-formulas.calculate-cost');
+        Route::get('/available-fields', [ManufacturingFormulaController::class, 'getAvailableFields'])->name('inventory-mgmt.manufacturing-formulas.available-fields');
+        Route::get('/field-values', [ManufacturingFormulaController::class, 'getFieldValues'])->name('inventory-mgmt.manufacturing-formulas.field-values');
+        Route::get('/selectable-fields', [ManufacturingFormulaController::class, 'getSelectableFields'])->name('inventory-mgmt.manufacturing-formulas.selectable-fields');
+        Route::get('/field-based-data', [ManufacturingFormulaController::class, 'getFieldBasedData'])->name('inventory-mgmt.manufacturing-formulas.field-based-data');
+
+        // Formula-specific operations
+        Route::get('/formula-numbers', [ManufacturingFormulaController::class, 'getManufacturingFormulaNumbers'])->name('inventory-mgmt.manufacturing-formulas.formula-numbers');
+        Route::get('/item-by-formula-number', [ManufacturingFormulaController::class, 'getItemByFormulaNumber'])->name('inventory-mgmt.manufacturing-formulas.item-by-formula-number');
+        Route::get('/warehouses', [ManufacturingFormulaController::class, 'getWarehouses'])->name('inventory-mgmt.manufacturing-formulas.warehouses');
+
+        // Price management
+        Route::put('/update-prices-from-suppliers/{id}', [ManufacturingFormulaController::class, 'updatePricesFromSuppliers'])->name('inventory-mgmt.manufacturing-formulas.update-prices-from-suppliers');
+        Route::put('/update-all-prices-from-suppliers', [ManufacturingFormulaController::class, 'updateAllPricesFromSuppliers'])->name('inventory-mgmt.manufacturing-formulas.update-all-prices-from-suppliers');
+
+        // Soft delete management
+        Route::post('/{id}/restore-formula', [ManufacturingFormulaController::class, 'restore'])->name('inventory-mgmt.manufacturing-formulas.restore-formula');
+        Route::delete('/{id}/permanently-remove', [ManufacturingFormulaController::class, 'forceDelete'])->name('inventory-mgmt.manufacturing-formulas.permanently-remove');
+        Route::get('/deleted-formulas', [ManufacturingFormulaController::class, 'trashed'])->name('inventory-mgmt.manufacturing-formulas.deleted-formulas');
     });
 
     // Legacy route for backward compatibility (commented out to avoid conflicts)

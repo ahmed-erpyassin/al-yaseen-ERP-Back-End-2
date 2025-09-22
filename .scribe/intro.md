@@ -3,7 +3,7 @@
 API documentation for Al-Yaseen ERP Project Management and Inventory Management modules.
 
 <aside>
-    <strong>Base URL</strong>: <code>http://127.0.0.1:8000/</code>
+    <strong>Base URL</strong>: <code>http://localhost</code>
 </aside>
 
     Welcome to the Al-Yaseen ERP API documentation for Project Management and Inventory Management modules. This API provides comprehensive endpoints for:

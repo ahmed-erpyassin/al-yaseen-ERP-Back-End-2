@@ -48,43 +48,48 @@ return [
 
     // Routes to include in the docs
     'routes' => [
+        // Authentication Routes (separate group)
         [
             'match' => [
-                // Match only Project Management and Inventory routes
                 'prefixes' => [
+                    'api/v1/auth/*',
+                ],
+                'domains' => ['*'],
+            ],
+            'include' => [],
+            'exclude' => [],
+        ],
+
+        // Main API Routes (Projects and Inventory)
+        [
+            'match' => [
+                'prefixes' => [
+                    // Projects Module Routes
                     'api/v1/projects/*',
-                    'api/v1/tasks/*',
-                    'api/v1/milestones/*',
-                    'api/v1/resources/*',
-                    'api/v1/documents/*',
-                    'api/v1/project-financials/*',
-                    'api/v1/project-risks/*',
+                    'api/v1/project-tasks/*',
+                    'api/v1/project-milestones/*',
+                    'api/v1/project-resources/*',
+                    'api/v1/project-documents/*',
+                    'api/v1/project-finance/*',
+                    'api/v1/project-risk-management/*',
+
+                    // Inventory Module Routes
                     'api/v1/inventory-items/*',
                     'api/v1/warehouses/*',
-                    'api/v1/stock-movements/*',
                     'api/v1/department-warehouses/*',
+                    'api/v1/stock-movements/*',
                     'api/v1/units/*',
                     'api/v1/items/*',
                     'api/v1/item-units/*',
-                    'api/v1/bom-items/*',
                     'api/v1/barcode-types/*',
                     'api/v1/item-types/*',
+                    'api/v1/bom-items/*',
                     'api/v1/inventory-movements/*',
+                    'api/v1/manufacturing-formulas/*',
                 ],
-
-                // Match only routes whose domains match this pattern (use * as a wildcard to match any characters). Example: 'api.*'.
                 'domains' => ['*'],
             ],
-
-            // Include these routes even if they did not match the rules above.
-            'include' => [
-                // Include specific authentication routes for API access
-                'api/v1/auth/login',
-                'api/v1/auth/logout',
-                'api/v1/auth/user',
-            ],
-
-            // Exclude these routes even if they matched the rules above.
+            'include' => [],
             'exclude' => [
                 // Exclude internal/admin routes if any
                 'api/v1/admin/*',

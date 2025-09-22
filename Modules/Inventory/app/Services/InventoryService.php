@@ -311,4 +311,46 @@ class InventoryService
             $query->orderBy('item_name_ar', 'asc');
         }
     }
+
+    /**
+     * Get first inventory item.
+     */
+    public function getFirstInventoryItem($user, string $sortBy = 'created_at')
+    {
+        $allowedSortFields = [
+            'id', 'item_number', 'item_name_ar', 'item_name_en', 'barcode', 'model',
+            'quantity', 'minimum_limit', 'reorder_limit', 'unit_price',
+            'first_purchase_price', 'first_sale_price', 'created_at', 'updated_at'
+        ];
+
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+
+        return InventoryItem::with(['company', 'stock.warehouse'])
+            ->forCompany($user->company_id)
+            ->orderBy($sortBy, 'asc')
+            ->first();
+    }
+
+    /**
+     * Get last inventory item.
+     */
+    public function getLastInventoryItem($user, string $sortBy = 'created_at')
+    {
+        $allowedSortFields = [
+            'id', 'item_number', 'item_name_ar', 'item_name_en', 'barcode', 'model',
+            'quantity', 'minimum_limit', 'reorder_limit', 'unit_price',
+            'first_purchase_price', 'first_sale_price', 'created_at', 'updated_at'
+        ];
+
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+
+        return InventoryItem::with(['company', 'stock.warehouse'])
+            ->forCompany($user->company_id)
+            ->orderBy($sortBy, 'desc')
+            ->first();
+    }
 }

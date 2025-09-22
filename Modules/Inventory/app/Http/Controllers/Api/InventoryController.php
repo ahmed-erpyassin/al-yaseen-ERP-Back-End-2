@@ -236,4 +236,68 @@ class InventoryController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * ! Get first inventory item.
+     */
+    public function first(Request $request): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+            $sortBy = $request->get('sort_by', 'created_at');
+
+            // Get first inventory item using service
+            $item = $this->inventoryService->getFirstInventoryItem($user, $sortBy);
+
+            if (!$item) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No inventory items found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => new InventoryResource($item),
+                'message' => 'First inventory item retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving first inventory item: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ! Get last inventory item.
+     */
+    public function last(Request $request): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+            $sortBy = $request->get('sort_by', 'created_at');
+
+            // Get last inventory item using service
+            $item = $this->inventoryService->getLastInventoryItem($user, $sortBy);
+
+            if (!$item) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No inventory items found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => new InventoryResource($item),
+                'message' => 'Last inventory item retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving last inventory item: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
