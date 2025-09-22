@@ -57,7 +57,7 @@ class UserSeeder extends Seeder
         $roles = [];
         foreach (['web', 'api'] as $guard) {
             $roles[$guard] = Role::firstOrCreate([
-                'name'       => 'super_admin',
+                'name'       => 'super_admin' . '_' . $guard,
                 'guard_name' => $guard,
             ]);
         }
@@ -70,13 +70,13 @@ class UserSeeder extends Seeder
 
         // ربط المستخدم بالدورين (web + api)
         $user->syncRoles([
-            $roles['web']->name,
-            $roles['api']->name,
+            $roles['web'],
+            $roles['api'],
         ]);
 
-        $company = Company::firstOrCreate([
-            'currency_id'                           => 1,
-            'financial_year_id'                     => 1,
+        $company = Company::create([
+            'currency_id'                           => null,
+            'financial_year_id'                     => null,
             'industry_id'                           => 1,
             'business_type_id'                      => 1,
             'country_id'                            => 1,

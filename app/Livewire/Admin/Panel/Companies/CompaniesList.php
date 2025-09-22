@@ -55,4 +55,10 @@ class CompaniesList extends Component
         $companies = $this->loadCompanies();
         return view('livewire.admin.panel.companies.companies-list', compact('companies'));
     }
+
+    public function show($id)
+    {
+        session(['company_id' => $id]);
+        return redirect()->route('admin.panel.companies.show', ['lang' => app()->getLocale()]);
+    }
 }

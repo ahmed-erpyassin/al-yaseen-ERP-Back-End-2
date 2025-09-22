@@ -18,6 +18,8 @@ class CityResource extends JsonResource
             'name_en' => $this->name_en,
             'country_id' => $this->country_id,
             'region_id' => $this->region_id,
+            'country' => new CountryResource($this->whenLoaded('country')),
+            'region' => new RegionResource($this->whenLoaded('region')),
         ];
     }
 }

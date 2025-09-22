@@ -28,11 +28,11 @@ class ModuleAccessPermissionSeeder extends Seeder
         foreach ($modules as $key => $label) {
             foreach (['web', 'api'] as $guard) {
                 Permission::firstOrCreate([
-                    'name'       => 'access_' . Str::snake($key),
+                    'name'       => 'access_' . Str::snake($key) . '_' . $guard,
                     'guard_name' => $guard,
                 ], [
                     'group' => $key,
-                    'label' => 'Access to ' . $label,
+                    'label' => 'Access to ' . $label . ' Module ' . strtoupper($guard),
                 ]);
             }
         }

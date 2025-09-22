@@ -20,7 +20,7 @@ class RegionService
 
     public function getRegions()
     {
-        return Region::with(['country', 'cities'])->all();
+        return Region::with(['country', 'cities'])->get();
     }
 
     public function getRegionById($id)

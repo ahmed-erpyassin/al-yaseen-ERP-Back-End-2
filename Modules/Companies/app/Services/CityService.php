@@ -21,7 +21,6 @@ class CityService
     public function getCities($user)
     {
         return City::with(['country', 'region']) // المدينة مع الدولة + المنطقة
-            ->where('user_id', $user->id)
             ->get();
     }
 
