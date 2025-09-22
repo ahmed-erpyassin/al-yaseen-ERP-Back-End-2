@@ -416,7 +416,7 @@ class BomItemController extends Controller
     }
 
     /**
-     * ✅ Filter BOM items by field value.
+     * ! Filter BOM items by field value.
      */
     public function filterByField(Request $request): JsonResponse
     {
@@ -468,7 +468,7 @@ class BomItemController extends Controller
     }
 
     /**
-     * ✅ Get first BOM item.
+     * ! Get first BOM item.
      */
     public function first(Request $request): JsonResponse
     {
@@ -499,7 +499,7 @@ class BomItemController extends Controller
     }
 
     /**
-     * ✅ Get last BOM item.
+     * ! Get last BOM item.
      */
     public function last(Request $request): JsonResponse
     {

@@ -188,7 +188,7 @@ class InventoryController extends Controller
     }
 
     /**
-     * Get low stock items.
+     * ! Get low stock items.
      */
     public function lowStock(Request $request): JsonResponse
     {
@@ -213,7 +213,7 @@ class InventoryController extends Controller
     }
 
     /**
-     * Get items that need reordering.
+     * ! Get items that need reordering.
      */
     public function reorderItems(Request $request): JsonResponse
     {
