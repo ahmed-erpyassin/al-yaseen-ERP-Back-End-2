@@ -2,8 +2,9 @@
 
 namespace Modules\Inventory\Models;
 
-use App\Models\Company;
-use App\Models\User;
+use Modules\Companies\Models\Company;
+use Modules\Companies\Models\Branch;
+use Modules\Users\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

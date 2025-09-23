@@ -20,6 +20,7 @@ class StoreUnitRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'company_id' => 'nullable|exists:companies,id',
             'branch_id' => 'nullable|exists:branches,id',
             'name' => 'required|string|max:255',
             'code' => 'nullable|string|max:255',
