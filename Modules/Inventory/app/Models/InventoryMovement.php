@@ -4,6 +4,8 @@ namespace Modules\Inventory\Models;
 
 use Modules\Companies\Models\Company;
 use Modules\Users\Models\User;
+use Modules\Suppliers\Models\Supplier;
+use Modules\Customers\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -123,36 +125,36 @@ class InventoryMovement extends Model
     }
 
     /**
-     * ✅ Get the vendor (prepare code without creating table).
+     * ✅ Get the vendor (supplier).
      */
     public function vendor(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Vendor::class, 'vendor_id');
+        return $this->belongsTo(Supplier::class, 'vendor_id');
     }
 
     /**
-     * ✅ Get the customer (prepare code without creating table).
+     * ✅ Get the customer.
      */
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     /**
-     * ✅ Get the inbound invoice (prepare code without creating table).
+     * ✅ Get the inbound invoice (commented out until proper invoice models are available).
      */
-    public function inboundInvoice(): BelongsTo
-    {
-        return $this->belongsTo(\App\Models\PurchaseInvoice::class, 'inbound_invoice_id');
-    }
+    // public function inboundInvoice(): BelongsTo
+    // {
+    //     return $this->belongsTo(\Modules\Purchases\Models\PurchaseInvoice::class, 'inbound_invoice_id');
+    // }
 
     /**
-     * ✅ Get the outbound invoice (prepare code without creating table).
+     * ✅ Get the outbound invoice (commented out until proper invoice models are available).
      */
-    public function outboundInvoice(): BelongsTo
-    {
-        return $this->belongsTo(\App\Models\SalesInvoice::class, 'outbound_invoice_id');
-    }
+    // public function outboundInvoice(): BelongsTo
+    // {
+    //     return $this->belongsTo(\Modules\Sales\Models\SalesInvoice::class, 'outbound_invoice_id');
+    // }
 
     /**
      * ✅ Get the movement data (details).

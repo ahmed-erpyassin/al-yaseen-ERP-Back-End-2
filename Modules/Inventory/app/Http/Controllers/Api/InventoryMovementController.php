@@ -27,12 +27,13 @@ class InventoryMovementController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = InventoryMovement::with([
             'company', 'user', 'warehouse', 'movementData.item', 'movementData.unit',
             'vendor', 'customer', 'creator', 'updater'
-        ])->forCompany($companyId);
+        ]);
+        //->forCompany($companyId);
 
         // ✅ Enhanced Search functionality (Movement Number / Date / Customer or Vendor / Movement Type)
         if ($request->has('search')) {
@@ -144,12 +145,7 @@ class InventoryMovementController extends Controller
             $data['movement_time'] = now()->toTimeString();
             $data['movement_datetime'] = now();
 
-            // ✅ Get warehouse information
-            $warehouse = Warehouse::find($data['warehouse_id']);
-            if ($warehouse) {
-                $data['warehouse_number'] = $warehouse->warehouse_number;
-                $data['warehouse_name'] = $warehouse->name;
-            }
+            // ✅ Warehouse information will be available via relationship
 
             // ✅ Generate movement description based on movement type
             $data['movement_description'] = $this->generateMovementDescription($data['movement_type'], $data['movement_description'] ?? null);
@@ -177,19 +173,14 @@ class InventoryMovementController extends Controller
                 $itemData['company_id'] = $companyId;
                 $itemData['inventory_movement_id'] = $movement->id;
                 $itemData['warehouse_id'] = $data['warehouse_id'];
-                $itemData['warehouse_number'] = $data['warehouse_number'] ?? null;
-                $itemData['warehouse_name'] = $data['warehouse_name'] ?? null;
                 $itemData['created_by'] = $userId;
 
                 // ✅ Add serial number
                 $itemData['serial_number'] = $serialNumber++;
 
-                // ✅ Get item information from Items table
+                // ✅ Get item information for pricing (item details available via relationship)
                 $item = Item::find($itemData['item_id']);
                 if ($item) {
-                    $itemData['item_number'] = $item->item_number;
-                    $itemData['item_name'] = $item->name;
-                    $itemData['item_description'] = $item->description;
 
                     // ✅ Get price from warehouse/item if not provided
                     if (!isset($itemData['unit_price']) || $itemData['unit_price'] == 0) {
@@ -197,14 +188,7 @@ class InventoryMovementController extends Controller
                     }
                 }
 
-                // ✅ Get unit information from Units table
-                if (!empty($itemData['unit_id'])) {
-                    $unit = Unit::find($itemData['unit_id']);
-                    if ($unit) {
-                        $itemData['unit_name'] = $unit->name;
-                        $itemData['unit_code'] = $unit->code;
-                    }
-                }
+                // ✅ Unit information will be available via relationship
 
                 // ✅ Get quantity from Warehouses table (current stock)
                 $currentStock = $this->getCurrentStock($data['warehouse_id'], $itemData['item_id']);
@@ -262,14 +246,16 @@ class InventoryMovementController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+      //  $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movement = InventoryMovement::with([
             'company', 'user', 'warehouse',
             'movementData.item', 'movementData.unit', 'movementData.warehouse',
             'vendor', 'customer', 'inboundInvoice', 'outboundInvoice',
             'creator', 'updater', 'confirmer'
-        ])->forCompany($companyId)->findOrFail($id);
+        ]);
+        //->forCompany($companyId)->findOrFail($id);
+        $movement = InventoryMovement::find($id);
 
         return response()->json([
             'success' => true,
@@ -417,14 +403,7 @@ class InventoryMovementController extends Controller
             $data = $request->validated();
             $data['updated_by'] = $userId;
 
-            // ✅ Get warehouse information if changed
-            if (isset($data['warehouse_id']) && $data['warehouse_id'] != $movement->warehouse_id) {
-                $warehouse = Warehouse::find($data['warehouse_id']);
-                if ($warehouse) {
-                    $data['warehouse_number'] = $warehouse->warehouse_number;
-                    $data['warehouse_name'] = $warehouse->name;
-                }
-            }
+            // ✅ Warehouse information will be available via relationship
 
             // ✅ Handle movement data updates
             if (isset($data['movement_data'])) {
@@ -472,13 +451,14 @@ class InventoryMovementController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
         try {
             DB::beginTransaction();
 
-            $movement = InventoryMovement::forCompany($companyId)->findOrFail($id);
+            $movement = InventoryMovement::findOrFail($id);
+            //forCompany($companyId)
 
             // ✅ Check if movement can be deleted
             if ($movement->is_confirmed && $movement->status === 'confirmed') {
@@ -517,13 +497,14 @@ class InventoryMovementController extends Controller
      */
     public function confirm($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        //$companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
         try {
             DB::beginTransaction();
 
-            $movement = InventoryMovement::forCompany($companyId)->findOrFail($id);
+            $movement = InventoryMovement::findOrFail($id);
+            //forCompany($companyId)
 
             if ($movement->is_confirmed) {
                 return response()->json([
@@ -638,35 +619,22 @@ class InventoryMovementController extends Controller
             $itemData['company_id'] = $companyId;
             $itemData['inventory_movement_id'] = $movement->id;
             $itemData['warehouse_id'] = $movement->warehouse_id;
-            $itemData['warehouse_number'] = $movement->warehouse_number;
-            $itemData['warehouse_name'] = $movement->warehouse_name;
 
             // ✅ Add serial number if not provided
             if (!isset($itemData['serial_number'])) {
                 $itemData['serial_number'] = $serialNumber++;
             }
 
-            // ✅ Get item information from Items table
+            // ✅ Get item information for pricing (item details available via relationship)
             $item = Item::find($itemData['item_id']);
             if ($item) {
-                $itemData['item_number'] = $item->item_number;
-                $itemData['item_name'] = $item->name;
-                $itemData['item_description'] = $item->description;
-
                 // ✅ Get price from warehouse/item if not provided
                 if (!isset($itemData['unit_price']) || $itemData['unit_price'] == 0) {
                     $itemData['unit_price'] = $item->price ?? 0;
                 }
             }
 
-            // ✅ Get unit information from Units table
-            if (!empty($itemData['unit_id'])) {
-                $unit = Unit::find($itemData['unit_id']);
-                if ($unit) {
-                    $itemData['unit_name'] = $unit->name;
-                    $itemData['unit_code'] = $unit->code;
-                }
-            }
+            // ✅ Unit information will be available via relationship
 
             // ✅ Get current stock quantity from Warehouses table
             if (!isset($itemData['previous_quantity'])) {
@@ -802,7 +770,7 @@ class InventoryMovementController extends Controller
      */
     public function filterByField(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $request->validate([
             'field' => 'required|string',
@@ -833,7 +801,8 @@ class InventoryMovementController extends Controller
         $query = InventoryMovement::with([
             'company', 'user', 'warehouse', 'movementData.item', 'movementData.unit',
             'vendor', 'customer', 'creator', 'updater'
-        ])->forCompany($companyId);
+        ]);
+        //->forCompany($companyId);
 
         // ✅ Apply field-specific filter (case-insensitive)
         if ($field === 'movement_date') {
@@ -868,14 +837,12 @@ class InventoryMovementController extends Controller
      */
     public function duplicate($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
         try {
             DB::beginTransaction();
 
             $originalMovement = InventoryMovement::with('movementData')
-                ->forCompany($companyId)
                 ->findOrFail($id);
 
             // ✅ Prepare data for duplication
@@ -885,8 +852,8 @@ class InventoryMovementController extends Controller
             unset($movementData['id'], $movementData['created_at'], $movementData['updated_at'],
                   $movementData['deleted_at'], $movementData['movement_data']);
 
-            // ✅ Generate new movement number
-            $movementData['movement_number'] = $this->generateMovementNumber($companyId, $movementData['movement_type']);
+            // ✅ Generate new movement number using original movement's company_id
+            $movementData['movement_number'] = $this->generateMovementNumber($originalMovement->company_id, $movementData['movement_type']);
 
             // ✅ Update date and time (key requirement)
             $movementData['movement_date'] = now()->toDateString();
@@ -971,11 +938,11 @@ class InventoryMovementController extends Controller
      */
     public function trashed(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = InventoryMovement::onlyTrashed()
-            ->with(['company', 'warehouse', 'deleter'])
-            ->forCompany($companyId);
+            ->with(['company', 'warehouse', 'deleter']);
+           // ->forCompany($companyId);
 
         // Apply search to trashed items
         if ($request->has('search')) {
@@ -1004,10 +971,10 @@ class InventoryMovementController extends Controller
      */
     public function restore($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        //$companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movement = InventoryMovement::onlyTrashed()
-            ->forCompany($companyId)
+         //   ->forCompany($companyId)
             ->findOrFail($id);
 
         $movement->restore();
@@ -1025,10 +992,10 @@ class InventoryMovementController extends Controller
      */
     public function forceDelete($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movement = InventoryMovement::onlyTrashed()
-            ->forCompany($companyId)
+          //  ->forCompany($companyId)
             ->findOrFail($id);
 
         $movement->forceDelete();
@@ -1045,7 +1012,7 @@ class InventoryMovementController extends Controller
      */
     public function first(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $sortBy = $request->get('sort_by', 'movement_date');
         $sortDirection = 'asc'; // First = ascending
@@ -1054,7 +1021,7 @@ class InventoryMovementController extends Controller
             'warehouse', 'movementData.item', 'movementData.unit',
             'vendor', 'customer', 'creator'
         ])
-        ->forCompany($companyId)
+       // ->forCompany($companyId)
         ->orderBy($sortBy, $sortDirection)
         ->first();
 
@@ -1079,7 +1046,7 @@ class InventoryMovementController extends Controller
      */
     public function last(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+      //  $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $sortBy = $request->get('sort_by', 'movement_date');
         $sortDirection = 'desc'; // Last = descending
@@ -1088,7 +1055,7 @@ class InventoryMovementController extends Controller
             'warehouse', 'movementData.item', 'movementData.unit',
             'vendor', 'customer', 'creator'
         ])
-        ->forCompany($companyId)
+        //->forCompany($companyId)
         ->orderBy($sortBy, $sortDirection)
         ->first();
 
@@ -1113,9 +1080,10 @@ class InventoryMovementController extends Controller
      */
     public function getMovementData($id, Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+     //   $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $movement = InventoryMovement::forCompany($companyId)->findOrFail($id);
+        $movement = InventoryMovement::findOrFail($id);
+        //forCompany($companyId)
 
         $query = InventoryMovementData::with(['item', 'unit', 'warehouse'])
             ->where('inventory_movement_id', $id);
@@ -1154,7 +1122,7 @@ class InventoryMovementController extends Controller
      */
     public function getNextMovementNumber(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $request->validate([
             'warehouse_id' => 'required|integer',

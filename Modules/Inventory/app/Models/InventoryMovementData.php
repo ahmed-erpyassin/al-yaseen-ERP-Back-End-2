@@ -15,19 +15,12 @@ class InventoryMovementData extends Model
     protected $fillable = [
         'company_id',
         'inventory_movement_id',
-        // Item Information
+        // Item Information (redundant fields removed - available via relationships)
         'item_id',
-        'item_number',
-        'item_name',
-        'item_description',
-        // Unit Information
+        // Unit Information (redundant fields removed - available via relationships)
         'unit_id',
-        'unit_name',
-        'unit_code',
-        // Warehouse Information
+        // Warehouse Information (redundant fields removed - available via relationships)
         'warehouse_id',
-        'warehouse_number',
-        'warehouse_name',
         // Quantity Information
         'inventory_count',
         'quantity',
@@ -129,19 +122,21 @@ class InventoryMovementData extends Model
     }
 
     /**
-     * ✅ Get item display name.
+     * ✅ Get item display name from relationship.
      */
     public function getItemDisplayNameAttribute(): string
     {
-        return ($this->item_number ? $this->item_number . ' - ' : '') . ($this->item_name ?? 'Unknown Item');
+        $item = $this->item;
+        return ($item?->item_number ? $item->item_number . ' - ' : '') . ($item?->name ?? 'Unknown Item');
     }
 
     /**
-     * ✅ Get warehouse display name.
+     * ✅ Get warehouse display name from relationship.
      */
     public function getWarehouseDisplayNameAttribute(): string
     {
-        return ($this->warehouse_number ? $this->warehouse_number . ' - ' : '') . ($this->warehouse_name ?? 'Unknown Warehouse');
+        $warehouse = $this->warehouse;
+        return ($warehouse?->warehouse_number ? $warehouse->warehouse_number . ' - ' : '') . ($warehouse?->name ?? 'Unknown Warehouse');
     }
 
     /**
@@ -179,11 +174,11 @@ class InventoryMovementData extends Model
             // Calculate totals automatically
             $model->total_cost = $model->calculateTotalCost();
             $model->total_price = $model->calculateTotalPrice();
-            
+
             // Calculate new quantity based on movement type
             if ($model->inventoryMovement) {
                 $movementType = $model->inventoryMovement->movement_type;
-                
+
                 switch ($movementType) {
                     case 'inbound':
                     case 'manufacturing':
