@@ -32,8 +32,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/stock-movements/track-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -98,7 +101,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: in
+        example: out
         type: string
         enumValues:
           - in
@@ -172,7 +175,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:31'
+        example: '2025-09-23T07:29:17'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -181,14 +184,14 @@ endpoints:
     cleanBodyParameters:
       inventory_item_id: consequatur
       warehouse_id: consequatur
-      movement_type: in
+      movement_type: out
       reference_type: mqeopfuudtdsufvyvddqa
       reference_id: 17
       quantity: 45
       unit_cost: 56
       total_cost: 16
       notes: consequatur
-      movement_date: '2025-09-22T14:42:31'
+      movement_date: '2025-09-23T07:29:17'
     fileParameters: []
     responses: []
     responseFields: []
@@ -240,8 +243,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/stock-movements/examine-movement/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -286,8 +292,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/stock-movements/movement-summary could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -343,8 +352,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/stock-movements/by-item/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -400,8 +412,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/stock-movements/by-warehouse/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

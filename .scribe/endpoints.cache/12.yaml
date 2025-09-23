@@ -36,8 +36,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/catalog-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -183,7 +186,7 @@ endpoints:
         name: selected_purchase_price_type
         description: ''
         required: false
-        example: third
+        example: second
         type: string
         enumValues:
           - first
@@ -286,7 +289,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: draft
+        example: archived
         type: string
         enumValues:
           - draft
@@ -310,7 +313,7 @@ endpoints:
         name: effective_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:32'
+        example: '2025-09-23T07:29:20'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -366,7 +369,7 @@ endpoints:
       formula_name: fuudtdsufvyvddqamniih
       formula_description: fqcoynlazghdtqtqxbajw
       formula_number: bpilpmufinllwloauydls
-      selected_purchase_price_type: third
+      selected_purchase_price_type: second
       batch_size: 42
       production_time_minutes: 64
       preparation_time_minutes: 34
@@ -376,9 +379,9 @@ endpoints:
       tolerance_percentage: 18
       quality_requirements: wiwxtrkimfcatbxspzmra
       requires_inspection: true
-      status: draft
+      status: archived
       is_active: true
-      effective_from: '2025-09-22T14:42:32'
+      effective_from: '2025-09-23T07:29:20'
       effective_to: '2106-10-22'
     fileParameters: []
     responses: []
@@ -432,8 +435,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/examine-formula/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -528,8 +534,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/item-numbers could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -575,8 +584,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/item-details could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -660,8 +672,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/available-fields could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -707,8 +722,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/field-values could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -754,8 +772,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/selectable-fields could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -801,8 +822,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/field-based-data could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -848,8 +872,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/formula-numbers could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -895,8 +922,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/item-by-formula-number could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -942,8 +972,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/warehouses could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1174,8 +1207,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/manufacturing-formulas/deleted-formulas could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

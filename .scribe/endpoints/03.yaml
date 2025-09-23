@@ -32,8 +32,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/department-warehouses/enumerate-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -214,8 +217,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/department-warehouses/view-assignment/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -341,7 +347,7 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -355,7 +361,7 @@ endpoints:
       manager_name: dtdsufvyvddqamniihfqc
       manager_phone: oynlazghdtqtqxbajwbpi
       manager_email: jaunita.schamberger@example.com
-      active: false
+      active: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -444,8 +450,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/department-warehouses/primary-assignment could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -490,8 +499,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/department-warehouses/ultimate-assignment could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

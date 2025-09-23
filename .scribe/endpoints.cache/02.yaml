@@ -34,8 +34,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/warehouses/scan-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -321,8 +324,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/warehouses/inspect-facility/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -498,7 +504,7 @@ endpoints:
         name: inventory_valuation_method
         description: ''
         required: true
-        example: natural_division
+        example: second_purchase_price
         type: string
         enumValues:
           - natural_division
@@ -513,7 +519,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: inactive
+        example: active
         type: string
         enumValues:
           - active
@@ -532,8 +538,8 @@ endpoints:
       phone_number: atbxspzmrazsroyjpxmqe
       purchase_account: sedyghenqcopwvownkbam
       sale_account: lnfngefbeilfzsyuxoezb
-      inventory_valuation_method: natural_division
-      status: inactive
+      inventory_valuation_method: second_purchase_price
+      status: active
     fileParameters: []
     responses: []
     responseFields: []
@@ -622,8 +628,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/warehouses/configuration-data could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -725,8 +734,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/warehouses/filter-by-criteria could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -771,8 +783,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/warehouses/archived-facilities could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -817,8 +832,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/warehouses/initial-facility could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -863,8 +881,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/warehouses/final-facility could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

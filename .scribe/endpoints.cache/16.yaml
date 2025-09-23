@@ -305,7 +305,7 @@ endpoints:
         name: resource_type
         description: ''
         required: true
-        example: internal
+        example: consultant
         type: string
         enumValues:
           - supplier
@@ -389,7 +389,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: inactive
+        example: completed
         type: string
         enumValues:
           - active
@@ -442,7 +442,7 @@ endpoints:
       project_id: consequatur
       supplier_id: consequatur
       role: mqeopfuudtdsufvyvddqa
-      resource_type: internal
+      resource_type: consultant
       supplier_number: mniihfqcoynlazghdtqtq
       supplier_name: xbajwbpilpmufinllwloa
       project_number: uydlsmsjuryvojcybzvrb
@@ -450,7 +450,7 @@ endpoints:
       allocation_percentage: 1
       allocation_value: 87
       notes: jrcnfbaqywuxhgjjmzuxj
-      status: inactive
+      status: completed
       allocation: ubqouzswiwxtrkimfcatb
     fileParameters: []
     responses: []
@@ -503,8 +503,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/display/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -590,7 +593,7 @@ endpoints:
         name: resource_type
         description: ''
         required: false
-        example: consultant
+        example: internal
         type: string
         enumValues:
           - supplier
@@ -674,7 +677,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: completed
+        example: inactive
         type: string
         enumValues:
           - active
@@ -695,7 +698,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       role: vmqeopfuudtdsufvyvddq
-      resource_type: consultant
+      resource_type: internal
       supplier_number: amniihfqcoynlazghdtqt
       supplier_name: qxbajwbpilpmufinllwlo
       project_number: auydlsmsjuryvojcybzvr
@@ -703,7 +706,7 @@ endpoints:
       allocation_percentage: 22
       allocation_value: 0
       notes: zjrcnfbaqywuxhgjjmzux
-      status: completed
+      status: inactive
       allocation: jubqouzswiwxtrkimfcat
     fileParameters: []
     responses: []
@@ -830,8 +833,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/filter-by-field could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -876,8 +882,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/field-values could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -922,8 +931,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/sortable-fields could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1101,8 +1113,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/deleted-resources could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1147,8 +1162,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/supplier-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1193,8 +1211,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/project-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1239,8 +1260,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/type-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1285,8 +1309,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/status-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1416,8 +1443,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/by-project/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1473,8 +1503,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-resources/by-supplier/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

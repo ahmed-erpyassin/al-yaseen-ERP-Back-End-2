@@ -34,8 +34,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/gather-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -140,7 +143,7 @@ endpoints:
         name: document_category
         description: ''
         required: false
-        example: other
+        example: drawing
         type: string
         enumValues:
           - contract
@@ -170,7 +173,7 @@ endpoints:
         name: upload_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:33'
+        example: '2025-09-23T07:29:22'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -222,9 +225,9 @@ endpoints:
       project_number: mniihfqcoynlazghdtqtq
       project_name: xbajwbpilpmufinllwloa
       description: 'A qui ducimus nihil laudantium nihil autem omnis.'
-      document_category: other
+      document_category: drawing
       status: active
-      upload_date: '2025-09-22T14:42:33'
+      upload_date: '2025-09-23T07:29:22'
       version: ryvojcybzvrbyickz
     fileParameters:
       file: null
@@ -278,8 +281,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/read/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -431,8 +437,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/consequatur/file-download could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -514,8 +523,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/filter-by-field could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -560,8 +572,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/field-values could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -606,8 +621,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/sortable-fields could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -785,8 +803,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/deleted-documents could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -831,8 +852,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/project-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -877,8 +901,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/category-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -923,8 +950,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/status-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1017,8 +1047,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/by-project/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1074,8 +1107,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/by-category/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

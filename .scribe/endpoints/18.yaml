@@ -32,8 +32,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/obtain-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -138,7 +141,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: true
-        example: '2025-09-22T14:42:33'
+        example: '2025-09-23T07:29:22'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -221,7 +224,7 @@ endpoints:
       reference_type: qeopfuudtdsufvyvddqam
       reference_id: niihfqcoynlazghdtqtqx
       amount: 2
-      date: '2025-09-22T14:42:33'
+      date: '2025-09-23T07:29:22'
       description: 'Consequatur debitis et id.'
     fileParameters: []
     responses: []
@@ -274,8 +277,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/show/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -391,7 +397,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:33'
+        example: '2025-09-23T07:29:22'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -422,7 +428,7 @@ endpoints:
       reference_type: mqeopfuudtdsufvyvddqa
       reference_id: mniihfqcoynlazghdtqtq
       amount: 23
-      date: '2025-09-22T14:42:33'
+      date: '2025-09-23T07:29:22'
       description: 'Aut consequatur debitis et.'
     fileParameters: []
     responses: []
@@ -549,8 +555,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/filter-by-field could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -595,8 +604,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/field-values could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -641,8 +653,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/sortable-fields could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -820,8 +835,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/deleted-financials could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -866,8 +884,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/project-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -912,8 +933,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/currency-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -969,8 +993,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/by-project/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1026,8 +1053,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/by-reference-type/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1094,8 +1124,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-finance/by-date-range/consequatur/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

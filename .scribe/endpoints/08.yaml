@@ -32,8 +32,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/barcode-types/enumerate-types could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -89,8 +92,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/barcode-types/view-type/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -135,8 +141,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/barcode-types/type-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -181,8 +190,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/barcode-types/supported-formats could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
