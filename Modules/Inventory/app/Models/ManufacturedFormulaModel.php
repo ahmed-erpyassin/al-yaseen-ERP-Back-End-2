@@ -33,6 +33,7 @@ class ManufacturedFormulaModel extends Model
         // Manufacturing Details
         'manufacturing_duration',
         'manufacturing_duration_unit',
+        'manufacturing_duration_value',
         'consumed_quantity',
         'produced_quantity',
 
@@ -48,9 +49,7 @@ class ManufacturedFormulaModel extends Model
         // Cost Information
         'total_raw_material_cost',
         'labor_cost',
-        'operating_cost',
-        'overhead_cost',
-        'waste_cost',
+        'overhead_cost', // operating_cost maps to this
         'total_manufacturing_cost',
         'cost_per_unit',
 
@@ -58,15 +57,24 @@ class ManufacturedFormulaModel extends Model
         'sale_price',
         'purchase_price',
 
+        // Date and Time Information
+        'formula_date',
+        'formula_time',
+        'formula_datetime',
+
+        // Manufacturing Schedule
+        'start_date',
+        'end_date',
+        'expected_completion_date',
+
         // Quality Control
+        'requires_quality_check',
         'quality_requirements',
-        'quality_check_passed',
-        'quality_notes',
+        'quality_status',
 
         // Status Management
         'status',
         'is_active',
-        'completion_percentage',
 
         // Additional Information
         'notes',

@@ -22,7 +22,15 @@ class UnitController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        // $companyId = Auth::user()->company_id ?? $request->company_id;
+        $user = Auth::user();
+        $companyId = $user->company?->id ?? $request->company_id;
+
+        if (!$companyId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Company ID is required. User must have a company or provide company_id in request.'
+            ], 400);
+        }
 
         $query = Unit::with([
             'company',
@@ -30,8 +38,8 @@ class UnitController extends Controller
             'user',
             'defaultHandlingUnit:id,name,symbol',
             'defaultWarehouse:id,name,warehouse_number'
-        ]);
-        // ->forCompany($companyId);
+        ])
+        ->forCompany($companyId);
 
         // Apply filters
         if ($request->has('status')) {
@@ -72,11 +80,19 @@ class UnitController extends Controller
      */
     public function store(StoreUnitRequest $request): JsonResponse
     {
-        // $companyId = Auth::user()->company_id ?? $request->company_id;
-        $userId = Auth::id() ?? $request->user_id;
+        $user = Auth::user();
+        $companyId = $user->company?->id ?? $request->company_id;
+        $userId = $user->id ?? $request->user_id;
+
+        if (!$companyId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Company ID is required. User must have a company or provide company_id in request.'
+            ], 400);
+        }
 
         $data = $request->validated();
-        // $data['company_id'] = $companyId;
+        $data['company_id'] = $companyId;
         $data['user_id'] = $userId;
         $data['created_by'] = $userId;
 
@@ -95,10 +111,18 @@ class UnitController extends Controller
      */
     public function show($id): JsonResponse
     {
-        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $user = Auth::user();
+        $companyId = $user->company?->id ?? request()->company_id;
+
+        if (!$companyId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Company ID is required. User must have a company or provide company_id in request.'
+            ], 400);
+        }
 
         $unit = Unit::with(['company', 'branch', 'user', 'items', 'itemUnits'])
-            // ->forCompany($companyId)
+            ->forCompany($companyId)
             ->findOrFail($id);
 
         return response()->json([
@@ -297,10 +321,10 @@ class UnitController extends Controller
      */
     public function getWarehousesForDropdown(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $warehouses = \Modules\Inventory\Models\Warehouse::
-            forCompany($companyId)->
+            // forCompany($companyId)->
             select('id', 'name', 'warehouse_number', 'address', 'status')
             ->where('status', 'active')
             ->orderBy('name')
@@ -329,17 +353,14 @@ class UnitController extends Controller
      */
     public function getUnitFormData(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-
         $data = [
-            'unit_options' => Unit::getAllUnitOptions($companyId),
-            'contains_options' => Unit::getAllContainsOptions($companyId),
-            'available_units' => Unit::forCompany($companyId)
-                ->where('status', 'active')
+            'unit_options' => Unit::UNIT_OPTIONS,
+            'contains_options' => Unit::CONTAINS_OPTIONS,
+            'available_units' => Unit::where('status', 'active')
                 ->select('id', 'name', 'symbol')
                 ->get(),
-            'available_warehouses' => \Modules\Inventory\Models\Warehouse::forCompany($companyId)
-                ->select('id', 'name', 'code', 'is_default')
+            'available_warehouses' => \Modules\Inventory\Models\Warehouse::where('status', 'active')
+                ->select('id', 'name', 'warehouse_number', 'address')
                 ->get(),
         ];
 

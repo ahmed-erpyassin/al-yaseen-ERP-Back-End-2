@@ -9,6 +9,7 @@ use Modules\Inventory\Models\Unit;
 use Modules\Inventory\Models\Warehouse;
 use Modules\Users\Models\User;
 use Modules\Companies\Models\Company;
+use Modules\Companies\Models\Branch;
 use Carbon\Carbon;
 
 class StockMovementSeeder extends Seeder
@@ -30,6 +31,28 @@ class StockMovementSeeder extends Seeder
             return;
         }
 
+        // Get or create a branch for the company
+        $branch = Branch::firstOrCreate([
+            'company_id' => $company->id,
+            'code' => 'BR-001'
+        ], [
+            'user_id' => $user->id,
+            'company_id' => $company->id,
+            'currency_id' => null,
+            'manager_id' => $user->id,
+            'code' => 'BR-001',
+            'name' => 'Main Branch',
+            'address' => 'Main Office Address',
+            'landline' => '+966112345678',
+            'mobile' => '+966501234567',
+            'email' => 'branch@company.com',
+            'tax_number' => 'TAX-001',
+            'timezone' => 'Asia/Riyadh',
+            'status' => 'active',
+            'created_by' => $user->id,
+            'updated_by' => $user->id,
+        ]);
+
         $laptop = $items->where('code', 'LAP-001')->first();
         $monitor = $items->where('code', 'MON-001')->first();
         $steel = $items->where('code', 'STEEL-001')->first();
@@ -46,14 +69,16 @@ class StockMovementSeeder extends Seeder
         $finishedGoodsWarehouse = $warehouses->where('warehouse_number', 'WH-003')->first();
 
         $stockMovements = [];
+        $documentCounter = 1001; // Starting document number
 
         // Initial stock movements (purchases)
         if ($laptop && $pieceUnit && $mainWarehouse) {
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $mainWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $laptop->id,
                 'unit_id' => $pieceUnit->id,
                 'type' => 'purchase',
@@ -72,8 +97,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $mainWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $monitor->id,
                 'unit_id' => $pieceUnit->id,
                 'type' => 'purchase',
@@ -92,8 +118,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $rawMaterialWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $steel->id,
                 'unit_id' => $kgUnit->id,
                 'type' => 'purchase',
@@ -112,8 +139,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $rawMaterialWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $paint->id,
                 'unit_id' => $literUnit->id,
                 'type' => 'purchase',
@@ -132,8 +160,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $finishedGoodsWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $paper->id,
                 'unit_id' => $cartonUnit->id,
                 'type' => 'purchase',
@@ -153,8 +182,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $mainWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $laptop->id,
                 'unit_id' => $pieceUnit->id,
                 'type' => 'sales',
@@ -173,8 +203,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $mainWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $monitor->id,
                 'unit_id' => $pieceUnit->id,
                 'type' => 'sales',
@@ -193,8 +224,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $rawMaterialWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $steel->id,
                 'unit_id' => $kgUnit->id,
                 'type' => 'production',
@@ -213,8 +245,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $rawMaterialWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $paint->id,
                 'unit_id' => $literUnit->id,
                 'type' => 'production',
@@ -233,8 +266,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $finishedGoodsWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $paper->id,
                 'unit_id' => $cartonUnit->id,
                 'type' => 'sales',
@@ -254,8 +288,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $mainWarehouse->id,
-                'document_id' => null,
+                'document_id' => $documentCounter++,
                 'item_id' => $laptop->id,
                 'unit_id' => $pieceUnit->id,
                 'type' => 'adjustments',
@@ -272,11 +307,14 @@ class StockMovementSeeder extends Seeder
 
         // Transfer movements
         if ($monitor && $pieceUnit && $mainWarehouse && $finishedGoodsWarehouse) {
+            $transferDocumentId = $documentCounter++; // Same document for both transfer movements
+
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $mainWarehouse->id,
-                'document_id' => null,
+                'document_id' => $transferDocumentId,
                 'item_id' => $monitor->id,
                 'unit_id' => $pieceUnit->id,
                 'type' => 'transfer',
@@ -293,8 +331,9 @@ class StockMovementSeeder extends Seeder
             $stockMovements[] = [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'warehouse_id' => $finishedGoodsWarehouse->id,
-                'document_id' => null,
+                'document_id' => $transferDocumentId,
                 'item_id' => $monitor->id,
                 'unit_id' => $pieceUnit->id,
                 'type' => 'transfer',
