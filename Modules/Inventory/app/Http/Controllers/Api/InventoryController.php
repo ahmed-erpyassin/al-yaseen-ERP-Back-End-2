@@ -78,6 +78,8 @@ class InventoryController extends Controller
             // Get inventory items using service
             $items = $this->inventoryService->getInventoryItems($user, $filters, $perPage);
 
+           // var_dump($items);
+
             return response()->json([
                 'success' => true,
                 'data' => InventoryResource::collection($items),
