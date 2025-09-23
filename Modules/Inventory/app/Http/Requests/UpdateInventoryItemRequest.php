@@ -21,8 +21,9 @@ class UpdateInventoryItemRequest extends FormRequest
     public function rules(): array
     {
         $itemId = $this->route('inventory') ?? $this->route('id');
-        
+
         return [
+               'company_id' => 'required|exists:companies,id',
             'item_number' => [
                 'required',
                 'string',

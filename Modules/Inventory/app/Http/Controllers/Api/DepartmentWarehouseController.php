@@ -22,10 +22,10 @@ class DepartmentWarehouseController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+      //  $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $query = DepartmentWarehouse::with(['company'])
-            ->forCompany($companyId);
+        $query = DepartmentWarehouse::with(['company']);
+            //->forCompany($companyId);
 
         // Apply filters
         if ($request->has('active')) {
@@ -63,11 +63,11 @@ class DepartmentWarehouseController extends Controller
      */
     public function store(StoreDepartmentWarehouseRequest $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+      $companyId = Auth::user()->company_id ?? $request->company_id;
         $userId = Auth::id() ?? $request->user_id;
 
         $data = $request->validated();
-        $data['company_id'] = $companyId;
+       $data['company_id'] = $companyId;
         $data['created_by'] = $userId;
 
         $department = DepartmentWarehouse::create($data);
@@ -85,10 +85,10 @@ class DepartmentWarehouseController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+      //  $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $department = DepartmentWarehouse::with(['company', 'warehouses'])
-            ->forCompany($companyId)
+            //->forCompany($companyId)
             ->findOrFail($id);
 
         return response()->json([
@@ -126,9 +126,10 @@ class DepartmentWarehouseController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $department = DepartmentWarehouse::forCompany($companyId)->findOrFail($id);
+        $department = DepartmentWarehouse::findOrFail($id);
+        //forCompany($companyId)
 
         // Check if department has warehouses
         if ($department->warehouses()->exists()) {
@@ -151,10 +152,10 @@ class DepartmentWarehouseController extends Controller
      */
     public function first(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $department = DepartmentWarehouse::with(['company'])
-            ->forCompany($companyId)
+            //->forCompany($companyId)
             ->orderBy('department_name_ar')
             ->first();
 
@@ -177,10 +178,10 @@ class DepartmentWarehouseController extends Controller
      */
     public function last(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+     //   $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $department = DepartmentWarehouse::with(['company'])
-            ->forCompany($companyId)
+            //->forCompany($companyId)
             ->orderBy('department_name_ar', 'desc')
             ->first();
 

@@ -183,6 +183,8 @@ class WarehouseController extends Controller
         $companyId = Auth::user()->company_id ?? $request->company_id;
         $userId = Auth::id() ?? $request->user_id;
 
+
+
         // ✅ Get validated data
         $data = $request->validated();
 
@@ -227,24 +229,25 @@ class WarehouseController extends Controller
     public function show($id): JsonResponse
     {
         try {
-            $companyId = Auth::user()->company_id ?? request()->company_id;
+         //   $companyId = Auth::user()->company_id ?? request()->company_id;
 
             // ✅ Load warehouse with all relationships for comprehensive preview
             $warehouse = Warehouse::with([
                 'company', 'branch', 'user', 'departmentWarehouse',
                 'warehouseKeeper', 'salesAccount', 'purchaseAccount',
                 'stock.inventoryItem', 'stockMovements', 'creator', 'updater'
-            ])->forCompany($companyId)->find($id);
+            ])->find($id);
+            //->forCompany($companyId)
 
             if (!$warehouse) {
                 return response()->json([
                     'success' => false,
                     'message' => "Warehouse with ID {$id} not found for this company",
                     'message_ar' => "المخزن برقم {$id} غير موجود لهذه الشركة",
-                    'available_warehouses' => Warehouse::forCompany($companyId)->pluck('name', 'id')
+                    'available_warehouses' => Warehouse::pluck('name', 'id')
+                   // forCompany($companyId)
                 ], 404);
             }
-
             // ✅ Add computed attributes for display
             $warehouseData = $warehouse->toArray();
             $warehouseData['display_name'] = $warehouse->display_name;

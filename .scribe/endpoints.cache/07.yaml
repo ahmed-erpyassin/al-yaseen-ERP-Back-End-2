@@ -34,8 +34,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/list-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -130,7 +133,7 @@ endpoints:
         name: unit_type
         description: ''
         required: true
-        example: balance
+        example: third
         type: string
         enumValues:
           - balance
@@ -153,7 +156,7 @@ endpoints:
         name: balance_unit
         description: ''
         required: true
-        example: kilo
+        example: liter
         type: string
         enumValues:
           - piece
@@ -273,7 +276,7 @@ endpoints:
         name: third_unit
         description: ''
         required: false
-        example: piece
+        example: ton
         type: string
         enumValues:
           - piece
@@ -431,9 +434,9 @@ endpoints:
       unit_id: consequatur
       conversion_rate: 45
       is_default: true
-      unit_type: balance
+      unit_type: third
       quantity_factor: 56
-      balance_unit: kilo
+      balance_unit: liter
       custom_balance_unit: eopfuudtdsufvyvddqamn
       length: 28
       width: 30
@@ -444,7 +447,7 @@ endpoints:
       custom_second_unit_contains: msjuryvojcybzvrbyickz
       second_unit_content: consequatur
       second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: piece
+      third_unit: ton
       custom_third_unit: mniihfqcoynlazghdtqtq
       third_unit_contains: xbajwbpilpmufinllwloa
       custom_third_unit_contains: uydlsmsjuryvojcybzvrb
@@ -508,8 +511,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/examine-unit/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -638,7 +644,7 @@ endpoints:
         name: balance_unit
         description: ''
         required: true
-        example: ton
+        example: piece
         type: string
         enumValues:
           - piece
@@ -693,7 +699,7 @@ endpoints:
         name: second_unit
         description: ''
         required: false
-        example: piece
+        example: ton
         type: string
         enumValues:
           - piece
@@ -758,7 +764,7 @@ endpoints:
         name: third_unit
         description: ''
         required: false
-        example: ton
+        example: liter
         type: string
         enumValues:
           - piece
@@ -903,7 +909,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: active
+        example: inactive
         type: string
         enumValues:
           - active
@@ -918,18 +924,18 @@ endpoints:
       is_default: true
       unit_type: second
       quantity_factor: 56
-      balance_unit: ton
+      balance_unit: piece
       custom_balance_unit: eopfuudtdsufvyvddqamn
       length: 28
       width: 30
       height: 25
-      second_unit: piece
+      second_unit: ton
       custom_second_unit: fqcoynlazghdtqtqxbajw
       second_unit_contains: bpilpmufinllwloauydls
       custom_second_unit_contains: msjuryvojcybzvrbyickz
       second_unit_content: consequatur
       second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: ton
+      third_unit: liter
       custom_third_unit: mniihfqcoynlazghdtqtq
       third_unit_contains: xbajwbpilpmufinllwloa
       custom_third_unit_contains: uydlsmsjuryvojcybzvrb
@@ -941,7 +947,7 @@ endpoints:
       unit_item_number: mqeopfuudtdsufvyvddqa
       unit_purchase_price: 45
       unit_sale_price: 46
-      status: active
+      status: inactive
     fileParameters: []
     responses: []
     responseFields: []
@@ -1030,8 +1036,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/type-selections could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1076,8 +1085,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/container-selections could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1122,8 +1134,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/form-setup could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1249,8 +1264,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/by-item/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1317,8 +1335,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/by-item-type/consequatur/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1374,8 +1395,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/comprehensive-data/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

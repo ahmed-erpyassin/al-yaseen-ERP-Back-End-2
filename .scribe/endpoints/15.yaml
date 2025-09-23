@@ -32,8 +32,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/retrieve-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -258,8 +261,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/view-single/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -335,7 +341,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:33'
+        example: '2025-09-23T07:29:21'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -345,7 +351,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: not_started
+        example: completed
         type: string
         enumValues:
           - not_started
@@ -406,8 +412,8 @@ endpoints:
         custom: []
     cleanBodyParameters:
       name: vmqeopfuudtdsufvyvddq
-      start_date: '2025-09-22T14:42:33'
-      status: not_started
+      start_date: '2025-09-23T07:29:21'
+      status: completed
       milestone_number: 2
       description: 'Molestias ipsam sit veniam sed fuga aspernatur.'
       end_date: '2106-10-22'
@@ -538,8 +544,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/filter-by-field could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -584,8 +593,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/field-values could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -630,8 +642,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/sortable-fields could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -809,8 +824,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/deleted-milestones could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -855,8 +873,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/project-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -901,8 +922,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/status-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -995,8 +1019,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/by-project/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

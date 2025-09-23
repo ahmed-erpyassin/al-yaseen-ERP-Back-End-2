@@ -34,8 +34,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/catalog-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -205,7 +208,7 @@ endpoints:
         name: second_unit
         description: ''
         required: false
-        example: kilo
+        example: liter
         type: string
         enumValues:
           - piece
@@ -270,7 +273,7 @@ endpoints:
         name: third_unit
         description: ''
         required: false
-        example: kilo
+        example: liter
         type: string
         enumValues:
           - piece
@@ -375,13 +378,13 @@ endpoints:
       width: 45
       height: 40
       quantity_factor: 1
-      second_unit: kilo
+      second_unit: liter
       custom_second_unit: zghdtqtqxbajwbpilpmuf
       second_unit_contains: inllwloauydlsmsjuryvo
       custom_second_unit_contains: jcybzvrbyickznkygloig
       second_unit_content: consequatur
       second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: kilo
+      third_unit: liter
       custom_third_unit: mniihfqcoynlazghdtqtq
       third_unit_contains: xbajwbpilpmufinllwloa
       custom_third_unit_contains: uydlsmsjuryvojcybzvrb
@@ -439,8 +442,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/review-unit/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -621,7 +627,7 @@ endpoints:
         name: second_unit
         description: ''
         required: false
-        example: carton
+        example: piece
         type: string
         enumValues:
           - piece
@@ -686,7 +692,7 @@ endpoints:
         name: third_unit
         description: ''
         required: false
-        example: carton
+        example: piece
         type: string
         enumValues:
           - piece
@@ -791,13 +797,13 @@ endpoints:
       width: 45
       height: 40
       quantity_factor: 1
-      second_unit: carton
+      second_unit: piece
       custom_second_unit: zghdtqtqxbajwbpilpmuf
       second_unit_contains: inllwloauydlsmsjuryvo
       custom_second_unit_contains: jcybzvrbyickznkygloig
       second_unit_content: consequatur
       second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: carton
+      third_unit: piece
       custom_third_unit: mniihfqcoynlazghdtqtq
       third_unit_contains: xbajwbpilpmufinllwloa
       custom_third_unit_contains: uydlsmsjuryvojcybzvrb
@@ -892,8 +898,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/unit-choices could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -938,8 +947,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/comprehensive-choices could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -984,8 +996,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/container-choices could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1030,8 +1045,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/selection-dropdown could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1076,8 +1094,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/warehouse-selection could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1122,8 +1143,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/form-configuration could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1168,8 +1192,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/initial-unit could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1214,8 +1241,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/final-unit could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

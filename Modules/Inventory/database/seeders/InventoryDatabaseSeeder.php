@@ -46,6 +46,9 @@ class InventoryDatabaseSeeder extends Seeder
             // Adjustment seeders
             InventoryAdjustmentSeeder::class,
             InventoryAdjustmentItemSeeder::class,
+
+            // BOM (Bill of Materials) seeders
+            BomItemSeeder::class,
         ]);
 
         $this->command->info('✅ Inventory Management Module seeded successfully!');

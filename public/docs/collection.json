@@ -5,12 +5,12 @@
             "key": "baseUrl",
             "type": "string",
             "name": "string",
-            "value": "http:\/\/localhost"
+            "value": "http:\/\/127.0.0.1:8000\/"
         }
     ],
     "info": {
         "name": "Al-Yaseen ERP API Documentation",
-        "_postman_id": "f436c219-e4ae-4448-922c-b0a69f9fecfe",
+        "_postman_id": "3d15a577-ae16-4146-a97e-77eab8656efe",
         "description": "API documentation for Al-Yaseen ERP Project Management and Inventory Management modules.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -158,8 +158,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/auth\/me could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -234,8 +234,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/bom-items\/list-components could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -315,8 +315,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/bom-items\/view-component\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -437,8 +437,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/bom-items\/by-item\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -490,8 +490,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/bom-items\/by-component\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -563,8 +563,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/bom-items\/filter-by-criteria could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -608,8 +608,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/bom-items\/first-component could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -653,8 +653,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/bom-items\/last-component could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -704,8 +704,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/barcode-types\/enumerate-types could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -757,8 +757,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/barcode-types\/view-type\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -802,8 +802,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/barcode-types\/type-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -847,8 +847,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/barcode-types\/supported-formats could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -982,8 +982,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/department-warehouses\/enumerate-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1063,8 +1063,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/department-warehouses\/view-assignment\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1099,7 +1099,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"department_number\":\"vmqeopfuudtdsufvyvddq\",\"department_name_ar\":\"amniihfqcoynlazghdtqt\",\"department_name_en\":\"qxbajwbpilpmufinllwlo\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"manager_name\":\"dtdsufvyvddqamniihfqc\",\"manager_phone\":\"oynlazghdtqtqxbajwbpi\",\"manager_email\":\"jaunita.schamberger@example.com\",\"active\":false}"
+                            "raw": "{\"department_number\":\"vmqeopfuudtdsufvyvddq\",\"department_name_ar\":\"amniihfqcoynlazghdtqt\",\"department_name_en\":\"qxbajwbpilpmufinllwlo\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"manager_name\":\"dtdsufvyvddqamniihfqc\",\"manager_phone\":\"oynlazghdtqtqxbajwbpi\",\"manager_email\":\"jaunita.schamberger@example.com\",\"active\":true}"
                         },
                         "description": ""
                     },
@@ -1177,8 +1177,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/department-warehouses\/primary-assignment could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1222,8 +1222,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/department-warehouses\/ultimate-assignment could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1337,7 +1337,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_number\":\"vmqeopfuudtdsufvyvddq\",\"item_name_ar\":\"amniihfqcoynlazghdtqt\",\"item_name_en\":\"qxbajwbpilpmufinllwlo\",\"barcode\":\"auydlsmsjuryvojcybzvr\",\"model\":\"byickznkygloigmkwxphl\",\"unit\":\"vazjrcnfbaqywuxhgjjmz\",\"quantity\":72,\"unit_price\":82,\"minimum_limit\":34,\"reorder_limit\":71,\"notes\":\"consequatur\",\"active\":false}"
+                            "raw": "{\"item_number\":\"vmqeopfuudtdsufvyvddq\",\"item_name_ar\":\"amniihfqcoynlazghdtqt\",\"item_name_en\":\"qxbajwbpilpmufinllwlo\",\"barcode\":\"auydlsmsjuryvojcybzvr\",\"model\":\"byickznkygloigmkwxphl\",\"unit\":\"vazjrcnfbaqywuxhgjjmz\",\"quantity\":72,\"unit_price\":82,\"minimum_limit\":34,\"reorder_limit\":71,\"notes\":\"consequatur\",\"active\":true}"
                         },
                         "description": ""
                     },
@@ -1390,8 +1390,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-items\/examine-inventory\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1426,7 +1426,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_number\":\"vmqeopfuudtdsufvyvddq\",\"item_name_ar\":\"amniihfqcoynlazghdtqt\",\"item_name_en\":\"qxbajwbpilpmufinllwlo\",\"barcode\":\"auydlsmsjuryvojcybzvr\",\"model\":\"byickznkygloigmkwxphl\",\"unit\":\"vazjrcnfbaqywuxhgjjmz\",\"quantity\":72,\"unit_price\":82,\"minimum_limit\":34,\"reorder_limit\":71,\"notes\":\"consequatur\",\"active\":true}"
+                            "raw": "{\"item_number\":\"vmqeopfuudtdsufvyvddq\",\"item_name_ar\":\"amniihfqcoynlazghdtqt\",\"item_name_en\":\"qxbajwbpilpmufinllwlo\",\"barcode\":\"auydlsmsjuryvojcybzvr\",\"model\":\"byickznkygloigmkwxphl\",\"unit\":\"vazjrcnfbaqywuxhgjjmz\",\"quantity\":72,\"unit_price\":82,\"minimum_limit\":34,\"reorder_limit\":71,\"notes\":\"consequatur\",\"active\":false}"
                         },
                         "description": ""
                     },
@@ -1504,8 +1504,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-items\/first-inventory could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1549,8 +1549,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-items\/last-inventory could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1594,8 +1594,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-items\/low-stock-items could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1639,8 +1639,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-items\/reorder-required-items could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1690,8 +1690,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/monitor-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1718,7 +1718,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"inventory_count\",\"movement_date\":\"2025-09-22T14:42:32\",\"movement_time\":\"14:42:32\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"cancelled\",\"movement_data\":[{\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-22T14:42:32\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\"}]}"
+                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"manufacturing\",\"movement_date\":\"2025-09-23T07:29:19\",\"movement_time\":\"07:29:19\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"cancelled\",\"movement_data\":[{\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-23T07:29:19\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\"}]}"
                         },
                         "description": ""
                     },
@@ -1771,8 +1771,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/review-movement\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1807,7 +1807,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"inventory_count\",\"movement_date\":\"2025-09-22T14:42:32\",\"movement_time\":\"14:42:32\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"confirmed\",\"movement_data\":[{\"id\":17,\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-22T14:42:32\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\",\"_delete\":false}]}"
+                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"manufacturing\",\"movement_date\":\"2025-09-23T07:29:19\",\"movement_time\":\"07:29:19\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"cancelled\",\"movement_data\":[{\"id\":17,\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-23T07:29:19\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\",\"_delete\":true}]}"
                         },
                         "description": ""
                     },
@@ -1885,8 +1885,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/setup-data could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1913,7 +1913,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"field\":\"consequatur\",\"value\":\"consequatur\",\"per_page\":13,\"sort_by\":\"consequatur\",\"sort_direction\":\"asc\"}"
+                            "raw": "{\"field\":\"consequatur\",\"value\":\"consequatur\",\"per_page\":13,\"sort_by\":\"consequatur\",\"sort_direction\":\"desc\"}"
                         },
                         "description": ""
                     },
@@ -1933,8 +1933,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/filter-by-criteria could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -1978,8 +1978,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/archived-movements could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2023,8 +2023,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/initial-movement could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2068,8 +2068,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/final-movement could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2096,7 +2096,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"warehouse_id\":17,\"movement_type\":\"transfer\"}"
+                            "raw": "{\"warehouse_id\":17,\"movement_type\":\"manufacturing\"}"
                         },
                         "description": ""
                     },
@@ -2116,8 +2116,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/next-sequence-number could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2169,8 +2169,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-movements\/consequatur\/movement-details could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2352,8 +2352,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-types\/catalog-types could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2433,8 +2433,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-types\/examine-type\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2469,7 +2469,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"name_ar\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"is_active\":false}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"name_ar\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"is_active\":true}"
                         },
                         "description": ""
                     },
@@ -2547,8 +2547,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-types\/type-selections could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2598,8 +2598,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/list-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2626,7 +2626,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"balance\",\"quantity_factor\":56,\"balance_unit\":\"kilo\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"piece\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"piece\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"active\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"third\",\"quantity_factor\":56,\"balance_unit\":\"liter\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"piece\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"ton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"active\"}"
                         },
                         "description": ""
                     },
@@ -2679,8 +2679,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/examine-unit\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2715,7 +2715,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"second\",\"quantity_factor\":56,\"balance_unit\":\"ton\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"piece\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"ton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"active\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"second\",\"quantity_factor\":56,\"balance_unit\":\"piece\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"ton\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"liter\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -2793,8 +2793,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/type-selections could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2838,8 +2838,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/container-selections could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2883,8 +2883,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/form-setup could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -2964,8 +2964,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/by-item\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3023,8 +3023,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/by-item-type\/consequatur\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3076,8 +3076,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/comprehensive-data\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3230,7 +3230,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"name_ar\":\"yickznkygloigmkwxphlv\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"model\":\"mqeopfuudtdsufvyvddqa\",\"unit_name\":\"mniihfqcoynlazghdtqtq\",\"type\":\"raw_material\",\"quantity\":80,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"cost_price\":70,\"purchase_price\":12,\"first_purchase_price\":66,\"second_purchase_price\":13,\"third_purchase_price\":65,\"purchase_discount_rate\":20,\"purchase_prices_include_vat\":true,\"sale_price\":18,\"minimum_sale_price\":74,\"first_sale_price\":87,\"second_sale_price\":76,\"third_sale_price\":10,\"sale_discount_rate\":3,\"maximum_sale_discount_rate\":17,\"minimum_allowed_sale_price\":1,\"sale_prices_include_vat\":true,\"item_subject_to_vat\":true,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"C128\",\"expiry_date\":\"2106-10-22\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"custom_item_type\":\"uydlsmsjuryvojcybzvrb\",\"custom_item_type_ar\":\"yickznkygloigmkwxphlv\",\"active\":false,\"stock_tracking\":true}"
+                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"name_ar\":\"yickznkygloigmkwxphlv\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"model\":\"mqeopfuudtdsufvyvddqa\",\"unit_name\":\"mniihfqcoynlazghdtqtq\",\"type\":\"raw_material\",\"quantity\":80,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"cost_price\":70,\"purchase_price\":12,\"first_purchase_price\":66,\"second_purchase_price\":13,\"third_purchase_price\":65,\"purchase_discount_rate\":20,\"purchase_prices_include_vat\":true,\"sale_price\":18,\"minimum_sale_price\":74,\"first_sale_price\":87,\"second_sale_price\":76,\"third_sale_price\":10,\"sale_discount_rate\":3,\"maximum_sale_discount_rate\":17,\"minimum_allowed_sale_price\":1,\"sale_prices_include_vat\":false,\"item_subject_to_vat\":true,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"C39\",\"expiry_date\":\"2106-10-22\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"custom_item_type\":\"uydlsmsjuryvojcybzvrb\",\"custom_item_type_ar\":\"yickznkygloigmkwxphlv\",\"active\":false,\"stock_tracking\":false}"
                         },
                         "description": ""
                     },
@@ -3283,8 +3283,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/inspect-item\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3319,7 +3319,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"model\":\"dtdsufvyvddqamniihfqc\",\"unit_name\":\"oynlazghdtqtqxbajwbpi\",\"type\":\"material\",\"quantity\":41,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"first_purchase_price\":70,\"second_purchase_price\":12,\"third_purchase_price\":66,\"purchase_discount_rate\":4,\"purchase_prices_include_vat\":true,\"first_sale_price\":65,\"second_sale_price\":72,\"third_sale_price\":18,\"sale_discount_rate\":21,\"maximum_sale_discount_rate\":24,\"minimum_allowed_sale_price\":76,\"sale_prices_include_vat\":true,\"item_subject_to_vat\":false,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"UPCA\",\"expiry_date\":\"2106-10-22\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"active\":true,\"stock_tracking\":false}"
+                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"model\":\"dtdsufvyvddqamniihfqc\",\"unit_name\":\"oynlazghdtqtqxbajwbpi\",\"type\":\"service\",\"quantity\":41,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"first_purchase_price\":70,\"second_purchase_price\":12,\"third_purchase_price\":66,\"purchase_discount_rate\":4,\"purchase_prices_include_vat\":true,\"first_sale_price\":65,\"second_sale_price\":72,\"third_sale_price\":18,\"sale_discount_rate\":21,\"maximum_sale_discount_rate\":24,\"minimum_allowed_sale_price\":76,\"sale_prices_include_vat\":false,\"item_subject_to_vat\":false,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"ITF\",\"expiry_date\":\"2106-10-22\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"active\":true,\"stock_tracking\":false}"
                         },
                         "description": ""
                     },
@@ -3397,8 +3397,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/locate-items could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3442,8 +3442,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/available-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3487,8 +3487,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/sortable-columns could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3532,8 +3532,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/item-categories could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3577,8 +3577,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/storage-locations could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3622,8 +3622,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/pricing-configuration could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3695,8 +3695,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/barcode-type-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3740,8 +3740,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/item-type-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3796,7 +3796,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"barcode\":\"consequatur\",\"barcode_type\":\"UPCA\"}"
+                            "raw": "{\"barcode\":\"consequatur\",\"barcode_type\":\"C128\"}"
                         },
                         "description": ""
                     },
@@ -3832,7 +3832,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"width\":9,\"height\":13,\"format\":\"png\",\"color\":\"consequatur\"}"
+                            "raw": "{\"width\":9,\"height\":13,\"format\":\"svg\",\"color\":\"consequatur\"}"
                         },
                         "description": ""
                     },
@@ -3904,7 +3904,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"date_from\":\"2025-09-22T14:42:32\",\"date_to\":\"2106-10-22\",\"transaction_type\":\"sales\",\"per_page\":13,\"sort_by\":\"type\",\"sort_direction\":\"desc\"}"
+                            "raw": "{\"date_from\":\"2025-09-23T07:29:18\",\"date_to\":\"2106-10-22\",\"transaction_type\":\"stock_movements\",\"per_page\":13,\"sort_by\":\"type\",\"sort_direction\":\"asc\"}"
                         },
                         "description": ""
                     },
@@ -3924,8 +3924,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/consequatur\/item-transactions could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -3960,7 +3960,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"date_from\":\"2025-09-22T14:42:32\",\"date_to\":\"2106-10-22\",\"transaction_type\":\"purchases\",\"export_type\":\"multi_sheet\",\"format\":\"xlsx\"}"
+                            "raw": "{\"date_from\":\"2025-09-23T07:29:18\",\"date_to\":\"2106-10-22\",\"transaction_type\":\"stock_movements\",\"export_type\":\"multi_sheet\",\"format\":\"csv\"}"
                         },
                         "description": ""
                     },
@@ -3980,8 +3980,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/consequatur\/export-transactions could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4025,8 +4025,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/first-item could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4070,8 +4070,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/last-item could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4115,8 +4115,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/parent-items could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4168,8 +4168,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/by-type\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4213,8 +4213,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/deleted-items could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4266,8 +4266,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/items\/preview-item\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4383,8 +4383,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/catalog-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4411,7 +4411,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"consumed_quantity\":45,\"produced_quantity\":56,\"labor_cost\":16,\"operating_cost\":50,\"waste_cost\":55,\"formula_name\":\"fuudtdsufvyvddqamniih\",\"formula_description\":\"fqcoynlazghdtqtqxbajw\",\"formula_number\":\"bpilpmufinllwloauydls\",\"selected_purchase_price_type\":\"third\",\"batch_size\":42,\"production_time_minutes\":64,\"preparation_time_minutes\":34,\"production_notes\":\"uryvojcybzvrbyickznky\",\"preparation_notes\":\"gloigmkwxphlvazjrcnfb\",\"usage_instructions\":\"aqywuxhgjjmzuxjubqouz\",\"tolerance_percentage\":18,\"quality_requirements\":\"wiwxtrkimfcatbxspzmra\",\"requires_inspection\":true,\"status\":\"draft\",\"is_active\":true,\"effective_from\":\"2025-09-22T14:42:32\",\"effective_to\":\"2106-10-22\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"consumed_quantity\":45,\"produced_quantity\":56,\"labor_cost\":16,\"operating_cost\":50,\"waste_cost\":55,\"formula_name\":\"fuudtdsufvyvddqamniih\",\"formula_description\":\"fqcoynlazghdtqtqxbajw\",\"formula_number\":\"bpilpmufinllwloauydls\",\"selected_purchase_price_type\":\"second\",\"batch_size\":42,\"production_time_minutes\":64,\"preparation_time_minutes\":34,\"production_notes\":\"uryvojcybzvrbyickznky\",\"preparation_notes\":\"gloigmkwxphlvazjrcnfb\",\"usage_instructions\":\"aqywuxhgjjmzuxjubqouz\",\"tolerance_percentage\":18,\"quality_requirements\":\"wiwxtrkimfcatbxspzmra\",\"requires_inspection\":true,\"status\":\"archived\",\"is_active\":true,\"effective_from\":\"2025-09-23T07:29:20\",\"effective_to\":\"2106-10-22\"}"
                         },
                         "description": ""
                     },
@@ -4464,8 +4464,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/examine-formula\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4542,8 +4542,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/item-numbers could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4587,8 +4587,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/item-details could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4657,8 +4657,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/available-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4702,8 +4702,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/field-values could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4747,8 +4747,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/selectable-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4792,8 +4792,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/field-based-data could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4837,8 +4837,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/formula-numbers could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4882,8 +4882,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/item-by-formula-number could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -4927,8 +4927,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/warehouses could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5096,8 +5096,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/manufacturing-formulas\/deleted-formulas could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5147,8 +5147,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/stock-movements\/track-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5175,7 +5175,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"in\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-09-22T14:42:31\"}"
+                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"out\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-09-23T07:29:17\"}"
                         },
                         "description": ""
                     },
@@ -5228,8 +5228,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/stock-movements\/examine-movement\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5273,8 +5273,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/stock-movements\/movement-summary could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5326,8 +5326,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/stock-movements\/by-item\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5379,8 +5379,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/stock-movements\/by-warehouse\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5430,8 +5430,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/catalog-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5458,7 +5458,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"piece\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"kilo\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"kilo\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"piece\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"liter\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"liter\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -5511,8 +5511,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/review-unit\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5547,7 +5547,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"carton\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"carton\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"carton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"carton\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"piece\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"piece\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -5625,8 +5625,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/unit-choices could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5670,8 +5670,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/comprehensive-choices could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5715,8 +5715,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/container-choices could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5760,8 +5760,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/selection-dropdown could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5805,8 +5805,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/warehouse-selection could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5850,8 +5850,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/form-configuration could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5895,8 +5895,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/initial-unit could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5940,8 +5940,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/final-unit could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -5991,8 +5991,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/warehouses\/scan-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6072,8 +6072,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/warehouses\/inspect-facility\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6108,7 +6108,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"location\":\"qxbajwbpilpmufinllwlo\",\"warehouse_keeper_employee_number\":\"auydlsmsjuryvojcybzvr\",\"warehouse_keeper_name\":\"byickznkygloigmkwxphl\",\"mobile\":\"vazjrcnfbaqywuxhgjjmz\",\"fax_number\":\"uxjubqouzswiwxtrkimfc\",\"phone_number\":\"atbxspzmrazsroyjpxmqe\",\"purchase_account\":\"sedyghenqcopwvownkbam\",\"sale_account\":\"lnfngefbeilfzsyuxoezb\",\"inventory_valuation_method\":\"natural_division\",\"status\":\"inactive\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"location\":\"qxbajwbpilpmufinllwlo\",\"warehouse_keeper_employee_number\":\"auydlsmsjuryvojcybzvr\",\"warehouse_keeper_name\":\"byickznkygloigmkwxphl\",\"mobile\":\"vazjrcnfbaqywuxhgjjmz\",\"fax_number\":\"uxjubqouzswiwxtrkimfc\",\"phone_number\":\"atbxspzmrazsroyjpxmqe\",\"purchase_account\":\"sedyghenqcopwvownkbam\",\"sale_account\":\"lnfngefbeilfzsyuxoezb\",\"inventory_valuation_method\":\"second_purchase_price\",\"status\":\"active\"}"
                         },
                         "description": ""
                     },
@@ -6186,8 +6186,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/warehouses\/configuration-data could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6234,8 +6234,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/warehouses\/filter-by-criteria could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6279,8 +6279,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/warehouses\/archived-facilities could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6324,8 +6324,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/warehouses\/initial-facility could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6369,8 +6369,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/warehouses\/final-facility could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6486,8 +6486,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/gather-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6547,7 +6547,7 @@
                                 },
                                 {
                                     "key": "document_category",
-                                    "value": "other",
+                                    "value": "drawing",
                                     "type": "text",
                                     "description": ""
                                 },
@@ -6559,7 +6559,7 @@
                                 },
                                 {
                                     "key": "upload_date",
-                                    "value": "2025-09-22T14:42:33",
+                                    "value": "2025-09-23T07:29:22",
                                     "type": "text",
                                     "description": "Must be a valid date."
                                 },
@@ -6627,8 +6627,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/read\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6746,8 +6746,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/consequatur\/file-download could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6816,8 +6816,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/filter-by-field could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6861,8 +6861,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/field-values could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -6906,8 +6906,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/sortable-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7042,8 +7042,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/deleted-documents could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7087,8 +7087,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/project-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7132,8 +7132,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/category-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7177,8 +7177,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/status-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7255,8 +7255,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/by-project\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7308,8 +7308,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-documents\/by-category\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7359,8 +7359,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/obtain-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7387,7 +7387,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"exchange_rate\":13,\"reference_type\":\"qeopfuudtdsufvyvddqam\",\"reference_id\":\"niihfqcoynlazghdtqtqx\",\"amount\":2,\"date\":\"2025-09-22T14:42:33\",\"description\":\"Consequatur debitis et id.\"}"
+                            "raw": "{\"project_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"exchange_rate\":13,\"reference_type\":\"qeopfuudtdsufvyvddqam\",\"reference_id\":\"niihfqcoynlazghdtqtqx\",\"amount\":2,\"date\":\"2025-09-23T07:29:22\",\"description\":\"Consequatur debitis et id.\"}"
                         },
                         "description": ""
                     },
@@ -7440,8 +7440,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/show\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7476,7 +7476,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"exchange_rate\":21,\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":\"mniihfqcoynlazghdtqtq\",\"amount\":23,\"date\":\"2025-09-22T14:42:33\",\"description\":\"Aut consequatur debitis et.\"}"
+                            "raw": "{\"exchange_rate\":21,\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":\"mniihfqcoynlazghdtqtq\",\"amount\":23,\"date\":\"2025-09-23T07:29:22\",\"description\":\"Aut consequatur debitis et.\"}"
                         },
                         "description": ""
                     },
@@ -7579,8 +7579,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/filter-by-field could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7624,8 +7624,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/field-values could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7669,8 +7669,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/sortable-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7805,8 +7805,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/deleted-financials could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7850,8 +7850,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/project-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7895,8 +7895,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/currency-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -7948,8 +7948,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/by-project\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8001,8 +8001,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/by-reference-type\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8060,8 +8060,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-finance\/by-date-range\/consequatur\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8111,8 +8111,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/retrieve-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8192,8 +8192,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/view-single\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8228,7 +8228,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"start_date\":\"2025-09-22T14:42:33\",\"status\":\"not_started\",\"milestone_number\":2,\"description\":\"Molestias ipsam sit veniam sed fuga aspernatur.\",\"end_date\":\"2106-10-22\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"start_date\":\"2025-09-23T07:29:21\",\"status\":\"completed\",\"milestone_number\":2,\"description\":\"Molestias ipsam sit veniam sed fuga aspernatur.\",\"end_date\":\"2106-10-22\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
                         },
                         "description": ""
                     },
@@ -8331,8 +8331,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/filter-by-field could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8376,8 +8376,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/field-values could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8421,8 +8421,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/sortable-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8557,8 +8557,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/deleted-milestones could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8602,8 +8602,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/project-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8647,8 +8647,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/status-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8725,8 +8725,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-milestones\/by-project\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -8966,8 +8966,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/examine\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9002,7 +9002,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"currency_price\":73,\"include_vat\":true,\"project_number\":\"mqeopfuudtdsufvyvddqa\",\"name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"project_value\":12,\"project_manager_name\":\"tdsufvyvddqamniihfqco\",\"start_date\":\"2025-09-22T14:42:33\",\"end_date\":\"2106-10-22\",\"status\":\"closed\",\"notes\":\"consequatur\",\"customer_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"budget\":87,\"actual_cost\":13,\"progress\":12}"
+                            "raw": "{\"currency_price\":73,\"include_vat\":false,\"project_number\":\"mqeopfuudtdsufvyvddqa\",\"name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"project_value\":12,\"project_manager_name\":\"tdsufvyvddqamniihfqco\",\"start_date\":\"2025-09-23T07:29:20\",\"end_date\":\"2106-10-22\",\"status\":\"on-hold\",\"notes\":\"consequatur\",\"customer_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"budget\":87,\"actual_cost\":13,\"progress\":12}"
                         },
                         "description": ""
                     },
@@ -9105,8 +9105,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/filter-by-field could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9150,8 +9150,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/field-values could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9195,8 +9195,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/sortable-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9331,8 +9331,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/deleted-projects could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9376,8 +9376,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/customer-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9429,8 +9429,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/customer-details\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9474,8 +9474,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/currency-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9519,8 +9519,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/employee-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9564,8 +9564,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/country-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9609,8 +9609,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/status-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9679,8 +9679,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/projects\/code-generation could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9842,7 +9842,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"role\":\"mqeopfuudtdsufvyvddqa\",\"resource_type\":\"internal\",\"supplier_number\":\"mniihfqcoynlazghdtqtq\",\"supplier_name\":\"xbajwbpilpmufinllwloa\",\"project_number\":\"uydlsmsjuryvojcybzvrb\",\"project_name\":\"yickznkygloigmkwxphlv\",\"allocation_percentage\":1,\"allocation_value\":87,\"notes\":\"jrcnfbaqywuxhgjjmzuxj\",\"status\":\"inactive\",\"allocation\":\"ubqouzswiwxtrkimfcatb\"}"
+                            "raw": "{\"project_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"role\":\"mqeopfuudtdsufvyvddqa\",\"resource_type\":\"consultant\",\"supplier_number\":\"mniihfqcoynlazghdtqtq\",\"supplier_name\":\"xbajwbpilpmufinllwloa\",\"project_number\":\"uydlsmsjuryvojcybzvrb\",\"project_name\":\"yickznkygloigmkwxphlv\",\"allocation_percentage\":1,\"allocation_value\":87,\"notes\":\"jrcnfbaqywuxhgjjmzuxj\",\"status\":\"completed\",\"allocation\":\"ubqouzswiwxtrkimfcatb\"}"
                         },
                         "description": ""
                     },
@@ -9895,8 +9895,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/display\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -9931,7 +9931,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"role\":\"vmqeopfuudtdsufvyvddq\",\"resource_type\":\"consultant\",\"supplier_number\":\"amniihfqcoynlazghdtqt\",\"supplier_name\":\"qxbajwbpilpmufinllwlo\",\"project_number\":\"auydlsmsjuryvojcybzvr\",\"project_name\":\"byickznkygloigmkwxphl\",\"allocation_percentage\":22,\"allocation_value\":0,\"notes\":\"zjrcnfbaqywuxhgjjmzux\",\"status\":\"completed\",\"allocation\":\"jubqouzswiwxtrkimfcat\"}"
+                            "raw": "{\"role\":\"vmqeopfuudtdsufvyvddq\",\"resource_type\":\"internal\",\"supplier_number\":\"amniihfqcoynlazghdtqt\",\"supplier_name\":\"qxbajwbpilpmufinllwlo\",\"project_number\":\"auydlsmsjuryvojcybzvr\",\"project_name\":\"byickznkygloigmkwxphl\",\"allocation_percentage\":22,\"allocation_value\":0,\"notes\":\"zjrcnfbaqywuxhgjjmzux\",\"status\":\"inactive\",\"allocation\":\"jubqouzswiwxtrkimfcat\"}"
                         },
                         "description": ""
                     },
@@ -10034,8 +10034,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/filter-by-field could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10079,8 +10079,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/field-values could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10124,8 +10124,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/sortable-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10260,8 +10260,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/deleted-resources could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10305,8 +10305,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/supplier-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10350,8 +10350,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/project-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10395,8 +10395,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/type-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10440,8 +10440,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/status-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10543,8 +10543,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/by-project\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10596,8 +10596,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-resources\/by-supplier\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10647,8 +10647,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/risk-statistics could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10692,8 +10692,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/collect-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10720,7 +10720,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"high\",\"probability\":\"low\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"open\",\"assigned_to\":17}"
+                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"medium\",\"probability\":\"high\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"open\",\"assigned_to\":17}"
                         },
                         "description": ""
                     },
@@ -10773,8 +10773,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/present\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10809,7 +10809,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"medium\",\"probability\":\"high\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"mitigated\",\"assigned_to\":17}"
+                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"low\",\"probability\":\"medium\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"open\",\"assigned_to\":17}"
                         },
                         "description": ""
                     },
@@ -10912,8 +10912,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/filter-by-field could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -10957,8 +10957,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/field-values could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11002,8 +11002,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/sortable-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11138,8 +11138,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/deleted-risks could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11183,8 +11183,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/project-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11228,8 +11228,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/employee-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11273,8 +11273,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/impact-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11318,8 +11318,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/probability-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11363,8 +11363,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/status-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11416,8 +11416,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/by-project\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11469,8 +11469,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/by-status\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11522,8 +11522,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/by-impact\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11575,8 +11575,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-risk-management\/by-probability\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11626,8 +11626,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/fetch-all could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11654,7 +11654,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"task_name\":\"mqeopfuudtdsufvyvddqa\",\"assigned_to\":\"consequatur\",\"due_date\":\"2106-10-22\",\"status\":\"blocked\",\"title\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"high\",\"start_date\":\"2020-01-18\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
+                            "raw": "{\"project_id\":\"consequatur\",\"task_name\":\"mqeopfuudtdsufvyvddqa\",\"assigned_to\":\"consequatur\",\"due_date\":\"2106-10-22\",\"status\":\"in_progress\",\"title\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"medium\",\"start_date\":\"2020-01-19\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
                         },
                         "description": ""
                     },
@@ -11707,8 +11707,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/inspect\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11743,7 +11743,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"task_name\":\"vmqeopfuudtdsufvyvddq\",\"due_date\":\"2025-09-22T14:42:33\",\"status\":\"to_do\",\"title\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"low\",\"start_date\":\"2025-09-22T14:42:33\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
+                            "raw": "{\"task_name\":\"vmqeopfuudtdsufvyvddq\",\"due_date\":\"2025-09-23T07:29:21\",\"status\":\"blocked\",\"title\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"low\",\"start_date\":\"2025-09-23T07:29:21\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
                         },
                         "description": ""
                     },
@@ -11821,8 +11821,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/advanced-search could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11866,8 +11866,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/filter-by-field could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11911,8 +11911,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/assigned-to-me could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -11956,8 +11956,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/due-today could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -12001,8 +12001,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/overdue-tasks could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -12046,8 +12046,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/sortable-fields could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -12116,8 +12116,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/employee-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -12161,8 +12161,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/status-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -12206,8 +12206,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/priority-options could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -12259,8 +12259,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/by-project\/consequatur could not be found.\"\n}",
                             "name": ""
                         }
                     ]
@@ -12345,8 +12345,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 401,
-                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/project-tasks\/consequatur\/task-documents could not be found.\"\n}",
                             "name": ""
                         }
                     ]

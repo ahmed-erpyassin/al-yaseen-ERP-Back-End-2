@@ -60,12 +60,10 @@ class InventoryResource extends JsonResource
                         'id' => $stockItem->id,
                         'warehouse_id' => $stockItem->warehouse_id,
                         'quantity' => $stockItem->quantity,
-                        'warehouse' => $stockItem->whenLoaded('warehouse', function () use ($stockItem) {
-                            return [
-                                'id' => $stockItem->warehouse->id,
-                                'name' => $stockItem->warehouse->name,
-                            ];
-                        }),
+                        'warehouse' => $stockItem->relationLoaded('warehouse') ? [
+                            'id' => $stockItem->warehouse->id,
+                            'name' => $stockItem->warehouse->name,
+                        ] : null,
                     ];
                 });
             }),
@@ -171,8 +169,8 @@ class InventoryResource extends JsonResource
      */
     private function canDelete($user): bool
     {
-        return $this->company_id === $user->company_id && 
-               !$this->stock()->exists() && 
+        return $this->company_id === $user->company_id &&
+               !$this->stock()->exists() &&
                !$this->stockMovements()->exists();
     }
 }

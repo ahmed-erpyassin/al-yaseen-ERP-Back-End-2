@@ -32,8 +32,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/fetch-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -118,7 +121,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: blocked
+        example: in_progress
         type: string
         enumValues:
           - to_do
@@ -172,7 +175,7 @@ endpoints:
         name: priority
         description: ''
         required: false
-        example: high
+        example: medium
         type: string
         enumValues:
           - low
@@ -186,7 +189,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date. Must be a date before or equal to <code>due_date</code>.'
         required: false
-        example: '2020-01-18'
+        example: '2020-01-19'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -268,12 +271,12 @@ endpoints:
       task_name: mqeopfuudtdsufvyvddqa
       assigned_to: consequatur
       due_date: '2106-10-22'
-      status: blocked
+      status: in_progress
       title: mqeopfuudtdsufvyvddqa
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       notes: consequatur
-      priority: high
-      start_date: '2020-01-18'
+      priority: medium
+      start_date: '2020-01-19'
       estimated_hours: 13
       actual_hours: 16
       progress: 5
@@ -330,8 +333,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/inspect/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -417,7 +423,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:33'
+        example: '2025-09-23T07:29:21'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -427,7 +433,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: to_do
+        example: blocked
         type: string
         enumValues:
           - to_do
@@ -495,7 +501,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:33'
+        example: '2025-09-23T07:29:21'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -544,13 +550,13 @@ endpoints:
         custom: []
     cleanBodyParameters:
       task_name: vmqeopfuudtdsufvyvddq
-      due_date: '2025-09-22T14:42:33'
-      status: to_do
+      due_date: '2025-09-23T07:29:21'
+      status: blocked
       title: amniihfqcoynlazghdtqt
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       notes: consequatur
       priority: low
-      start_date: '2025-09-22T14:42:33'
+      start_date: '2025-09-23T07:29:21'
       estimated_hours: 13
       actual_hours: 16
       progress: 5
@@ -644,8 +650,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/advanced-search could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -690,8 +699,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/filter-by-field could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -736,8 +748,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/assigned-to-me could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -782,8 +797,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/due-today could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -828,8 +846,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/overdue-tasks could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -874,8 +895,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/sortable-fields could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -957,8 +981,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/employee-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1003,8 +1030,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/status-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1049,8 +1079,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/priority-options could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1106,8 +1139,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/by-project/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1211,8 +1247,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/consequatur/task-documents could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

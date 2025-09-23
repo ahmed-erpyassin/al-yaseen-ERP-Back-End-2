@@ -20,6 +20,7 @@ class StoreInventoryItemRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'company_id' => 'required|exists:companies,id',
             'item_number' => 'required|string|max:255|unique:inventory_items,item_number',
             'item_name_ar' => 'required|string|max:255',
             'item_name_en' => 'nullable|string|max:255',

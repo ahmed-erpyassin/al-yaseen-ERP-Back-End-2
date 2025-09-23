@@ -34,8 +34,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/monitor-all could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -90,7 +93,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: inventory_count
+        example: manufacturing
         type: string
         enumValues:
           - outbound
@@ -105,7 +108,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:32'
+        example: '2025-09-23T07:29:19'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -115,7 +118,7 @@ endpoints:
         name: movement_time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '14:42:32'
+        example: '07:29:19'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -369,7 +372,7 @@ endpoints:
         name: 'movement_data[].expiry_date'
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:32'
+        example: '2025-09-23T07:29:19'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -417,9 +420,9 @@ endpoints:
         custom: []
     cleanBodyParameters:
       movement_number: vmqeopfuudtdsufvyvddq
-      movement_type: inventory_count
-      movement_date: '2025-09-22T14:42:32'
-      movement_time: '14:42:32'
+      movement_type: manufacturing
+      movement_date: '2025-09-23T07:29:19'
+      movement_time: '07:29:19'
       vendor_id: 17
       customer_id: 17
       vendor_name: mqeopfuudtdsufvyvddqa
@@ -445,7 +448,7 @@ endpoints:
           inventory_count: 50
           notes: pfuudtdsufvyvddqamnii
           batch_number: hfqcoynlazghdtqtqxbaj
-          expiry_date: '2025-09-22T14:42:32'
+          expiry_date: '2025-09-23T07:29:19'
           serial_number: wbpilpmufinllwloauydl
           location_code: smsjuryvojcybzvrbyick
           shelf_number: znkygloigmkwxphlvazjr
@@ -501,8 +504,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/review-movement/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -568,7 +574,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: inventory_count
+        example: manufacturing
         type: string
         enumValues:
           - outbound
@@ -583,7 +589,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:32'
+        example: '2025-09-23T07:29:19'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -593,7 +599,7 @@ endpoints:
         name: movement_time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '14:42:32'
+        example: '07:29:19'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -743,7 +749,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: confirmed
+        example: cancelled
         type: string
         enumValues:
           - draft
@@ -856,7 +862,7 @@ endpoints:
         name: 'movement_data[].expiry_date'
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-22T14:42:32'
+        example: '2025-09-23T07:29:19'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -906,7 +912,7 @@ endpoints:
         name: 'movement_data[]._delete'
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -914,9 +920,9 @@ endpoints:
         custom: []
     cleanBodyParameters:
       movement_number: vmqeopfuudtdsufvyvddq
-      movement_type: inventory_count
-      movement_date: '2025-09-22T14:42:32'
-      movement_time: '14:42:32'
+      movement_type: manufacturing
+      movement_date: '2025-09-23T07:29:19'
+      movement_time: '07:29:19'
       vendor_id: 17
       customer_id: 17
       vendor_name: mqeopfuudtdsufvyvddqa
@@ -931,7 +937,7 @@ endpoints:
       invoice_number: yickznkygloigmkwxphlv
       reference: azjrcnfbaqywuxhgjjmzu
       warehouse_id: 17
-      status: confirmed
+      status: cancelled
       movement_data:
         -
           id: 17
@@ -943,12 +949,12 @@ endpoints:
           inventory_count: 50
           notes: pfuudtdsufvyvddqamnii
           batch_number: hfqcoynlazghdtqtqxbaj
-          expiry_date: '2025-09-22T14:42:32'
+          expiry_date: '2025-09-23T07:29:19'
           serial_number: wbpilpmufinllwloauydl
           location_code: smsjuryvojcybzvrbyick
           shelf_number: znkygloigmkwxphlvazjr
           bin_number: cnfbaqywuxhgjjmzuxjub
-          _delete: false
+          _delete: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -1037,8 +1043,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/setup-data could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1123,7 +1132,7 @@ endpoints:
         name: sort_direction
         description: ''
         required: false
-        example: asc
+        example: desc
         type: string
         enumValues:
           - asc
@@ -1136,12 +1145,15 @@ endpoints:
       value: consequatur
       per_page: 13
       sort_by: consequatur
-      sort_direction: asc
+      sort_direction: desc
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/filter-by-criteria could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1186,8 +1198,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/archived-movements could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1232,8 +1247,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/initial-movement could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1278,8 +1296,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/final-movement could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1334,7 +1355,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: transfer
+        example: manufacturing
         type: string
         enumValues:
           - outbound
@@ -1347,12 +1368,15 @@ endpoints:
         custom: []
     cleanBodyParameters:
       warehouse_id: 17
-      movement_type: transfer
+      movement_type: manufacturing
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/next-sequence-number could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -1408,8 +1432,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/consequatur/movement-details could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

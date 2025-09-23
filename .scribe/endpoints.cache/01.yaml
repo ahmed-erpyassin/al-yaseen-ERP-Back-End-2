@@ -291,7 +291,7 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -309,7 +309,7 @@ endpoints:
       minimum_limit: 34
       reorder_limit: 71
       notes: consequatur
-      active: false
+      active: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -361,8 +361,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-items/examine-inventory/consequatur could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -528,7 +531,7 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -546,7 +549,7 @@ endpoints:
       minimum_limit: 34
       reorder_limit: 71
       notes: consequatur
-      active: true
+      active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -635,8 +638,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-items/first-inventory could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -681,8 +687,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-items/last-inventory could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -727,8 +736,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-items/low-stock-items could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -773,8 +785,11 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"message":"Unauthenticated."}'
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-items/reorder-required-items could not be found."
+          }
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

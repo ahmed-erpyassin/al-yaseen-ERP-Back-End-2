@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 servers:
   -
-    url: 'http://localhost'
+    url: 'http://127.0.0.1:8000'
 tags:
   -
     name: Endpoints
@@ -120,18 +120,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/auth/me could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/auth/me could not be found.'
       tags:
         - Endpoints
   /api/v1/auth/logout:
@@ -150,18 +150,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/bom-items/list-components could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/bom-items/list-components could not be found.'
       tags:
         - 'Inventory Management / BOM Items'
   /api/v1/bom-items/create-component:
@@ -217,18 +217,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/bom-items/view-component/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/bom-items/view-component/consequatur could not be found.'
       tags:
         - 'Inventory Management / BOM Items'
     parameters:
@@ -320,18 +320,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/bom-items/by-item/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/bom-items/by-item/consequatur could not be found.'
       tags:
         - 'Inventory Management / BOM Items'
     parameters:
@@ -350,18 +350,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/bom-items/by-component/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/bom-items/by-component/consequatur could not be found.'
       tags:
         - 'Inventory Management / BOM Items'
     parameters:
@@ -409,18 +409,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/bom-items/filter-by-criteria could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/bom-items/filter-by-criteria could not be found.'
       tags:
         - 'Inventory Management / BOM Items'
   /api/v1/bom-items/first-component:
@@ -430,18 +430,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/bom-items/first-component could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/bom-items/first-component could not be found.'
       tags:
         - 'Inventory Management / BOM Items'
   /api/v1/bom-items/last-component:
@@ -451,18 +451,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/bom-items/last-component could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/bom-items/last-component could not be found.'
       tags:
         - 'Inventory Management / BOM Items'
   /api/v1/barcode-types/enumerate-types:
@@ -472,18 +472,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/barcode-types/enumerate-types could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/barcode-types/enumerate-types could not be found.'
       tags:
         - 'Inventory Management / Barcode Types'
   '/api/v1/barcode-types/view-type/{id}':
@@ -493,18 +493,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/barcode-types/view-type/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/barcode-types/view-type/consequatur could not be found.'
       tags:
         - 'Inventory Management / Barcode Types'
     parameters:
@@ -523,18 +523,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/barcode-types/type-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/barcode-types/type-options could not be found.'
       tags:
         - 'Inventory Management / Barcode Types'
   /api/v1/barcode-types/supported-formats:
@@ -544,18 +544,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/barcode-types/supported-formats could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/barcode-types/supported-formats could not be found.'
       tags:
         - 'Inventory Management / Barcode Types'
   /api/v1/barcode-types/verify-barcode:
@@ -690,18 +690,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/department-warehouses/enumerate-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/department-warehouses/enumerate-all could not be found.'
       tags:
         - 'Inventory Management / Department Warehouses'
   /api/v1/department-warehouses/create-assignment:
@@ -770,18 +770,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/department-warehouses/view-assignment/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/department-warehouses/view-assignment/consequatur could not be found.'
       tags:
         - 'Inventory Management / Department Warehouses'
     parameters:
@@ -847,7 +847,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
               required:
                 - department_number
@@ -886,18 +886,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/department-warehouses/primary-assignment could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/department-warehouses/primary-assignment could not be found.'
       tags:
         - 'Inventory Management / Department Warehouses'
   /api/v1/department-warehouses/ultimate-assignment:
@@ -907,18 +907,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/department-warehouses/ultimate-assignment could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/department-warehouses/ultimate-assignment could not be found.'
       tags:
         - 'Inventory Management / Department Warehouses'
   /api/v1/inventory-items/survey-all:
@@ -1167,7 +1167,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
               required:
                 - item_number
@@ -1180,18 +1180,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-items/examine-inventory/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-items/examine-inventory/consequatur could not be found.'
       tags:
         - 'Inventory Management / Inventory Items'
     parameters:
@@ -1277,7 +1277,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
               required:
                 - item_number
@@ -1317,18 +1317,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-items/first-inventory could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-items/first-inventory could not be found.'
       tags:
         - 'Inventory Management / Inventory Items'
   /api/v1/inventory-items/last-inventory:
@@ -1338,18 +1338,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-items/last-inventory could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-items/last-inventory could not be found.'
       tags:
         - 'Inventory Management / Inventory Items'
   /api/v1/inventory-items/low-stock-items:
@@ -1359,18 +1359,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-items/low-stock-items could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-items/low-stock-items could not be found.'
       tags:
         - 'Inventory Management / Inventory Items'
   /api/v1/inventory-items/reorder-required-items:
@@ -1380,18 +1380,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-items/reorder-required-items could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-items/reorder-required-items could not be found.'
       tags:
         - 'Inventory Management / Inventory Items'
   /api/v1/inventory-movements/monitor-all:
@@ -1401,18 +1401,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/monitor-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/monitor-all could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
   /api/v1/inventory-movements/initiate-movement:
@@ -1439,7 +1439,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: inventory_count
+                  example: manufacturing
                   nullable: false
                   enum:
                     - outbound
@@ -1450,12 +1450,12 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:32'
+                  example: '2025-09-23T07:29:19'
                   nullable: true
                 movement_time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '14:42:32'
+                  example: '07:29:19'
                   nullable: true
                 vendor_id:
                   type: integer
@@ -1587,7 +1587,7 @@ paths:
                       expiry_date:
                         type: string
                         description: 'Must be a valid date.'
-                        example: '2025-09-22T14:42:32'
+                        example: '2025-09-23T07:29:19'
                         nullable: true
                       serial_number:
                         type: string
@@ -1623,18 +1623,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/review-movement/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/review-movement/consequatur could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
     parameters:
@@ -1670,7 +1670,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: inventory_count
+                  example: manufacturing
                   nullable: false
                   enum:
                     - outbound
@@ -1681,12 +1681,12 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:32'
+                  example: '2025-09-23T07:29:19'
                   nullable: true
                 movement_time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '14:42:32'
+                  example: '07:29:19'
                   nullable: true
                 vendor_id:
                   type: integer
@@ -1761,7 +1761,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: confirmed
+                  example: cancelled
                   nullable: true
                   enum:
                     - draft
@@ -1823,7 +1823,7 @@ paths:
                       expiry_date:
                         type: string
                         description: 'Must be a valid date.'
-                        example: '2025-09-22T14:42:32'
+                        example: '2025-09-23T07:29:19'
                         nullable: true
                       serial_number:
                         type: string
@@ -1848,7 +1848,7 @@ paths:
                       _delete:
                         type: boolean
                         description: ''
-                        example: false
+                        example: true
                         nullable: true
                     required:
                       - item_id
@@ -1890,18 +1890,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/setup-data could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/setup-data could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
   /api/v1/inventory-movements/filter-by-criteria:
@@ -1911,18 +1911,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/filter-by-criteria could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/filter-by-criteria could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
       requestBody:
@@ -1955,7 +1955,7 @@ paths:
                 sort_direction:
                   type: string
                   description: ''
-                  example: asc
+                  example: desc
                   nullable: true
                   enum:
                     - asc
@@ -1970,18 +1970,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/archived-movements could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/archived-movements could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
   /api/v1/inventory-movements/initial-movement:
@@ -1991,18 +1991,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/initial-movement could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/initial-movement could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
   /api/v1/inventory-movements/final-movement:
@@ -2012,18 +2012,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/final-movement could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/final-movement could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
   /api/v1/inventory-movements/next-sequence-number:
@@ -2033,18 +2033,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/next-sequence-number could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/next-sequence-number could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
       requestBody:
@@ -2062,7 +2062,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: transfer
+                  example: manufacturing
                   nullable: false
                   enum:
                     - outbound
@@ -2080,18 +2080,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/inventory-movements/consequatur/movement-details could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/inventory-movements/consequatur/movement-details could not be found.'
       tags:
         - 'Inventory Management / Inventory Movements'
     parameters:
@@ -2182,18 +2182,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-types/catalog-types could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-types/catalog-types could not be found.'
       tags:
         - 'Inventory Management / Item Types'
   /api/v1/item-types/establish-type:
@@ -2241,18 +2241,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-types/examine-type/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-types/examine-type/consequatur could not be found.'
       tags:
         - 'Inventory Management / Item Types'
     parameters:
@@ -2303,7 +2303,7 @@ paths:
                 is_active:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
               required:
                 - name
@@ -2341,18 +2341,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-types/type-selections could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-types/type-selections could not be found.'
       tags:
         - 'Inventory Management / Item Types'
   /api/v1/item-units/list-all:
@@ -2362,18 +2362,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-units/list-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-units/list-all could not be found.'
       tags:
         - 'Inventory Management / Item Units'
   /api/v1/item-units/establish-unit:
@@ -2420,7 +2420,7 @@ paths:
                 unit_type:
                   type: string
                   description: ''
-                  example: balance
+                  example: third
                   nullable: false
                   enum:
                     - balance
@@ -2434,7 +2434,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: kilo
+                  example: liter
                   nullable: false
                   enum:
                     - piece
@@ -2501,7 +2501,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: piece
+                  example: ton
                   nullable: true
                   enum:
                     - piece
@@ -2596,18 +2596,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-units/examine-unit/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-units/examine-unit/consequatur could not be found.'
       tags:
         - 'Inventory Management / Item Units'
     parameters:
@@ -2677,7 +2677,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: ton
+                  example: piece
                   nullable: false
                   enum:
                     - piece
@@ -2708,7 +2708,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: piece
+                  example: ton
                   nullable: true
                   enum:
                     - piece
@@ -2744,7 +2744,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: ton
+                  example: liter
                   nullable: true
                   enum:
                     - piece
@@ -2820,7 +2820,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: false
                   enum:
                     - active
@@ -2866,18 +2866,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-units/type-selections could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-units/type-selections could not be found.'
       tags:
         - 'Inventory Management / Item Units'
   /api/v1/item-units/container-selections:
@@ -2887,18 +2887,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-units/container-selections could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-units/container-selections could not be found.'
       tags:
         - 'Inventory Management / Item Units'
   /api/v1/item-units/form-setup:
@@ -2908,18 +2908,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-units/form-setup could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-units/form-setup could not be found.'
       tags:
         - 'Inventory Management / Item Units'
   /api/v1/item-units/compute-conversion:
@@ -2964,18 +2964,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-units/by-item/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-units/by-item/consequatur could not be found.'
       tags:
         - 'Inventory Management / Item Units'
     parameters:
@@ -2994,18 +2994,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-units/by-item-type/consequatur/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-units/by-item-type/consequatur/consequatur could not be found.'
       tags:
         - 'Inventory Management / Item Units'
     parameters:
@@ -3032,18 +3032,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/item-units/comprehensive-data/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/item-units/comprehensive-data/consequatur could not be found.'
       tags:
         - 'Inventory Management / Item Units'
     parameters:
@@ -3470,7 +3470,7 @@ paths:
                 sale_prices_include_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 item_subject_to_vat:
                   type: boolean
@@ -3490,7 +3490,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: C128
+                  example: C39
                   nullable: true
                   enum:
                     - C128
@@ -3536,7 +3536,7 @@ paths:
                 stock_tracking:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
               required:
                 - unit_id
@@ -3551,18 +3551,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/inspect-item/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/inspect-item/consequatur could not be found.'
       tags:
         - 'Inventory Management / Items'
     parameters:
@@ -3643,7 +3643,7 @@ paths:
                 type:
                   type: string
                   description: ''
-                  example: material
+                  example: service
                   nullable: false
                   enum:
                     - product
@@ -3738,7 +3738,7 @@ paths:
                 sale_prices_include_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 item_subject_to_vat:
                   type: boolean
@@ -3758,7 +3758,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: UPCA
+                  example: ITF
                   nullable: true
                   enum:
                     - C128
@@ -3837,18 +3837,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/locate-items could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/locate-items could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/available-fields:
@@ -3858,18 +3858,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/available-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/available-fields could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/sortable-columns:
@@ -3879,18 +3879,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/sortable-columns could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/sortable-columns could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/item-categories:
@@ -3900,18 +3900,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/item-categories could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/item-categories could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/storage-locations:
@@ -3921,18 +3921,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/storage-locations could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/storage-locations could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/pricing-configuration:
@@ -3942,18 +3942,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/pricing-configuration could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/pricing-configuration could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/validate-pricing-data:
@@ -3996,18 +3996,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/barcode-type-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/barcode-type-options could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/item-type-options:
@@ -4017,18 +4017,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/item-type-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/item-type-options could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/create-custom-type:
@@ -4083,7 +4083,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: UPCA
+                  example: C128
                   nullable: false
                   enum:
                     - C128
@@ -4123,7 +4123,7 @@ paths:
                 format:
                   type: string
                   description: ''
-                  example: png
+                  example: svg
                   nullable: true
                   enum:
                     - png
@@ -4189,18 +4189,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/consequatur/item-transactions could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/consequatur/item-transactions could not be found.'
       tags:
         - 'Inventory Management / Items'
       requestBody:
@@ -4213,7 +4213,7 @@ paths:
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:32'
+                  example: '2025-09-23T07:29:18'
                   nullable: true
                 date_to:
                   type: string
@@ -4223,7 +4223,7 @@ paths:
                 transaction_type:
                   type: string
                   description: ''
-                  example: sales
+                  example: stock_movements
                   nullable: true
                   enum:
                     - sales
@@ -4248,7 +4248,7 @@ paths:
                 sort_direction:
                   type: string
                   description: ''
-                  example: desc
+                  example: asc
                   nullable: true
                   enum:
                     - asc
@@ -4269,18 +4269,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/consequatur/export-transactions could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/consequatur/export-transactions could not be found.'
       tags:
         - 'Inventory Management / Items'
       requestBody:
@@ -4293,7 +4293,7 @@ paths:
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:32'
+                  example: '2025-09-23T07:29:18'
                   nullable: true
                 date_to:
                   type: string
@@ -4303,7 +4303,7 @@ paths:
                 transaction_type:
                   type: string
                   description: ''
-                  example: purchases
+                  example: stock_movements
                   nullable: true
                   enum:
                     - sales
@@ -4322,7 +4322,7 @@ paths:
                 format:
                   type: string
                   description: ''
-                  example: xlsx
+                  example: csv
                   nullable: true
                   enum:
                     - xlsx
@@ -4344,18 +4344,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/first-item could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/first-item could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/last-item:
@@ -4365,18 +4365,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/last-item could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/last-item could not be found.'
       tags:
         - 'Inventory Management / Items'
   /api/v1/items/parent-items:
@@ -4386,18 +4386,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/parent-items could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/parent-items could not be found.'
       tags:
         - 'Inventory Management / Items'
   '/api/v1/items/by-type/{type}':
@@ -4407,18 +4407,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/by-type/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/by-type/consequatur could not be found.'
       tags:
         - 'Inventory Management / Items'
     parameters:
@@ -4437,18 +4437,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/deleted-items could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/deleted-items could not be found.'
       tags:
         - 'Inventory Management / Items'
   '/api/v1/items/preview-item/{id}':
@@ -4458,18 +4458,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/items/preview-item/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/items/preview-item/consequatur could not be found.'
       tags:
         - 'Inventory Management / Items'
     parameters:
@@ -4524,18 +4524,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/catalog-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/catalog-all could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/establish-formula:
@@ -4607,7 +4607,7 @@ paths:
                 selected_purchase_price_type:
                   type: string
                   description: ''
-                  example: third
+                  example: second
                   nullable: true
                   enum:
                     - first
@@ -4661,7 +4661,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: draft
+                  example: archived
                   nullable: true
                   enum:
                     - draft
@@ -4676,7 +4676,7 @@ paths:
                 effective_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:32'
+                  example: '2025-09-23T07:29:20'
                   nullable: true
                 effective_to:
                   type: string
@@ -4712,18 +4712,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/examine-formula/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/examine-formula/consequatur could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
     parameters:
@@ -4760,18 +4760,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/item-numbers could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/item-numbers could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/item-details:
@@ -4781,18 +4781,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/item-details could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/item-details could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/calculate-cost:
@@ -4811,18 +4811,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/available-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/available-fields could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/field-values:
@@ -4832,18 +4832,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/field-values could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/field-values could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/selectable-fields:
@@ -4853,18 +4853,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/selectable-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/selectable-fields could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/field-based-data:
@@ -4874,18 +4874,18 @@ paths:
       description: 'When user clicks on any field in the table, show related data.'
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/field-based-data could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/field-based-data could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/formula-numbers:
@@ -4895,18 +4895,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/formula-numbers could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/formula-numbers could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/item-by-formula-number:
@@ -4916,18 +4916,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/item-by-formula-number could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/item-by-formula-number could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/manufacturing-formulas/warehouses:
@@ -4937,18 +4937,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/warehouses could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/warehouses could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   '/api/v1/manufacturing-formulas/update-prices-from-suppliers/{id}':
@@ -5021,18 +5021,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/manufacturing-formulas/deleted-formulas could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/manufacturing-formulas/deleted-formulas could not be found.'
       tags:
         - 'Inventory Management / ManufacturingFormula'
   /api/v1/stock-movements/track-all:
@@ -5042,18 +5042,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/stock-movements/track-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/stock-movements/track-all could not be found.'
       tags:
         - 'Inventory Management / Stock Movements'
   /api/v1/stock-movements/record-movement:
@@ -5085,7 +5085,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: in
+                  example: out
                   nullable: false
                   enum:
                     - in
@@ -5125,7 +5125,7 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:31'
+                  example: '2025-09-23T07:29:17'
                   nullable: true
               required:
                 - inventory_item_id
@@ -5139,18 +5139,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/stock-movements/examine-movement/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/stock-movements/examine-movement/consequatur could not be found.'
       tags:
         - 'Inventory Management / Stock Movements'
     parameters:
@@ -5169,18 +5169,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/stock-movements/movement-summary could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/stock-movements/movement-summary could not be found.'
       tags:
         - 'Inventory Management / Stock Movements'
   '/api/v1/stock-movements/by-item/{itemId}':
@@ -5190,18 +5190,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/stock-movements/by-item/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/stock-movements/by-item/consequatur could not be found.'
       tags:
         - 'Inventory Management / Stock Movements'
     parameters:
@@ -5220,18 +5220,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/stock-movements/by-warehouse/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/stock-movements/by-warehouse/consequatur could not be found.'
       tags:
         - 'Inventory Management / Stock Movements'
     parameters:
@@ -5250,18 +5250,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/catalog-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/catalog-all could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/units/define-unit:
@@ -5349,7 +5349,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: kilo
+                  example: liter
                   nullable: true
                   enum:
                     - piece
@@ -5385,7 +5385,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: kilo
+                  example: liter
                   nullable: true
                   enum:
                     - piece
@@ -5448,18 +5448,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/review-unit/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/review-unit/consequatur could not be found.'
       tags:
         - 'Inventory Management / Units'
     parameters:
@@ -5556,7 +5556,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: carton
+                  example: piece
                   nullable: true
                   enum:
                     - piece
@@ -5592,7 +5592,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: carton
+                  example: piece
                   nullable: true
                   enum:
                     - piece
@@ -5682,18 +5682,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/unit-choices could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/unit-choices could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/units/comprehensive-choices:
@@ -5703,18 +5703,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/comprehensive-choices could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/comprehensive-choices could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/units/container-choices:
@@ -5724,18 +5724,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/container-choices could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/container-choices could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/units/selection-dropdown:
@@ -5745,18 +5745,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/selection-dropdown could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/selection-dropdown could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/units/warehouse-selection:
@@ -5766,18 +5766,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/warehouse-selection could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/warehouse-selection could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/units/form-configuration:
@@ -5787,18 +5787,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/form-configuration could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/form-configuration could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/units/initial-unit:
@@ -5808,18 +5808,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/initial-unit could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/initial-unit could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/units/final-unit:
@@ -5829,18 +5829,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/units/final-unit could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/units/final-unit could not be found.'
       tags:
         - 'Inventory Management / Units'
   /api/v1/warehouses/scan-all:
@@ -5850,18 +5850,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/warehouses/scan-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/warehouses/scan-all could not be found.'
       tags:
         - 'Inventory Management / Warehouses'
   /api/v1/warehouses/establish-facility:
@@ -5987,18 +5987,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/warehouses/inspect-facility/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/warehouses/inspect-facility/consequatur could not be found.'
       tags:
         - 'Inventory Management / Warehouses'
     parameters:
@@ -6089,7 +6089,7 @@ paths:
                 inventory_valuation_method:
                   type: string
                   description: ''
-                  example: natural_division
+                  example: second_purchase_price
                   nullable: false
                   enum:
                     - natural_division
@@ -6100,7 +6100,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: inactive
+                  example: active
                   nullable: false
                   enum:
                     - active
@@ -6143,18 +6143,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/warehouses/configuration-data could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/warehouses/configuration-data could not be found.'
       tags:
         - 'Inventory Management / Warehouses'
   /api/v1/warehouses/filter-by-criteria:
@@ -6164,18 +6164,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/warehouses/filter-by-criteria could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/warehouses/filter-by-criteria could not be found.'
       tags:
         - 'Inventory Management / Warehouses'
       requestBody:
@@ -6223,18 +6223,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/warehouses/archived-facilities could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/warehouses/archived-facilities could not be found.'
       tags:
         - 'Inventory Management / Warehouses'
   /api/v1/warehouses/initial-facility:
@@ -6244,18 +6244,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/warehouses/initial-facility could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/warehouses/initial-facility could not be found.'
       tags:
         - 'Inventory Management / Warehouses'
   /api/v1/warehouses/final-facility:
@@ -6265,18 +6265,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/warehouses/final-facility could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/warehouses/final-facility could not be found.'
       tags:
         - 'Inventory Management / Warehouses'
   '/api/v1/warehouses/{id}/reactivate-facility':
@@ -6322,18 +6322,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/gather-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/gather-all could not be found.'
       tags:
         - 'Project Management / Documents'
   /api/v1/project-documents/compose-new:
@@ -6385,7 +6385,7 @@ paths:
                 document_category:
                   type: string
                   description: ''
-                  example: other
+                  example: drawing
                   nullable: true
                   enum:
                     - contract
@@ -6407,7 +6407,7 @@ paths:
                 upload_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:33'
+                  example: '2025-09-23T07:29:22'
                   nullable: true
                 version:
                   type: string
@@ -6440,18 +6440,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/read/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/read/consequatur could not be found.'
       tags:
         - 'Project Management / Documents'
     parameters:
@@ -6506,18 +6506,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/consequatur/file-download could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/consequatur/file-download could not be found.'
       tags:
         - 'Project Management / Documents'
     parameters:
@@ -6545,18 +6545,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/filter-by-field could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/filter-by-field could not be found.'
       tags:
         - 'Project Management / Documents'
   /api/v1/project-documents/field-values:
@@ -6566,18 +6566,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/field-values could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/field-values could not be found.'
       tags:
         - 'Project Management / Documents'
   /api/v1/project-documents/sortable-fields:
@@ -6587,18 +6587,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/sortable-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/sortable-fields could not be found.'
       tags:
         - 'Project Management / Documents'
   /api/v1/project-documents/apply-sort:
@@ -6653,18 +6653,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/deleted-documents could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/deleted-documents could not be found.'
       tags:
         - 'Project Management / Documents'
   /api/v1/project-documents/project-options:
@@ -6674,18 +6674,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/project-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/project-options could not be found.'
       tags:
         - 'Project Management / Documents'
   /api/v1/project-documents/category-options:
@@ -6695,18 +6695,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/category-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/category-options could not be found.'
       tags:
         - 'Project Management / Documents'
   /api/v1/project-documents/status-options:
@@ -6716,18 +6716,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/status-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/status-options could not be found.'
       tags:
         - 'Project Management / Documents'
   /api/v1/project-documents/number-generation:
@@ -6746,18 +6746,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/by-project/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/by-project/consequatur could not be found.'
       tags:
         - 'Project Management / Documents'
     parameters:
@@ -6776,18 +6776,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-documents/by-category/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-documents/by-category/consequatur could not be found.'
       tags:
         - 'Project Management / Documents'
     parameters:
@@ -6806,18 +6806,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/obtain-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/obtain-all could not be found.'
       tags:
         - 'Project Management / Financials'
   /api/v1/project-finance/register-new:
@@ -6869,7 +6869,7 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:33'
+                  example: '2025-09-23T07:29:22'
                   nullable: false
                 description:
                   type: string
@@ -6921,18 +6921,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/show/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/show/consequatur could not be found.'
       tags:
         - 'Project Management / Financials'
     parameters:
@@ -6993,7 +6993,7 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:33'
+                  example: '2025-09-23T07:29:22'
                   nullable: false
                 description:
                   type: string
@@ -7048,18 +7048,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/filter-by-field could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/filter-by-field could not be found.'
       tags:
         - 'Project Management / Financials'
   /api/v1/project-finance/field-values:
@@ -7069,18 +7069,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/field-values could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/field-values could not be found.'
       tags:
         - 'Project Management / Financials'
   /api/v1/project-finance/sortable-fields:
@@ -7090,18 +7090,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/sortable-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/sortable-fields could not be found.'
       tags:
         - 'Project Management / Financials'
   /api/v1/project-finance/apply-sort:
@@ -7156,18 +7156,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/deleted-financials could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/deleted-financials could not be found.'
       tags:
         - 'Project Management / Financials'
   /api/v1/project-finance/project-options:
@@ -7177,18 +7177,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/project-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/project-options could not be found.'
       tags:
         - 'Project Management / Financials'
   /api/v1/project-finance/currency-options:
@@ -7198,18 +7198,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/currency-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/currency-options could not be found.'
       tags:
         - 'Project Management / Financials'
   '/api/v1/project-finance/by-project/{projectId}':
@@ -7219,18 +7219,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/by-project/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/by-project/consequatur could not be found.'
       tags:
         - 'Project Management / Financials'
     parameters:
@@ -7249,18 +7249,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/by-reference-type/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/by-reference-type/consequatur could not be found.'
       tags:
         - 'Project Management / Financials'
     parameters:
@@ -7279,18 +7279,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-finance/by-date-range/consequatur/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-finance/by-date-range/consequatur/consequatur could not be found.'
       tags:
         - 'Project Management / Financials'
     parameters:
@@ -7317,18 +7317,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/retrieve-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/retrieve-all could not be found.'
       tags:
         - 'Project Management / Milestones'
   /api/v1/project-milestones/build-new:
@@ -7423,18 +7423,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/view-single/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/view-single/consequatur could not be found.'
       tags:
         - 'Project Management / Milestones'
     parameters:
@@ -7475,12 +7475,12 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:33'
+                  example: '2025-09-23T07:29:21'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: not_started
+                  example: completed
                   nullable: false
                   enum:
                     - not_started
@@ -7554,18 +7554,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/filter-by-field could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/filter-by-field could not be found.'
       tags:
         - 'Project Management / Milestones'
   /api/v1/project-milestones/field-values:
@@ -7575,18 +7575,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/field-values could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/field-values could not be found.'
       tags:
         - 'Project Management / Milestones'
   /api/v1/project-milestones/sortable-fields:
@@ -7596,18 +7596,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/sortable-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/sortable-fields could not be found.'
       tags:
         - 'Project Management / Milestones'
   /api/v1/project-milestones/apply-sort:
@@ -7662,18 +7662,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/deleted-milestones could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/deleted-milestones could not be found.'
       tags:
         - 'Project Management / Milestones'
   /api/v1/project-milestones/project-options:
@@ -7683,18 +7683,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/project-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/project-options could not be found.'
       tags:
         - 'Project Management / Milestones'
   /api/v1/project-milestones/status-options:
@@ -7704,18 +7704,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/status-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/status-options could not be found.'
       tags:
         - 'Project Management / Milestones'
   /api/v1/project-milestones/number-generation:
@@ -7734,18 +7734,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-milestones/by-project/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-milestones/by-project/consequatur could not be found.'
       tags:
         - 'Project Management / Milestones'
     parameters:
@@ -8299,18 +8299,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/examine/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/examine/consequatur could not be found.'
       tags:
         - 'Project Management / Projects'
     parameters:
@@ -8376,7 +8376,7 @@ paths:
                 include_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 project_number:
                   type: string
@@ -8411,7 +8411,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:33'
+                  example: '2025-09-23T07:29:20'
                   nullable: false
                 end_date:
                   type: string
@@ -8421,7 +8421,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: closed
+                  example: on-hold
                   nullable: false
                   enum:
                     - draft
@@ -8517,18 +8517,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/filter-by-field could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/filter-by-field could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/projects/field-values:
@@ -8538,18 +8538,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/field-values could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/field-values could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/projects/sortable-fields:
@@ -8559,18 +8559,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/sortable-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/sortable-fields could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/projects/apply-sort:
@@ -8625,18 +8625,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/deleted-projects could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/deleted-projects could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/projects/customer-options:
@@ -8646,18 +8646,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/customer-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/customer-options could not be found.'
       tags:
         - 'Project Management / Projects'
   '/api/v1/projects/customer-details/{customerId}':
@@ -8667,18 +8667,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/customer-details/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/customer-details/consequatur could not be found.'
       tags:
         - 'Project Management / Projects'
     parameters:
@@ -8697,18 +8697,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/currency-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/currency-options could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/projects/employee-options:
@@ -8718,18 +8718,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/employee-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/employee-options could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/projects/country-options:
@@ -8739,18 +8739,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/country-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/country-options could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/projects/status-options:
@@ -8760,18 +8760,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/status-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/status-options could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/projects/vat-calculation:
@@ -8790,18 +8790,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/projects/code-generation could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/projects/code-generation could not be found.'
       tags:
         - 'Project Management / Projects'
   /api/v1/project-resources/load-all:
@@ -9118,7 +9118,7 @@ paths:
                 resource_type:
                   type: string
                   description: ''
-                  example: internal
+                  example: consultant
                   nullable: false
                   enum:
                     - supplier
@@ -9163,7 +9163,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: inactive
+                  example: completed
                   nullable: true
                   enum:
                     - active
@@ -9201,18 +9201,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/display/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/display/consequatur could not be found.'
       tags:
         - 'Project Management / Resources'
     parameters:
@@ -9258,7 +9258,7 @@ paths:
                 resource_type:
                   type: string
                   description: ''
-                  example: consultant
+                  example: internal
                   nullable: false
                   enum:
                     - supplier
@@ -9303,7 +9303,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: completed
+                  example: inactive
                   nullable: true
                   enum:
                     - active
@@ -9357,18 +9357,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/filter-by-field could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/filter-by-field could not be found.'
       tags:
         - 'Project Management / Resources'
   /api/v1/project-resources/field-values:
@@ -9378,18 +9378,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/field-values could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/field-values could not be found.'
       tags:
         - 'Project Management / Resources'
   /api/v1/project-resources/sortable-fields:
@@ -9399,18 +9399,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/sortable-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/sortable-fields could not be found.'
       tags:
         - 'Project Management / Resources'
   /api/v1/project-resources/apply-sort:
@@ -9465,18 +9465,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/deleted-resources could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/deleted-resources could not be found.'
       tags:
         - 'Project Management / Resources'
   /api/v1/project-resources/supplier-options:
@@ -9486,18 +9486,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/supplier-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/supplier-options could not be found.'
       tags:
         - 'Project Management / Resources'
   /api/v1/project-resources/project-options:
@@ -9507,18 +9507,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/project-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/project-options could not be found.'
       tags:
         - 'Project Management / Resources'
   /api/v1/project-resources/type-options:
@@ -9528,18 +9528,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/type-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/type-options could not be found.'
       tags:
         - 'Project Management / Resources'
   /api/v1/project-resources/status-options:
@@ -9549,18 +9549,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/status-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/status-options could not be found.'
       tags:
         - 'Project Management / Resources'
   /api/v1/project-resources/allocation-calculation:
@@ -9588,18 +9588,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/by-project/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/by-project/consequatur could not be found.'
       tags:
         - 'Project Management / Resources'
     parameters:
@@ -9618,18 +9618,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-resources/by-supplier/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-resources/by-supplier/consequatur could not be found.'
       tags:
         - 'Project Management / Resources'
     parameters:
@@ -9648,18 +9648,18 @@ paths:
       description: 'Can be filtered by project_id if provided.'
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/risk-statistics could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/risk-statistics could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/collect-all:
@@ -9669,128 +9669,24 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/collect-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/collect-all could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/formulate-new:
     post:
       summary: 'Store a newly created project risk.'
       operationId: storeANewlyCreatedProjectRisk
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - 'Project Management / Risks'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                project_id:
-                  type: integer
-                  description: ''
-                  example: 17
-                  nullable: false
-                title:
-                  type: string
-                  description: 'Must not be greater than 255 characters. Must be at least 3 characters.'
-                  example: mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury
-                  nullable: false
-                description:
-                  type: string
-                  description: 'Must not be greater than 65535 characters.'
-                  example: 'Natus ex dicta hic inventore asperiores illum est.'
-                  nullable: true
-                impact:
-                  type: string
-                  description: ''
-                  example: high
-                  nullable: false
-                  enum:
-                    - low
-                    - medium
-                    - high
-                probability:
-                  type: string
-                  description: ''
-                  example: low
-                  nullable: false
-                  enum:
-                    - low
-                    - medium
-                    - high
-                mitigation_plan:
-                  type: string
-                  description: 'Must not be greater than 65535 characters.'
-                  example: byickznkygloigmkwxphl
-                  nullable: true
-                status:
-                  type: string
-                  description: ''
-                  example: open
-                  nullable: false
-                  enum:
-                    - open
-                    - mitigated
-                    - closed
-                assigned_to:
-                  type: integer
-                  description: ''
-                  example: 17
-                  nullable: true
-              required:
-                - project_id
-                - title
-                - impact
-                - probability
-                - status
-  '/api/v1/project-risk-management/present/{id}':
-    get:
-      summary: 'Display the specified project risk.'
-      operationId: displayTheSpecifiedProjectRisk
-      description: ''
-      parameters: []
-      responses:
-        401:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: Unauthenticated.
-                properties:
-                  message:
-                    type: string
-                    example: Unauthenticated.
-      tags:
-        - 'Project Management / Risks'
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the present.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  '/api/v1/project-risk-management/modify-existing/{id}':
-    put:
-      summary: 'Update the specified project risk.'
-      operationId: updateTheSpecifiedProjectRisk
       description: ''
       parameters: []
       responses: {  }
@@ -9844,7 +9740,111 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: mitigated
+                  example: open
+                  nullable: false
+                  enum:
+                    - open
+                    - mitigated
+                    - closed
+                assigned_to:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+              required:
+                - project_id
+                - title
+                - impact
+                - probability
+                - status
+  '/api/v1/project-risk-management/present/{id}':
+    get:
+      summary: 'Display the specified project risk.'
+      operationId: displayTheSpecifiedProjectRisk
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The route api/v1/project-risk-management/present/consequatur could not be found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The route api/v1/project-risk-management/present/consequatur could not be found.'
+      tags:
+        - 'Project Management / Risks'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the present.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/project-risk-management/modify-existing/{id}':
+    put:
+      summary: 'Update the specified project risk.'
+      operationId: updateTheSpecifiedProjectRisk
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Project Management / Risks'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: false
+                title:
+                  type: string
+                  description: 'Must not be greater than 255 characters. Must be at least 3 characters.'
+                  example: mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury
+                  nullable: false
+                description:
+                  type: string
+                  description: 'Must not be greater than 65535 characters.'
+                  example: 'Natus ex dicta hic inventore asperiores illum est.'
+                  nullable: true
+                impact:
+                  type: string
+                  description: ''
+                  example: low
+                  nullable: false
+                  enum:
+                    - low
+                    - medium
+                    - high
+                probability:
+                  type: string
+                  description: ''
+                  example: medium
+                  nullable: false
+                  enum:
+                    - low
+                    - medium
+                    - high
+                mitigation_plan:
+                  type: string
+                  description: 'Must not be greater than 65535 characters.'
+                  example: byickznkygloigmkwxphl
+                  nullable: true
+                status:
+                  type: string
+                  description: ''
+                  example: open
                   nullable: false
                   enum:
                     - open
@@ -9904,18 +9904,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/filter-by-field could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/filter-by-field could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/field-values:
@@ -9925,18 +9925,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/field-values could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/field-values could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/sortable-fields:
@@ -9946,18 +9946,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/sortable-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/sortable-fields could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/apply-sort:
@@ -10012,18 +10012,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/deleted-risks could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/deleted-risks could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/project-options:
@@ -10033,18 +10033,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/project-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/project-options could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/employee-options:
@@ -10054,18 +10054,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/employee-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/employee-options could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/impact-options:
@@ -10075,18 +10075,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/impact-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/impact-options could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/probability-options:
@@ -10096,18 +10096,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/probability-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/probability-options could not be found.'
       tags:
         - 'Project Management / Risks'
   /api/v1/project-risk-management/status-options:
@@ -10117,18 +10117,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/status-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/status-options could not be found.'
       tags:
         - 'Project Management / Risks'
   '/api/v1/project-risk-management/by-project/{projectId}':
@@ -10138,18 +10138,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/by-project/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/by-project/consequatur could not be found.'
       tags:
         - 'Project Management / Risks'
     parameters:
@@ -10168,18 +10168,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/by-status/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/by-status/consequatur could not be found.'
       tags:
         - 'Project Management / Risks'
     parameters:
@@ -10198,18 +10198,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/by-impact/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/by-impact/consequatur could not be found.'
       tags:
         - 'Project Management / Risks'
     parameters:
@@ -10228,18 +10228,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-risk-management/by-probability/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-risk-management/by-probability/consequatur could not be found.'
       tags:
         - 'Project Management / Risks'
     parameters:
@@ -10258,18 +10258,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/fetch-all could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/fetch-all could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/generate-new:
@@ -10311,7 +10311,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: blocked
+                  example: in_progress
                   nullable: false
                   enum:
                     - to_do
@@ -10341,7 +10341,7 @@ paths:
                 priority:
                   type: string
                   description: ''
-                  example: high
+                  example: medium
                   nullable: true
                   enum:
                     - low
@@ -10351,7 +10351,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date. Must be a date before or equal to <code>due_date</code>.'
-                  example: '2020-01-18'
+                  example: '2020-01-19'
                   nullable: true
                 estimated_hours:
                   type: integer
@@ -10404,18 +10404,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/inspect/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/inspect/consequatur could not be found.'
       tags:
         - 'Project Management / Tasks'
     parameters:
@@ -10461,12 +10461,12 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:33'
+                  example: '2025-09-23T07:29:21'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: to_do
+                  example: blocked
                   nullable: false
                   enum:
                     - to_do
@@ -10506,7 +10506,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-22T14:42:33'
+                  example: '2025-09-23T07:29:21'
                   nullable: false
                 estimated_hours:
                   type: integer
@@ -10565,18 +10565,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/advanced-search could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/advanced-search could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/filter-by-field:
@@ -10586,18 +10586,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/filter-by-field could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/filter-by-field could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/assigned-to-me:
@@ -10607,18 +10607,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/assigned-to-me could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/assigned-to-me could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/due-today:
@@ -10628,18 +10628,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/due-today could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/due-today could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/overdue-tasks:
@@ -10649,18 +10649,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/overdue-tasks could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/overdue-tasks could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/sortable-fields:
@@ -10670,18 +10670,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/sortable-fields could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/sortable-fields could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/apply-sort:
@@ -10700,18 +10700,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/employee-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/employee-options could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/status-options:
@@ -10721,18 +10721,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/status-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/status-options could not be found.'
       tags:
         - 'Project Management / Tasks'
   /api/v1/project-tasks/priority-options:
@@ -10742,18 +10742,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/priority-options could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/priority-options could not be found.'
       tags:
         - 'Project Management / Tasks'
   '/api/v1/project-tasks/by-project/{projectId}':
@@ -10763,18 +10763,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/by-project/consequatur could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/by-project/consequatur could not be found.'
       tags:
         - 'Project Management / Tasks'
     parameters:
@@ -10811,18 +10811,18 @@ paths:
       description: ''
       parameters: []
       responses:
-        401:
+        404:
           description: ''
           content:
             application/json:
               schema:
                 type: object
                 example:
-                  message: Unauthenticated.
+                  message: 'The route api/v1/project-tasks/consequatur/task-documents could not be found.'
                 properties:
                   message:
                     type: string
-                    example: Unauthenticated.
+                    example: 'The route api/v1/project-tasks/consequatur/task-documents could not be found.'
       tags:
         - 'Project Management / Tasks'
     parameters:
