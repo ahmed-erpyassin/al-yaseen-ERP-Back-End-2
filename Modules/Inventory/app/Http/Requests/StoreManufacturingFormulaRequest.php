@@ -25,17 +25,36 @@ class StoreManufacturingFormulaRequest extends FormRequest
             'consumed_quantity' => 'required|numeric|min:0',
             'produced_quantity' => 'required|numeric|min:0',
             'labor_cost' => 'required|numeric|min:0',
-            'operating_cost' => 'required|numeric|min:0',
-            'waste_cost' => 'required|numeric|min:0',
+            'operating_cost' => 'required|numeric|min:0', // Will be mapped to overhead_cost
+            'waste_cost' => 'required|numeric|min:0', // Will be mapped to total_raw_material_cost
             
             // ✅ Optional fields
             'unit_id' => 'nullable|exists:units,id',
             'formula_name' => 'nullable|string|max:255',
             'formula_description' => 'nullable|string|max:1000',
-            'formula_number' => 'nullable|string|max:50|unique:bom_items,formula_number',
-            
+            'formula_number' => 'nullable|string|max:50|unique:manufactured_formulas,formula_number',
+
             // ✅ Purchase price selection
             'selected_purchase_price_type' => 'nullable|in:first,second,third',
+
+            // ✅ Quality control
+            'quality_requirements' => 'nullable|string|max:1000',
+            'requires_inspection' => 'nullable|boolean', // Will be mapped to requires_quality_check
+
+            // ✅ Status fields
+            'status' => 'nullable|in:draft,active,completed,cancelled',
+            'is_active' => 'nullable|boolean',
+
+            // ✅ Fields that will be ignored (not in database)
+            'batch_size' => 'nullable|numeric',
+            'production_time_minutes' => 'nullable|numeric',
+            'preparation_time_minutes' => 'nullable|numeric',
+            'production_notes' => 'nullable|string',
+            'preparation_notes' => 'nullable|string',
+            'usage_instructions' => 'nullable|string',
+            'tolerance_percentage' => 'nullable|numeric',
+            'effective_from' => 'nullable|date',
+            'effective_to' => 'nullable|date',
             
             // ✅ Additional optional fields
             'batch_size' => 'nullable|numeric|min:0',

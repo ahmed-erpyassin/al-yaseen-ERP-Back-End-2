@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\BomItem;
+use Modules\Inventory\Models\ManufacturedFormulaModel;
 use Modules\Inventory\Models\Item;
 use Modules\Inventory\Models\Unit;
 use Modules\Inventory\Http\Requests\StoreManufacturingFormulaRequest;
@@ -29,18 +30,19 @@ class ManufacturingFormulaController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             if (!$user) {
                 return response()->json([
                     'success' => false,
                     'message' => 'User not authenticated'
                 ], 401);
             }
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $query = BomItem::with(['item', 'creator', 'updater'])
-                ->where('company_id', $companyId)
-                ->whereNotNull('formula_number'); // Only manufacturing formulas
+            $query = ManufacturedFormulaModel::with(['item', 'creator', 'updater', 'branch', 'rawMaterialsWarehouse', 'finishedProductWarehouse'])
+                ->where('company_id', Auth::user()->company_id ?? 1); // Use company filtering
+
+            // var_dump($query);
 
             // ✅ Advanced Search Functionality
             $this->applySearchFilters($query, $request);
@@ -80,7 +82,7 @@ class ManufacturingFormulaController extends Controller
     public function show(Request $request, $id): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             if (!$user) {
                 return response()->json([
                     'success' => false,
@@ -89,9 +91,8 @@ class ManufacturingFormulaController extends Controller
             }
             $companyId = $user->company_id;
 
-            $formula = BomItem::with(['item', 'creator', 'updater'])
+            $formula = ManufacturedFormulaModel::with(['item', 'creator', 'updater', 'branch', 'rawMaterialsWarehouse', 'finishedProductWarehouse'])
                 ->where('company_id', $companyId)
-                ->whereNotNull('formula_number')
                 ->findOrFail($id);
 
             return response()->json([
@@ -115,7 +116,7 @@ class ManufacturingFormulaController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = $request->user();
+            $user = Auth::user();
             if (!$user) {
                 Log::warning('Authentication failed in update method - user is null');
                 return response()->json([
@@ -126,8 +127,7 @@ class ManufacturingFormulaController extends Controller
 
             $companyId = $user->company_id;
 
-            $formula = BomItem::where('company_id', $companyId)
-                ->whereNotNull('formula_number')
+            $formula = ManufacturedFormulaModel::where('company_id', $companyId)
                 ->findOrFail($id);
 
             $updateData = $request->validated();
@@ -192,7 +192,7 @@ class ManufacturingFormulaController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = $request->user();
+            $user = Auth::user();
             if (!$user) {
                 return response()->json([
                     'success' => false,
@@ -201,8 +201,7 @@ class ManufacturingFormulaController extends Controller
             }
             $companyId = $user->company_id;
 
-            $formula = BomItem::where('company_id', $companyId)
-                ->whereNotNull('formula_number')
+            $formula = ManufacturedFormulaModel::where('company_id', $companyId)
                 ->findOrFail($id);
 
             // Soft delete with audit trail
@@ -331,7 +330,7 @@ class ManufacturingFormulaController extends Controller
      */
     public function store(StoreManufacturingFormulaRequest $request): JsonResponse
     {
-        $user = $request->user();
+        $user = Auth::user();
         if (!$user) {
             return response()->json([
                 'success' => false,
@@ -347,6 +346,34 @@ class ManufacturingFormulaController extends Controller
 
             // ✅ Get validated data
             $data = $request->validated();
+
+            // ✅ Map request fields to database columns
+            if (isset($data['operating_cost'])) {
+                $data['overhead_cost'] = $data['operating_cost'];
+                unset($data['operating_cost']);
+            }
+            if (isset($data['waste_cost'])) {
+                $data['total_raw_material_cost'] = $data['waste_cost'];
+                unset($data['waste_cost']);
+            }
+
+            // ✅ Map inspection field
+            if (isset($data['requires_inspection'])) {
+                $data['requires_quality_check'] = $data['requires_inspection'];
+                unset($data['requires_inspection']);
+            }
+
+            // ✅ Remove fields that don't exist in database
+            $fieldsToRemove = [
+                'batch_size', 'production_time_minutes', 'preparation_time_minutes',
+                'production_notes', 'preparation_notes', 'usage_instructions',
+                'tolerance_percentage', 'effective_from', 'effective_to'
+            ];
+            foreach ($fieldsToRemove as $field) {
+                if (isset($data[$field])) {
+                    unset($data[$field]);
+                }
+            }
 
             // ✅ Set system fields
             $data['company_id'] = $companyId;
@@ -413,8 +440,8 @@ class ManufacturingFormulaController extends Controller
             $data['component_type'] = 'raw_material'; // Default for manufacturing formula
             $data['sequence_order'] = 1;
 
-            // ✅ Create manufacturing formula (stored in bom_items table)
-            $formula = BomItem::create($data);
+            // ✅ Create manufacturing formula (stored in manufactured_formulas table)
+            $formula = ManufacturedFormulaModel::create($data);
 
             // ✅ Load relationships for response
             $formula->load(['item', 'unit', 'creator']);
@@ -507,7 +534,7 @@ class ManufacturingFormulaController extends Controller
         $month = date('m');
 
         // Get the last formula number for this company
-        $lastFormula = BomItem::where('company_id', $companyId)
+        $lastFormula = ManufacturedFormulaModel::where('company_id', $companyId)
             ->where('formula_number', 'like', "{$prefix}{$year}{$month}%")
             ->orderBy('formula_number', 'desc')
             ->first();
@@ -837,7 +864,7 @@ class ManufacturingFormulaController extends Controller
     public function getFieldValues(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $field = $request->get('field');
 
@@ -848,8 +875,7 @@ class ManufacturingFormulaController extends Controller
                 ], 400);
             }
 
-            $query = BomItem::where('company_id', $companyId)
-                ->whereNotNull('formula_number');
+            $query = ManufacturedFormulaModel::where('company_id', $companyId);
 
             // Handle relationship fields
             if (in_array($field, ['item_number', 'item_name'])) {
@@ -934,12 +960,11 @@ class ManufacturingFormulaController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
-            $formula = BomItem::withTrashed()
+            $formula = ManufacturedFormulaModel::withTrashed()
                 ->where('company_id', $companyId)
-                ->whereNotNull('formula_number')
                 ->findOrFail($id);
 
             if (!$formula->trashed()) {
@@ -981,12 +1006,11 @@ class ManufacturingFormulaController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
-            $formula = BomItem::withTrashed()
+            $formula = ManufacturedFormulaModel::withTrashed()
                 ->where('company_id', $companyId)
-                ->whereNotNull('formula_number')
                 ->findOrFail($id);
 
             $formula->forceDelete();
@@ -1013,13 +1037,12 @@ class ManufacturingFormulaController extends Controller
     public function trashed(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
-            $query = BomItem::onlyTrashed()
+            $query = ManufacturedFormulaModel::onlyTrashed()
                 ->with(['item', 'creator', 'updater'])
-                ->where('company_id', $companyId)
-                ->whereNotNull('formula_number');
+                ->where('company_id', $companyId);
 
             // Apply search filters to trashed items too
             $this->applySearchFilters($query, $request);
@@ -1057,7 +1080,7 @@ class ManufacturingFormulaController extends Controller
     public function getFieldBasedData(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $field = $request->get('field');
             $value = $request->get('value');
@@ -1519,7 +1542,7 @@ class ManufacturingFormulaController extends Controller
     public function getManufacturingFormulaNumbers(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $formulas = BomItem::where('company_id', $companyId)
@@ -1557,7 +1580,7 @@ class ManufacturingFormulaController extends Controller
     public function getItemByFormulaNumber(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
             $formulaId = $request->get('formula_id');
 
@@ -1619,7 +1642,7 @@ class ManufacturingFormulaController extends Controller
     public function getWarehouses(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $warehouses = \Modules\Inventory\Models\Warehouse::where('company_id', $companyId)
@@ -1658,7 +1681,7 @@ class ManufacturingFormulaController extends Controller
     public function updatePricesFromSuppliers(Request $request, $id): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $formula = BomItem::where('company_id', $companyId)
@@ -1704,7 +1727,7 @@ class ManufacturingFormulaController extends Controller
     public function updateAllPricesFromSuppliers(Request $request): JsonResponse
     {
         try {
-            $user = $request->user();
+            $user = Auth::user();
             $companyId = $user->company_id;
 
             $formulas = BomItem::where('company_id', $companyId)
