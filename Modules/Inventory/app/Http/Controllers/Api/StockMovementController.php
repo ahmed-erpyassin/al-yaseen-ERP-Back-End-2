@@ -22,10 +22,10 @@ class StockMovementController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $query = StockMovement::with(['item', 'warehouse', 'user', 'unit', 'branch'])
-            ->forCompany($companyId);
+        $query = StockMovement::with(['item', 'warehouse', 'user', 'unit', 'branch']);
+            // ->forCompany($companyId);
 
         // Apply filters
         if ($request->has('type')) {
@@ -105,10 +105,10 @@ class StockMovementController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movement = StockMovement::with(['item', 'warehouse', 'user', 'unit', 'branch'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->findOrFail($id);
 
         return response()->json([
@@ -123,10 +123,10 @@ class StockMovementController extends Controller
      */
     public function byItem($itemId): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movements = StockMovement::with(['warehouse', 'user', 'unit', 'branch'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->forItem($itemId)
             ->orderBy('transaction_date', 'desc')
             ->get();
@@ -143,10 +143,10 @@ class StockMovementController extends Controller
      */
     public function byWarehouse($warehouseId): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $movements = StockMovement::with(['item', 'user', 'unit', 'branch'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->forWarehouse($warehouseId)
             ->orderBy('transaction_date', 'desc')
             ->get();
@@ -163,10 +163,10 @@ class StockMovementController extends Controller
      */
     public function stockSummary(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $summary = InventoryStock::with(['inventoryItem', 'warehouse'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->get()
             ->groupBy('inventory_item_id')
             ->map(function ($stocks) {

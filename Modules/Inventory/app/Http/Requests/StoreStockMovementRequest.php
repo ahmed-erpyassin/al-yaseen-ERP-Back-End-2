@@ -21,6 +21,9 @@ class StoreStockMovementRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'item_id' => 'nullable|exists:items,id',
+            // 'unit_id' => 'nullable|exists:units,id',    
+            'unit_id' => 'nullable',    
             'inventory_item_id' => 'required|exists:inventory_items,id',
             'warehouse_id' => 'required|exists:warehouses,id',
             'movement_type' => [
