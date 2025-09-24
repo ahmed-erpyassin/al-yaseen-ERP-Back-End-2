@@ -27,6 +27,7 @@ class InventoryDatabaseSeeder extends Seeder
             // Warehouse and item seeders
             WarehouseSeeder::class,
             ItemSeeder::class,
+            ItemUnitSeeder::class, // Add ItemUnitSeeder after ItemSeeder
             InventoryItemSeeder::class,
 
             // Stock and movement seeders

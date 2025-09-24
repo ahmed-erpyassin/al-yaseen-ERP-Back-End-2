@@ -22,10 +22,10 @@ class ItemUnitController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $query = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
-            ->forCompany($companyId);
+        $query = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit']);
+           // ->forCompany($companyId);
 
         // Apply filters
         if ($request->has('status')) {
@@ -99,10 +99,10 @@ class ItemUnitController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $itemUnit = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
-            ->forCompany($companyId)
+            //->forCompany($companyId)
             ->findOrFail($id);
 
         return response()->json([
@@ -148,14 +148,15 @@ class ItemUnitController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+      //  $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
+        $itemUnit = ItemUnit::findOrFail($id);
+        //forCompany($companyId)->
 
         // Don't allow deletion of default unit if it's the only one
         if ($itemUnit->is_default) {
             $otherUnits = ItemUnit::where('item_id', $itemUnit->item_id)
-                ->where('company_id', $companyId)
+              //  ->where('company_id', $companyId)
                 ->where('id', '!=', $id)
                 ->count();
 
@@ -180,10 +181,10 @@ class ItemUnitController extends Controller
      */
     public function byItem($itemId): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $itemUnits = ItemUnit::with(['unit'])
-            ->forCompany($companyId)
+          //  ->forCompany($companyId)
             ->forItem($itemId)
             ->active()
             ->get();
@@ -200,14 +201,15 @@ class ItemUnitController extends Controller
      */
     public function setDefault($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+     //   $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
-        $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
+        $itemUnit = ItemUnit::findOrFail($id);
+        //forCompany($companyId)->
 
         // Unset other defaults for the same item
         ItemUnit::where('item_id', $itemUnit->item_id)
-            ->where('company_id', $companyId)
+           // ->where('company_id', $companyId)
             ->update(['is_default' => false]);
 
         // Set this as default
@@ -228,10 +230,10 @@ class ItemUnitController extends Controller
      */
     public function getByType(Request $request, $itemId, $type): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+      //  $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $itemUnits = ItemUnit::with(['unit:id,name,symbol', 'item:id,name'])
-            ->forCompany($companyId)
+           // ->forCompany($companyId)
             ->forItem($itemId)
             ->byType($type)
             ->active()
@@ -253,10 +255,10 @@ class ItemUnitController extends Controller
      */
     public function getComprehensiveData(Request $request, $itemId): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        //$companyId = Auth::user()->company_id ?? $request->company_id;
 
         $itemUnits = ItemUnit::with(['unit:id,name,symbol', 'item:id,name'])
-            ->forCompany($companyId)
+           // ->forCompany($companyId)
             ->forItem($itemId)
             ->active()
             ->get();
@@ -299,10 +301,10 @@ class ItemUnitController extends Controller
     /**
      * Get contains options for item units.
      */
-    public function getItemUnitContainsOptions(Request $request): JsonResponse
+    public function getItemUnitContainsOptions(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $options = ItemUnit::getAllContainsOptions($companyId);
+        // Return predefined options without company filtering
+        $options = ItemUnit::CONTAINS_OPTIONS;
 
         return response()->json([
             'success' => true,
@@ -323,10 +325,8 @@ class ItemUnitController extends Controller
             'quantity' => 'required|numeric|min:0',
         ]);
 
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-
-        $fromUnit = ItemUnit::forCompany($companyId)->findOrFail($request->from_unit_id);
-        $toUnit = ItemUnit::forCompany($companyId)->findOrFail($request->to_unit_id);
+        $fromUnit = ItemUnit::findOrFail($request->from_unit_id);
+        $toUnit = ItemUnit::findOrFail($request->to_unit_id);
 
         // Ensure both units belong to the same item
         if ($fromUnit->item_id !== $toUnit->item_id) {
@@ -366,19 +366,15 @@ class ItemUnitController extends Controller
     /**
      * Get item unit form data.
      */
-    public function getFormData(Request $request): JsonResponse
+    public function getFormData(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-
         $data = [
             'unit_type_options' => ItemUnit::UNIT_TYPE_OPTIONS,
-            'contains_options' => ItemUnit::getAllContainsOptions($companyId),
-            'available_units' => \Modules\Inventory\Models\Unit::forCompany($companyId)
-                ->where('status', 'active')
+            'contains_options' => ItemUnit::CONTAINS_OPTIONS,
+            'available_units' => \Modules\Inventory\Models\Unit::where('status', 'active')
                 ->select('id', 'name', 'symbol', 'code')
                 ->get(),
-            'available_items' => \Modules\Inventory\Models\Item::forCompany($companyId)
-                ->where('active', true)
+            'available_items' => \Modules\Inventory\Models\Item::where('active', true)
                 ->select('id', 'name', 'item_number', 'code')
                 ->get(),
         ];
