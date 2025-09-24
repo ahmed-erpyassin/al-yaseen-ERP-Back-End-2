@@ -471,7 +471,7 @@ class ItemController extends Controller
      */
     public function preview($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $item = Item::with([
             'company:id,title,email,landline,address',
@@ -485,7 +485,7 @@ class ItemController extends Controller
             'updatedBy:id,first_name,second_name,email',
             'deletedBy:id,first_name,second_name,email'
         ])
-        ->forCompany($companyId)
+        // ->forCompany($companyId)
         ->findOrFail($id);
 
         // Get comprehensive preview data
@@ -546,12 +546,12 @@ class ItemController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-       // $companyId = Auth::user()->company_id ?? request()->company_id;
+    //    $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
         $item = Item::findOrFail($id);
 
-        //forCompany($companyId)->
+        // forCompany($companyId)->
 
         // Check if item has children or item units
         if ($item->children()->exists() || $item->itemUnits()->exists()) {
@@ -580,11 +580,11 @@ class ItemController extends Controller
      */
     public function restore($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
         $item = Item::withTrashed()
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->findOrFail($id);
 
         if (!$item->trashed()) {
@@ -615,10 +615,10 @@ class ItemController extends Controller
      */
     public function forceDelete($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $item = Item::withTrashed()
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->findOrFail($id);
 
         // Check if item has children or item units
@@ -646,11 +646,11 @@ class ItemController extends Controller
      */
     public function trashed(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = Item::onlyTrashed()
-            ->with(['company:id,title', 'branch', 'unit', 'deletedBy'])
-            ->forCompany($companyId);
+            ->with(['company:id,title', 'branch', 'unit', 'deletedBy']);
+            // ->forCompany($companyId);
 
         // Apply search to trashed items
         if ($request->has('search')) {
@@ -684,10 +684,10 @@ class ItemController extends Controller
      */
     public function first(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $item = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->orderBy('name')
             ->first();
 
@@ -710,10 +710,10 @@ class ItemController extends Controller
      */
     public function last(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $item = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->orderBy('name', 'desc')
             ->first();
 
@@ -736,10 +736,10 @@ class ItemController extends Controller
      */
     public function byType($type): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $items = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->byType($type)
             ->get();
 
@@ -755,10 +755,10 @@ class ItemController extends Controller
      */
     public function parents(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $items = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'children'])
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->parentsOnly()
             ->get();
 
@@ -1924,8 +1924,10 @@ class ItemController extends Controller
      */
     public function generateBarcodeSVG(Request $request, $id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $item = Item::forCompany($companyId)->findOrFail($id);
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+        $item = Item::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         $request->validate([
             'width' => 'nullable|integer|min:1|max:10',
@@ -2002,8 +2004,10 @@ class ItemController extends Controller
      */
     public function getItemTransactions(Request $request, $id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $item = Item::forCompany($companyId)->findOrFail($id);
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+        $item = Item::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         $request->validate([
             'date_from' => 'nullable|date',
@@ -2105,26 +2109,29 @@ class ItemController extends Controller
             ->where('sales_items.item_id', $itemId);
 
         if ($dateFrom) {
-            $query->where('sales.sale_date', '>=', $dateFrom);
+            $query->whereDate('sales.created_at', '>=', $dateFrom);
         }
         if ($dateTo) {
-            $query->where('sales.sale_date', '<=', $dateTo);
+            $query->whereDate('sales.created_at', '<=', $dateTo);
         }
 
         $salesItems = $query->select([
             'sales.id as transaction_id',
-            'sales.sale_number as document_number',
-            'sales.sale_date as transaction_date',
+            'sales.invoice_number as document_number',
+            'sales.created_at as transaction_date',
             'sales_items.quantity',
             'sales_items.unit_price',
-            'sales_items.total_amount',
-            'sales_items.discount_amount',
+            'sales_items.total',
+            'sales_items.discount_rate',
             'customers.name as customer_name',
             'sales.notes',
             'sales.status'
         ])->get();
 
         return $salesItems->map(function ($item) {
+            // Calculate discount amount from discount rate
+            $discountAmount = ($item->unit_price * $item->quantity * $item->discount_rate) / 100;
+
             return [
                 'id' => 'sale_' . $item->transaction_id,
                 'type' => 'sale',
@@ -2133,9 +2140,9 @@ class ItemController extends Controller
                 'transaction_date' => $item->transaction_date,
                 'quantity' => -abs($item->quantity), // Negative for outgoing
                 'unit_price' => $item->unit_price,
-                'total_amount' => $item->total_amount,
-                'discount_amount' => $item->discount_amount ?? 0,
-                'net_amount' => $item->total_amount - ($item->discount_amount ?? 0),
+                'total_amount' => $item->total,
+                'discount_amount' => $discountAmount,
+                'net_amount' => $item->total - $discountAmount,
                 'reference' => $item->customer_name ?? 'عميل غير محدد',
                 'notes' => $item->notes,
                 'status' => $item->status,
@@ -2159,26 +2166,29 @@ class ItemController extends Controller
             ->where('purchase_items.item_id', $itemId);
 
         if ($dateFrom) {
-            $query->where('purchases.purchase_date', '>=', $dateFrom);
+            $query->whereDate('purchases.created_at', '>=', $dateFrom);
         }
         if ($dateTo) {
-            $query->where('purchases.purchase_date', '<=', $dateTo);
+            $query->whereDate('purchases.created_at', '<=', $dateTo);
         }
 
         $purchaseItems = $query->select([
             'purchases.id as transaction_id',
-            'purchases.purchase_number as document_number',
-            'purchases.purchase_date as transaction_date',
+            'purchases.journal_number as document_number',
+            'purchases.created_at as transaction_date',
             'purchase_items.quantity',
             'purchase_items.unit_price',
-            'purchase_items.total_amount',
-            'purchase_items.discount_amount',
+            'purchase_items.total',
+            'purchase_items.discount_rate',
             'suppliers.name as supplier_name',
             'purchases.notes',
             'purchases.status'
         ])->get();
 
         return $purchaseItems->map(function ($item) {
+            // Calculate discount amount from discount rate
+            $discountAmount = ($item->unit_price * $item->quantity * $item->discount_rate) / 100;
+
             return [
                 'id' => 'purchase_' . $item->transaction_id,
                 'type' => 'purchase',
@@ -2187,9 +2197,9 @@ class ItemController extends Controller
                 'transaction_date' => $item->transaction_date,
                 'quantity' => abs($item->quantity), // Positive for incoming
                 'unit_price' => $item->unit_price,
-                'total_amount' => $item->total_amount,
-                'discount_amount' => $item->discount_amount ?? 0,
-                'net_amount' => $item->total_amount - ($item->discount_amount ?? 0),
+                'total_amount' => $item->total,
+                'discount_amount' => $discountAmount,
+                'net_amount' => $item->total - $discountAmount,
                 'reference' => $item->supplier_name ?? 'مورد غير محدد',
                 'notes' => $item->notes,
                 'status' => $item->status,
