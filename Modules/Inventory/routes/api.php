@@ -14,7 +14,8 @@ use Modules\Inventory\Http\Controllers\Api\ItemTypeController;
 use Modules\Inventory\Http\Controllers\Api\InventoryMovementController;
 use Modules\Inventory\Http\Controllers\Api\ManufacturingFormulaController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
+// Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
+Route::prefix('v1')->group(function () {
 
     // Inventory Items Routes
     Route::prefix('inventory-items')->group(function () {

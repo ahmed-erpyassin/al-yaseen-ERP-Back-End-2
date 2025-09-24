@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Inventory\Models\BomItem;
 use Modules\Inventory\Models\ManufacturedFormulaModel;
 use Modules\Inventory\Models\Item;
-use Modules\Inventory\Models\Unit;
 use Modules\Inventory\Http\Requests\StoreManufacturingFormulaRequest;
 use Modules\Inventory\Http\Requests\UpdateManufacturingFormulaRequest;
 use Modules\Inventory\Http\Resources\ManufacturingFormulaResource;
@@ -89,10 +88,10 @@ class ManufacturingFormulaController extends Controller
                     'message' => 'User not authenticated'
                 ], 401);
             }
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $formula = ManufacturedFormulaModel::with(['item', 'creator', 'updater', 'branch', 'rawMaterialsWarehouse', 'finishedProductWarehouse'])
-                ->where('company_id', $companyId)
+                // ->where('company_id', $companyId)
                 ->findOrFail($id);
 
             return response()->json([
@@ -133,23 +132,8 @@ class ManufacturingFormulaController extends Controller
             $updateData = $request->validated();
             $updateData['updated_by'] = $user->id;
 
-            // Update item information if item_id changed
-            if (isset($updateData['item_id']) && $updateData['item_id'] !== $formula->item_id) {
-                $item = Item::find($updateData['item_id']);
-                if ($item) {
-                    $updateData['item_number'] = $item->item_number;
-                    $updateData['item_name'] = $item->name;
-                }
-            }
-
-            // Update unit information if unit_id changed
-            if (isset($updateData['unit_id']) && $updateData['unit_id'] !== $formula->unit_id) {
-                $unit = Unit::find($updateData['unit_id']);
-                if ($unit) {
-                    $updateData['unit_name'] = $unit->name;
-                    $updateData['unit_code'] = $unit->code;
-                }
-            }
+            // Item and unit information will be available via relationships
+            // No need to store redundant data
 
             // Recalculate costs if relevant fields changed
             if (isset($updateData['labor_cost']) || isset($updateData['operating_cost']) ||
@@ -199,10 +183,11 @@ class ManufacturingFormulaController extends Controller
                     'message' => 'User not authenticated'
                 ], 401);
             }
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $formula = ManufacturedFormulaModel::where('company_id', $companyId)
-                ->findOrFail($id);
+            $formula = ManufacturedFormulaModel::
+                // where('company_id', $companyId)->
+                findOrFail($id);
 
             // Soft delete with audit trail
             $formula->update([
@@ -233,10 +218,11 @@ class ManufacturingFormulaController extends Controller
      */
     public function getItemNumbers(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $items = Item::where('company_id', $companyId)
-            ->select('id', 'item_number', 'name', 'description')
+        $items = Item::
+        // where('company_id', $companyId)->
+        select('id', 'item_number', 'name', 'description')
             ->orderBy('item_number')
             ->get();
 
@@ -260,7 +246,7 @@ class ManufacturingFormulaController extends Controller
      */
     public function getItemDetails(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
         $itemNumber = $request->get('item_number');
         $itemName = $request->get('item_name');
 
@@ -272,7 +258,8 @@ class ManufacturingFormulaController extends Controller
             ], 400);
         }
 
-        $query = Item::where('company_id', $companyId);
+        $query = Item::query();
+        // where('company_id', $companyId);
 
         if ($itemNumber) {
             $query->where('item_number', $itemNumber);
@@ -390,61 +377,32 @@ class ManufacturingFormulaController extends Controller
             $data['formula_time'] = now()->toTimeString();
             $data['formula_datetime'] = now();
 
-            // ✅ Get item information from Items table
-            $item = Item::find($data['item_id']);
-            if ($item) {
-                $data['item_number'] = $item->item_number;
-                $data['item_name'] = $item->name;
-                $data['balance'] = $item->balance ?? 0;
-                $data['minimum_limit'] = $item->minimum_limit ?? 0;
-                $data['maximum_limit'] = $item->maximum_limit ?? 0;
-                $data['minimum_reorder_level'] = $item->minimum_reorder_level ?? 0;
-                $data['selling_price'] = $item->selling_price ?? 0;
-                $data['purchase_price'] = $item->purchase_price ?? 0;
+            // ✅ Item and unit information will be available via relationships
+            // No need to store redundant data - the schema uses relationships only
 
-                // ✅ Get historical prices from invoices
-                $purchasePrices = $this->getPurchasePricesFromInvoices($item->id);
-                $sellingPrices = $this->getSellingPricesFromInvoices($item->id);
+            // ✅ Calculate costs based on provided data
+            $totalCost = ($data['total_raw_material_cost'] ?? 0) +
+                        ($data['labor_cost'] ?? 0) +
+                        ($data['overhead_cost'] ?? 0);
 
-                $data['first_purchase_price'] = $purchasePrices['latest'] ?? 0;
-                $data['second_purchase_price'] = $purchasePrices['median'] ?? 0;
-                $data['third_purchase_price'] = $purchasePrices['earliest'] ?? 0;
-
-                $data['first_selling_price'] = $sellingPrices['latest'] ?? 0;
-                $data['second_selling_price'] = $sellingPrices['median'] ?? 0;
-                $data['third_selling_price'] = $sellingPrices['earliest'] ?? 0;
-            }
-
-            // ✅ Get unit information from Units table
-            if (!empty($data['unit_id'])) {
-                $unit = Unit::find($data['unit_id']);
-                if ($unit) {
-                    $data['unit_name'] = $unit->name;
-                    $data['unit_code'] = $unit->code;
-                }
-            }
-
-            // ✅ Calculate Final Cost based on selected purchase price
-            $selectedPurchasePrice = $this->getSelectedPurchasePrice($data);
-            $data['final_cost'] = $this->calculateFinalCost($data, $selectedPurchasePrice);
-
-            // ✅ Set additional cost fields
-            $data['material_cost'] = $selectedPurchasePrice;
-            $data['total_production_cost'] = $data['final_cost'];
+            $data['total_manufacturing_cost'] = $totalCost;
             $data['cost_per_unit'] = $data['produced_quantity'] > 0 ?
-                $data['final_cost'] / $data['produced_quantity'] : 0;
+                $totalCost / $data['produced_quantity'] : 0;
+
+            // ✅ Generate formula number if not provided
+            if (empty($data['formula_number'])) {
+                $data['formula_number'] = $this->generateFormulaNumber($companyId);
+            }
 
             // ✅ Set default values
             $data['status'] = $data['status'] ?? 'active';
             $data['is_active'] = $data['is_active'] ?? true;
-            $data['component_type'] = 'raw_material'; // Default for manufacturing formula
-            $data['sequence_order'] = 1;
 
             // ✅ Create manufacturing formula (stored in manufactured_formulas table)
             $formula = ManufacturedFormulaModel::create($data);
 
             // ✅ Load relationships for response
-            $formula->load(['item', 'unit', 'creator']);
+            $formula->load(['item', 'creator']);
 
             DB::commit();
 
@@ -456,54 +414,56 @@ class ManufacturingFormulaController extends Controller
                     'formula_name' => $formula->formula_name,
                     'formula_description' => $formula->formula_description,
 
-                    // ✅ Item information
+                    // ✅ Item information (via relationship)
                     'item_id' => $formula->item_id,
-                    'item_number' => $formula->item_number,
-                    'item_name' => $formula->item_name,
-                    'balance' => $formula->balance,
-                    'minimum_limit' => $formula->minimum_limit,
-                    'maximum_limit' => $formula->maximum_limit,
-                    'minimum_reorder_level' => $formula->minimum_reorder_level,
+                    'item' => $formula->item ? [
+                        'id' => $formula->item->id,
+                        'item_number' => $formula->item->item_number,
+                        'name' => $formula->item->name,
+                    ] : null,
 
-                    // ✅ Unit information
-                    'unit_id' => $formula->unit_id,
-                    'unit_name' => $formula->unit_name,
-                    'unit_code' => $formula->unit_code,
+                    // ✅ Manufacturing details
+                    'manufacturing_duration' => $formula->manufacturing_duration,
+                    'manufacturing_duration_unit' => $formula->manufacturing_duration_unit,
+                    'manufacturing_duration_value' => $formula->manufacturing_duration_value,
 
-                    // ✅ Date and Time (automatic)
+                    // ✅ Quantities
+                    'consumed_quantity' => $formula->consumed_quantity,
+                    'produced_quantity' => $formula->produced_quantity,
+
+                    // ✅ Warehouse information
+                    'raw_materials_warehouse_id' => $formula->raw_materials_warehouse_id,
+                    'finished_product_warehouse_id' => $formula->finished_product_warehouse_id,
+
+                    // ✅ Cost information
+                    'total_raw_material_cost' => $formula->total_raw_material_cost,
+                    'labor_cost' => $formula->labor_cost,
+                    'overhead_cost' => $formula->overhead_cost,
+                    'total_manufacturing_cost' => $formula->total_manufacturing_cost,
+                    'cost_per_unit' => $formula->cost_per_unit,
+
+                    // ✅ Pricing information
+                    'sale_price' => $formula->sale_price,
+                    'purchase_price' => $formula->purchase_price,
+
+                    // ✅ Date and Time
                     'formula_date' => $formula->formula_date,
                     'formula_time' => $formula->formula_time,
                     'formula_datetime' => $formula->formula_datetime,
 
-                    // ✅ Quantities (manual input)
-                    'consumed_quantity' => $formula->consumed_quantity,
-                    'produced_quantity' => $formula->produced_quantity,
-
-                    // ✅ Purchase prices from invoices
-                    'first_purchase_price' => $formula->first_purchase_price,
-                    'second_purchase_price' => $formula->second_purchase_price,
-                    'third_purchase_price' => $formula->third_purchase_price,
-                    'selected_purchase_price' => $selectedPurchasePrice,
-
-                    // ✅ Selling prices from invoices
-                    'first_selling_price' => $formula->first_selling_price,
-                    'second_selling_price' => $formula->second_selling_price,
-                    'third_selling_price' => $formula->third_selling_price,
-
-                    // ✅ Costs (manual input)
-                    'labor_cost' => $formula->labor_cost,
-                    'operating_cost' => $formula->operating_cost,
-                    'waste_cost' => $formula->waste_cost,
-
-                    // ✅ Final Cost (calculated)
-                    'final_cost' => $formula->final_cost,
-                    'material_cost' => $formula->material_cost,
-                    'total_production_cost' => $formula->total_production_cost,
-                    'cost_per_unit' => $formula->cost_per_unit,
-
                     // ✅ Status
                     'status' => $formula->status,
                     'is_active' => $formula->is_active,
+
+                    // ✅ Quality control
+                    'requires_quality_check' => $formula->requires_quality_check,
+                    'quality_requirements' => $formula->quality_requirements,
+                    'quality_status' => $formula->quality_status,
+
+                    // ✅ Additional information
+                    'notes' => $formula->notes,
+                    'batch_number' => $formula->batch_number,
+                    'production_order_number' => $formula->production_order_number,
 
                     // ✅ Timestamps
                     'created_at' => $formula->created_at,
@@ -865,7 +825,7 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $field = $request->get('field');
 
             if (!$field) {
@@ -875,7 +835,8 @@ class ManufacturingFormulaController extends Controller
                 ], 400);
             }
 
-            $query = ManufacturedFormulaModel::where('company_id', $companyId);
+            $query = ManufacturedFormulaModel::query();
+            // ->where('company_id', $companyId);
 
             // Handle relationship fields
             if (in_array($field, ['item_number', 'item_name'])) {
@@ -961,10 +922,10 @@ class ManufacturingFormulaController extends Controller
             DB::beginTransaction();
 
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $formula = ManufacturedFormulaModel::withTrashed()
-                ->where('company_id', $companyId)
+                // ->where('company_id', $companyId)
                 ->findOrFail($id);
 
             if (!$formula->trashed()) {
@@ -978,7 +939,7 @@ class ManufacturingFormulaController extends Controller
             $formula->update([
                 'deleted_by' => null,
                 'deleted_at' => null,
-                'updated_by' => $user->id,
+                // 'updated_by' => $user->id,
             ]);
 
             DB::commit();
@@ -1007,10 +968,10 @@ class ManufacturingFormulaController extends Controller
             DB::beginTransaction();
 
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $formula = ManufacturedFormulaModel::withTrashed()
-                ->where('company_id', $companyId)
+                // ->where('company_id', $companyId)
                 ->findOrFail($id);
 
             $formula->forceDelete();
@@ -1038,11 +999,11 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
             $query = ManufacturedFormulaModel::onlyTrashed()
-                ->with(['item', 'creator', 'updater'])
-                ->where('company_id', $companyId);
+                ->with(['item', 'creator', 'updater']);
+                // ->where('company_id', $companyId);
 
             // Apply search filters to trashed items too
             $this->applySearchFilters($query, $request);
@@ -1081,7 +1042,7 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
             $field = $request->get('field');
             $value = $request->get('value');
             $formulaId = $request->get('formula_id');
@@ -1096,31 +1057,41 @@ class ManufacturingFormulaController extends Controller
             // ✅ Get the base formula if formula_id is provided
             $baseFormula = null;
             if ($formulaId) {
-                $baseFormula = BomItem::with(['item', 'component', 'unit'])
-                    ->where('company_id', $companyId)
-                    ->whereNotNull('formula_number')
+                $baseFormula = ManufacturedFormulaModel::with(['item'])
+                    // ->where('company_id', $companyId)
                     ->find($formulaId);
             }
 
             // ✅ Build query based on selected field
-            $query = BomItem::with([
-                'item:id,item_number,name,description,color,length,width,height,balance,minimum_limit,maximum_limit,reorder_limit',
-                'component:id,item_number,name,description',
-                'unit:id,name,code',
-                'creator:id,name',
-                'updater:id,name'
-            ])
-            ->where('company_id', $companyId)
-            ->whereNotNull('formula_number');
+            $query = ManufacturedFormulaModel::with([
+                'item',
+                'creator:id,first_name,second_name',
+                'updater:id,first_name,second_name'
+            ]);
+            // ->where('company_id', $companyId);
 
             // ✅ Apply field-based filtering
-            $this->applyFieldBasedFilter($query, $field, $value, $baseFormula);
+            if ($value) {
+                $this->applyFieldBasedFilter($query, $field, $value, $baseFormula);
+            }
 
             // ✅ Get results
             $results = $query->orderBy('created_at', 'desc')->limit(50)->get();
 
-            // ✅ Get field-specific data
-            $fieldData = $this->getFieldSpecificData($field, $value, $companyId, $baseFormula);
+            // ✅ Get field-specific data and related data
+            $fieldData = [
+                'field' => $field,
+                'value' => $value,
+                'statistics' => [
+                    'total' => $results->count(),
+                    'average' => 0,
+                    'minimum' => 0,
+                    'maximum' => 0
+                ]
+            ];
+
+            // ✅ Get related data based on field type
+            $relatedData = $this->getRelatedDataForField($field, $value);
 
             // ✅ Format results with enhanced data
             $formattedResults = $results->map(function ($formula) use ($field, $value) {
@@ -1134,7 +1105,7 @@ class ManufacturingFormulaController extends Controller
                     'item_number' => $formula->item?->item_number,
                     'item_name' => $formula->item?->name,
                     'item_description' => $formula->item?->description,
-                    'unit' => $formula->item?->unit?->name ?? $formula->unit?->name,
+                    'unit' => $formula->item?->unit?->name ?? null,
                     'balance' => $formula->item?->balance,
                     'minimum_limit' => $formula->item?->minimum_limit,
                     'maximum_limit' => $formula->item?->maximum_limit,
@@ -1159,8 +1130,14 @@ class ManufacturingFormulaController extends Controller
 
                     // ✅ Highlight selected field
                     'selected_field' => $field,
-                    'selected_field_value' => $this->getFieldValue($formula, $field),
-                    'is_match' => $this->isFieldMatch($formula, $field, $value),
+                    'selected_field_value' => $this->getSelectedFieldValue($formula, $field),
+                    'is_match' => $this->checkFieldMatch($formula, $field, $value),
+
+                    // ✅ User Information
+                    'created_by_name' => $formula->creator ?
+                        trim(($formula->creator->first_name ?? '') . ' ' . ($formula->creator->second_name ?? '')) : null,
+                    'updated_by_name' => $formula->updater ?
+                        trim(($formula->updater->first_name ?? '') . ' ' . ($formula->updater->second_name ?? '')) : null,
 
                     'created_at' => $formula->created_at?->format('Y-m-d H:i:s'),
                     'updated_at' => $formula->updated_at?->format('Y-m-d H:i:s'),
@@ -1179,9 +1156,16 @@ class ManufacturingFormulaController extends Controller
                         'item_name' => $baseFormula->item?->name,
                     ] : null,
                     'field_data' => $fieldData,
-                    'formulas' => $formattedResults,
-                    'total_results' => $results->count(),
+                    'statistics' => [
+                        'total' => $results->count(),
+                        'average' => 0,
+                        'minimum' => 0,
+                        'maximum' => 0
+                    ],
+                    'related_data' => $relatedData,
                 ],
+                'formulas' => $formattedResults,
+                'total_results' => $results->count(),
                 'message' => "Data retrieved successfully for field: {$field}"
             ]);
 
@@ -1243,6 +1227,67 @@ class ManufacturingFormulaController extends Controller
     }
 
     // ✅ Private Helper Methods for Field-Based Data Display
+
+    /**
+     * Get related data for a specific field.
+     */
+    private function getRelatedDataForField($field, $value): array
+    {
+        try {
+            switch ($field) {
+                case 'item_name':
+                case 'item_number':
+                    // Get related items
+                    $items = ManufacturedFormulaModel::with('item')
+                        ->whereHas('item')
+                        ->limit(10)
+                        ->get()
+                        ->map(function ($formula) {
+                            return [
+                                'id' => $formula->item->id,
+                                'item_number' => $formula->item->item_number,
+                                'name' => $formula->item->name,
+                                'description' => $formula->item->description,
+                            ];
+                        });
+                    return $items->toArray();
+
+                case 'status':
+                    // Get status distribution
+                    $statuses = ManufacturedFormulaModel::select('status')
+                        ->groupBy('status')
+                        ->selectRaw('status, count(*) as count')
+                        ->get()
+                        ->map(function ($item) {
+                            return [
+                                'status' => $item->status,
+                                'count' => $item->count,
+                            ];
+                        });
+                    return $statuses->toArray();
+
+                case 'formula_number':
+                    // Get recent formula numbers
+                    $formulas = ManufacturedFormulaModel::select('id', 'formula_number', 'formula_name')
+                        ->orderBy('created_at', 'desc')
+                        ->limit(10)
+                        ->get()
+                        ->map(function ($formula) {
+                            return [
+                                'id' => $formula->id,
+                                'formula_number' => $formula->formula_number,
+                                'formula_name' => $formula->formula_name,
+                            ];
+                        });
+                    return $formulas->toArray();
+
+                default:
+                    return [];
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 
     /**
      * Apply field-based filtering to query.
@@ -1382,7 +1427,47 @@ class ManufacturingFormulaController extends Controller
 
 
     /**
+     * Get the value of a specific field from the formula.
+     */
+    private function getSelectedFieldValue($formula, $field)
+    {
+        switch ($field) {
+            case 'formula_number':
+                return $formula->formula_number;
+            case 'formula_name':
+                return $formula->formula_name;
+            case 'item_name':
+                return $formula->item?->name;
+            case 'item_number':
+                return $formula->item?->item_number;
+            case 'status':
+                return $formula->status;
+            case 'manufacturing_duration':
+                return $formula->manufacturing_duration;
+            case 'consumed_quantity':
+                return $formula->consumed_quantity;
+            case 'produced_quantity':
+                return $formula->produced_quantity;
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Check if field matches the given value.
+     */
+    private function checkFieldMatch($formula, $field, $value): bool
+    {
+        if (!$value) {
+            return true;
+        }
+
+        $fieldValue = $this->getSelectedFieldValue($formula, $field);
+        return $fieldValue && stripos($fieldValue, $value) !== false;
+    }
+
+    /**
+     * Check if field matches the given value (legacy method).
      */
     private function isFieldMatch($formula, $field, $value): bool
     {
@@ -1543,10 +1628,11 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $formulas = BomItem::where('company_id', $companyId)
-                ->whereNotNull('formula_number')
+            $formulas = ManufacturedFormulaModel::
+                // where('company_id', $companyId)->
+                whereNotNull('formula_number')
                 ->select('id', 'formula_number', 'formula_name', 'item_id')
                 ->orderBy('formula_number')
                 ->get();
@@ -1580,9 +1666,8 @@ class ManufacturingFormulaController extends Controller
     public function getItemByFormulaNumber(Request $request): JsonResponse
     {
         try {
-            $user = Auth::user();
-            $companyId = $user->company_id;
-            $formulaId = $request->get('formula_id');
+            // Handle different parameter formats
+            $formulaId = $request->get('formula_id') ?? $request->get('id') ?? $request->input('value');
 
             if (!$formulaId) {
                 return response()->json([
@@ -1591,13 +1676,14 @@ class ManufacturingFormulaController extends Controller
                 ], 400);
             }
 
-            $formula = BomItem::with(['item.unit'])
-                ->where('company_id', $companyId)
+            $formula = ManufacturedFormulaModel::with(['item.unit'])
+                // ->where('company_id', $companyId)
                 ->findOrFail($formulaId);
 
             $itemDetails = null;
             if ($formula->item) {
                 $itemDetails = [
+                    // 'id' => $formula->item->id,
                     'item_id' => $formula->item->id,
                     'item_number' => $formula->item->item_number,
                     'item_name' => $formula->item->name,
@@ -1643,10 +1729,11 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $warehouses = \Modules\Inventory\Models\Warehouse::where('company_id', $companyId)
-                ->where('status', 'active')
+            $warehouses = \Modules\Inventory\Models\Warehouse::
+            // where('company_id', $companyId)->
+            where('status', 'active')
                 ->select('id', 'warehouse_number', 'name', 'address')
                 ->orderBy('warehouse_number')
                 ->get();
@@ -1682,10 +1769,11 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $formula = BomItem::where('company_id', $companyId)
-                ->whereNotNull('formula_number')
+            $formula = ManufacturedFormulaModel::
+                // where('company_id', $companyId)->
+                whereNotNull('formula_number')
                 ->findOrFail($id);
 
             // Get prices from suppliers table
@@ -1696,7 +1784,7 @@ class ManufacturingFormulaController extends Controller
             $formula->update([
                 'sale_price' => $salePrice ?? 0,
                 'purchase_price' => $purchasePrice ?? 0,
-                'updated_by' => $user->id,
+                // 'updated_by' => $user->id,
             ]);
 
             return response()->json([
@@ -1728,10 +1816,11 @@ class ManufacturingFormulaController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id;
+            // $companyId = $user->company_id;
 
-            $formulas = BomItem::where('company_id', $companyId)
-                ->whereNotNull('formula_number')
+            $formulas = ManufacturedFormulaModel::
+                // where('company_id', $companyId)->
+                whereNotNull('formula_number')
                 ->with('item')
                 ->get();
 
