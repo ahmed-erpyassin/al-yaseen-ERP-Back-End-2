@@ -9,23 +9,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Modules\Users\Http\Requests\LoginUserRequest;
+use Modules\Users\Http\Requests\RegisterUserRequest;
+use Modules\Users\Http\Requests\SendOTPRequest;
+use Modules\Users\Http\Requests\VerifyOTPRequest;
 use Modules\Users\Models\User;
 
 class AuthController extends Controller
 {
     // تسجيل مستخدم جديد
-    public function register(Request $request)
+    public function register(RegisterUserRequest $request)
     {
         DB::beginTransaction();
         try {
-            $data = $request->validate([
-                'first_name'  => 'required|string|max:255',
-                'second_name' => 'required|string|max:255',
-                'email'       => 'required|email|unique:users,email',
-                'phone'       => 'nullable|string|unique:users,phone',
-                'password'    => ['required', 'string', Password::min(8)],
-            ]);
+            $data = $request->validated();
 
             $user = User::create([
                 'first_name' => $data['first_name'],
@@ -67,14 +64,11 @@ class AuthController extends Controller
     }
 
     // تسجيل الدخول
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
         DB::beginTransaction();
         try {
-            $credentials = $request->validate([
-                'email'    => 'required|email',
-                'password' => 'required|string',
-            ]);
+            $credentials = $request->validated();
 
             $user = User::where('email', $credentials['email'])->first();
 
@@ -121,13 +115,11 @@ class AuthController extends Controller
     }
 
     // تسجيل الدخول بالهاتف + OTP (اختياري)
-    public function sendOtp(Request $request)
+    public function sendOtp(SendOTPRequest $request)
     {
         DB::beginTransaction();
         try {
-            $data = $request->validate([
-                'phone' => 'required|string|exists:users,phone',
-            ]);
+            $data = $request->validated();
 
             $user = User::where('phone', $data['phone'])->first();
 
@@ -147,14 +139,11 @@ class AuthController extends Controller
         }
     }
 
-    public function verifyOtp(Request $request)
+    public function verifyOtp(VerifyOTPRequest $request)
     {
         DB::beginTransaction();
         try {
-            $data = $request->validate([
-                'phone' => 'required|string|exists:users,phone',
-                'otp'   => 'required|string|size:4',
-            ]);
+            $data = $request->validated();
 
             $user = User::where('phone', $data['phone'])->first();
 

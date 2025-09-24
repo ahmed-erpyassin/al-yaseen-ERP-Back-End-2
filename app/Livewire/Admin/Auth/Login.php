@@ -28,7 +28,7 @@ class Login extends Component
     public function login()
     {
         $this->isLoading = true;
-        
+
         try {
             $data = $this->validate([
                 'email' => 'required|email',
@@ -54,10 +54,10 @@ class Login extends Component
 
             Auth::guard('web')->login($user, $this->remember);
             $this->alertMessage('تم تسجيل الدخول بنجاح', 'success', 'center');
-            
+
             // Add a small delay to show success message before redirect
             $this->dispatch('login-success');
-            
+
         } catch (\Exception $e) {
             $this->alertMessage('حدث خطأ أثناء تسجيل الدخول', 'error', 'center');
         } finally {
