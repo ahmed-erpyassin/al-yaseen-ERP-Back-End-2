@@ -17,6 +17,7 @@ class RegisterUserRequest extends FormRequest
             'second_name' => 'required|string|max:255',
             'email'       => 'required|email|unique:users,email',
             'phone'       => 'nullable|string|unique:users,phone',
+            'phone_country_code' => 'nullable|string|max:5',
             'password'    => ['required', 'string', Password::min(8)],
         ];
     }
@@ -38,6 +39,7 @@ class RegisterUserRequest extends FormRequest
             'email.email'          => __('Email must be a valid email address.'),
             'email.unique'         => __('This email is already registered.'),
             'phone.unique'         => __('This phone number is already registered.'),
+            'phone_country_code.max' => __('Phone country code must be at most 5 characters.'),
             'password.required'    => __('Password is required.'),
             'password.min'         => __('Password must be at least 8 characters long.'),
         ];

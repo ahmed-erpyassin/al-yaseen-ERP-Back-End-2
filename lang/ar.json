@@ -217,5 +217,6 @@
     "Income tax rate must be a number.": "يجب أن تكون ضريبة الدخل رقمًا.",
     "VAT rate must be a number.": "يجب أن تكون ضريبة القيمة المضافة رقمًا.",
     "Status is required.": "الحالة مطلوبة.",
-    "Status must be either active or inactive.": "يجب أن تكون الحالة إما نشطة أو غير نشطة."
+    "Status must be either active or inactive.": "يجب أن تكون الحالة إما نشطة أو غير نشطة.",
+    "Phone country code must be at most 5 characters.": "رمز الدولة للهاتف يجب أن يكون 5 أحرف كحد أقصى."
 }

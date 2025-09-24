@@ -16,7 +16,11 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('second_name');
             $table->string('email')->unique();
+
+            // Phone and its country code
             $table->string('phone')->nullable()->unique();
+            $table->string('phone_country_code', 5)->nullable();
+
             $table->string('password');
             $table->enum('status', ['active', 'inactive', 'suspended', 'pending'])->default('active');
             $table->enum('type', ['super_admin', 'admin', 'customer'])->default('customer');
