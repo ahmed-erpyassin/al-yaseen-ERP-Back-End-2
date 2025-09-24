@@ -27,7 +27,6 @@ class Item extends Model
         'description',
         'description_ar', // الوصف بالعربية
         'model',
-        'unit_name',
         'type',
         'quantity',
         'balance',

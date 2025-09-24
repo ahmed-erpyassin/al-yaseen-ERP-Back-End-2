@@ -47,7 +47,6 @@ class UpdateItemRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'model' => 'nullable|string|max:255',
-            'unit_name' => 'nullable|string|max:255',
             'type' => 'required|in:product,service,material,raw_material',
             'quantity' => 'nullable|numeric|min:0',
             'balance' => 'nullable|numeric',
