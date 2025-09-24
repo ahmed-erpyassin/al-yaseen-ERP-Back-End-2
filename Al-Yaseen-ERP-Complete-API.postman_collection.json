@@ -1,0 +1,1164 @@
+{
+    "info": {
+        "name": "Al-Yaseen ERP Complete API Collection",
+        "description": "Complete API collection for Al-Yaseen ERP system including all Inventory and Project Management controllers",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_postman_id": "complete-erp-api-collection"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "item": [
+        {
+            "name": "🔐 Authentication",
+            "item": [
+                {
+                    "name": "Register User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\",\n    \"company_id\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/register",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "register"]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data && response.data.token) {",
+                                    "        pm.collectionVariables.set('token', response.data.token);",
+                                    "    }",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/login",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "login"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/me",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "me"]
+                        }
+                    }
+                },
+                {
+                    "name": "Send OTP",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"phone\": \"+1234567890\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/send-otp",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "send-otp"]
+                        }
+                    }
+                },
+                {
+                    "name": "Verify OTP",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"phone\": \"+1234567890\",\n    \"otp\": \"123456\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/verify-otp",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "verify-otp"]
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/auth/logout",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "auth", "logout"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "📦 Inventory Management",
+            "item": [
+                {
+                    "name": "🏭 Manufacturing Formulas",
+                    "item": [
+                        {
+                            "name": "Get All Manufacturing Formulas",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/catalog-all",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "catalog-all"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Create Manufacturing Formula",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"formula_name_ar\": \"تركيبة تصنيع جديدة\",\n    \"formula_name_en\": \"New Manufacturing Formula\",\n    \"formula_number\": \"MF001\",\n    \"item_id\": 1,\n    \"quantity\": 100,\n    \"unit_id\": 1,\n    \"warehouse_id\": 1,\n    \"cost_per_unit\": 25.50,\n    \"total_cost\": 2550.00,\n    \"notes\": \"Manufacturing formula notes\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/establish-formula",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "establish-formula"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Manufacturing Formula by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/examine-formula/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "examine-formula", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Manufacturing Formula",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"formula_name_ar\": \"تركيبة تصنيع محدثة\",\n    \"formula_name_en\": \"Updated Manufacturing Formula\",\n    \"quantity\": 150,\n    \"cost_per_unit\": 30.00,\n    \"total_cost\": 4500.00\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/modify-formula/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "modify-formula", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete Manufacturing Formula",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/remove-formula/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "remove-formula", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Item Numbers for Dropdown",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/item-numbers-dropdown",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "item-numbers-dropdown"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Item Details by Number",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/item-details-by-number?item_number=ITM001",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "item-details-by-number"],
+                                    "query": [{"key": "item_number", "value": "ITM001"}]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Calculate Final Cost",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"formula_id\": 1,\n    \"quantity\": 100\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/calculate-final-cost",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "calculate-final-cost"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Available Fields",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/available-fields",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "available-fields"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Field Values for Dropdown",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/field-values-dropdown?field=status",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "field-values-dropdown"],
+                                    "query": [{"key": "field", "value": "status"}]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Selectable Fields",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/selectable-fields",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "selectable-fields"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Field-Based Data Display",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/field-based-display?field=category&value=electronics",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "field-based-display"],
+                                    "query": [
+                                        {"key": "field", "value": "category"},
+                                        {"key": "value", "value": "electronics"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Formula Numbers for Dropdown",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/formula-numbers-dropdown",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "formula-numbers-dropdown"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Item Details by Formula Number",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/item-details-by-formula?formula_number=MF001",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "item-details-by-formula"],
+                                    "query": [{"key": "formula_number", "value": "MF001"}]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Warehouses for Dropdown",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/warehouses-dropdown",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "warehouses-dropdown"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Prices from Suppliers (Single)",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"formula_id\": 1\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/update-prices-from-suppliers",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "update-prices-from-suppliers"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Prices from Suppliers (All)",
+                            "request": {
+                                "method": "PUT",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/update-all-prices-from-suppliers",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "update-all-prices-from-suppliers"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Restore Deleted Formula",
+                            "request": {
+                                "method": "PUT",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/restore-formula/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "restore-formula", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Force Delete Formula",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/force-delete-formula/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "force-delete-formula", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Trashed Formulas",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/manufacturing-formulas/trashed-formulas",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "manufacturing-formulas", "trashed-formulas"]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "📋 BOM Items",
+                    "item": [
+                        {
+                            "name": "Get All BOM Items",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/catalog-all",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "catalog-all"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Create BOM Item",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"item_id\": 1,\n    \"component_id\": 2,\n    \"quantity_required\": 5,\n    \"unit_id\": 1,\n    \"cost_per_unit\": 10.50,\n    \"total_cost\": 52.50,\n    \"notes\": \"BOM component notes\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/establish-component",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "establish-component"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get BOM Item by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/examine-component/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "examine-component", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update BOM Item",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"quantity_required\": 8,\n    \"cost_per_unit\": 12.00,\n    \"total_cost\": 96.00,\n    \"notes\": \"Updated BOM component\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/modify-component/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "modify-component", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete BOM Item",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/remove-component/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "remove-component", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get BOM Items by Item ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/by-item/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "by-item", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Items Using Component",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/by-component/2",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "by-component", "2"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Calculate Material Requirements",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"item_id\": 1,\n    \"production_quantity\": 100\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/calculate-requirements",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "calculate-requirements"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "! Filter BOM Items by Field",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/filter-by-criteria?field=status&value=active",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "filter-by-criteria"],
+                                    "query": [
+                                        {"key": "field", "value": "status"},
+                                        {"key": "value", "value": "active"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "! Get First BOM Item",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/first-component",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "first-component"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "! Get Last BOM Item",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/bom-items/last-component",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "bom-items", "last-component"]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "🏷️ Barcode Types",
+                    "item": [
+                        {
+                            "name": "Get All Barcode Types",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/barcode-types/enumerate-types",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "barcode-types", "enumerate-types"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Barcode Type by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/barcode-types/view-type/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "barcode-types", "view-type", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Barcode Type Options",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/barcode-types/type-options",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "barcode-types", "type-options"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Supported Barcode Formats",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/barcode-types/supported-formats",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "barcode-types", "supported-formats"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Validate Barcode",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"barcode\": \"123456789012\",\n    \"type\": \"EAN13\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/barcode-types/validate-barcode",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "barcode-types", "validate-barcode"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Generate Barcode Image",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"barcode\": \"123456789012\",\n    \"type\": \"EAN13\",\n    \"format\": \"PNG\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/barcode-types/generate-barcode",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "barcode-types", "generate-barcode"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Generate SVG Barcode",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"barcode\": \"123456789012\",\n    \"type\": \"EAN13\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/barcode-types/generate-svg-barcode",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "barcode-types", "generate-svg-barcode"]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "🏢 Department Warehouses",
+                    "item": [
+                        {
+                            "name": "Get All Department Warehouses",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/department-warehouses/enumerate-all",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "department-warehouses", "enumerate-all"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Create Department Warehouse Assignment",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"department_name_ar\": \"قسم المبيعات\",\n    \"department_name_en\": \"Sales Department\",\n    \"department_number\": \"DEPT001\",\n    \"warehouse_id\": 1,\n    \"manager_name\": \"أحمد محمد\",\n    \"active\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/department-warehouses/create-assignment",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "department-warehouses", "create-assignment"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Department Warehouse by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/department-warehouses/view-assignment/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "department-warehouses", "view-assignment", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Department Warehouse",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"department_name_ar\": \"قسم المبيعات المحدث\",\n    \"department_name_en\": \"Updated Sales Department\",\n    \"manager_name\": \"محمد أحمد\",\n    \"active\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/department-warehouses/update-assignment/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "department-warehouses", "update-assignment", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete Department Warehouse",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/department-warehouses/remove-assignment/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "department-warehouses", "remove-assignment", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get First Department Warehouse",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/department-warehouses/primary-assignment",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "department-warehouses", "primary-assignment"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Last Department Warehouse",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/department-warehouses/ultimate-assignment",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "department-warehouses", "ultimate-assignment"]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "📊 Inventory Items",
+                    "item": [
+                        {
+                            "name": "Get All Inventory Items",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/survey-all",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "survey-all"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Create Inventory Item",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"item_id\": 1,\n    \"warehouse_id\": 1,\n    \"quantity_on_hand\": 100,\n    \"reserved_quantity\": 10,\n    \"available_quantity\": 90,\n    \"reorder_level\": 20,\n    \"max_stock_level\": 500,\n    \"location\": \"A1-B2-C3\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/register-inventory",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "register-inventory"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Inventory Item by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/examine-inventory/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "examine-inventory", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Inventory Item",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"quantity_on_hand\": 150,\n    \"reserved_quantity\": 15,\n    \"available_quantity\": 135,\n    \"reorder_level\": 25,\n    \"location\": \"A1-B2-C4\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/modify-inventory/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "modify-inventory", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete Inventory Item",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/remove-inventory/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "remove-inventory", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "! Get First Inventory Item",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/first-inventory",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "first-inventory"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "! Get Last Inventory Item",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/last-inventory",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "last-inventory"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "! Get Low Stock Items",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/low-stock-items",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "low-stock-items"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "! Get Items Requiring Reorder",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-items/reorder-required-items",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-items", "reorder-required-items"]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "🔄 Inventory Movements",
+                    "item": [
+                        {
+                            "name": "Get All Inventory Movements",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-movements/monitor-all",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-movements", "monitor-all"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Create Inventory Movement",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"movement_number\": \"MOV001\",\n    \"movement_type\": \"IN\",\n    \"item_id\": 1,\n    \"warehouse_id\": 1,\n    \"quantity\": 50,\n    \"unit_id\": 1,\n    \"reference_number\": \"REF001\",\n    \"notes\": \"Stock receipt\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-movements/initiate-movement",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-movements", "initiate-movement"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Movement by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-movements/review-movement/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-movements", "review-movement", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Movement",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"quantity\": 75,\n    \"notes\": \"Updated stock receipt\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-movements/adjust-movement/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-movements", "adjust-movement", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete Movement",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/inventory-movements/cancel-movement/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "inventory-movements", "cancel-movement", "1"]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "🏪 Warehouses",
+                    "item": [
+                        {
+                            "name": "Get All Warehouses",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/warehouses/scan-all",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "warehouses", "scan-all"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Create Warehouse",
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"warehouse_name_ar\": \"المستودع الرئيسي\",\n    \"warehouse_name_en\": \"Main Warehouse\",\n    \"warehouse_number\": \"WH001\",\n    \"location\": \"الرياض\",\n    \"manager_name\": \"أحمد محمد\",\n    \"capacity\": 10000,\n    \"active\": true\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/warehouses/establish-facility",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "warehouses", "establish-facility"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Get Warehouse by ID",
+                            "request": {
+                                "method": "GET",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/warehouses/inspect-facility/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "warehouses", "inspect-facility", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Update Warehouse",
+                            "request": {
+                                "method": "PUT",
+                                "header": [
+                                    {"key": "Content-Type", "value": "application/json"},
+                                    {"key": "Accept", "value": "application/json"}
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n    \"warehouse_name_ar\": \"المستودع الرئيسي المحدث\",\n    \"warehouse_name_en\": \"Updated Main Warehouse\",\n    \"capacity\": 15000,\n    \"manager_name\": \"محمد أحمد\"\n}"
+                                },
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/warehouses/modify-facility/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "warehouses", "modify-facility", "1"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "Delete Warehouse",
+                            "request": {
+                                "method": "DELETE",
+                                "header": [{"key": "Accept", "value": "application/json"}],
+                                "url": {
+                                    "raw": "{{baseUrl}}/api/v1/warehouses/deactivate-facility/1",
+                                    "host": ["{{baseUrl}}"],
+                                    "path": ["api", "v1", "warehouses", "deactivate-facility", "1"]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "🚀 Project Management",
+            "item": [
+                {
+                    "name": "📋 Projects",
+                    "item": []
+                },
+                {
+                    "name": "✅ Tasks",
+                    "item": []
+                },
+                {
+                    "name": "🎯 Milestones",
+                    "item": []
+                },
+                {
+                    "name": "🔧 Resources",
+                    "item": []
+                },
+                {
+                    "name": "📄 Documents",
+                    "item": []
+                },
+                {
+                    "name": "💰 Financials",
+                    "item": []
+                },
+                {
+                    "name": "⚠️ Risk Management",
+                    "item": []
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,268 @@
+{
+    "info": {
+        "name": "Al-Yaseen ERP Remaining Controllers",
+        "description": "Additional controllers for complete API coverage",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "📦 Items Controller (28 Methods)",
+            "item": [
+                {
+                    "name": "Get All Items",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/inventory-all",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "inventory-all"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Item",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Accept", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"item_name_ar\": \"صنف جديد\",\n    \"item_name_en\": \"New Item\",\n    \"item_number\": \"ITM001\",\n    \"item_type_id\": 1,\n    \"unit_id\": 1,\n    \"cost_price\": 100.00,\n    \"selling_price\": 150.00,\n    \"barcode\": \"123456789012\",\n    \"description\": \"Item description\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/register-item",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "register-item"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Item by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/inspect-item/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "inspect-item", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Item",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Accept", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"item_name_ar\": \"صنف محدث\",\n    \"item_name_en\": \"Updated Item\",\n    \"cost_price\": 110.00,\n    \"selling_price\": 165.00\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/modify-item/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "modify-item", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Item",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/discard-item/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "discard-item", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Search Items",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/search-items?search=laptop",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "search-items"],
+                            "query": [{"key": "search", "value": "laptop"}]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Available Fields",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/available-fields",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "available-fields"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Sortable Columns",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/sortable-columns",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "sortable-columns"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Categories",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/categories",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "categories"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Warehouses",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/warehouses",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "warehouses"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Pricing Data",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/pricing-data",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "pricing-data"]
+                        }
+                    }
+                },
+                {
+                    "name": "Validate Pricing",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Accept", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"cost_price\": 100.00,\n    \"selling_price\": 150.00,\n    \"margin_percentage\": 50\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/validate-pricing",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "validate-pricing"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Barcode Types",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/barcode-types",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "barcode-types"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Item Types",
+                    "request": {
+                        "method": "GET",
+                        "header": [{"key": "Accept", "value": "application/json"}],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/item-types",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "item-types"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Custom Item Type",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Accept", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"type_name_ar\": \"نوع مخصص\",\n    \"type_name_en\": \"Custom Type\",\n    \"description\": \"Custom item type\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/create-custom-type",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "create-custom-type"]
+                        }
+                    }
+                },
+                {
+                    "name": "Validate Barcode",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Accept", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"barcode\": \"123456789012\",\n    \"type\": \"EAN13\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/validate-barcode",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "validate-barcode"]
+                        }
+                    }
+                },
+                {
+                    "name": "Generate Barcode",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Accept", "value": "application/json"}
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"item_id\": 1,\n    \"format\": \"PNG\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/v1/items/generate-barcode/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "v1", "items", "generate-barcode", "1"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

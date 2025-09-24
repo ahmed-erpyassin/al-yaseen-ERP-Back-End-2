@@ -12,8 +12,8 @@ class InventoryService
      */
     public function getInventoryItems($user, array $filters = [], int $perPage = 15)
     {
-        $query = InventoryItem::with(['company', 'stock.warehouse'])
-            ->forCompany($user->company_id);
+        $query = InventoryItem::with(['company', 'stock.warehouse']);
+           // ->forCompany($user->company_id);
 
         // Apply filters
         $this->applyFilters($query, $filters);
@@ -32,7 +32,6 @@ class InventoryService
     public function createInventoryItem(array $data, $user): InventoryItem
     {
         return DB::transaction(function () use ($data, $user) {
-            // Set user context
             $data['company_id'] = $data['company_id'] ?? $user->company_id;
             $data['created_by'] = $user->id;
 
@@ -51,7 +50,7 @@ class InventoryService
     public function getInventoryItemById(int $id, $user): InventoryItem
     {
         return InventoryItem::with(['company', 'stock.warehouse', 'category', 'supplier'])
-            ->forCompany($user->company_id)
+           // ->forCompany($user->company_id)
             ->findOrFail($id);
     }
 
@@ -61,7 +60,8 @@ class InventoryService
     public function updateInventoryItem(int $id, array $data, $user): InventoryItem
     {
         return DB::transaction(function () use ($id, $data, $user) {
-            $item = InventoryItem::forCompany($user->company_id)->findOrFail($id);
+            $item = InventoryItem::findOrFail($id);
+            //forCompany($user->company_id)->
 
             // Set updated_by
             $data['updated_by'] = $user->id;
@@ -78,7 +78,8 @@ class InventoryService
     public function deleteInventoryItem(int $id, $user): bool
     {
         return DB::transaction(function () use ($id, $user) {
-            $item = InventoryItem::forCompany($user->company_id)->findOrFail($id);
+            $item = InventoryItem::findOrFail($id);
+            //forCompany($user->company_id)->
 
             // Check if item has stock or movements
             if ($item->stock()->exists() || $item->stockMovements()->exists()) {
@@ -161,7 +162,7 @@ class InventoryService
     public function getReorderItems($user, int $perPage = 15)
     {
         return InventoryItem::with(['company', 'stock.warehouse'])
-            ->forCompany($user->company_id)
+          //  ->forCompany($user->company_id)
             ->whereColumn('quantity', '<=', 'reorder_limit')
             ->orderBy('item_name_ar')
             ->paginate($perPage);
@@ -173,7 +174,7 @@ class InventoryService
     public function getLowStockItems($user, int $perPage = 15)
     {
         return InventoryItem::with(['company', 'stock.warehouse'])
-            ->forCompany($user->company_id)
+          //  ->forCompany($user->company_id)
             ->whereColumn('quantity', '<=', 'minimum_limit')
             ->orderBy('item_name_ar')
             ->paginate($perPage);
@@ -310,5 +311,47 @@ class InventoryService
         } else {
             $query->orderBy('item_name_ar', 'asc');
         }
+    }
+
+    /**
+     * Get first inventory item.
+     */
+    public function getFirstInventoryItem($user, string $sortBy = 'created_at')
+    {
+        $allowedSortFields = [
+            'id', 'item_number', 'item_name_ar', 'item_name_en', 'barcode', 'model',
+            'quantity', 'minimum_limit', 'reorder_limit', 'unit_price',
+            'first_purchase_price', 'first_sale_price', 'created_at', 'updated_at'
+        ];
+
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+
+        return InventoryItem::with(['company', 'stock.warehouse'])
+           // ->forCompany($user->company_id)
+            ->orderBy($sortBy, 'asc')
+            ->first();
+    }
+
+    /**
+     * Get last inventory item.
+     */
+    public function getLastInventoryItem($user, string $sortBy = 'created_at')
+    {
+        $allowedSortFields = [
+            'id', 'item_number', 'item_name_ar', 'item_name_en', 'barcode', 'model',
+            'quantity', 'minimum_limit', 'reorder_limit', 'unit_price',
+            'first_purchase_price', 'first_sale_price', 'created_at', 'updated_at'
+        ];
+
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+
+        return InventoryItem::with(['company', 'stock.warehouse'])
+            //->forCompany($user->company_id)
+            ->orderBy($sortBy, 'desc')
+            ->first();
     }
 }

@@ -237,10 +237,10 @@ class BomItemController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+      //  $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $bomItem = BomItem::with(['company', 'branch', 'user', 'item', 'component', 'unit'])
-            ->forCompany($companyId)
+           // ->forCompany($companyId)
             ->findOrFail($id);
 
         return response()->json([
@@ -258,7 +258,7 @@ class BomItemController extends Controller
         $companyId = Auth::user()->company_id ?? $request->company_id;
         $userId = Auth::id() ?? $request->user_id;
 
-        $bomItem = BomItem::forCompany($companyId)->findOrFail($id);
+        $bomItem = BomItem::findOrFail($id);
 
         $data = $request->validated();
         $data['updated_by'] = $userId;
@@ -278,9 +278,10 @@ class BomItemController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+//    $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $bomItem = BomItem::forCompany($companyId)->findOrFail($id);
+        $bomItem = BomItem::findOrFail($id);
+        //forCompany($companyId)
         $bomItem->delete();
 
         return response()->json([
@@ -294,10 +295,10 @@ class BomItemController extends Controller
      */
     public function byItem($itemId): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $bomItems = BomItem::with(['component', 'unit'])
-            ->forCompany($companyId)
+           // ->forCompany($companyId)
             ->forItem($itemId)
             ->get();
 
@@ -313,10 +314,10 @@ class BomItemController extends Controller
      */
     public function byComponent($componentId): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $bomItems = BomItem::with(['item', 'unit'])
-            ->forCompany($companyId)
+          //  ->forCompany($companyId)
             ->forComponent($componentId)
             ->get();
 
@@ -337,12 +338,12 @@ class BomItemController extends Controller
             'production_quantity' => 'required|numeric|min:0.01'
         ]);
 
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
         $itemId = $request->get('item_id');
         $productionQuantity = $request->get('production_quantity');
 
         $bomItems = BomItem::with(['component', 'unit'])
-            ->forCompany($companyId)
+         //   ->forCompany($companyId)
             ->forItem($itemId)
             ->get();
 
@@ -416,11 +417,11 @@ class BomItemController extends Controller
     }
 
     /**
-     * ✅ Filter BOM items by field value.
+     * ! Filter BOM items by field value.
      */
     public function filterByField(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+      //  $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $field = $request->get('field');
         $value = $request->get('value');
@@ -446,8 +447,8 @@ class BomItemController extends Controller
             ], 400);
         }
 
-        $query = BomItem::with(['item', 'component', 'unit'])
-            ->forCompany($companyId);
+        $query = BomItem::with(['item', 'component', 'unit']);
+          //  ->forCompany($companyId);
 
         // ✅ Apply field-based filtering
         if ($field === 'is_active' || $field === 'is_critical') {
@@ -468,17 +469,17 @@ class BomItemController extends Controller
     }
 
     /**
-     * ✅ Get first BOM item.
+     * ! Get first BOM item.
      */
     public function first(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        //$companyId = Auth::user()->company_id ?? $request->company_id;
 
         $sortBy = $request->get('sort_by', 'sequence_order');
         $sortDirection = 'asc';
 
         $bomItem = BomItem::with(['item', 'component', 'unit'])
-            ->forCompany($companyId)
+          //  ->forCompany($companyId)
             ->orderBy($sortBy, $sortDirection)
             ->first();
 
@@ -499,17 +500,17 @@ class BomItemController extends Controller
     }
 
     /**
-     * ✅ Get last BOM item.
+     * ! Get last BOM item.
      */
     public function last(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $sortBy = $request->get('sort_by', 'sequence_order');
         $sortDirection = 'desc';
 
         $bomItem = BomItem::with(['item', 'component', 'unit'])
-            ->forCompany($companyId)
+           // ->forCompany($companyId)
             ->orderBy($sortBy, $sortDirection)
             ->first();
 

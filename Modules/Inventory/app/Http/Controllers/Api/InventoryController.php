@@ -78,6 +78,8 @@ class InventoryController extends Controller
             // Get inventory items using service
             $items = $this->inventoryService->getInventoryItems($user, $filters, $perPage);
 
+           // var_dump($items);
+
             return response()->json([
                 'success' => true,
                 'data' => InventoryResource::collection($items),
@@ -188,7 +190,7 @@ class InventoryController extends Controller
     }
 
     /**
-     * Get low stock items.
+     * ! Get low stock items.
      */
     public function lowStock(Request $request): JsonResponse
     {
@@ -213,7 +215,7 @@ class InventoryController extends Controller
     }
 
     /**
-     * Get items that need reordering.
+     * ! Get items that need reordering.
      */
     public function reorderItems(Request $request): JsonResponse
     {
@@ -233,6 +235,70 @@ class InventoryController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error retrieving reorder items: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ! Get first inventory item.
+     */
+    public function first(Request $request): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+            $sortBy = $request->get('sort_by', 'created_at');
+
+            // Get first inventory item using service
+            $item = $this->inventoryService->getFirstInventoryItem($user, $sortBy);
+
+            if (!$item) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No inventory items found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => new InventoryResource($item),
+                'message' => 'First inventory item retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving first inventory item: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ! Get last inventory item.
+     */
+    public function last(Request $request): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+            $sortBy = $request->get('sort_by', 'created_at');
+
+            // Get last inventory item using service
+            $item = $this->inventoryService->getLastInventoryItem($user, $sortBy);
+
+            if (!$item) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No inventory items found'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => new InventoryResource($item),
+                'message' => 'Last inventory item retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving last inventory item: ' . $e->getMessage()
             ], 500);
         }
     }

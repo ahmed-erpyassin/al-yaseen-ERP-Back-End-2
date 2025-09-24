@@ -12,177 +12,272 @@ use Modules\Inventory\Http\Controllers\Api\BomItemController;
 use Modules\Inventory\Http\Controllers\Api\BarcodeTypeController;
 use Modules\Inventory\Http\Controllers\Api\ItemTypeController;
 use Modules\Inventory\Http\Controllers\Api\InventoryMovementController;
+use Modules\Inventory\Http\Controllers\Api\ManufacturingFormulaController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
-    // // Inventory Items Routes
-    // Route::prefix('inventory-items')->group(function () {
-    //     Route::get('/', [InventoryController::class, 'index'])->name('inventory.items.index');
-    //     Route::post('/', [InventoryController::class, 'store'])->name('inventory.items.store');
-    //     Route::get('/first', [InventoryController::class, 'first'])->name('inventory.items.first');
-    //     Route::get('/last', [InventoryController::class, 'last'])->name('inventory.items.last');
-    //     Route::get('/{id}', [InventoryController::class, 'show'])->name('inventory.items.show');
-    //     Route::put('/{id}', [InventoryController::class, 'update'])->name('inventory.items.update');
-    //     Route::delete('/{id}', [InventoryController::class, 'destroy'])->name('inventory.items.destroy');
-    // });
+    // Inventory Items Routes
+    Route::prefix('inventory-items')->group(function () {
+        // Main CRUD operations
+        Route::get('/survey-all', [InventoryController::class, 'index'])->name('inventory-mgmt.inventory-items.survey-all');
+        Route::post('/register-inventory', [InventoryController::class, 'store'])->name('inventory-mgmt.inventory-items.register-inventory');
+        Route::get('/examine-inventory/{id}', [InventoryController::class, 'show'])->name('inventory-mgmt.inventory-items.examine-inventory');
+        Route::put('/modify-inventory/{id}', [InventoryController::class, 'update'])->name('inventory-mgmt.inventory-items.modify-inventory');
+        Route::delete('/remove-inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory-mgmt.inventory-items.remove-inventory');
 
-    // // ✅ Enhanced Warehouses Routes with Search, Sorting, and Soft Delete
-    // Route::prefix('warehouses')->group(function () {
-    //     Route::get('/', [WarehouseController::class, 'index'])->name('inventory.warehouses.index');
-    //     Route::post('/', [WarehouseController::class, 'store'])->name('inventory.warehouses.store');
-    //     Route::get('/form-data', [WarehouseController::class, 'getFormData'])->name('inventory.warehouses.form-data');
-    //     Route::get('/filter-by-field', [WarehouseController::class, 'filterByField'])->name('inventory.warehouses.filter-by-field');
-    //     Route::get('/trashed', [WarehouseController::class, 'trashed'])->name('inventory.warehouses.trashed');
-    //     Route::get('/first', [WarehouseController::class, 'first'])->name('inventory.warehouses.first');
-    //     Route::get('/last', [WarehouseController::class, 'last'])->name('inventory.warehouses.last');
-    //     Route::get('/{id}', [WarehouseController::class, 'show'])->name('inventory.warehouses.show');
-    //     Route::put('/{id}', [WarehouseController::class, 'update'])->name('inventory.warehouses.update');
-    //     Route::delete('/{id}', [WarehouseController::class, 'destroy'])->name('inventory.warehouses.destroy');
-    //     Route::post('/{id}/restore', [WarehouseController::class, 'restore'])->name('inventory.warehouses.restore');
-    //     Route::delete('/{id}/force', [WarehouseController::class, 'forceDelete'])->name('inventory.warehouses.force-delete');
-    // });
+        // Navigation helpers
+        Route::get('/first-inventory', [InventoryController::class, 'first'])->name('inventory-mgmt.inventory-items.first-inventory');
+        Route::get('/last-inventory', [InventoryController::class, 'last'])->name('inventory-mgmt.inventory-items.last-inventory');
 
-    // // Department Warehouses Routes
-    // Route::prefix('department-warehouses')->group(function () {
-    //     Route::get('/', [DepartmentWarehouseController::class, 'index'])->name('inventory.departments.index');
-    //     Route::post('/', [DepartmentWarehouseController::class, 'store'])->name('inventory.departments.store');
-    //     Route::get('/first', [DepartmentWarehouseController::class, 'first'])->name('inventory.departments.first');
-    //     Route::get('/last', [DepartmentWarehouseController::class, 'last'])->name('inventory.departments.last');
-    //     Route::get('/{id}', [DepartmentWarehouseController::class, 'show'])->name('inventory.departments.show');
-    //     Route::put('/{id}', [DepartmentWarehouseController::class, 'update'])->name('inventory.departments.update');
-    //     Route::delete('/{id}', [DepartmentWarehouseController::class, 'destroy'])->name('inventory.departments.destroy');
-    // });
+        // ! Additional inventory management endpoints
+        Route::get('/low-stock-items', [InventoryController::class, 'lowStock'])->name('inventory-mgmt.inventory-items.low-stock-items'); // ! Get low stock items
+        Route::get('/reorder-required-items', [InventoryController::class, 'reorderItems'])->name('inventory-mgmt.inventory-items.reorder-required-items'); // ! Get items that need reordering
+    });
 
-    // // Stock Movements Routes
-    // Route::prefix('stock-movements')->group(function () {
-    //     Route::get('/', [StockMovementController::class, 'index'])->name('inventory.movements.index');
-    //     Route::post('/', [StockMovementController::class, 'store'])->name('inventory.movements.store');
-    //     Route::get('/summary', [StockMovementController::class, 'stockSummary'])->name('inventory.movements.summary');
-    //     Route::get('/item/{itemId}', [StockMovementController::class, 'byItem'])->name('inventory.movements.by-item');
-    //     Route::get('/warehouse/{warehouseId}', [StockMovementController::class, 'byWarehouse'])->name('inventory.movements.by-warehouse');
-    //     Route::get('/{id}', [StockMovementController::class, 'show'])->name('inventory.movements.show');
-    // });
+    // ✅ Enhanced Warehouses Routes with Search, Sorting, and Soft Delete
+    Route::prefix('warehouses')->group(function () {
+        // Main CRUD operations
+        Route::get('/scan-all', [WarehouseController::class, 'index'])->name('inventory-mgmt.warehouses.scan-all');
+        Route::post('/establish-facility', [WarehouseController::class, 'store'])->name('inventory-mgmt.warehouses.establish-facility');
+        Route::get('/inspect-facility/{id}', [WarehouseController::class, 'show'])->name('inventory-mgmt.warehouses.inspect-facility');
+        Route::put('/modify-facility/{id}', [WarehouseController::class, 'update'])->name('inventory-mgmt.warehouses.modify-facility');
+        Route::delete('/demolish-facility/{id}', [WarehouseController::class, 'destroy'])->name('inventory-mgmt.warehouses.demolish-facility');
 
-    // // Units Routes
-    // Route::prefix('units')->group(function () {
-    //     Route::get('/', [UnitController::class, 'index'])->name('inventory.units.index');
-    //     Route::post('/', [UnitController::class, 'store'])->name('inventory.units.store');
-    //     Route::get('/options', [UnitController::class, 'getUnitOptions'])->name('inventory.units.options');
-    //     Route::get('/all-options', [UnitController::class, 'getAllUnitOptions'])->name('inventory.units.all-options');
-    //     Route::get('/contains-options', [UnitController::class, 'getContainsOptions'])->name('inventory.units.contains-options');
-    //     Route::get('/dropdown', [UnitController::class, 'getUnitsForDropdown'])->name('inventory.units.dropdown');
-    //     Route::get('/warehouses-dropdown', [UnitController::class, 'getWarehousesForDropdown'])->name('inventory.units.warehouses-dropdown');
-    //     Route::get('/form-data', [UnitController::class, 'getUnitFormData'])->name('inventory.units.form-data');
-    //     Route::get('/first', [UnitController::class, 'first'])->name('inventory.units.first');
-    //     Route::get('/last', [UnitController::class, 'last'])->name('inventory.units.last');
-    //     Route::get('/{id}', [UnitController::class, 'show'])->name('inventory.units.show');
-    //     Route::put('/{id}', [UnitController::class, 'update'])->name('inventory.units.update');
-    //     Route::delete('/{id}', [UnitController::class, 'destroy'])->name('inventory.units.destroy');
-    // });
+        // Enhanced functionality
+        Route::get('/configuration-data', [WarehouseController::class, 'getFormData'])->name('inventory-mgmt.warehouses.configuration-data');
+        Route::get('/filter-by-criteria', [WarehouseController::class, 'filterByField'])->name('inventory-mgmt.warehouses.filter-by-criteria');
+        Route::get('/archived-facilities', [WarehouseController::class, 'trashed'])->name('inventory-mgmt.warehouses.archived-facilities');
+        Route::get('/initial-facility', [WarehouseController::class, 'first'])->name('inventory-mgmt.warehouses.initial-facility');
+        Route::get('/final-facility', [WarehouseController::class, 'last'])->name('inventory-mgmt.warehouses.final-facility');
+        Route::post('/{id}/reactivate-facility', [WarehouseController::class, 'restore'])->name('inventory-mgmt.warehouses.reactivate-facility');
+        Route::delete('/{id}/permanently-remove', [WarehouseController::class, 'forceDelete'])->name('inventory-mgmt.warehouses.permanently-remove');
+    });
 
-    // // Items Routes
-    // Route::prefix('items')->group(function () {
-    //     Route::get('/', [ItemController::class, 'index'])->name('inventory.items.index');
-    //     Route::post('/', [ItemController::class, 'store'])->name('inventory.items.store');
-    //     Route::get('/search', [ItemController::class, 'search'])->name('inventory.items.search');
-    //     Route::get('/fields', [ItemController::class, 'getAvailableFields'])->name('inventory.items.fields');
-    //     Route::get('/columns', [ItemController::class, 'getSortableColumns'])->name('inventory.items.columns');
-    //     Route::get('/categories', [ItemController::class, 'getCategories'])->name('inventory.items.categories');
-    //     Route::get('/warehouses', [ItemController::class, 'getAvailableWarehouses'])->name('inventory.items.warehouses');
-    //     Route::get('/pricing-form-data', [ItemController::class, 'getPricingFormData'])->name('inventory.items.pricing-form-data');
-    //     Route::post('/validate-pricing', [ItemController::class, 'validatePricingData'])->name('inventory.items.validate-pricing');
-    //     Route::get('/barcode-types', [ItemController::class, 'getBarcodeTypes'])->name('inventory.items.barcode-types');
-    //     Route::get('/item-types', [ItemController::class, 'getItemTypes'])->name('inventory.items.item-types');
-    //     Route::post('/custom-item-type', [ItemController::class, 'createCustomItemType'])->name('inventory.items.custom-item-type');
-    //     Route::post('/validate-barcode', [ItemController::class, 'validateBarcode'])->name('inventory.items.validate-barcode');
-    //     Route::post('/{item}/generate-barcode', [ItemController::class, 'generateBarcode'])->name('inventory.items.generate-barcode');
-    //     Route::post('/{item}/generate-barcode-svg', [ItemController::class, 'generateBarcodeSVG'])->name('inventory.items.generate-barcode-svg');
-    //     Route::get('/{item}/transactions', [ItemController::class, 'getItemTransactions'])->name('inventory.items.transactions');
-    //     Route::get('/{item}/transactions/export', [ItemController::class, 'exportItemTransactions'])->name('inventory.items.transactions.export');
-    //     Route::get('/first', [ItemController::class, 'first'])->name('inventory.items.first');
-    //     Route::get('/last', [ItemController::class, 'last'])->name('inventory.items.last');
-    //     Route::get('/parents', [ItemController::class, 'parents'])->name('inventory.items.parents');
-    //     Route::get('/type/{type}', [ItemController::class, 'byType'])->name('inventory.items.by-type');
-    //     Route::get('/trashed', [ItemController::class, 'trashed'])->name('inventory.items.trashed');
-    //     Route::get('/{id}', [ItemController::class, 'show'])->name('inventory.items.show');
-    //     Route::get('/{id}/preview', [ItemController::class, 'preview'])->name('inventory.items.preview');
-    //     Route::put('/{id}', [ItemController::class, 'update'])->name('inventory.items.update');
-    //     Route::delete('/{id}', [ItemController::class, 'destroy'])->name('inventory.items.destroy');
-    //     Route::post('/{id}/restore', [ItemController::class, 'restore'])->name('inventory.items.restore');
-    //     Route::delete('/{id}/force', [ItemController::class, 'forceDelete'])->name('inventory.items.force-delete');
-    // });
+    // Department Warehouses Routes
+    Route::prefix('department-warehouses')->group(function () {
+        // Main CRUD operations
+        Route::get('/enumerate-all', [DepartmentWarehouseController::class, 'index'])->name('inventory-mgmt.dept-warehouses.enumerate-all');
+        Route::post('/create-assignment', [DepartmentWarehouseController::class, 'store'])->name('inventory-mgmt.dept-warehouses.create-assignment');
+        Route::get('/view-assignment/{id}', [DepartmentWarehouseController::class, 'show'])->name('inventory-mgmt.dept-warehouses.view-assignment');
+        Route::put('/update-assignment/{id}', [DepartmentWarehouseController::class, 'update'])->name('inventory-mgmt.dept-warehouses.update-assignment');
+        Route::delete('/remove-assignment/{id}', [DepartmentWarehouseController::class, 'destroy'])->name('inventory-mgmt.dept-warehouses.remove-assignment');
 
-    // // Item Units Routes
-    // Route::prefix('item-units')->group(function () {
-    //     Route::get('/', [ItemUnitController::class, 'index'])->name('inventory.item-units.index');
-    //     Route::post('/', [ItemUnitController::class, 'store'])->name('inventory.item-units.store');
-    //     Route::get('/type-options', [ItemUnitController::class, 'getUnitTypeOptions'])->name('inventory.item-units.type-options');
-    //     Route::get('/contains-options', [ItemUnitController::class, 'getItemUnitContainsOptions'])->name('inventory.item-units.contains-options');
-    //     Route::get('/form-data', [ItemUnitController::class, 'getFormData'])->name('inventory.item-units.form-data');
-    //     Route::post('/calculate-conversion', [ItemUnitController::class, 'calculateConversion'])->name('inventory.item-units.calculate-conversion');
-    //     Route::get('/item/{itemId}', [ItemUnitController::class, 'byItem'])->name('inventory.item-units.by-item');
-    //     Route::get('/item/{itemId}/type/{type}', [ItemUnitController::class, 'getByType'])->name('inventory.item-units.by-type');
-    //     Route::get('/item/{itemId}/comprehensive', [ItemUnitController::class, 'getComprehensiveData'])->name('inventory.item-units.comprehensive');
-    //     Route::get('/{id}', [ItemUnitController::class, 'show'])->name('inventory.item-units.show');
-    //     Route::put('/{id}', [ItemUnitController::class, 'update'])->name('inventory.item-units.update');
-    //     Route::put('/{id}/set-default', [ItemUnitController::class, 'setDefault'])->name('inventory.item-units.set-default');
-    //     Route::delete('/{id}', [ItemUnitController::class, 'destroy'])->name('inventory.item-units.destroy');
-    // });
+        // Navigation helpers
+        Route::get('/primary-assignment', [DepartmentWarehouseController::class, 'first'])->name('inventory-mgmt.dept-warehouses.primary-assignment');
+        Route::get('/ultimate-assignment', [DepartmentWarehouseController::class, 'last'])->name('inventory-mgmt.dept-warehouses.ultimate-assignment');
+    });
 
-    // // Barcode Types Routes
-    // Route::prefix('barcode-types')->group(function () {
-    //     Route::get('/', [BarcodeTypeController::class, 'index'])->name('inventory.barcode-types.index');
-    //     Route::get('/options', [BarcodeTypeController::class, 'getOptions'])->name('inventory.barcode-types.options');
-    //     Route::get('/supported', [BarcodeTypeController::class, 'getSupportedTypes'])->name('inventory.barcode-types.supported');
-    //     Route::get('/{id}', [BarcodeTypeController::class, 'show'])->name('inventory.barcode-types.show');
-    //     Route::post('/validate', [BarcodeTypeController::class, 'validateBarcode'])->name('inventory.barcode-types.validate');
-    //     Route::post('/generate', [BarcodeTypeController::class, 'generateBarcode'])->name('inventory.barcode-types.generate');
-    //     Route::post('/generate-svg', [BarcodeTypeController::class, 'generateBarcodeSVG'])->name('inventory.barcode-types.generate-svg');
-    // });
+    // Stock Movements Routes
+    Route::prefix('stock-movements')->group(function () {
+        // Main CRUD operations
+        Route::get('/track-all', [StockMovementController::class, 'index'])->name('inventory-mgmt.stock-moves.track-all');
+        Route::post('/record-movement', [StockMovementController::class, 'store'])->name('inventory-mgmt.stock-moves.record-movement');
+        Route::get('/examine-movement/{id}', [StockMovementController::class, 'show'])->name('inventory-mgmt.stock-moves.examine-movement');
 
-    // // Item Types Routes
-    // Route::prefix('item-types')->group(function () {
-    //     Route::get('/', [ItemTypeController::class, 'index'])->name('inventory.item-types.index');
-    //     Route::post('/', [ItemTypeController::class, 'store'])->name('inventory.item-types.store');
-    //     Route::get('/options', [ItemTypeController::class, 'getOptions'])->name('inventory.item-types.options');
-    //     Route::get('/{id}', [ItemTypeController::class, 'show'])->name('inventory.item-types.show');
-    //     Route::put('/{id}', [ItemTypeController::class, 'update'])->name('inventory.item-types.update');
-    //     Route::delete('/{id}', [ItemTypeController::class, 'destroy'])->name('inventory.item-types.destroy');
-    // });
+        // Specialized views
+        Route::get('/movement-summary', [StockMovementController::class, 'stockSummary'])->name('inventory-mgmt.stock-moves.movement-summary');
+        Route::get('/by-item/{itemId}', [StockMovementController::class, 'byItem'])->name('inventory-mgmt.stock-moves.by-item');
+        Route::get('/by-warehouse/{warehouseId}', [StockMovementController::class, 'byWarehouse'])->name('inventory-mgmt.stock-moves.by-warehouse');
+    });
 
-    // // BOM Items Routes
-    // Route::prefix('bom-items')->group(function () {
-    //     Route::get('/', [BomItemController::class, 'index'])->name('inventory.bom-items.index');
-    //     Route::post('/', [BomItemController::class, 'store'])->name('inventory.bom-items.store');
-    //     Route::get('/item/{itemId}', [BomItemController::class, 'byItem'])->name('inventory.bom-items.by-item');
-    //     Route::get('/component/{componentId}', [BomItemController::class, 'byComponent'])->name('inventory.bom-items.by-component');
-    //     Route::post('/calculate-requirements', [BomItemController::class, 'calculateRequirements'])->name('inventory.bom-items.calculate-requirements');
-    //     Route::get('/{id}', [BomItemController::class, 'show'])->name('inventory.bom-items.show');
-    //     Route::put('/{id}', [BomItemController::class, 'update'])->name('inventory.bom-items.update');
-    //     Route::delete('/{id}', [BomItemController::class, 'destroy'])->name('inventory.bom-items.destroy');
-    // });
+    // Units Routes
+    Route::prefix('units')->group(function () {
+        // Main CRUD operations
+        Route::get('/catalog-all', [UnitController::class, 'index'])->name('inventory-mgmt.units.catalog-all');
+        Route::post('/define-unit', [UnitController::class, 'store'])->name('inventory-mgmt.units.define-unit');
+        Route::get('/review-unit/{id}', [UnitController::class, 'show'])->name('inventory-mgmt.units.review-unit');
+        Route::put('/revise-unit/{id}', [UnitController::class, 'update'])->name('inventory-mgmt.units.revise-unit');
+        Route::delete('/eliminate-unit/{id}', [UnitController::class, 'destroy'])->name('inventory-mgmt.units.eliminate-unit');
 
-    // // ✅ Complete Inventory Movement Routes (Add Warehouse Movement System)
-    // Route::prefix('inventory-movements')->group(function () {
-    //     Route::get('/', [InventoryMovementController::class, 'index'])->name('inventory.movements.index');
-    //     Route::post('/', [InventoryMovementController::class, 'store'])->name('inventory.movements.store');
-    //     Route::get('/form-data', [InventoryMovementController::class, 'getFormData'])->name('inventory.movements.form-data');
-    //     Route::get('/filter-by-field', [InventoryMovementController::class, 'filterByField'])->name('inventory.movements.filter-by-field');
-    //     Route::get('/trashed', [InventoryMovementController::class, 'trashed'])->name('inventory.movements.trashed');
-    //     Route::get('/first', [InventoryMovementController::class, 'first'])->name('inventory.movements.first');
-    //     Route::get('/last', [InventoryMovementController::class, 'last'])->name('inventory.movements.last');
-    //     Route::get('/next-movement-number', [InventoryMovementController::class, 'getNextMovementNumber'])->name('inventory.movements.next-number');
-    //     Route::get('/{id}', [InventoryMovementController::class, 'show'])->name('inventory.movements.show');
-    //     Route::get('/{id}/movement-data', [InventoryMovementController::class, 'getMovementData'])->name('inventory.movements.movement-data');
-    //     Route::put('/{id}', [InventoryMovementController::class, 'update'])->name('inventory.movements.update');
-    //     Route::delete('/{id}', [InventoryMovementController::class, 'destroy'])->name('inventory.movements.destroy');
-    //     Route::post('/{id}/confirm', [InventoryMovementController::class, 'confirm'])->name('inventory.movements.confirm');
-    //     Route::post('/{id}/duplicate', [InventoryMovementController::class, 'duplicate'])->name('inventory.movements.duplicate');
-    //     Route::post('/{id}/restore', [InventoryMovementController::class, 'restore'])->name('inventory.movements.restore');
-    //     Route::delete('/{id}/force', [InventoryMovementController::class, 'forceDelete'])->name('inventory.movements.force-delete');
-    // });
+        // Helper endpoints
+        Route::get('/unit-choices', [UnitController::class, 'getUnitOptions'])->name('inventory-mgmt.units.unit-choices');
+        Route::get('/comprehensive-choices', [UnitController::class, 'getAllUnitOptions'])->name('inventory-mgmt.units.comprehensive-choices');
+        Route::get('/container-choices', [UnitController::class, 'getContainsOptions'])->name('inventory-mgmt.units.container-choices');
+        Route::get('/selection-dropdown', [UnitController::class, 'getUnitsForDropdown'])->name('inventory-mgmt.units.selection-dropdown');
+        Route::get('/warehouse-selection', [UnitController::class, 'getWarehousesForDropdown'])->name('inventory-mgmt.units.warehouse-selection');
+        Route::get('/form-configuration', [UnitController::class, 'getUnitFormData'])->name('inventory-mgmt.units.form-configuration');
+        Route::get('/initial-unit', [UnitController::class, 'first'])->name('inventory-mgmt.units.initial-unit');
+        Route::get('/final-unit', [UnitController::class, 'last'])->name('inventory-mgmt.units.final-unit');
+    });
 
-    // // Legacy route for backward compatibility
-    // Route::apiResource('inventories', InventoryController::class)->names('inventory');
-    // // Route::apiResource('inventories', InventoryController::class)->names('inventory');
+    // Items Routes
+    Route::prefix('items')->group(function () {
+        // Main CRUD operations
+        Route::get('/inventory-all', [ItemController::class, 'index'])->name('inventory-mgmt.items.inventory-all');
+        Route::post('/register-item', [ItemController::class, 'store'])->name('inventory-mgmt.items.register-item');
+        Route::get('/inspect-item/{id}', [ItemController::class, 'show'])->name('inventory-mgmt.items.inspect-item');
+        Route::put('/modify-item/{id}', [ItemController::class, 'update'])->name('inventory-mgmt.items.modify-item');
+        Route::delete('/discard-item/{id}', [ItemController::class, 'destroy'])->name('inventory-mgmt.items.discard-item');
+
+        // Search and filtering
+        Route::get('/locate-items', [ItemController::class, 'search'])->name('inventory-mgmt.items.locate-items');
+        Route::get('/available-fields', [ItemController::class, 'getAvailableFields'])->name('inventory-mgmt.items.available-fields');
+        Route::get('/sortable-columns', [ItemController::class, 'getSortableColumns'])->name('inventory-mgmt.items.sortable-columns');
+        Route::get('/item-categories', [ItemController::class, 'getCategories'])->name('inventory-mgmt.items.item-categories');
+        Route::get('/storage-locations', [ItemController::class, 'getAvailableWarehouses'])->name('inventory-mgmt.items.storage-locations');
+
+        // Pricing and validation
+        Route::get('/pricing-configuration', [ItemController::class, 'getPricingFormData'])->name('inventory-mgmt.items.pricing-configuration');
+        Route::post('/validate-pricing-data', [ItemController::class, 'validatePricingData'])->name('inventory-mgmt.items.validate-pricing-data');
+        Route::get('/barcode-type-options', [ItemController::class, 'getBarcodeTypes'])->name('inventory-mgmt.items.barcode-type-options');
+        Route::get('/item-type-options', [ItemController::class, 'getItemTypes'])->name('inventory-mgmt.items.item-type-options');
+        Route::post('/create-custom-type', [ItemController::class, 'createCustomItemType'])->name('inventory-mgmt.items.create-custom-type');
+        Route::post('/validate-barcode-format', [ItemController::class, 'validateBarcode'])->name('inventory-mgmt.items.validate-barcode-format');
+
+        // Barcode generation
+        Route::post('/{item}/produce-barcode', [ItemController::class, 'generateBarcode'])->name('inventory-mgmt.items.produce-barcode');
+        Route::post('/{item}/produce-barcode-svg', [ItemController::class, 'generateBarcodeSVG'])->name('inventory-mgmt.items.produce-barcode-svg');
+
+        // Transaction management
+        Route::get('/{item}/item-transactions', [ItemController::class, 'getItemTransactions'])->name('inventory-mgmt.items.item-transactions');
+        Route::get('/{item}/export-transactions', [ItemController::class, 'exportItemTransactions'])->name('inventory-mgmt.items.export-transactions');
+
+        // Navigation and filtering
+        Route::get('/first-item', [ItemController::class, 'first'])->name('inventory-mgmt.items.first-item');
+        Route::get('/last-item', [ItemController::class, 'last'])->name('inventory-mgmt.items.last-item');
+        Route::get('/parent-items', [ItemController::class, 'parents'])->name('inventory-mgmt.items.parent-items');
+        Route::get('/by-type/{type}', [ItemController::class, 'byType'])->name('inventory-mgmt.items.by-type');
+        Route::get('/deleted-items', [ItemController::class, 'trashed'])->name('inventory-mgmt.items.deleted-items');
+        Route::get('/preview-item/{id}', [ItemController::class, 'preview'])->name('inventory-mgmt.items.preview-item');
+
+        // Soft delete management
+        Route::post('/{id}/restore-item', [ItemController::class, 'restore'])->name('inventory-mgmt.items.restore-item');
+        Route::delete('/{id}/permanently-delete', [ItemController::class, 'forceDelete'])->name('inventory-mgmt.items.permanently-delete');
+    });
+
+    // Item Units Routes
+    Route::prefix('item-units')->group(function () {
+        // Main CRUD operations
+        Route::get('/list-all', [ItemUnitController::class, 'index'])->name('inventory-mgmt.item-units.list-all');
+        Route::post('/establish-unit', [ItemUnitController::class, 'store'])->name('inventory-mgmt.item-units.establish-unit');
+        Route::get('/examine-unit/{id}', [ItemUnitController::class, 'show'])->name('inventory-mgmt.item-units.examine-unit');
+        Route::put('/adjust-unit/{id}', [ItemUnitController::class, 'update'])->name('inventory-mgmt.item-units.adjust-unit');
+        Route::delete('/remove-unit/{id}', [ItemUnitController::class, 'destroy'])->name('inventory-mgmt.item-units.remove-unit');
+
+        // Configuration and options
+        Route::get('/type-selections', [ItemUnitController::class, 'getUnitTypeOptions'])->name('inventory-mgmt.item-units.type-selections');
+        Route::get('/container-selections', [ItemUnitController::class, 'getItemUnitContainsOptions'])->name('inventory-mgmt.item-units.container-selections');
+        Route::get('/form-setup', [ItemUnitController::class, 'getFormData'])->name('inventory-mgmt.item-units.form-setup');
+        Route::post('/compute-conversion', [ItemUnitController::class, 'calculateConversion'])->name('inventory-mgmt.item-units.compute-conversion');
+
+        // Item-specific queries
+        Route::get('/by-item/{itemId}', [ItemUnitController::class, 'byItem'])->name('inventory-mgmt.item-units.by-item');
+        Route::get('/by-item-type/{itemId}/{type}', [ItemUnitController::class, 'getByType'])->name('inventory-mgmt.item-units.by-item-type');
+        Route::get('/comprehensive-data/{itemId}', [ItemUnitController::class, 'getComprehensiveData'])->name('inventory-mgmt.item-units.comprehensive-data');
+
+        // Unit management
+        Route::put('/{id}/designate-default', [ItemUnitController::class, 'setDefault'])->name('inventory-mgmt.item-units.designate-default');
+    });
+
+    // Barcode Types Routes
+    Route::prefix('barcode-types')->group(function () {
+        // Main operations
+        Route::get('/enumerate-types', [BarcodeTypeController::class, 'index'])->name('inventory-mgmt.barcode-types.enumerate-types');
+        Route::get('/view-type/{id}', [BarcodeTypeController::class, 'show'])->name('inventory-mgmt.barcode-types.view-type');
+
+        // Configuration and options
+        Route::get('/type-options', [BarcodeTypeController::class, 'getOptions'])->name('inventory-mgmt.barcode-types.type-options');
+        Route::get('/supported-formats', [BarcodeTypeController::class, 'getSupportedTypes'])->name('inventory-mgmt.barcode-types.supported-formats');
+
+        // Barcode operations
+        Route::post('/verify-barcode', [BarcodeTypeController::class, 'validateBarcode'])->name('inventory-mgmt.barcode-types.verify-barcode');
+        Route::post('/create-barcode', [BarcodeTypeController::class, 'generateBarcode'])->name('inventory-mgmt.barcode-types.create-barcode');
+        Route::post('/create-barcode-svg', [BarcodeTypeController::class, 'generateBarcodeSVG'])->name('inventory-mgmt.barcode-types.create-barcode-svg');
+    });
+
+    // Item Types Routes
+    Route::prefix('item-types')->group(function () {
+        // Main CRUD operations
+        Route::get('/catalog-types', [ItemTypeController::class, 'index'])->name('inventory-mgmt.item-types.catalog-types');
+        Route::post('/establish-type', [ItemTypeController::class, 'store'])->name('inventory-mgmt.item-types.establish-type');
+        Route::get('/examine-type/{id}', [ItemTypeController::class, 'show'])->name('inventory-mgmt.item-types.examine-type');
+        Route::put('/modify-type/{id}', [ItemTypeController::class, 'update'])->name('inventory-mgmt.item-types.modify-type');
+        Route::delete('/eliminate-type/{id}', [ItemTypeController::class, 'destroy'])->name('inventory-mgmt.item-types.eliminate-type');
+
+        // Helper endpoints
+        Route::get('/type-selections', [ItemTypeController::class, 'getOptions'])->name('inventory-mgmt.item-types.type-selections');
+    });
+
+    // BOM Items Routes
+    Route::prefix('bom-items')->group(function () {
+        // Main CRUD operations
+        Route::get('/list-components', [BomItemController::class, 'index'])->name('inventory-mgmt.bom-items.list-components');
+        Route::post('/create-component', [BomItemController::class, 'store'])->name('inventory-mgmt.bom-items.create-component');
+        Route::get('/view-component/{id}', [BomItemController::class, 'show'])->name('inventory-mgmt.bom-items.view-component');
+        Route::put('/update-component/{id}', [BomItemController::class, 'update'])->name('inventory-mgmt.bom-items.update-component');
+        Route::delete('/delete-component/{id}', [BomItemController::class, 'destroy'])->name('inventory-mgmt.bom-items.delete-component');
+
+        // Specialized queries
+        Route::get('/by-item/{itemId}', [BomItemController::class, 'byItem'])->name('inventory-mgmt.bom-items.by-item');
+        Route::get('/by-component/{componentId}', [BomItemController::class, 'byComponent'])->name('inventory-mgmt.bom-items.by-component');
+        Route::post('/compute-requirements', [BomItemController::class, 'calculateRequirements'])->name('inventory-mgmt.bom-items.compute-requirements');
+
+        // ! Additional BOM management endpoints
+        Route::get('/filter-by-criteria', [BomItemController::class, 'filterByField'])->name('inventory-mgmt.bom-items.filter-by-criteria'); // ! Filter BOM items by field value
+        Route::get('/first-component', [BomItemController::class, 'first'])->name('inventory-mgmt.bom-items.first-component'); // ! Get first BOM component
+        Route::get('/last-component', [BomItemController::class, 'last'])->name('inventory-mgmt.bom-items.last-component'); // ! Get last BOM component
+    });
+
+    // ✅ Complete Inventory Movement Routes (Add Warehouse Movement System)
+    Route::prefix('inventory-movements')->group(function () {
+        // Main CRUD operations
+        Route::get('/monitor-all', [InventoryMovementController::class, 'index'])->name('inventory-mgmt.inv-movements.monitor-all');
+        Route::post('/initiate-movement', [InventoryMovementController::class, 'store'])->name('inventory-mgmt.inv-movements.initiate-movement');
+        Route::get('/review-movement/{id}', [InventoryMovementController::class, 'show'])->name('inventory-mgmt.inv-movements.review-movement');
+        Route::put('/adjust-movement/{id}', [InventoryMovementController::class, 'update'])->name('inventory-mgmt.inv-movements.adjust-movement');
+        Route::delete('/cancel-movement/{id}', [InventoryMovementController::class, 'destroy'])->name('inventory-mgmt.inv-movements.cancel-movement');
+
+        // Configuration and filtering
+        Route::get('/setup-data', [InventoryMovementController::class, 'getFormData'])->name('inventory-mgmt.inv-movements.setup-data');
+        Route::get('/filter-by-criteria', [InventoryMovementController::class, 'filterByField'])->name('inventory-mgmt.inv-movements.filter-by-criteria');
+        Route::get('/archived-movements', [InventoryMovementController::class, 'trashed'])->name('inventory-mgmt.inv-movements.archived-movements');
+
+        // Navigation helpers
+        Route::get('/initial-movement', [InventoryMovementController::class, 'first'])->name('inventory-mgmt.inv-movements.initial-movement');
+        Route::get('/final-movement', [InventoryMovementController::class, 'last'])->name('inventory-mgmt.inv-movements.final-movement');
+        Route::get('/next-sequence-number', [InventoryMovementController::class, 'getNextMovementNumber'])->name('inventory-mgmt.inv-movements.next-sequence-number');
+
+        // Movement operations
+        Route::get('/{id}/movement-details', [InventoryMovementController::class, 'getMovementData'])->name('inventory-mgmt.inv-movements.movement-details');
+        Route::post('/{id}/validate-movement', [InventoryMovementController::class, 'confirm'])->name('inventory-mgmt.inv-movements.validate-movement');
+        Route::post('/{id}/replicate-movement', [InventoryMovementController::class, 'duplicate'])->name('inventory-mgmt.inv-movements.replicate-movement');
+        Route::post('/{id}/reactivate-movement', [InventoryMovementController::class, 'restore'])->name('inventory-mgmt.inv-movements.reactivate-movement');
+        Route::delete('/{id}/permanently-remove', [InventoryMovementController::class, 'forceDelete'])->name('inventory-mgmt.inv-movements.permanently-remove');
+    });
+
+    // Manufacturing Formula Routes
+    Route::prefix('manufacturing-formulas')->group(function () {
+        // Main CRUD operations
+        Route::get('/catalog-all', [ManufacturingFormulaController::class, 'index'])->name('inventory-mgmt.manufacturing-formulas.catalog-all');
+        Route::post('/establish-formula', [ManufacturingFormulaController::class, 'store'])->name('inventory-mgmt.manufacturing-formulas.establish-formula');
+        Route::get('/examine-formula/{id}', [ManufacturingFormulaController::class, 'show'])->name('inventory-mgmt.manufacturing-formulas.examine-formula');
+        Route::put('/modify-formula/{id}', [ManufacturingFormulaController::class, 'update'])->name('inventory-mgmt.manufacturing-formulas.modify-formula');
+        Route::delete('/remove-formula/{id}', [ManufacturingFormulaController::class, 'destroy'])->name('inventory-mgmt.manufacturing-formulas.remove-formula');
+
+        // Data retrieval and configuration
+        Route::get('/item-numbers', [ManufacturingFormulaController::class, 'getItemNumbers'])->name('inventory-mgmt.manufacturing-formulas.item-numbers');
+        Route::get('/item-details', [ManufacturingFormulaController::class, 'getItemDetails'])->name('inventory-mgmt.manufacturing-formulas.item-details');
+        Route::post('/calculate-cost', [ManufacturingFormulaController::class, 'calculateCost'])->name('inventory-mgmt.manufacturing-formulas.calculate-cost');
+        Route::get('/available-fields', [ManufacturingFormulaController::class, 'getAvailableFields'])->name('inventory-mgmt.manufacturing-formulas.available-fields');
+        Route::get('/field-values', [ManufacturingFormulaController::class, 'getFieldValues'])->name('inventory-mgmt.manufacturing-formulas.field-values');
+        Route::get('/selectable-fields', [ManufacturingFormulaController::class, 'getSelectableFields'])->name('inventory-mgmt.manufacturing-formulas.selectable-fields');
+        Route::get('/field-based-data', [ManufacturingFormulaController::class, 'getFieldBasedData'])->name('inventory-mgmt.manufacturing-formulas.field-based-data');
+
+        // Formula-specific operations
+        Route::get('/formula-numbers', [ManufacturingFormulaController::class, 'getManufacturingFormulaNumbers'])->name('inventory-mgmt.manufacturing-formulas.formula-numbers');
+        Route::get('/item-by-formula-number', [ManufacturingFormulaController::class, 'getItemByFormulaNumber'])->name('inventory-mgmt.manufacturing-formulas.item-by-formula-number');
+        Route::get('/warehouses', [ManufacturingFormulaController::class, 'getWarehouses'])->name('inventory-mgmt.manufacturing-formulas.warehouses');
+
+        // Price management
+        Route::put('/update-prices-from-suppliers/{id}', [ManufacturingFormulaController::class, 'updatePricesFromSuppliers'])->name('inventory-mgmt.manufacturing-formulas.update-prices-from-suppliers');
+        Route::put('/update-all-prices-from-suppliers', [ManufacturingFormulaController::class, 'updateAllPricesFromSuppliers'])->name('inventory-mgmt.manufacturing-formulas.update-all-prices-from-suppliers');
+
+        // Soft delete management
+        Route::post('/{id}/restore-formula', [ManufacturingFormulaController::class, 'restore'])->name('inventory-mgmt.manufacturing-formulas.restore-formula');
+        Route::delete('/{id}/permanently-remove', [ManufacturingFormulaController::class, 'forceDelete'])->name('inventory-mgmt.manufacturing-formulas.permanently-remove');
+        Route::get('/deleted-formulas', [ManufacturingFormulaController::class, 'trashed'])->name('inventory-mgmt.manufacturing-formulas.deleted-formulas');
+    });
+
+    // Legacy route for backward compatibility (commented out to avoid conflicts)
+    // Route::apiResource('inventories', InventoryController::class)->names('inventory-mgmt.legacy-inventories');
 });

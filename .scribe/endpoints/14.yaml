@@ -1,20 +1,310 @@
-name: 'Project Management / Resources'
+name: 'Project Management / Tasks'
 description: |-
 
-  APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+  APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/resources/{id}'
+    uri: api/v1/project-tasks/fetch-all
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified resource.'
+      title: 'Display a listing of tasks.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/fetch-all could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/project-tasks/generate-new
+    metadata:
+      groupName: 'Project Management / Tasks'
+      groupDescription: |-
+
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created task.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      project_id:
+        name: project_id
+        description: 'The <code>id</code> of an existing record in the projects table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      task_name:
+        name: task_name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      assigned_to:
+        name: assigned_to
+        description: 'The <code>id</code> of an existing record in the employees table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      due_date:
+        name: due_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
+        required: true
+        example: '2106-10-22'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: true
+        example: in_progress
+        type: string
+        enumValues:
+          - to_do
+          - in_progress
+          - done
+          - blocked
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      milestone_id:
+        name: milestone_id
+        description: 'The <code>id</code> of an existing record in the project_milestones table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      title:
+        name: title
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      priority:
+        name: priority
+        description: ''
+        required: false
+        example: medium
+        type: string
+        enumValues:
+          - low
+          - medium
+          - high
+          - urgent
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      start_date:
+        name: start_date
+        description: 'Must be a valid date. Must be a date before or equal to <code>due_date</code>.'
+        required: false
+        example: '2020-01-19'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      estimated_hours:
+        name: estimated_hours
+        description: 'Must be at least 1. Must not be greater than 1000.'
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      actual_hours:
+        name: actual_hours
+        description: 'Must be at least 0. Must not be greater than 1000.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      progress:
+        name: progress
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 5
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      records:
+        name: records
+        description: 'Must be a valid URL. Must not be greater than 500 characters.'
+        required: false
+        example:
+          - opfuudtdsufvyvddqamni
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      fiscal_year_id:
+        name: fiscal_year_id
+        description: 'The <code>id</code> of an existing record in the fiscal_years table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      project_id: consequatur
+      task_name: mqeopfuudtdsufvyvddqa
+      assigned_to: consequatur
+      due_date: '2106-10-22'
+      status: in_progress
+      title: mqeopfuudtdsufvyvddqa
+      description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      notes: consequatur
+      priority: medium
+      start_date: '2020-01-19'
+      estimated_hours: 13
+      actual_hours: 16
+      progress: 5
+      records:
+        - opfuudtdsufvyvddqamni
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/project-tasks/inspect/{id}'
+    metadata:
+      groupName: 'Project Management / Tasks'
+      groupDescription: |-
+
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified task.'
       description: ''
       authenticated: true
       deprecated: false
@@ -26,7 +316,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the resource.'
+        description: 'The ID of the inspect.'
         required: true
         example: consequatur
         type: string
@@ -46,7 +336,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/resources/consequatur could not be found."
+              "message": "The route api/v1/project-tasks/inspect/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -66,15 +356,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/resources/{id}'
+    uri: 'api/v1/project-tasks/update-existing/{id}'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified resource.'
+      title: 'Update the specified task.'
       description: ''
       authenticated: true
       deprecated: false
@@ -86,7 +376,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the resource.'
+        description: 'The ID of the update existing.'
         required: true
         example: consequatur
         type: string
@@ -109,18 +399,8 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      supplier_id:
-        name: supplier_id
-        description: 'The <code>id</code> of an existing record in the suppliers table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      role:
-        name: role
+      task_name:
+        name: task_name
         description: 'Must not be greater than 255 characters.'
         required: false
         example: vmqeopfuudtdsufvyvddq
@@ -129,125 +409,159 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      resource_type:
-        name: resource_type
-        description: ''
+      assigned_to:
+        name: assigned_to
+        description: 'The <code>id</code> of an existing record in the employees table.'
         required: false
-        example: supplier
+        example: null
         type: string
-        enumValues:
-          - supplier
-          - internal
-          - contractor
-          - consultant
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      supplier_number:
-        name: supplier_number
-        description: 'Must not be greater than 100 characters.'
+      due_date:
+        name: due_date
+        description: 'Must be a valid date.'
         required: false
-        example: amniihfqcoynlazghdtqt
+        example: '2025-09-23T07:29:21'
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
-        custom: []
-      supplier_name:
-        name: supplier_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: qxbajwbpilpmufinllwlo
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      project_number:
-        name: project_number
-        description: 'Must not be greater than 100 characters.'
-        required: false
-        example: auydlsmsjuryvojcybzvr
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      project_name:
-        name: project_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: byickznkygloigmkwxphl
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      allocation_percentage:
-        name: allocation_percentage
-        description: 'Must be at least 0. Must not be greater than 100.'
-        required: false
-        example: 22
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      allocation_value:
-        name: allocation_value
-        description: 'Must be at least 0.'
-        required: false
-        example: 0
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      notes:
-        name: notes
-        description: 'Must not be greater than 2000 characters.'
-        required: false
-        example: zjrcnfbaqywuxhgjjmzux
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
       status:
         name: status
         description: ''
         required: false
-        example: inactive
+        example: blocked
         type: string
         enumValues:
-          - active
-          - inactive
-          - completed
+          - to_do
+          - in_progress
+          - done
+          - blocked
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      milestone_id:
+        name: milestone_id
+        description: 'The <code>id</code> of an existing record in the project_milestones table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      allocation:
-        name: allocation
-        description: 'Must not be greater than 500 characters.'
+      title:
+        name: title
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: jubqouzswiwxtrkimfcat
+        example: amniihfqcoynlazghdtqt
         type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      priority:
+        name: priority
+        description: ''
+        required: false
+        example: low
+        type: string
+        enumValues:
+          - low
+          - medium
+          - high
+          - urgent
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      start_date:
+        name: start_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-23T07:29:21'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      estimated_hours:
+        name: estimated_hours
+        description: 'Must be at least 1. Must not be greater than 1000.'
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      actual_hours:
+        name: actual_hours
+        description: 'Must be at least 0. Must not be greater than 1000.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      progress:
+        name: progress
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 5
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      records:
+        name: records
+        description: 'Must be a valid URL. Must not be greater than 500 characters.'
+        required: false
+        example:
+          - opfuudtdsufvyvddqamni
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
     cleanBodyParameters:
-      role: vmqeopfuudtdsufvyvddq
-      resource_type: supplier
-      supplier_number: amniihfqcoynlazghdtqt
-      supplier_name: qxbajwbpilpmufinllwlo
-      project_number: auydlsmsjuryvojcybzvr
-      project_name: byickznkygloigmkwxphl
-      allocation_percentage: 22
-      allocation_value: 0
-      notes: zjrcnfbaqywuxhgjjmzux
-      status: inactive
-      allocation: jubqouzswiwxtrkimfcat
+      task_name: vmqeopfuudtdsufvyvddq
+      due_date: '2025-09-23T07:29:21'
+      status: blocked
+      title: amniihfqcoynlazghdtqt
+      description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      notes: consequatur
+      priority: low
+      start_date: '2025-09-23T07:29:21'
+      estimated_hours: 13
+      actual_hours: 16
+      progress: 5
+      records:
+        - opfuudtdsufvyvddqamni
     fileParameters: []
     responses: []
     responseFields: []
@@ -262,15 +576,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/resources/{id}'
+    uri: 'api/v1/project-tasks/delete-item/{id}'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified resource (soft delete).'
+      title: 'Remove the specified task.'
       description: ''
       authenticated: true
       deprecated: false
@@ -282,324 +596,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the resource.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/resources/search
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Advanced search for resources.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/resources/filter/by-field
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get resources by specific field value.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/resources/filter/by-field could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/resources/fields/values
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get unique values for a specific field.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/resources/fields/values could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/resources/fields/sortable
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get sortable fields for resources.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/resources/fields/sortable could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/resources/sort
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Sort resources by specified field and order.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: 'api/v1/resources/{id}/restore'
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Restore a soft-deleted resource.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the resource.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/resources/{id}/force-delete'
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Permanently delete a resource.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the resource.'
+        description: 'The ID of the delete item.'
         required: true
         example: consequatur
         type: string
@@ -627,15 +624,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/resources/trashed/list
+    uri: api/v1/project-tasks/advanced-search
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get trashed (soft-deleted) resources.'
+      title: 'Advanced search for tasks.'
       description: ''
       authenticated: true
       deprecated: false
@@ -656,7 +653,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/resources/trashed/list could not be found."
+              "message": "The route api/v1/project-tasks/advanced-search could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -676,15 +673,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/resources/suppliers/list
+    uri: api/v1/project-tasks/filter-by-field
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get suppliers for dropdown (with supplier number and name).'
+      title: 'Get tasks filtered by specific field value (Dynamic Field Selection).'
       description: ''
       authenticated: true
       deprecated: false
@@ -705,7 +702,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/resources/suppliers/list could not be found."
+              "message": "The route api/v1/project-tasks/filter-by-field could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -725,15 +722,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/resources/projects/list
+    uri: api/v1/project-tasks/assigned-to-me
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get projects for dropdown (with project number and name).'
+      title: 'Get tasks assigned to the current user (My Tasks).'
       description: ''
       authenticated: true
       deprecated: false
@@ -754,7 +751,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/resources/projects/list could not be found."
+              "message": "The route api/v1/project-tasks/assigned-to-me could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -774,15 +771,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/resources/types/list
+    uri: api/v1/project-tasks/due-today
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get resource type options.'
+      title: 'Get tasks due today (Daily Due Date).'
       description: ''
       authenticated: true
       deprecated: false
@@ -803,7 +800,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/resources/types/list could not be found."
+              "message": "The route api/v1/project-tasks/due-today could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -823,15 +820,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/resources/statuses/list
+    uri: api/v1/project-tasks/overdue-tasks
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get resource status options.'
+      title: 'Get overdue tasks (tasks past due date but not completed).'
       description: ''
       authenticated: true
       deprecated: false
@@ -852,7 +849,56 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/resources/statuses/list could not be found."
+              "message": "The route api/v1/project-tasks/overdue-tasks could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/project-tasks/sortable-fields
+    metadata:
+      groupName: 'Project Management / Tasks'
+      groupDescription: |-
+
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get sortable fields for tasks.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/sortable-fields could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -872,15 +918,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/resources/calculate-allocation
+    uri: api/v1/project-tasks/apply-sort
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Calculate allocation based on project value and percentage.'
+      title: 'Sort tasks by specified field and order.'
       description: ''
       authenticated: true
       deprecated: false
@@ -908,16 +954,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - POST
-    uri: api/v1/resources/calculate-percentage
+      - GET
+    uri: api/v1/project-tasks/employee-options
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Calculate allocation percentage based on project value and allocation value.'
+      title: 'Get employees for assignment dropdown.'
       description: ''
       authenticated: true
       deprecated: false
@@ -933,7 +979,19 @@ endpoints:
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
-    responses: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/employee-options could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth:
       - headers
@@ -946,15 +1004,113 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/resources/project/{projectId}'
+    uri: api/v1/project-tasks/status-options
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get resources for a specific project.'
+      title: 'Get task status options.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/status-options could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/project-tasks/priority-options
+    metadata:
+      groupName: 'Project Management / Tasks'
+      groupDescription: |-
+
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get task priority options.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-tasks/priority-options could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/project-tasks/by-project/{projectId}'
+    metadata:
+      groupName: 'Project Management / Tasks'
+      groupDescription: |-
+
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get tasks for a specific project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -986,7 +1142,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/resources/project/consequatur could not be found."
+              "message": "The route api/v1/project-tasks/by-project/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -1005,16 +1161,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: 'api/v1/resources/supplier/{supplierId}'
+      - POST
+    uri: 'api/v1/project-tasks/{taskId}/upload-document'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Tasks'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get resources for a specific supplier.'
+      title: 'Upload document for a task.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1024,8 +1180,8 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      supplierId:
-        name: supplierId
+      taskId:
+        name: taskId
         description: ''
         required: true
         example: consequatur
@@ -1035,7 +1191,55 @@ endpoints:
         nullable: false
         custom: []
     cleanUrlParameters:
-      supplierId: consequatur
+      taskId: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/project-tasks/{taskId}/task-documents'
+    metadata:
+      groupName: 'Project Management / Tasks'
+      groupDescription: |-
+
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get documents for a task.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      taskId:
+        name: taskId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      taskId: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1046,7 +1250,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/resources/supplier/consequatur could not be found."
+              "message": "The route api/v1/project-tasks/consequatur/task-documents could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -1054,6 +1258,54 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/project-tasks/document/{documentId}/remove'
+    metadata:
+      groupName: 'Project Management / Tasks'
+      groupDescription: |-
+
+        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Delete a task document.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      documentId:
+        name: documentId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      documentId: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
     responseFields: []
     auth:
       - headers

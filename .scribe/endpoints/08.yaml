@@ -1,20 +1,20 @@
-name: 'Inventory Management / Item Types'
+name: 'Inventory Management / Barcode Types'
 description: |-
 
-  APIs for managing item types, categories, and item classification.
+  APIs for managing barcode types, validation, and barcode generation.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/item-types/options
+    uri: api/v1/barcode-types/enumerate-types
     metadata:
-      groupName: 'Inventory Management / Item Types'
+      groupName: 'Inventory Management / Barcode Types'
       groupDescription: |-
 
-        APIs for managing item types, categories, and item classification.
+        APIs for managing barcode types, validation, and barcode generation.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get item type options for dropdown.'
+      title: 'Display a listing of barcode types.'
       description: ''
       authenticated: true
       deprecated: false
@@ -35,7 +35,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/item-types/options could not be found."
+              "message": "The route api/v1/barcode-types/enumerate-types could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -55,15 +55,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/item-types/{id}'
+    uri: 'api/v1/barcode-types/view-type/{id}'
     metadata:
-      groupName: 'Inventory Management / Item Types'
+      groupName: 'Inventory Management / Barcode Types'
       groupDescription: |-
 
-        APIs for managing item types, categories, and item classification.
+        APIs for managing barcode types, validation, and barcode generation.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified item type.'
+      title: 'Display the specified barcode type.'
       description: ''
       authenticated: true
       deprecated: false
@@ -75,7 +75,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the item type.'
+        description: 'The ID of the view type.'
         required: true
         example: consequatur
         type: string
@@ -95,7 +95,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/item-types/consequatur could not be found."
+              "message": "The route api/v1/barcode-types/view-type/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -114,16 +114,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - PUT
-    uri: 'api/v1/item-types/{id}'
+      - GET
+    uri: api/v1/barcode-types/type-options
     metadata:
-      groupName: 'Inventory Management / Item Types'
+      groupName: 'Inventory Management / Barcode Types'
       groupDescription: |-
 
-        APIs for managing item types, categories, and item classification.
+        APIs for managing barcode types, validation, and barcode generation.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified item type.'
+      title: 'Get barcode type options for dropdown.'
       description: ''
       authenticated: true
       deprecated: false
@@ -132,78 +132,132 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the item type.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/barcode-types/type-options could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
         custom: []
-    cleanUrlParameters:
-      id: consequatur
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/barcode-types/supported-formats
+    metadata:
+      groupName: 'Inventory Management / Barcode Types'
+      groupDescription: |-
+
+        APIs for managing barcode types, validation, and barcode generation.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get supported barcode types from Milon library.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/barcode-types/supported-formats could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/barcode-types/verify-barcode
+    metadata:
+      groupName: 'Inventory Management / Barcode Types'
+      groupDescription: |-
+
+        APIs for managing barcode types, validation, and barcode generation.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Validate a barcode against a specific type.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      name:
-        name: name
-        description: 'Must not be greater than 255 characters.'
+      barcode:
+        name: barcode
+        description: ''
         required: true
-        example: vmqeopfuudtdsufvyvddq
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      name_ar:
-        name: name_ar
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: amniihfqcoynlazghdtqt
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      description:
-        name: description
-        description: ''
-        required: false
-        example: 'Dolores dolorum amet iste laborum eius est dolor.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      description_ar:
-        name: description_ar
-        description: ''
-        required: false
+      barcode_type_id:
+        name: barcode_type_id
+        description: 'The <code>id</code> of an existing record in the barcode_types table.'
+        required: true
         example: consequatur
         type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      is_active:
-        name: is_active
-        description: ''
-        required: false
-        example: true
-        type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      name: vmqeopfuudtdsufvyvddq
-      name_ar: amniihfqcoynlazghdtqt
-      description: 'Dolores dolorum amet iste laborum eius est dolor.'
-      description_ar: consequatur
-      is_active: true
+      barcode: consequatur
+      barcode_type_id: consequatur
     fileParameters: []
     responses: []
     responseFields: []
@@ -217,16 +271,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - DELETE
-    uri: 'api/v1/item-types/{id}'
+      - POST
+    uri: api/v1/barcode-types/create-barcode
     metadata:
-      groupName: 'Inventory Management / Item Types'
+      groupName: 'Inventory Management / Barcode Types'
       groupDescription: |-
 
-        APIs for managing item types, categories, and item classification.
+        APIs for managing barcode types, validation, and barcode generation.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified item type.'
+      title: 'Generate barcode image (PNG or SVG).'
       description: ''
       authenticated: true
       deprecated: false
@@ -235,10 +289,14 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the item type.'
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      barcode:
+        name: barcode
+        description: ''
         required: true
         example: consequatur
         type: string
@@ -246,12 +304,157 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-    cleanUrlParameters:
-      id: consequatur
+      barcode_type_id:
+        name: barcode_type_id
+        description: 'The <code>id</code> of an existing record in the barcode_types table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      width:
+        name: width
+        description: 'Must be at least 1. Must not be greater than 10.'
+        required: false
+        example: 5
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      height:
+        name: height
+        description: 'Must be at least 10. Must not be greater than 100.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      format:
+        name: format
+        description: ''
+        required: false
+        example: svg
+        type: string
+        enumValues:
+          - png
+          - svg
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      color:
+        name: color
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      barcode: consequatur
+      barcode_type_id: consequatur
+      width: 5
+      height: 16
+      format: svg
+      color: consequatur
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/barcode-types/create-barcode-svg
+    metadata:
+      groupName: 'Inventory Management / Barcode Types'
+      groupDescription: |-
+
+        APIs for managing barcode types, validation, and barcode generation.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Generate SVG barcode specifically.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      barcode:
+        name: barcode
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      barcode_type_id:
+        name: barcode_type_id
+        description: 'The <code>id</code> of an existing record in the barcode_types table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      width:
+        name: width
+        description: 'Must be at least 1. Must not be greater than 10.'
+        required: false
+        example: 5
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      height:
+        name: height
+        description: 'Must be at least 10. Must not be greater than 100.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      color:
+        name: color
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      barcode: consequatur
+      barcode_type_id: consequatur
+      width: 5
+      height: 16
+      color: consequatur
     fileParameters: []
     responses: []
     responseFields: []

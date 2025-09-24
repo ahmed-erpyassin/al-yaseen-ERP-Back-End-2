@@ -1,20 +1,16 @@
-name: 'Inventory Management / Inventory Items'
-description: |-
-
-  APIs for managing inventory items, stock levels, and warehouse operations.
+name: Endpoints
+description: ''
 endpoints:
   -
     httpMethods:
-      - GET
-    uri: 'api/v1/inventory-items/{id}'
+      - POST
+    uri: api/v1/auth/register
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
-      groupDescription: |-
-
-        APIs for managing inventory items, stock levels, and warehouse operations.
+      groupName: Endpoints
+      groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified inventory item.'
+      title: ''
       description: ''
       authenticated: true
       deprecated: false
@@ -23,19 +19,148 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory item.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/login
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/send-otp
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/verify-otp
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/auth/me
+    metadata:
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -46,7 +171,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/inventory-items/consequatur could not be found."
+              "message": "The route api/v1/auth/me could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -65,16 +190,14 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - PUT
-    uri: 'api/v1/inventory-items/{id}'
+      - POST
+    uri: api/v1/auth/logout
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
-      groupDescription: |-
-
-        APIs for managing inventory items, stock levels, and warehouse operations.
+      groupName: Endpoints
+      groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified inventory item.'
+      title: ''
       description: ''
       authenticated: true
       deprecated: false
@@ -83,199 +206,8 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory item.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      item_number:
-        name: item_number
-        description: 'Must not be greater than 255 characters.'
-        required: true
-        example: vmqeopfuudtdsufvyvddq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      item_name_ar:
-        name: item_name_ar
-        description: 'Must not be greater than 255 characters.'
-        required: true
-        example: amniihfqcoynlazghdtqt
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      item_name_en:
-        name: item_name_en
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: qxbajwbpilpmufinllwlo
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      barcode:
-        name: barcode
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: auydlsmsjuryvojcybzvr
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      model:
-        name: model
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: byickznkygloigmkwxphl
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit:
-        name: unit
-        description: 'Must not be greater than 50 characters.'
-        required: true
-        example: vazjrcnfbaqywuxhgjjmz
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      quantity:
-        name: quantity
-        description: 'Must be at least 0.'
-        required: false
-        example: 72
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit_price:
-        name: unit_price
-        description: 'Must be at least 0.'
-        required: false
-        example: 82
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      minimum_limit:
-        name: minimum_limit
-        description: 'Must be at least 0.'
-        required: false
-        example: 34
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      reorder_limit:
-        name: reorder_limit
-        description: 'Must be at least 0.'
-        required: false
-        example: 71
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      notes:
-        name: notes
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      active:
-        name: active
-        description: ''
-        required: false
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      item_number: vmqeopfuudtdsufvyvddq
-      item_name_ar: amniihfqcoynlazghdtqt
-      item_name_en: qxbajwbpilpmufinllwlo
-      barcode: auydlsmsjuryvojcybzvr
-      model: byickznkygloigmkwxphl
-      unit: vazjrcnfbaqywuxhgjjmz
-      quantity: 72
-      unit_price: 82
-      minimum_limit: 34
-      reorder_limit: 71
-      notes: consequatur
-      active: true
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/inventory-items/{id}'
-    metadata:
-      groupName: 'Inventory Management / Inventory Items'
-      groupDescription: |-
-
-        APIs for managing inventory items, stock levels, and warehouse operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Remove the specified inventory item.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory item.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

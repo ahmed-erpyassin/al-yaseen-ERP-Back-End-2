@@ -1,20 +1,238 @@
-name: 'Project Management / Documents'
+name: 'Project Management / Milestones'
 description: |-
 
-  APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+  APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/documents/{id}'
+    uri: api/v1/project-milestones/retrieve-all
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified document.'
+      title: 'Display a listing of milestones.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-milestones/retrieve-all could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/project-milestones/build-new
+    metadata:
+      groupName: 'Project Management / Milestones'
+      groupDescription: |-
+
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created milestone.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      project_id:
+        name: project_id
+        description: 'The <code>id</code> of an existing record in the projects table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      start_date:
+        name: start_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
+        required: true
+        example: '2106-10-22'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: true
+        example: not_started
+        type: string
+        enumValues:
+          - not_started
+          - in_progress
+          - completed
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      milestone_number:
+        name: milestone_number
+        description: 'Must be at least 1.'
+        required: false
+        example: 45
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      description:
+        name: description
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: 'Amet iste laborum eius est dolor dolores.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      end_date:
+        name: end_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
+        required: false
+        example: '2106-10-22'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      progress:
+        name: progress
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: 'Must not be greater than 2000 characters.'
+        required: false
+        example: qeopfuudtdsufvyvddqam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      fiscal_year_id:
+        name: fiscal_year_id
+        description: 'The <code>id</code> of an existing record in the fiscal_years table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      project_id: consequatur
+      name: mqeopfuudtdsufvyvddqa
+      start_date: '2106-10-22'
+      status: not_started
+      milestone_number: 45
+      description: 'Amet iste laborum eius est dolor dolores.'
+      end_date: '2106-10-22'
+      progress: 13
+      notes: qeopfuudtdsufvyvddqam
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/project-milestones/view-single/{id}'
+    metadata:
+      groupName: 'Project Management / Milestones'
+      groupDescription: |-
+
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified milestone.'
       description: ''
       authenticated: true
       deprecated: false
@@ -26,7 +244,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the document.'
+        description: 'The ID of the view single.'
         required: true
         example: consequatur
         type: string
@@ -46,7 +264,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/documents/consequatur could not be found."
+              "message": "The route api/v1/project-milestones/view-single/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -66,27 +284,27 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/documents/{id}'
+    uri: 'api/v1/project-milestones/edit-record/{id}'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified document.'
+      title: 'Update the specified milestone.'
       description: ''
       authenticated: true
       deprecated: false
       custom: []
     headers:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: multipart/form-data
+      Content-Type: application/json
       Accept: application/json
     urlParameters:
       id:
         name: id
-        description: 'The ID of the document.'
+        description: 'The ID of the edit record.'
         required: true
         example: consequatur
         type: string
@@ -109,8 +327,8 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      title:
-        name: title
+      name:
+        name: name
         description: 'Must not be greater than 255 characters.'
         required: false
         example: vmqeopfuudtdsufvyvddq
@@ -119,107 +337,89 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      file:
-        name: file
-        description: 'Must be a file. Must not be greater than 20480 kilobytes.'
+      start_date:
+        name: start_date
+        description: 'Must be a valid date.'
         required: false
-        example: null
-        type: file
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      project_number:
-        name: project_number
-        description: 'Must not be greater than 100 characters.'
-        required: false
-        example: amniihfqcoynlazghdtqt
+        example: '2025-09-23T07:29:21'
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
-      project_name:
-        name: project_name
-        description: 'Must not be greater than 255 characters.'
+      status:
+        name: status
+        description: ''
         required: false
-        example: qxbajwbpilpmufinllwlo
+        example: completed
         type: string
+        enumValues:
+          - not_started
+          - in_progress
+          - completed
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      milestone_number:
+        name: milestone_number
+        description: 'Must be at least 1.'
+        required: false
+        example: 2
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
       description:
         name: description
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: 'Molestias ipsam sit veniam sed fuga aspernatur.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      end_date:
+        name: end_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
+        required: false
+        example: '2106-10-22'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      progress:
+        name: progress
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
         description: 'Must not be greater than 2000 characters.'
         required: false
-        example: 'Et a qui ducimus.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      document_category:
-        name: document_category
-        description: ''
-        required: false
-        example: drawing
-        type: string
-        enumValues:
-          - contract
-          - specification
-          - drawing
-          - report
-          - invoice
-          - correspondence
-          - other
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      status:
-        name: status
-        description: ''
-        required: false
-        example: active
-        type: string
-        enumValues:
-          - active
-          - archived
-          - deleted
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      upload_date:
-        name: upload_date
-        description: 'Must be a valid date.'
-        required: false
-        example: '2025-09-16T10:25:38'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      version:
-        name: version
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: smsjuryvojcybzvrb
+        example: qeopfuudtdsufvyvddqam
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
     cleanBodyParameters:
-      title: vmqeopfuudtdsufvyvddq
-      project_number: amniihfqcoynlazghdtqt
-      project_name: qxbajwbpilpmufinllwlo
-      description: 'Et a qui ducimus.'
-      document_category: drawing
-      status: active
-      upload_date: '2025-09-16T10:25:38'
-      version: smsjuryvojcybzvrb
-    fileParameters:
-      file: null
+      name: vmqeopfuudtdsufvyvddq
+      start_date: '2025-09-23T07:29:21'
+      status: completed
+      milestone_number: 2
+      description: 'Molestias ipsam sit veniam sed fuga aspernatur.'
+      end_date: '2106-10-22'
+      progress: 13
+      notes: qeopfuudtdsufvyvddqam
+    fileParameters: []
     responses: []
     responseFields: []
     auth:
@@ -233,15 +433,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/documents/{id}'
+    uri: 'api/v1/project-milestones/destroy-entry/{id}'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified document (soft delete).'
+      title: 'Remove the specified milestone (soft delete).'
       description: ''
       authenticated: true
       deprecated: false
@@ -253,7 +453,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the document.'
+        description: 'The ID of the destroy entry.'
         required: true
         example: consequatur
         type: string
@@ -280,76 +480,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - GET
-    uri: 'api/v1/documents/{id}/download'
-    metadata:
-      groupName: 'Project Management / Documents'
-      groupDescription: |-
-
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Download a document file.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the document.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/documents/consequatur/download could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
       - POST
-    uri: api/v1/documents/search
+    uri: api/v1/project-milestones/advanced-search
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Advanced search for documents.'
+      title: 'Advanced search for milestones.'
       description: ''
       authenticated: true
       deprecated: false
@@ -378,15 +518,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/documents/filter/by-field
+    uri: api/v1/project-milestones/filter-by-field
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get documents by specific field value.'
+      title: 'Get milestones filtered by specific field value.'
       description: ''
       authenticated: true
       deprecated: false
@@ -407,7 +547,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/documents/filter/by-field could not be found."
+              "message": "The route api/v1/project-milestones/filter-by-field could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -427,15 +567,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/documents/fields/values
+    uri: api/v1/project-milestones/field-values
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get unique values for a specific field.'
+      title: 'Get all field values for dropdown filtering.'
       description: ''
       authenticated: true
       deprecated: false
@@ -456,7 +596,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/documents/fields/values could not be found."
+              "message": "The route api/v1/project-milestones/field-values could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -476,15 +616,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/documents/fields/sortable
+    uri: api/v1/project-milestones/sortable-fields
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get sortable fields for documents.'
+      title: 'Get sortable fields list.'
       description: ''
       authenticated: true
       deprecated: false
@@ -505,7 +645,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/documents/fields/sortable could not be found."
+              "message": "The route api/v1/project-milestones/sortable-fields could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -525,15 +665,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/documents/sort
+    uri: api/v1/project-milestones/apply-sort
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Sort documents by specified field and order.'
+      title: 'Sort milestones by specified field and order.'
       description: ''
       authenticated: true
       deprecated: false
@@ -562,15 +702,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/v1/documents/{id}/restore'
+    uri: 'api/v1/project-milestones/{id}/restore-milestone'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Restore a soft-deleted document.'
+      title: 'Restore a soft-deleted milestone.'
       description: ''
       authenticated: true
       deprecated: false
@@ -582,7 +722,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the document.'
+        description: 'The ID of the project milestone.'
         required: true
         example: consequatur
         type: string
@@ -610,15 +750,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/documents/{id}/force-delete'
+    uri: 'api/v1/project-milestones/{id}/permanent-delete'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Permanently delete a document.'
+      title: 'Permanently delete a milestone.'
       description: ''
       authenticated: true
       deprecated: false
@@ -630,7 +770,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the document.'
+        description: 'The ID of the project milestone.'
         required: true
         example: consequatur
         type: string
@@ -658,15 +798,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/documents/trashed/list
+    uri: api/v1/project-milestones/deleted-milestones
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get trashed documents.'
+      title: 'Get trashed (soft-deleted) milestones.'
       description: ''
       authenticated: true
       deprecated: false
@@ -687,7 +827,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/documents/trashed/list could not be found."
+              "message": "The route api/v1/project-milestones/deleted-milestones could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -707,12 +847,12 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/documents/projects/list
+    uri: api/v1/project-milestones/project-options
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
       title: 'Get projects for dropdown (with project number and name).'
@@ -736,7 +876,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/documents/projects/list could not be found."
+              "message": "The route api/v1/project-milestones/project-options could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -756,15 +896,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/documents/categories/list
+    uri: api/v1/project-milestones/status-options
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get document category options.'
+      title: 'Get milestone status options.'
       description: ''
       authenticated: true
       deprecated: false
@@ -785,56 +925,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/documents/categories/list could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/documents/statuses/list
-    metadata:
-      groupName: 'Project Management / Documents'
-      groupDescription: |-
-
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get document status options.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/documents/statuses/list could not be found."
+              "message": "The route api/v1/project-milestones/status-options could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -854,15 +945,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/documents/generate-number
+    uri: api/v1/project-milestones/number-generation
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Generate next document number for a project.'
+      title: 'Generate next milestone number for a project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -891,15 +982,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/documents/project/{projectId}'
+    uri: 'api/v1/project-milestones/by-project/{projectId}'
     metadata:
-      groupName: 'Project Management / Documents'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get documents for a specific project.'
+      title: 'Get milestones for a specific project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -931,67 +1022,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/documents/project/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/documents/category/{category}'
-    metadata:
-      groupName: 'Project Management / Documents'
-      groupDescription: |-
-
-        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get documents by category.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      category:
-        name: category
-        description: 'The category.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      category: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/documents/category/consequatur could not be found."
+              "message": "The route api/v1/project-milestones/by-project/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'

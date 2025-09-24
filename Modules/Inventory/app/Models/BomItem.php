@@ -2,8 +2,10 @@
 
 namespace Modules\Inventory\Models;
 
-use App\Models\Company;
-use App\Models\User;
+use Modules\Companies\Models\Company;
+use Modules\Companies\Models\Branch;
+use Modules\Users\Models\User;
+use Modules\Suppliers\Models\Supplier;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -476,7 +478,7 @@ class BomItem extends Model
      */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('sequence_order')->orderBy('component_item_name');
+        return $query->orderBy('sequence_order')->orderBy('id');
     }
 
     /**
