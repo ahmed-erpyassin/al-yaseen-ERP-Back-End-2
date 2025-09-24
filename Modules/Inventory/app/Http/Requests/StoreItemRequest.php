@@ -32,7 +32,6 @@ class StoreItemRequest extends FormRequest
             'description' => 'nullable|string',
             'description_ar' => 'nullable|string', // الوصف بالعربية
             'model' => 'nullable|string|max:255',
-            'unit_name' => 'nullable|string|max:255',
             'type' => 'required|in:product,service,material,raw_material',
             'quantity' => 'nullable|numeric|min:0',
             'balance' => 'nullable|numeric',

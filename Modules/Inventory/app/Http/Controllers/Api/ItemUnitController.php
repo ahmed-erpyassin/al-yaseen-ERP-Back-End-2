@@ -24,7 +24,7 @@ class ItemUnitController extends Controller
     {
        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $query = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit']);
+        $query = ItemUnit::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'item', 'unit']);
            // ->forCompany($companyId);
 
         // Apply filters
@@ -85,7 +85,7 @@ class ItemUnitController extends Controller
         }
 
         $itemUnit = ItemUnit::create($data);
-        $itemUnit->load(['company', 'branch', 'user', 'item', 'unit']);
+        $itemUnit->load(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'item', 'unit']);
 
         return response()->json([
             'success' => true,
@@ -101,7 +101,7 @@ class ItemUnitController extends Controller
     {
        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $itemUnit = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
+        $itemUnit = ItemUnit::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'item', 'unit'])
             //->forCompany($companyId)
             ->findOrFail($id);
 
@@ -134,7 +134,7 @@ class ItemUnitController extends Controller
         }
 
         $itemUnit->update($data);
-        $itemUnit->load(['company', 'branch', 'user', 'item', 'unit']);
+        $itemUnit->load(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'item', 'unit']);
 
         return response()->json([
             'success' => true,

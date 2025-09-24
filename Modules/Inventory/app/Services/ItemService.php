@@ -13,7 +13,7 @@ class ItemService
      */
     public function getItems($user, array $filters = [], int $perPage = 15)
     {
-        $query = Item::with(['company', 'branch', 'user', 'unit', 'parent', 'itemUnits.unit'])
+        $query = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent', 'itemUnits.unit'])
             ->forCompany($user->company_id);
 
         // Apply filters
@@ -54,12 +54,12 @@ class ItemService
 
             // Load relationships for response
             $item->load([
-                'company:id,name',
+                'company:id,title',
                 'branch:id,name',
-                'user:id,name,email',
+                'user:id,first_name,second_name,email',
                 'unit:id,name,symbol',
                 'parent:id,item_number,name',
-                'createdBy:id,name,email',
+                'createdBy:id,first_name,second_name,email',
                 'children:id,item_number,name',
                 'itemUnits.unit:id,name,symbol'
             ]);
@@ -74,8 +74,8 @@ class ItemService
     public function getItemById(int $id, $user): Item
     {
         return Item::with([
-                'company', 'branch', 'user', 'unit', 'parent', 'children',
-                'createdBy', 'updatedBy', 'itemUnits.unit'
+                'company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent', 'children',
+                'createdBy:id,first_name,second_name,email', 'updatedBy:id,first_name,second_name,email', 'itemUnits.unit'
             ])
             ->forCompany($user->company_id)
             ->findOrFail($id);
@@ -101,8 +101,8 @@ class ItemService
             $item->update($data);
 
             return $item->load([
-                'company', 'branch', 'user', 'unit', 'parent', 'children',
-                'createdBy', 'updatedBy', 'itemUnits.unit'
+                'company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent', 'children',
+                'createdBy:id,first_name,second_name,email', 'updatedBy:id,first_name,second_name,email', 'itemUnits.unit'
             ]);
         });
     }
@@ -165,7 +165,7 @@ class ItemService
     public function getTrashedItems($user, int $perPage = 15)
     {
         return Item::onlyTrashed()
-            ->with(['company', 'branch', 'user', 'unit', 'parent'])
+            ->with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
             ->forCompany($user->company_id)
             ->orderBy('deleted_at', 'desc')
             ->paginate($perPage);
@@ -176,7 +176,7 @@ class ItemService
      */
     public function searchItems($user, array $searchParams, int $perPage = 15)
     {
-        $query = Item::with(['company', 'branch', 'user', 'unit', 'parent', 'itemUnits.unit'])
+        $query = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent', 'itemUnits.unit'])
             ->forCompany($user->company_id);
 
         // Apply search filters
@@ -195,7 +195,7 @@ class ItemService
      */
     public function getItemsByType(string $type, $user, int $perPage = 15)
     {
-        return Item::with(['company', 'branch', 'user', 'unit', 'parent'])
+        return Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
             ->forCompany($user->company_id)
             ->where('type', $type)
             ->orderBy('name')
@@ -207,7 +207,7 @@ class ItemService
      */
     public function getItemsByParent(int $parentId, $user, int $perPage = 15)
     {
-        return Item::with(['company', 'branch', 'user', 'unit', 'parent'])
+        return Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
             ->forCompany($user->company_id)
             ->where('parent_id', $parentId)
             ->orderBy('name')
@@ -219,7 +219,7 @@ class ItemService
      */
     public function getLowStockItems($user, int $perPage = 15)
     {
-        return Item::with(['company', 'branch', 'user', 'unit'])
+        return Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit'])
             ->forCompany($user->company_id)
             ->lowStock()
             ->orderBy('name')
@@ -231,7 +231,7 @@ class ItemService
      */
     public function getReorderItems($user, int $perPage = 15)
     {
-        return Item::with(['company', 'branch', 'user', 'unit'])
+        return Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit'])
             ->forCompany($user->company_id)
             ->needReorder()
             ->orderBy('name')
@@ -260,7 +260,7 @@ class ItemService
             $item->updated_by = $user->id;
             $item->save();
 
-            return $item->load(['company', 'branch', 'user', 'unit']);
+            return $item->load(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit']);
         });
     }
 
