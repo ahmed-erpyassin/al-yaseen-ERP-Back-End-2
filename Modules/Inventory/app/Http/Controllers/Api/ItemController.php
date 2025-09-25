@@ -2391,8 +2391,8 @@ class ItemController extends Controller
      */
     public function exportItemTransactions(Request $request, $id)
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $item = Item::forCompany($companyId)->findOrFail($id);
+       //$companyId = Auth::user()->company_id ?? $request->company_id;
+        $item = Item::findOrFail($id);
 
         $request->validate([
             'date_from' => 'nullable|date',

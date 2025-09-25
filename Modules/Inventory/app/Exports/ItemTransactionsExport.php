@@ -94,7 +94,7 @@ class ItemTransactionsExport implements FromCollection, WithHeadings, WithMappin
         // Set RTL direction for Arabic content
         $sheet->setRightToLeft(true);
 
-        // Style the header row
+        // Style the header row (row 1)
         $sheet->getStyle('A1:O1')->applyFromArray([
             'font' => [
                 'bold' => true,
@@ -117,42 +117,55 @@ class ItemTransactionsExport implements FromCollection, WithHeadings, WithMappin
             ]
         ]);
 
-        // Style data rows
+        // Style data rows (starting from row 2)
         $lastRow = $this->transactions->count() + 1;
-        $sheet->getStyle("A2:O{$lastRow}")->applyFromArray([
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical' => Alignment::VERTICAL_CENTER
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                    'color' => ['rgb' => 'CCCCCC']
+        if ($lastRow > 1) {
+            $sheet->getStyle("A2:O{$lastRow}")->applyFromArray([
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['rgb' => 'CCCCCC']
+                    ]
                 ]
-            ]
+            ]);
+        }
+
+        // Add item information after the data
+        $infoStartRow = $lastRow + 3;
+
+        $sheet->setCellValue("A{$infoStartRow}", 'معلومات الصنف:');
+        $sheet->getStyle("A{$infoStartRow}")->applyFromArray([
+            'font' => ['bold' => true, 'size' => 14]
         ]);
 
-        // Add item information at the top
-        $sheet->insertRows(1, 5);
-        
-        // Item details
-        $sheet->setCellValue('A1', 'تقرير حركات الصنف');
-        $sheet->mergeCells('A1:O1');
-        $sheet->getStyle('A1')->applyFromArray([
-            'font' => ['bold' => true, 'size' => 16],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]
-        ]);
-
-        $sheet->setCellValue('A2', 'اسم الصنف: ' . $this->item['name']);
-        $sheet->setCellValue('A3', 'كود الصنف: ' . $this->item['code']);
-        $sheet->setCellValue('A4', 'رقم الصنف: ' . $this->item['item_number']);
-        $sheet->setCellValue('A5', 'الرصيد الحالي: ' . $this->item['current_balance']);
+        $infoStartRow++;
+        $sheet->setCellValue("A{$infoStartRow}", 'اسم الصنف: ' . $this->item['name']);
+        $infoStartRow++;
+        $sheet->setCellValue("A{$infoStartRow}", 'كود الصنف: ' . $this->item['code']);
+        $infoStartRow++;
+        $sheet->setCellValue("A{$infoStartRow}", 'رقم الصنف: ' . $this->item['item_number']);
+        $infoStartRow++;
+        $sheet->setCellValue("A{$infoStartRow}", 'الرصيد الحالي: ' . $this->item['current_balance']);
 
         // Filter information
-        $sheet->setCellValue('H2', 'من تاريخ: ' . ($this->filters['date_from'] ?? 'غير محدد'));
-        $sheet->setCellValue('H3', 'إلى تاريخ: ' . ($this->filters['date_to'] ?? 'غير محدد'));
-        $sheet->setCellValue('H4', 'نوع الحركة: ' . $this->getTransactionTypeArabic($this->filters['transaction_type'] ?? 'all'));
-        $sheet->setCellValue('H5', 'تاريخ التقرير: ' . now()->format('Y-m-d H:i:s'));
+        $filterStartRow = $lastRow + 3;
+        $sheet->setCellValue("H{$filterStartRow}", 'معلومات التقرير:');
+        $sheet->getStyle("H{$filterStartRow}")->applyFromArray([
+            'font' => ['bold' => true, 'size' => 14]
+        ]);
+
+        $filterStartRow++;
+        $sheet->setCellValue("H{$filterStartRow}", 'من تاريخ: ' . ($this->filters['date_from'] ?? 'غير محدد'));
+        $filterStartRow++;
+        $sheet->setCellValue("H{$filterStartRow}", 'إلى تاريخ: ' . ($this->filters['date_to'] ?? 'غير محدد'));
+        $filterStartRow++;
+        $sheet->setCellValue("H{$filterStartRow}", 'نوع الحركة: ' . $this->getTransactionTypeArabic($this->filters['transaction_type'] ?? 'all'));
+        $filterStartRow++;
+        $sheet->setCellValue("H{$filterStartRow}", 'تاريخ التقرير: ' . now()->format('Y-m-d H:i:s'));
 
         return $sheet;
     }
