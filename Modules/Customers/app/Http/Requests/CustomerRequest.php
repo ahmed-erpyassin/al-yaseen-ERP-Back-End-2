@@ -15,51 +15,70 @@ class CustomerRequest extends FormRequest
         $customerId = $this->route('customer'); // or however you get the current customer ID
 
         return [
-            'company_id'        => 'required|integer',
-            'branch_id'         => 'required|integer',
-            'currency_id'       => 'required|integer',
-            'employee_id'       => 'required|integer',
-            'country_id'        => 'required|integer',
-            'region_id'         => 'required|integer',
-            'city_id'           => 'required|integer',
+            // Required fields
+            'company_id'        => 'required|integer|exists:companies,id',
+            'branch_id'         => 'nullable|integer|exists:branches,id',
+            'currency_id'       => 'required|integer|exists:currencies,id',
+            'employee_id'       => 'required|integer|exists:employees,id',
+            'country_id'        => 'nullable|integer|exists:countries,id',
+            'region_id'         => 'nullable|integer|exists:regions,id',
+            'city_id'           => 'nullable|integer|exists:cities,id',
+
+            // Customer identification
             'customer_number'   => [
-                'required',
+                'nullable', // Will be auto-generated if not provided
                 'string',
                 'max:50',
                 Rule::unique('customers', 'customer_number')->ignore($customerId),
             ],
-            'company_name'      => 'required|string|max:255',
-            'first_name'        => 'required|string|max:100',
-            'second_name'       => 'required|string|max:100',
-            'contact_name'      => 'required|string|max:100',
+            'customer_type'     => 'required|in:individual,business',
+            'balance'           => 'nullable|numeric|min:0',
+
+            // Company/Business information
+            'company_name'      => 'required|string|max:255', // Required as per your request
+            'first_name'        => 'nullable|string|max:100', // Optional as per your request
+            'second_name'       => 'nullable|string|max:100', // Optional as per your request
+            'contact_name'      => 'nullable|string|max:100',
+
+            // Contact information
             'email'             => [
-                'required',
+                'nullable', // Optional as per your request
                 'email',
                 'max:150',
                 Rule::unique('customers', 'email')->ignore($customerId),
             ],
-            'phone'             => 'required|string|max:50',
-            'mobile'            => 'required|string|max:50',
-            'address_one'       => 'required|string|max:255',
-            'address_two'       => 'required|string|max:255',
-            'postal_code'       => 'required|string|max:20',
-            'licensed_operator' => 'required|string|max:255',
+            'phone'             => 'nullable|string|max:50', // Optional as per your request
+            'mobile'            => 'nullable|string|max:50', // Optional as per your request
+
+            // Address information
+            'address_one'       => 'nullable|string|max:255', // Optional as per your request
+            'address_two'       => 'nullable|string|max:255', // Optional as per your request
+            'postal_code'       => 'nullable|string|max:20', // Optional as per your request
+            'licensed_operator' => 'nullable|string|max:255', // Optional as per your request
+
+            // Tax and business information
             'tax_number'        => [
-                'required',
+                'nullable',
                 'string',
                 'max:50',
                 Rule::unique('customers', 'tax_number')->ignore($customerId),
             ],
-            'notes'             => 'nullable|string|max:500',
-            'status'            => 'required|in:active,inactive',
+
+            // Barcode information
             'code'              => [
-                'required',
+                'nullable', // Optional as per your request
                 'string',
                 'max:50',
                 Rule::unique('customers', 'code')->ignore($customerId),
             ],
-            'invoice_type'      => 'required|string|max:100',
-            'category'          => 'required|string|max:100',
+            'barcode'           => 'nullable|string|max:100',
+            'barcode_type'      => 'nullable|string|in:C128,EAN13,C39,UPCA,ITF',
+
+            // Additional information
+            'notes'             => 'nullable|string|max:1000',
+            'status'            => 'nullable|in:active,inactive',
+            'invoice_type'      => 'nullable|string|max:100',
+            'category'          => 'nullable|string|max:100',
         ];
     }
 

@@ -564,4 +564,116 @@ class CustomerController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get dropdown data for customer form.
+     */
+    public function getFormData()
+    {
+        try {
+            $user = Auth::user();
+            $companyId = $user->company_id ?? request()->company_id;
+
+            $data = [
+                'currencies' => \Modules\FinancialAccounts\Models\Currency::select('id', 'name', 'code', 'symbol')
+                    ->where('company_id', $companyId)
+                    ->get(),
+
+                'sales_representatives' => \Modules\HumanResources\Models\Employee::select('id', 'employee_number', 'first_name', 'second_name')
+                    ->where('company_id', $companyId)
+                    ->where('is_sales', true)
+                    ->get()
+                    ->map(function ($employee) {
+                        return [
+                            'id' => $employee->id,
+                            'employee_number' => $employee->employee_number,
+                            'full_name' => trim($employee->first_name . ' ' . $employee->second_name),
+                            'display_name' => $employee->employee_number . ' - ' . trim($employee->first_name . ' ' . $employee->second_name)
+                        ];
+                    }),
+
+                'branches' => \Modules\Companies\Models\Branch::select('id', 'name', 'code')
+                    ->where('company_id', $companyId)
+                    ->get(),
+
+                'countries' => \Modules\Companies\Models\Country::select('id', 'name')->get(),
+
+                'regions' => \Modules\Companies\Models\Region::select('id', 'name', 'country_id')->get(),
+
+                'cities' => \Modules\Companies\Models\City::select('id', 'name', 'region_id')->get(),
+
+                'barcode_types' => Customer::getAvailableBarcodeTypes(),
+
+                'customer_types' => Customer::CUSTOMER_TYPE_OPTIONS,
+
+                'category_options' => Customer::CATEGORY_OPTIONS,
+
+                'next_customer_number' => Customer::generateCustomerNumber(),
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching form data.',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get next customer number.
+     */
+    public function getNextCustomerNumber()
+    {
+        try {
+            $nextNumber = Customer::generateCustomerNumber();
+
+            return response()->json([
+                'success' => true,
+                'customer_number' => $nextNumber
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while generating customer number.',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get sales representatives for dropdown.
+     */
+    public function getSalesRepresentatives()
+    {
+        try {
+            $user = Auth::user();
+            $companyId = $user->company_id ?? request()->company_id;
+
+            $salesReps = \Modules\HumanResources\Models\Employee::select('id', 'employee_number', 'first_name', 'second_name')
+                ->where('company_id', $companyId)
+                ->where('is_sales', true)
+                ->get()
+                ->map(function ($employee) {
+                    return [
+                        'id' => $employee->id,
+                        'employee_number' => $employee->employee_number,
+                        'full_name' => trim($employee->first_name . ' ' . $employee->second_name),
+                        'display_name' => $employee->employee_number . ' - ' . trim($employee->first_name . ' ' . $employee->second_name)
+                    ];
+                });
+
+            return response()->json([
+                'success' => true,
+                'data' => $salesReps
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An error occurred while fetching sales representatives.',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

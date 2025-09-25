@@ -42,18 +42,34 @@ class CustomerService
 
     public function store(CustomerRequest $request)
     {
-
         try {
             $companyId = $request->user()->company_id ?? $request->company_id;
             $userId = $request->user()->id;
 
-            $data = [
-                'company_id' => $companyId,
-                'user_id'    => $userId,
-                'status'     => 'active',
-            ] + $request->validated();
+            $data = $request->validated();
+
+            // Auto-generate customer number if not provided
+            if (empty($data['customer_number'])) {
+                $data['customer_number'] = Customer::generateCustomerNumber();
+            }
+
+            // Set default values
+            $data['company_id'] = $companyId;
+            $data['user_id'] = $userId;
+            $data['status'] = $data['status'] ?? 'active';
+            $data['customer_type'] = $data['customer_type'] ?? 'business';
+            $data['balance'] = $data['balance'] ?? 0.00;
+            $data['barcode_type'] = $data['barcode_type'] ?? 'C128';
+            $data['created_by'] = $userId;
+            $data['updated_by'] = $userId;
 
             $customer = Customer::create($data);
+
+            // Load relationships for response
+            $customer->load([
+                'user', 'company', 'currency', 'country', 'region', 'city',
+                'employee', 'branch', 'creator', 'updater'
+            ]);
 
             return $customer;
         } catch (\Exception $e) {

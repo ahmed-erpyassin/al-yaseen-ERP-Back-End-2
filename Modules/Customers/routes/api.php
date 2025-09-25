@@ -38,5 +38,10 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/stats/overview', [CustomerController::class, 'getStats'])->name('customers.stats');
         Route::get('/export/excel', [CustomerController::class, 'exportExcel'])->name('customers.export-excel');
         Route::post('/import/excel', [CustomerController::class, 'importExcel'])->name('customers.import-excel');
+
+        // Form data and dropdown endpoints
+        Route::get('/form-data', [CustomerController::class, 'getFormData'])->name('customers.form-data');
+        Route::get('/next-customer-number', [CustomerController::class, 'getNextCustomerNumber'])->name('customers.next-number');
+        Route::get('/sales-representatives', [CustomerController::class, 'getSalesRepresentatives'])->name('customers.sales-reps');
     });
 });

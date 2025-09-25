@@ -28,6 +28,21 @@ class Customer extends Model
 
     protected $casts = [
         'status' => 'string',
+        'customer_type' => 'string',
+        'balance' => 'decimal:2',
+    ];
+
+    // Customer type options
+    const CUSTOMER_TYPE_OPTIONS = [
+        'individual' => 'Individual',
+        'business' => 'Business',
+    ];
+
+    // Customer category options
+    const CATEGORY_OPTIONS = [
+        'major' => 'Major Customers',
+        'medium' => 'Medium Customers',
+        'minor' => 'Minor Customers',
     ];
 
     /**
@@ -116,6 +131,14 @@ class Customer extends Model
     public function invoices(): HasMany
     {
         return $this->hasMany(Invoice::class, 'customer_id');
+    }
+
+    /**
+     * Get the branch for this customer.
+     */
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Companies\Models\Branch::class);
     }
 
     /**
@@ -251,6 +274,55 @@ class Customer extends Model
         }
 
         return $query;
+    }
+
+    /**
+     * Generate the next sequential customer number.
+     */
+    public static function generateCustomerNumber(): string
+    {
+        $lastCustomer = self::orderBy('id', 'desc')->first();
+
+        if (!$lastCustomer) {
+            return 'CUST-0001';
+        }
+
+        // Extract number from last customer number (assuming format CUST-XXXX)
+        $lastNumber = (int) substr($lastCustomer->customer_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'CUST-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Get customer type display name.
+     */
+    public function getCustomerTypeDisplayAttribute(): string
+    {
+        return self::CUSTOMER_TYPE_OPTIONS[$this->customer_type] ?? $this->customer_type;
+    }
+
+    /**
+     * Get available barcode types.
+     */
+    public static function getAvailableBarcodeTypes(): array
+    {
+        return [
+            'C128' => 'Code 128',
+            'EAN13' => 'EAN-13',
+            'C39' => 'Code 39',
+            'UPCA' => 'UPC-A',
+            'ITF' => 'Interleaved 2 of 5',
+        ];
+    }
+
+    /**
+     * Get customer balance with currency symbol.
+     */
+    public function getFormattedBalanceAttribute(): string
+    {
+        $symbol = $this->currency ? $this->currency->symbol : '';
+        return $symbol . ' ' . number_format($this->balance, 2);
     }
 
     // protected static function newFactory(): CustomerFactory

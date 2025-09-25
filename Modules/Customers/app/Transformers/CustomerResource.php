@@ -22,6 +22,7 @@ class CustomerResource extends JsonResource
             'region'       => $this->whenLoaded('region'),
             'city'         => $this->whenLoaded('city'),
             'employee'     => new UserResource($this->whenLoaded('employee')),
+            'branch'       => $this->whenLoaded('branch'),
             'creator'      => new UserResource($this->whenLoaded('creator')),
             'updater'      => new UserResource($this->whenLoaded('updater')),
             'deleter'      => new UserResource($this->whenLoaded('deleter')),
@@ -38,10 +39,14 @@ class CustomerResource extends JsonResource
 
             // Customer Information
             'customer_number' => $this->customer_number,
+            'customer_type'   => $this->customer_type,
+            'customer_type_display' => $this->customer_type_display,
+            'balance'         => $this->balance,
+            'formatted_balance' => $this->formatted_balance,
             'company_name'    => $this->company_name,
             'first_name'      => $this->first_name,
             'second_name'     => $this->second_name,
-            'full_name'       => $this->first_name . ' ' . $this->second_name,
+            'full_name'       => trim($this->first_name . ' ' . $this->second_name),
             'contact_name'    => $this->contact_name,
             'email'           => $this->email,
             'phone'           => $this->phone,
@@ -53,6 +58,8 @@ class CustomerResource extends JsonResource
             'tax_number'      => $this->tax_number,
             'notes'           => $this->notes,
             'code'            => $this->code,
+            'barcode'         => $this->barcode,
+            'barcode_type'    => $this->barcode_type,
             'invoice_type'    => $this->invoice_type,
             'category'        => $this->category,
 
