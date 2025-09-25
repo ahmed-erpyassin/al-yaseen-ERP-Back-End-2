@@ -18,6 +18,9 @@ class CompaniesController extends Controller
         $this->companyService = $companyService;
     }
 
+    /**
+     * Store a newly created company in storage.
+     */
     public function store(CompanyRequest $request)
     {
         $user = Auth::user();
@@ -28,24 +31,36 @@ class CompaniesController extends Controller
         return new CompanyResource($company);
     }
 
+    /**
+     * Display a listing of the companies.
+     */
     public function index(Request $request)
     {
         $companies = $this->companyService->getCompanies($request->user());
         return CompanyResource::collection($companies);
     }
 
+    /**
+     * Display the specified company.
+     */
     public function show($id)
     {
         $company = $this->companyService->getCompanyById($id);
         return new CompanyResource($company);
     }
 
+    /**
+     * Update the specified company in storage.
+     */
     public function update(CompanyRequest $request, $id)
     {
         $company = $this->companyService->updateCompany($id, $request->validated());
         return new CompanyResource($company);
     }
 
+    /**
+     * Remove the specified company from storage.
+     */
     public function destroy($id)
     {
         $this->companyService->deleteCompany($id);

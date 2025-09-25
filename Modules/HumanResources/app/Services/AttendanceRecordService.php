@@ -2,6 +2,7 @@
 
 namespace Modules\HumanResources\app\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\HumanResources\Http\Requests\AttendanceRecordRequest;
 use Modules\HumanResources\Http\Requests\EmployeeRequest;
 use Modules\HumanResources\Models\AttendanceRecord;
@@ -17,14 +18,14 @@ class AttendanceRecordService
     public function create(AttendanceRecordRequest $request): AttendanceRecord
     {
         return AttendanceRecord::create($request->validated() + [
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
     }
 
     public function update(AttendanceRecordRequest $request, AttendanceRecord $attendanceRecord): AttendanceRecord
     {
         $attendanceRecord->update($request->validated() + [
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return $attendanceRecord;
@@ -32,7 +33,7 @@ class AttendanceRecordService
 
     public function delete(AttendanceRecord $attendanceRecord): void
     {
-        $attendanceRecord->update(['deleted_by' => auth()->id()]);
+        $attendanceRecord->update(['deleted_by' => Auth::id()]);
         $attendanceRecord->delete();
     }
 }

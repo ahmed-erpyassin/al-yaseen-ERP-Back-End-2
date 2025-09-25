@@ -3,6 +3,7 @@
 namespace Modules\ProjectsManagment\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreProjectRequest extends FormRequest
 {
@@ -130,8 +131,8 @@ class StoreProjectRequest extends FormRequest
     {
         // Set default values
         $this->merge([
-            'user_id' => auth()->id(),
-            'company_id' => auth()->user()->company_id ?? $this->company_id,
+            'user_id' => Auth::id(),
+            'company_id' => Auth::user()->company_id ?? $this->company_id,
             'include_vat' => $this->boolean('include_vat'),
         ]);
     }

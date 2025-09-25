@@ -17,11 +17,17 @@ class UserController extends Controller
         $this->service = $service;
     }
 
+    /**
+     * Display a listing of the users.
+     */
     public function index()
     {
         return UserResource::collection($this->service->getAll());
     }
 
+    /**
+     * Store a newly created user in storage.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -38,12 +44,18 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    /**
+     * Display the specified user.
+     */
     public function show($id)
     {
         $user = $this->service->findById($id);
         return new UserResource($user);
     }
 
+    /**
+     * Update the specified user in storage.
+     */
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
@@ -60,6 +72,9 @@ class UserController extends Controller
         return new UserResource($updatedUser);
     }
 
+    /**
+     * Remove the specified user from storage.
+     */
     public function destroy(User $user)
     {
         $this->service->delete($user);
