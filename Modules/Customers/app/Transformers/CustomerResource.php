@@ -15,7 +15,19 @@ class CustomerResource extends JsonResource
     {
         return [
             'id'           => $this->id,
-            'user_id'      => new UserResource($this->whenLoaded('user')),
+            'user'         => new UserResource($this->whenLoaded('user')),
+            'company'      => $this->whenLoaded('company'),
+            'currency'     => $this->whenLoaded('currency'),
+            'country'      => $this->whenLoaded('country'),
+            'region'       => $this->whenLoaded('region'),
+            'city'         => $this->whenLoaded('city'),
+            'employee'     => new UserResource($this->whenLoaded('employee')),
+            'creator'      => new UserResource($this->whenLoaded('creator')),
+            'updater'      => new UserResource($this->whenLoaded('updater')),
+            'deleter'      => new UserResource($this->whenLoaded('deleter')),
+
+            // IDs for reference
+            'user_id'      => $this->user_id,
             'company_id'   => $this->company_id,
             'branch_id'    => $this->branch_id,
             'currency_id'  => $this->currency_id,
@@ -24,10 +36,12 @@ class CustomerResource extends JsonResource
             'region_id'    => $this->region_id,
             'city_id'      => $this->city_id,
 
+            // Customer Information
             'customer_number' => $this->customer_number,
             'company_name'    => $this->company_name,
             'first_name'      => $this->first_name,
             'second_name'     => $this->second_name,
+            'full_name'       => $this->first_name . ' ' . $this->second_name,
             'contact_name'    => $this->contact_name,
             'email'           => $this->email,
             'phone'           => $this->phone,
@@ -42,11 +56,22 @@ class CustomerResource extends JsonResource
             'invoice_type'    => $this->invoice_type,
             'category'        => $this->category,
 
+            // Transaction Information
+            'last_transaction_date' => $this->last_transaction_date,
+            'sales_count'     => $this->whenLoaded('sales', function () {
+                return $this->sales->count();
+            }),
+            'invoices_count'  => $this->whenLoaded('invoices', function () {
+                return $this->invoices->count();
+            }),
+
+            // Audit Information
             'created_by'   => $this->created_by,
             'updated_by'   => $this->updated_by,
             'deleted_by'   => $this->deleted_by,
             'status'       => $this->status,
 
+            // Timestamps
             'created_at'   => $this->created_at,
             'updated_at'   => $this->updated_at,
             'deleted_at'   => $this->deleted_at,

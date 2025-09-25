@@ -3,6 +3,7 @@
 namespace Modules\HumanResources\app\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\HumanResources\Http\Requests\LeaveRequestRequest;
 use Modules\HumanResources\Models\LeaveRequest;
 
@@ -17,14 +18,14 @@ class LeaveRequestService
     public function create(LeaveRequestRequest $request): LeaveRequest
     {
         return LeaveRequest::create($request->validated() + [
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
     }
 
     public function update(LeaveRequestRequest $request, LeaveRequest $leaveRequest): LeaveRequest
     {
         $leaveRequest->update($request->validated() + [
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return $leaveRequest;
@@ -32,7 +33,7 @@ class LeaveRequestService
 
     public function delete(LeaveRequest $leaveRequest): void
     {
-        $leaveRequest->update(['deleted_by' => auth()->id()]);
+        $leaveRequest->update(['deleted_by' => Auth::id()]);
         $leaveRequest->delete();
     }
 }
