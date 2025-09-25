@@ -154,32 +154,37 @@ class ItemTransactionsByTypeExport implements FromCollection, WithHeadings, With
 
         // Style data rows
         $lastRow = $this->transactions->count() + 1;
-        $sheet->getStyle("A2:{$lastColumn}{$lastRow}")->applyFromArray([
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical' => Alignment::VERTICAL_CENTER
-            ],
-            'borders' => [
-                'allBorders' => [
-                    'borderStyle' => Border::BORDER_THIN,
-                    'color' => ['rgb' => 'CCCCCC']
+        if ($lastRow > 1) {
+            $sheet->getStyle("A2:{$lastColumn}{$lastRow}")->applyFromArray([
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['rgb' => 'CCCCCC']
+                    ]
                 ]
-            ]
-        ]);
+            ]);
+        }
 
-        // Add title and item information at the top
-        $sheet->insertRows(1, 4);
-        
-        $sheet->setCellValue('A1', $this->typeArabic . ' - ' . $this->item['name']);
-        $sheet->mergeCells("A1:{$lastColumn}1");
-        $sheet->getStyle('A1')->applyFromArray([
+        // Add title and item information after the data
+        $infoStartRow = $lastRow + 3;
+
+        $sheet->setCellValue("A{$infoStartRow}", $this->typeArabic . ' - ' . $this->item['name']);
+        $sheet->mergeCells("A{$infoStartRow}:{$lastColumn}{$infoStartRow}");
+        $sheet->getStyle("A{$infoStartRow}")->applyFromArray([
             'font' => ['bold' => true, 'size' => 16],
             'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]
         ]);
 
-        $sheet->setCellValue('A2', 'كود الصنف: ' . $this->item['code']);
-        $sheet->setCellValue('A3', 'رقم الصنف: ' . $this->item['item_number']);
-        $sheet->setCellValue('A4', 'عدد الحركات: ' . $this->transactions->count());
+        $infoStartRow++;
+        $sheet->setCellValue("A{$infoStartRow}", 'كود الصنف: ' . $this->item['code']);
+        $infoStartRow++;
+        $sheet->setCellValue("A{$infoStartRow}", 'رقم الصنف: ' . $this->item['item_number']);
+        $infoStartRow++;
+        $sheet->setCellValue("A{$infoStartRow}", 'عدد الحركات: ' . $this->transactions->count());
 
         return $sheet;
     }

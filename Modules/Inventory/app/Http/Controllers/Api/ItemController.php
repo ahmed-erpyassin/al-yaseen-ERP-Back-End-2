@@ -2123,7 +2123,7 @@ class ItemController extends Controller
             'sales_items.unit_price',
             'sales_items.total',
             'sales_items.discount_rate',
-            'customers.name as customer_name',
+            'customers.company_name as customer_name',
             'sales.notes',
             'sales.status'
         ])->get();
@@ -2180,7 +2180,7 @@ class ItemController extends Controller
             'purchase_items.unit_price',
             'purchase_items.total',
             'purchase_items.discount_rate',
-            'suppliers.name as supplier_name',
+            'suppliers.supplier_name_ar as supplier_name',
             'purchases.notes',
             'purchases.status'
         ])->get();
@@ -2218,47 +2218,45 @@ class ItemController extends Controller
     private function getStockMovements($itemId, $dateFrom = null, $dateTo = null): \Illuminate\Support\Collection
     {
         $query = DB::table('stock_movements')
-            ->leftJoin('warehouses as from_warehouse', 'stock_movements.from_warehouse_id', '=', 'from_warehouse.id')
-            ->leftJoin('warehouses as to_warehouse', 'stock_movements.to_warehouse_id', '=', 'to_warehouse.id')
+            ->leftJoin('warehouses', 'stock_movements.warehouse_id', '=', 'warehouses.id')
             ->leftJoin('users', 'stock_movements.created_by', '=', 'users.id')
             ->where('stock_movements.item_id', $itemId);
 
         if ($dateFrom) {
-            $query->where('stock_movements.movement_date', '>=', $dateFrom);
+            $query->where('stock_movements.transaction_date', '>=', $dateFrom);
         }
         if ($dateTo) {
-            $query->where('stock_movements.movement_date', '<=', $dateTo);
+            $query->where('stock_movements.transaction_date', '<=', $dateTo);
         }
 
         $stockMovements = $query->select([
             'stock_movements.id as transaction_id',
-            'stock_movements.movement_number as document_number',
-            'stock_movements.movement_date as transaction_date',
+            'stock_movements.id as document_number',
+            'stock_movements.transaction_date',
             'stock_movements.quantity',
             'stock_movements.movement_type',
-            'stock_movements.reason',
+            'stock_movements.type',
             'stock_movements.notes',
-            'from_warehouse.name as from_warehouse_name',
-            'to_warehouse.name as to_warehouse_name',
-            'users.name as created_by_name'
+            'warehouses.name as warehouse_name',
+            DB::raw("CONCAT(users.first_name, ' ', users.second_name) as created_by_name")
         ])->get();
 
         return $stockMovements->map(function ($item) {
             $movementTypeAr = $this->getMovementTypeArabic($item->movement_type);
-            $isIncoming = in_array($item->movement_type, ['adjustment_in', 'transfer_in', 'return_in']);
+            $isIncoming = $item->movement_type === 'in';
 
             return [
                 'id' => 'stock_' . $item->transaction_id,
                 'type' => 'stock_movement',
                 'type_ar' => 'حركة مخزون',
-                'document_number' => $item->document_number,
+                'document_number' => 'STK-' . $item->document_number,
                 'transaction_date' => $item->transaction_date,
                 'quantity' => $isIncoming ? abs($item->quantity) : -abs($item->quantity),
                 'unit_price' => null,
                 'total_amount' => null,
                 'discount_amount' => 0,
                 'net_amount' => null,
-                'reference' => $this->getStockMovementReference($item),
+                'reference' => $item->warehouse_name ?? 'حركة مخزون',
                 'notes' => $item->notes,
                 'status' => 'completed',
                 'status_ar' => 'مكتمل',
@@ -2266,7 +2264,7 @@ class ItemController extends Controller
                 'direction_ar' => $isIncoming ? 'وارد' : 'صادر',
                 'movement_type' => $item->movement_type,
                 'movement_type_ar' => $movementTypeAr,
-                'reason' => $item->reason,
+                'type_detail' => $item->type,
                 'created_by' => $item->created_by_name,
                 'icon' => 'stock_movement',
                 'color' => $isIncoming ? 'info' : 'warning'
@@ -2379,12 +2377,8 @@ class ItemController extends Controller
      */
     private function getStockMovementReference($item)
     {
-        if ($item->from_warehouse_name && $item->to_warehouse_name) {
-            return "من {$item->from_warehouse_name} إلى {$item->to_warehouse_name}";
-        } elseif ($item->from_warehouse_name) {
-            return "من {$item->from_warehouse_name}";
-        } elseif ($item->to_warehouse_name) {
-            return "إلى {$item->to_warehouse_name}";
+        if ($item->warehouse_name) {
+            return "مستودع: {$item->warehouse_name}";
         } elseif ($item->created_by_name) {
             return "بواسطة {$item->created_by_name}";
         } else {
@@ -2397,8 +2391,8 @@ class ItemController extends Controller
      */
     public function exportItemTransactions(Request $request, $id)
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $item = Item::forCompany($companyId)->findOrFail($id);
+       //$companyId = Auth::user()->company_id ?? $request->company_id;
+        $item = Item::findOrFail($id);
 
         $request->validate([
             'date_from' => 'nullable|date',
