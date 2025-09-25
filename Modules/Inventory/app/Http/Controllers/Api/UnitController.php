@@ -158,29 +158,33 @@ class UnitController extends Controller
     }
 
     /**
-     * Remove the specified unit.
+     * Remove the specified unit (soft delete).
      */
     public function destroy($id): JsonResponse
     {
         // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
-        $unit = Unit::
-        // forCompany($companyId)->
-        findOrFail($id);
+        $unit = Unit::findOrFail($id);
+        // ->forCompany($companyId)
 
         // Check if unit has items
         if ($unit->items()->exists() || $unit->itemUnits()->exists()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Cannot delete unit with existing items or item units'
+                'message' => 'Cannot delete unit with existing items or item units',
+                'message_ar' => 'لا يمكن حذف الوحدة التي تحتوي على أصناف أو وحدات أصناف'
             ], 422);
         }
 
+        // Set deleted_by before soft delete
+        $unit->update(['deleted_by' => $userId]);
         $unit->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Unit deleted successfully'
+            'message' => 'Unit deleted successfully',
+            'message_ar' => 'تم حذف الوحدة بنجاح'
         ]);
     }
 
@@ -369,6 +373,108 @@ class UnitController extends Controller
             'data' => $data,
             'message' => 'Unit form data retrieved successfully',
             'message_ar' => 'تم استرداد بيانات نموذج الوحدة بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Get trashed (soft deleted) units.
+     *
+     * Retrieve all soft deleted units with search and pagination support.
+     */
+    public function trashed(Request $request): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+
+        $query = Unit::onlyTrashed()
+            ->with(['creator', 'updater', 'deleter']);
+            // ->forCompany($companyId);
+
+        // Apply search to trashed items
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('symbol', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = $request->get('per_page', 15);
+        $units = $query->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $units,
+            'message' => 'Trashed units retrieved successfully',
+            'message_ar' => 'تم استرداد الوحدات المحذوفة بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Restore a soft deleted unit.
+     *
+     * Restore a previously soft deleted unit back to active status.
+     */
+    public function restore($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
+
+        $unit = Unit::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        if (!$unit->trashed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unit is not deleted',
+                'message_ar' => 'الوحدة غير محذوفة'
+            ], 422);
+        }
+
+        // Clear deleted_by and restore
+        $unit->update([
+            'deleted_by' => null,
+            'updated_by' => $userId
+        ]);
+        $unit->restore();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Unit restored successfully',
+            'message_ar' => 'تم استعادة الوحدة بنجاح',
+            'data' => $unit
+        ]);
+    }
+
+    /**
+     * ? Permanently delete a unit (force delete).
+     *
+     * Permanently remove a unit from the database. This action cannot be undone.
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+
+        $unit = Unit::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        // Check if unit has items or item units even in trashed state
+        if ($unit->items()->withTrashed()->exists() || $unit->itemUnits()->withTrashed()->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot permanently delete unit with existing items or item units',
+                'message_ar' => 'لا يمكن حذف الوحدة نهائياً التي تحتوي على أصناف أو وحدات أصناف'
+            ], 422);
+        }
+
+        $unit->forceDelete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Unit permanently deleted',
+            'message_ar' => 'تم حذف الوحدة نهائياً'
         ]);
     }
 }

@@ -86,6 +86,48 @@ paths:
       responses: {  }
       tags:
         - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: vmqeopfuudtdsufvyvddq
+                  nullable: false
+                second_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: amniihfqcoynlazghdtqt
+                  nullable: false
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: andreanne00@example.org
+                  nullable: false
+                phone:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                phone_country_code:
+                  type: string
+                  description: 'Must not be greater than 5 characters.'
+                  example: mqeop
+                  nullable: true
+                password:
+                  type: string
+                  description: ''
+                  example: 'O[2UZ5ij-e/dl4m{o,'
+                  nullable: false
+              required:
+                - first_name
+                - second_name
+                - email
+                - password
   /api/v1/auth/login:
     post:
       summary: ''
@@ -95,6 +137,26 @@ paths:
       responses: {  }
       tags:
         - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: qkunze@example.com
+                  nullable: false
+                password:
+                  type: string
+                  description: ''
+                  example: 'O[2UZ5ij-e/dl4m{o,'
+                  nullable: false
+              required:
+                - email
+                - password
   /api/v1/auth/send-otp:
     post:
       summary: ''
@@ -104,6 +166,20 @@ paths:
       responses: {  }
       tags:
         - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 'The <code>phone</code> of an existing record in the users table.'
+                  example: consequatur
+                  nullable: false
+              required:
+                - phone
   /api/v1/auth/verify-otp:
     post:
       summary: ''
@@ -113,6 +189,26 @@ paths:
       responses: {  }
       tags:
         - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 'The <code>phone</code> of an existing record in the users table.'
+                  example: consequatur
+                  nullable: false
+                otp:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: false
+              required:
+                - phone
+                - otp
   /api/v1/auth/me:
     get:
       summary: ''
@@ -297,8 +393,8 @@ paths:
           type: string
   '/api/v1/bom-items/delete-component/{id}':
     delete:
-      summary: 'Remove the specified BOM item.'
-      operationId: removeTheSpecifiedBOMItem
+      summary: 'Remove the specified BOM item (soft delete).'
+      operationId: removeTheSpecifiedBOMItemsoftDelete
       description: ''
       parameters: []
       responses: {  }
@@ -465,6 +561,63 @@ paths:
                     example: 'The route api/v1/bom-items/last-component could not be found.'
       tags:
         - 'Inventory Management / BOM Items'
+  /api/v1/bom-items/deleted-bom-items:
+    get:
+      summary: 'Get trashed (soft deleted) BOM items.'
+      operationId: getTrashedsoftDeletedBOMItems
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The route api/v1/bom-items/deleted-bom-items could not be found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The route api/v1/bom-items/deleted-bom-items could not be found.'
+      tags:
+        - 'Inventory Management / BOM Items'
+  '/api/v1/bom-items/{id}/restore-bom-item':
+    post:
+      summary: 'Restore a soft deleted BOM item.'
+      operationId: restoreASoftDeletedBOMItem
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / BOM Items'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the bom item.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/bom-items/{id}/permanently-delete':
+    delete:
+      summary: 'Permanently delete a BOM item (force delete).'
+      operationId: permanentlyDeleteABOMItemforceDelete
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / BOM Items'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the bom item.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
   /api/v1/barcode-types/enumerate-types:
     get:
       summary: 'Display a listing of barcode types.'
@@ -847,7 +1000,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
               required:
                 - department_number
@@ -1109,55 +1262,60 @@ paths:
             schema:
               type: object
               properties:
+                company_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: consequatur
+                  nullable: false
                 item_number:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: vmqeopfuudtdsufvyvddq
+                  example: mqeopfuudtdsufvyvddqa
                   nullable: false
                 item_name_ar:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: amniihfqcoynlazghdtqt
+                  example: mniihfqcoynlazghdtqtq
                   nullable: false
                 item_name_en:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: qxbajwbpilpmufinllwlo
+                  example: xbajwbpilpmufinllwloa
                   nullable: true
                 barcode:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: auydlsmsjuryvojcybzvr
+                  example: uydlsmsjuryvojcybzvrb
                   nullable: true
                 model:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: byickznkygloigmkwxphl
+                  example: yickznkygloigmkwxphlv
                   nullable: true
                 unit:
                   type: string
                   description: 'Must not be greater than 50 characters.'
-                  example: vazjrcnfbaqywuxhgjjmz
+                  example: azjrcnfbaqywuxhgjjmzu
                   nullable: false
                 quantity:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 72
+                  example: 82
                   nullable: true
                 unit_price:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 82
+                  example: 34
                   nullable: true
                 minimum_limit:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 34
+                  example: 71
                   nullable: true
                 reorder_limit:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 71
+                  example: 4
                   nullable: true
                 notes:
                   type: string
@@ -1167,9 +1325,10 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
               required:
+                - company_id
                 - item_number
                 - item_name_ar
                 - unit
@@ -1219,55 +1378,60 @@ paths:
             schema:
               type: object
               properties:
+                company_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: consequatur
+                  nullable: false
                 item_number:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: vmqeopfuudtdsufvyvddq
+                  example: mqeopfuudtdsufvyvddqa
                   nullable: false
                 item_name_ar:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: amniihfqcoynlazghdtqt
+                  example: mniihfqcoynlazghdtqtq
                   nullable: false
                 item_name_en:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: qxbajwbpilpmufinllwlo
+                  example: xbajwbpilpmufinllwloa
                   nullable: true
                 barcode:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: auydlsmsjuryvojcybzvr
+                  example: uydlsmsjuryvojcybzvrb
                   nullable: true
                 model:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: byickznkygloigmkwxphl
+                  example: yickznkygloigmkwxphlv
                   nullable: true
                 unit:
                   type: string
                   description: 'Must not be greater than 50 characters.'
-                  example: vazjrcnfbaqywuxhgjjmz
+                  example: azjrcnfbaqywuxhgjjmzu
                   nullable: false
                 quantity:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 72
+                  example: 82
                   nullable: true
                 unit_price:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 82
+                  example: 34
                   nullable: true
                 minimum_limit:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 34
+                  example: 71
                   nullable: true
                 reorder_limit:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 71
+                  example: 4
                   nullable: true
                 notes:
                   type: string
@@ -1277,9 +1441,10 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
               required:
+                - company_id
                 - item_number
                 - item_name_ar
                 - unit
@@ -1394,6 +1559,63 @@ paths:
                     example: 'The route api/v1/inventory-items/reorder-required-items could not be found.'
       tags:
         - 'Inventory Management / Inventory Items'
+  /api/v1/inventory-items/deleted-inventory:
+    get:
+      summary: 'Get trashed (soft deleted) inventory items.'
+      operationId: getTrashedsoftDeletedInventoryItems
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The route api/v1/inventory-items/deleted-inventory could not be found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The route api/v1/inventory-items/deleted-inventory could not be found.'
+      tags:
+        - 'Inventory Management / Inventory Items'
+  '/api/v1/inventory-items/{id}/restore-inventory':
+    post:
+      summary: 'Restore a soft deleted inventory item.'
+      operationId: restoreASoftDeletedInventoryItem
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Inventory Items'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the inventory item.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/inventory-items/{id}/permanently-delete':
+    delete:
+      summary: 'Permanently delete an inventory item (force delete).'
+      operationId: permanentlyDeleteAnInventoryItemforceDelete
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Inventory Items'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the inventory item.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
   /api/v1/inventory-movements/monitor-all:
     get:
       summary: '✅ Display a listing of inventory movements.'
@@ -1439,7 +1661,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: manufacturing
+                  example: inbound
                   nullable: false
                   enum:
                     - outbound
@@ -1450,12 +1672,12 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:19'
+                  example: '2025-09-25T13:42:25'
                   nullable: true
                 movement_time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '07:29:19'
+                  example: '13:42:25'
                   nullable: true
                 vendor_id:
                   type: integer
@@ -1530,7 +1752,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: cancelled
+                  example: draft
                   nullable: true
                   enum:
                     - draft
@@ -1587,7 +1809,7 @@ paths:
                       expiry_date:
                         type: string
                         description: 'Must be a valid date.'
-                        example: '2025-09-23T07:29:19'
+                        example: '2025-09-25T13:42:25'
                         nullable: true
                       serial_number:
                         type: string
@@ -1670,7 +1892,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: manufacturing
+                  example: inventory_count
                   nullable: false
                   enum:
                     - outbound
@@ -1681,12 +1903,12 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:19'
+                  example: '2025-09-25T13:42:25'
                   nullable: true
                 movement_time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '07:29:19'
+                  example: '13:42:25'
                   nullable: true
                 vendor_id:
                   type: integer
@@ -1761,7 +1983,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: cancelled
+                  example: confirmed
                   nullable: true
                   enum:
                     - draft
@@ -1823,7 +2045,7 @@ paths:
                       expiry_date:
                         type: string
                         description: 'Must be a valid date.'
-                        example: '2025-09-23T07:29:19'
+                        example: '2025-09-25T13:42:25'
                         nullable: true
                       serial_number:
                         type: string
@@ -2420,7 +2642,7 @@ paths:
                 unit_type:
                   type: string
                   description: ''
-                  example: third
+                  example: balance
                   nullable: false
                   enum:
                     - balance
@@ -2434,7 +2656,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: liter
+                  example: kilo
                   nullable: false
                   enum:
                     - piece
@@ -2466,249 +2688,6 @@ paths:
                   type: string
                   description: ''
                   example: piece
-                  nullable: true
-                  enum:
-                    - piece
-                    - liter
-                    - kilo
-                    - ton
-                    - carton
-                custom_second_unit:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: fqcoynlazghdtqtqxbajw
-                  nullable: true
-                second_unit_contains:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: bpilpmufinllwloauydls
-                  nullable: true
-                custom_second_unit_contains:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: msjuryvojcybzvrbyickz
-                  nullable: true
-                second_unit_content:
-                  type: string
-                  description: ''
-                  example: consequatur
-                  nullable: true
-                second_unit_item_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: true
-                third_unit:
-                  type: string
-                  description: ''
-                  example: ton
-                  nullable: true
-                  enum:
-                    - piece
-                    - liter
-                    - kilo
-                    - ton
-                    - carton
-                custom_third_unit:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mniihfqcoynlazghdtqtq
-                  nullable: true
-                third_unit_contains:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: xbajwbpilpmufinllwloa
-                  nullable: true
-                custom_third_unit_contains:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: uydlsmsjuryvojcybzvrb
-                  nullable: true
-                third_unit_content:
-                  type: string
-                  description: ''
-                  example: consequatur
-                  nullable: true
-                third_unit_item_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: true
-                default_handling_unit_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the units table.'
-                  example: null
-                  nullable: true
-                default_warehouse_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the warehouses table.'
-                  example: null
-                  nullable: true
-                contains:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mniihfqcoynlazghdtqtq
-                  nullable: true
-                custom_contains:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: xbajwbpilpmufinllwloa
-                  nullable: true
-                unit_content:
-                  type: string
-                  description: ''
-                  example: consequatur
-                  nullable: true
-                unit_item_number:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: true
-                unit_purchase_price:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 45
-                  nullable: true
-                unit_sale_price:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 46
-                  nullable: true
-                status:
-                  type: string
-                  description: ''
-                  example: active
-                  nullable: false
-                  enum:
-                    - active
-                    - inactive
-              required:
-                - item_id
-                - unit_id
-                - conversion_rate
-                - unit_type
-                - balance_unit
-                - status
-  '/api/v1/item-units/examine-unit/{id}':
-    get:
-      summary: 'Display the specified item unit.'
-      operationId: displayTheSpecifiedItemUnit
-      description: ''
-      parameters: []
-      responses:
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  message: 'The route api/v1/item-units/examine-unit/consequatur could not be found.'
-                properties:
-                  message:
-                    type: string
-                    example: 'The route api/v1/item-units/examine-unit/consequatur could not be found.'
-      tags:
-        - 'Inventory Management / Item Units'
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the examine unit.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  '/api/v1/item-units/adjust-unit/{id}':
-    put:
-      summary: 'Update the specified item unit.'
-      operationId: updateTheSpecifiedItemUnit
-      description: ''
-      parameters: []
-      responses: {  }
-      tags:
-        - 'Inventory Management / Item Units'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                branch_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the branches table.'
-                  example: null
-                  nullable: true
-                item_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the items table.'
-                  example: consequatur
-                  nullable: false
-                unit_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the units table.'
-                  example: consequatur
-                  nullable: false
-                conversion_rate:
-                  type: number
-                  description: 'Must be at least 0.000001.'
-                  example: 45
-                  nullable: false
-                is_default:
-                  type: boolean
-                  description: ''
-                  example: true
-                  nullable: false
-                unit_type:
-                  type: string
-                  description: ''
-                  example: second
-                  nullable: false
-                  enum:
-                    - balance
-                    - second
-                    - third
-                quantity_factor:
-                  type: number
-                  description: 'Must be at least 0.0001.'
-                  example: 56
-                  nullable: true
-                balance_unit:
-                  type: string
-                  description: ''
-                  example: piece
-                  nullable: false
-                  enum:
-                    - piece
-                    - liter
-                    - kilo
-                    - ton
-                    - carton
-                custom_balance_unit:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: eopfuudtdsufvyvddqamn
-                  nullable: true
-                length:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 28
-                  nullable: true
-                width:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 30
-                  nullable: true
-                height:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 25
-                  nullable: true
-                second_unit:
-                  type: string
-                  description: ''
-                  example: ton
                   nullable: true
                   enum:
                     - piece
@@ -2832,6 +2811,249 @@ paths:
                 - unit_type
                 - balance_unit
                 - status
+  '/api/v1/item-units/examine-unit/{id}':
+    get:
+      summary: 'Display the specified item unit.'
+      operationId: displayTheSpecifiedItemUnit
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The route api/v1/item-units/examine-unit/consequatur could not be found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The route api/v1/item-units/examine-unit/consequatur could not be found.'
+      tags:
+        - 'Inventory Management / Item Units'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the examine unit.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/item-units/adjust-unit/{id}':
+    put:
+      summary: 'Update the specified item unit.'
+      operationId: updateTheSpecifiedItemUnit
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Item Units'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branch_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the branches table.'
+                  example: null
+                  nullable: true
+                item_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the items table.'
+                  example: consequatur
+                  nullable: false
+                unit_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the units table.'
+                  example: consequatur
+                  nullable: false
+                conversion_rate:
+                  type: number
+                  description: 'Must be at least 0.000001.'
+                  example: 45
+                  nullable: false
+                is_default:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: false
+                unit_type:
+                  type: string
+                  description: ''
+                  example: third
+                  nullable: false
+                  enum:
+                    - balance
+                    - second
+                    - third
+                quantity_factor:
+                  type: number
+                  description: 'Must be at least 0.0001.'
+                  example: 56
+                  nullable: true
+                balance_unit:
+                  type: string
+                  description: ''
+                  example: ton
+                  nullable: false
+                  enum:
+                    - piece
+                    - liter
+                    - kilo
+                    - ton
+                    - carton
+                custom_balance_unit:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: eopfuudtdsufvyvddqamn
+                  nullable: true
+                length:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 28
+                  nullable: true
+                width:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 30
+                  nullable: true
+                height:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 25
+                  nullable: true
+                second_unit:
+                  type: string
+                  description: ''
+                  example: carton
+                  nullable: true
+                  enum:
+                    - piece
+                    - liter
+                    - kilo
+                    - ton
+                    - carton
+                custom_second_unit:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: fqcoynlazghdtqtqxbajw
+                  nullable: true
+                second_unit_contains:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: bpilpmufinllwloauydls
+                  nullable: true
+                custom_second_unit_contains:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: msjuryvojcybzvrbyickz
+                  nullable: true
+                second_unit_content:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                second_unit_item_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: true
+                third_unit:
+                  type: string
+                  description: ''
+                  example: carton
+                  nullable: true
+                  enum:
+                    - piece
+                    - liter
+                    - kilo
+                    - ton
+                    - carton
+                custom_third_unit:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mniihfqcoynlazghdtqtq
+                  nullable: true
+                third_unit_contains:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: xbajwbpilpmufinllwloa
+                  nullable: true
+                custom_third_unit_contains:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: uydlsmsjuryvojcybzvrb
+                  nullable: true
+                third_unit_content:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                third_unit_item_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: true
+                default_handling_unit_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the units table.'
+                  example: null
+                  nullable: true
+                default_warehouse_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the warehouses table.'
+                  example: null
+                  nullable: true
+                contains:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mniihfqcoynlazghdtqtq
+                  nullable: true
+                custom_contains:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: xbajwbpilpmufinllwloa
+                  nullable: true
+                unit_content:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                unit_item_number:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: true
+                unit_purchase_price:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 45
+                  nullable: true
+                unit_sale_price:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 46
+                  nullable: true
+                status:
+                  type: string
+                  description: ''
+                  example: active
+                  nullable: false
+                  enum:
+                    - active
+                    - inactive
+              required:
+                - item_id
+                - unit_id
+                - conversion_rate
+                - unit_type
+                - balance_unit
+                - status
     parameters:
       -
         in: path
@@ -2843,8 +3065,8 @@ paths:
           type: string
   '/api/v1/item-units/remove-unit/{id}':
     delete:
-      summary: 'Remove the specified item unit.'
-      operationId: removeTheSpecifiedItemUnit
+      summary: 'Remove the specified item unit (soft delete).'
+      operationId: removeTheSpecifiedItemUnitsoftDelete
       description: ''
       parameters: []
       responses: {  }
@@ -3059,6 +3281,63 @@ paths:
     put:
       summary: 'Set default unit for an item.'
       operationId: setDefaultUnitForAnItem
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Item Units'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the item unit.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  /api/v1/item-units/deleted-item-units:
+    get:
+      summary: 'Get trashed (soft deleted) item units.'
+      operationId: getTrashedsoftDeletedItemUnits
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The route api/v1/item-units/deleted-item-units could not be found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The route api/v1/item-units/deleted-item-units could not be found.'
+      tags:
+        - 'Inventory Management / Item Units'
+  '/api/v1/item-units/{id}/restore-item-unit':
+    post:
+      summary: 'Restore a soft deleted item unit.'
+      operationId: restoreASoftDeletedItemUnit
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Item Units'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the item unit.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/item-units/{id}/permanently-delete':
+    delete:
+      summary: 'Permanently delete an item unit (force delete).'
+      operationId: permanentlyDeleteAnItemUnitforceDelete
       description: ''
       parameters: []
       responses: {  }
@@ -3347,15 +3626,10 @@ paths:
                   description: 'Must not be greater than 255 characters.'
                   example: mqeopfuudtdsufvyvddqa
                   nullable: true
-                unit_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mniihfqcoynlazghdtqtq
-                  nullable: true
                 type:
                   type: string
                   description: ''
-                  example: raw_material
+                  example: material
                   nullable: false
                   enum:
                     - product
@@ -3365,7 +3639,7 @@ paths:
                 quantity:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 80
+                  example: 45
                   nullable: true
                 balance:
                   type: number
@@ -3425,7 +3699,7 @@ paths:
                 purchase_prices_include_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 sale_price:
                   type: number
@@ -3470,12 +3744,12 @@ paths:
                 sale_prices_include_vat:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
                 item_subject_to_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 notes:
                   type: string
@@ -3490,7 +3764,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: C39
+                  example: EAN13
                   nullable: true
                   enum:
                     - C128
@@ -3501,7 +3775,7 @@ paths:
                 expiry_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: true
                 image:
                   type: string
@@ -3635,15 +3909,10 @@ paths:
                   description: 'Must not be greater than 255 characters.'
                   example: dtdsufvyvddqamniihfqc
                   nullable: true
-                unit_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: oynlazghdtqtqxbajwbpi
-                  nullable: true
                 type:
                   type: string
                   description: ''
-                  example: service
+                  example: raw_material
                   nullable: false
                   enum:
                     - product
@@ -3653,7 +3922,7 @@ paths:
                 quantity:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 41
+                  example: 51
                   nullable: true
                 balance:
                   type: number
@@ -3743,7 +4012,7 @@ paths:
                 item_subject_to_vat:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
                 notes:
                   type: string
@@ -3758,7 +4027,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: ITF
+                  example: UPCA
                   nullable: true
                   enum:
                     - C128
@@ -3769,7 +4038,7 @@ paths:
                 expiry_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: true
                 image:
                   type: string
@@ -4083,7 +4352,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: C128
+                  example: EAN13
                   nullable: false
                   enum:
                     - C128
@@ -4213,17 +4482,17 @@ paths:
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:18'
+                  example: '2025-09-25T13:42:23'
                   nullable: true
                 date_to:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: true
                 transaction_type:
                   type: string
                   description: ''
-                  example: stock_movements
+                  example: purchases
                   nullable: true
                   enum:
                     - sales
@@ -4238,7 +4507,7 @@ paths:
                 sort_by:
                   type: string
                   description: ''
-                  example: type
+                  example: amount
                   nullable: true
                   enum:
                     - date
@@ -4293,17 +4562,17 @@ paths:
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:18'
+                  example: '2025-09-25T13:42:23'
                   nullable: true
                 date_to:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: true
                 transaction_type:
                   type: string
                   description: ''
-                  example: stock_movements
+                  example: all
                   nullable: true
                   enum:
                     - sales
@@ -4313,7 +4582,7 @@ paths:
                 export_type:
                   type: string
                   description: ''
-                  example: multi_sheet
+                  example: transactions
                   nullable: true
                   enum:
                     - transactions
@@ -4613,45 +4882,10 @@ paths:
                     - first
                     - second
                     - third
-                batch_size:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 42
-                  nullable: true
-                production_time_minutes:
-                  type: integer
-                  description: 'Must be at least 0.'
-                  example: 64
-                  nullable: true
-                preparation_time_minutes:
-                  type: integer
-                  description: 'Must be at least 0.'
-                  example: 34
-                  nullable: true
-                production_notes:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: uryvojcybzvrbyickznky
-                  nullable: true
-                preparation_notes:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: gloigmkwxphlvazjrcnfb
-                  nullable: true
-                usage_instructions:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: aqywuxhgjjmzuxjubqouz
-                  nullable: true
-                tolerance_percentage:
-                  type: number
-                  description: 'Must be at least 0. Must not be greater than 100.'
-                  example: 18
-                  nullable: true
                 quality_requirements:
                   type: string
                   description: 'Must not be greater than 1000 characters.'
-                  example: wiwxtrkimfcatbxspzmra
+                  example: msjuryvojcybzvrbyickz
                   nullable: true
                 requires_inspection:
                   type: boolean
@@ -4661,7 +4895,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: archived
+                  example: active
                   nullable: true
                   enum:
                     - draft
@@ -4671,17 +4905,52 @@ paths:
                 is_active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
+                  nullable: true
+                batch_size:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 48
+                  nullable: true
+                production_time_minutes:
+                  type: integer
+                  description: 'Must be at least 0.'
+                  example: 36
+                  nullable: true
+                preparation_time_minutes:
+                  type: integer
+                  description: 'Must be at least 0.'
+                  example: 87
+                  nullable: true
+                production_notes:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: gloigmkwxphlvazjrcnfb
+                  nullable: true
+                preparation_notes:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: aqywuxhgjjmzuxjubqouz
+                  nullable: true
+                usage_instructions:
+                  type: string
+                  description: 'Must not be greater than 1000 characters.'
+                  example: swiwxtrkimfcatbxspzmr
+                  nullable: true
+                tolerance_percentage:
+                  type: number
+                  description: 'Must be at least 0. Must not be greater than 100.'
+                  example: 1
                   nullable: true
                 effective_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:20'
+                  example: '2025-09-25T13:42:25'
                   nullable: true
                 effective_to:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>effective_from</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: true
                 company_id:
                   type: string
@@ -5072,6 +5341,16 @@ paths:
             schema:
               type: object
               properties:
+                item_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the items table.'
+                  example: null
+                  nullable: true
+                unit_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
                 inventory_item_id:
                   type: string
                   description: 'The <code>id</code> of an existing record in the inventory_items table.'
@@ -5085,7 +5364,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: out
+                  example: transfer
                   nullable: false
                   enum:
                     - in
@@ -5125,7 +5404,7 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:17'
+                  example: '2025-09-25T13:42:22'
                   nullable: true
               required:
                 - inventory_item_id
@@ -5158,6 +5437,119 @@ paths:
         in: path
         name: id
         description: 'The ID of the examine movement.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/stock-movements/modify-movement/{id}':
+    put:
+      summary: 'Update the specified stock movement.'
+      operationId: updateTheSpecifiedStockMovement
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Stock Movements'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                item_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the items table.'
+                  example: null
+                  nullable: true
+                unit_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                inventory_item_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the inventory_items table.'
+                  example: consequatur
+                  nullable: false
+                warehouse_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the warehouses table.'
+                  example: consequatur
+                  nullable: false
+                movement_type:
+                  type: string
+                  description: ''
+                  example: adjustment
+                  nullable: false
+                  enum:
+                    - in
+                    - out
+                    - transfer
+                    - adjustment
+                reference_type:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: mqeopfuudtdsufvyvddqa
+                  nullable: true
+                reference_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                quantity:
+                  type: number
+                  description: 'Must be at least 0.01.'
+                  example: 45
+                  nullable: false
+                unit_cost:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 56
+                  nullable: true
+                total_cost:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 16
+                  nullable: true
+                notes:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                movement_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-09-25T13:42:22'
+                  nullable: true
+              required:
+                - inventory_item_id
+                - warehouse_id
+                - movement_type
+                - quantity
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the modify movement.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/stock-movements/remove-movement/{id}':
+    delete:
+      summary: 'Remove the specified stock movement (soft delete).'
+      operationId: removeTheSpecifiedStockMovementsoftDelete
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Stock Movements'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the remove movement.'
         example: consequatur
         required: true
         schema:
@@ -5243,6 +5635,63 @@ paths:
         required: true
         schema:
           type: string
+  /api/v1/stock-movements/deleted-movements:
+    get:
+      summary: 'Get trashed (soft deleted) stock movements.'
+      operationId: getTrashedsoftDeletedStockMovements
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The route api/v1/stock-movements/deleted-movements could not be found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The route api/v1/stock-movements/deleted-movements could not be found.'
+      tags:
+        - 'Inventory Management / Stock Movements'
+  '/api/v1/stock-movements/{id}/restore-movement':
+    post:
+      summary: 'Restore a soft deleted stock movement.'
+      operationId: restoreASoftDeletedStockMovement
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Stock Movements'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the stock movement.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/stock-movements/{id}/permanently-delete':
+    delete:
+      summary: 'Permanently delete a stock movement (force delete).'
+      operationId: permanentlyDeleteAStockMovementforceDelete
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Stock Movements'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the stock movement.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
   /api/v1/units/catalog-all:
     get:
       summary: 'Display a listing of units.'
@@ -5280,6 +5729,11 @@ paths:
             schema:
               type: object
               properties:
+                company_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: null
+                  nullable: true
                 branch_id:
                   type: string
                   description: 'The <code>id</code> of an existing record in the branches table.'
@@ -5313,7 +5767,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: piece
+                  example: ton
                   nullable: false
                   enum:
                     - piece
@@ -5349,7 +5803,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: liter
+                  example: piece
                   nullable: true
                   enum:
                     - piece
@@ -5385,7 +5839,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: liter
+                  example: piece
                   nullable: true
                   enum:
                     - piece
@@ -5556,7 +6010,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: piece
+                  example: ton
                   nullable: true
                   enum:
                     - piece
@@ -5659,8 +6113,8 @@ paths:
           type: string
   '/api/v1/units/eliminate-unit/{id}':
     delete:
-      summary: 'Remove the specified unit.'
-      operationId: removeTheSpecifiedUnit
+      summary: 'Remove the specified unit (soft delete).'
+      operationId: removeTheSpecifiedUnitsoftDelete
       description: ''
       parameters: []
       responses: {  }
@@ -5843,6 +6297,63 @@ paths:
                     example: 'The route api/v1/units/final-unit could not be found.'
       tags:
         - 'Inventory Management / Units'
+  /api/v1/units/deleted-units:
+    get:
+      summary: 'Get trashed (soft deleted) units.'
+      operationId: getTrashedsoftDeletedUnits
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The route api/v1/units/deleted-units could not be found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The route api/v1/units/deleted-units could not be found.'
+      tags:
+        - 'Inventory Management / Units'
+  '/api/v1/units/{id}/restore-unit':
+    post:
+      summary: 'Restore a soft deleted unit.'
+      operationId: restoreASoftDeletedUnit
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Units'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the unit.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
+  '/api/v1/units/{id}/permanently-delete':
+    delete:
+      summary: 'Permanently delete a unit (force delete).'
+      operationId: permanentlyDeleteAUnitforceDelete
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Inventory Management / Units'
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the unit.'
+        example: consequatur
+        required: true
+        schema:
+          type: string
   /api/v1/warehouses/scan-all:
     get:
       summary: 'Display a listing of warehouses.'
@@ -5953,7 +6464,7 @@ paths:
                 inventory_valuation_method:
                   type: string
                   description: ''
-                  example: first_purchase_price
+                  example: no_value
                   nullable: false
                   enum:
                     - natural_division
@@ -6089,7 +6600,7 @@ paths:
                 inventory_valuation_method:
                   type: string
                   description: ''
-                  example: second_purchase_price
+                  example: no_value
                   nullable: false
                   enum:
                     - natural_division
@@ -6100,7 +6611,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: false
                   enum:
                     - active
@@ -6385,7 +6896,7 @@ paths:
                 document_category:
                   type: string
                   description: ''
-                  example: drawing
+                  example: specification
                   nullable: true
                   enum:
                     - contract
@@ -6398,7 +6909,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: deleted
                   nullable: true
                   enum:
                     - active
@@ -6407,7 +6918,7 @@ paths:
                 upload_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:22'
+                  example: '2025-09-25T13:42:27'
                   nullable: true
                 version:
                   type: string
@@ -6869,7 +7380,7 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:22'
+                  example: '2025-09-25T13:42:28'
                   nullable: false
                 description:
                   type: string
@@ -6993,7 +7504,7 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:22'
+                  example: '2025-09-25T13:42:28'
                   nullable: false
                 description:
                   type: string
@@ -7360,12 +7871,12 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: not_started
+                  example: completed
                   nullable: false
                   enum:
                     - not_started
@@ -7384,7 +7895,7 @@ paths:
                 end_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: true
                 progress:
                   type: number
@@ -7475,7 +7986,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:21'
+                  example: '2025-09-25T13:42:26'
                   nullable: false
                 status:
                   type: string
@@ -7499,7 +8010,7 @@ paths:
                 end_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: true
                 progress:
                   type: number
@@ -8186,7 +8697,7 @@ paths:
                 include_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 project_number:
                   type: string
@@ -8411,17 +8922,17 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:20'
+                  example: '2025-09-25T13:42:26'
                   nullable: false
                 end_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>start_date</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: on-hold
+                  example: open
                   nullable: false
                   enum:
                     - draft
@@ -9118,7 +9629,7 @@ paths:
                 resource_type:
                   type: string
                   description: ''
-                  example: consultant
+                  example: internal
                   nullable: false
                   enum:
                     - supplier
@@ -9303,7 +9814,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: inactive
+                  example: completed
                   nullable: true
                   enum:
                     - active
@@ -9726,7 +10237,7 @@ paths:
                 probability:
                   type: string
                   description: ''
-                  example: high
+                  example: medium
                   nullable: false
                   enum:
                     - low
@@ -9740,7 +10251,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: open
+                  example: closed
                   nullable: false
                   enum:
                     - open
@@ -9821,7 +10332,7 @@ paths:
                 impact:
                   type: string
                   description: ''
-                  example: low
+                  example: medium
                   nullable: false
                   enum:
                     - low
@@ -9830,7 +10341,7 @@ paths:
                 probability:
                   type: string
                   description: ''
-                  example: medium
+                  example: low
                   nullable: false
                   enum:
                     - low
@@ -9844,7 +10355,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: open
+                  example: closed
                   nullable: false
                   enum:
                     - open
@@ -10306,12 +10817,12 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-22'
+                  example: '2106-10-25'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: in_progress
+                  example: blocked
                   nullable: false
                   enum:
                     - to_do
@@ -10341,7 +10852,7 @@ paths:
                 priority:
                   type: string
                   description: ''
-                  example: medium
+                  example: low
                   nullable: true
                   enum:
                     - low
@@ -10351,7 +10862,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date. Must be a date before or equal to <code>due_date</code>.'
-                  example: '2020-01-19'
+                  example: '2020-01-21'
                   nullable: true
                 estimated_hours:
                   type: integer
@@ -10461,12 +10972,12 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:21'
+                  example: '2025-09-25T13:42:26'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: blocked
+                  example: in_progress
                   nullable: false
                   enum:
                     - to_do
@@ -10496,7 +11007,7 @@ paths:
                 priority:
                   type: string
                   description: ''
-                  example: low
+                  example: high
                   nullable: false
                   enum:
                     - low
@@ -10506,7 +11017,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-23T07:29:21'
+                  example: '2025-09-25T13:42:26'
                   nullable: false
                 estimated_hours:
                   type: integer

@@ -127,7 +127,7 @@ class StockMovementController extends Controller
 
         $movements = StockMovement::with(['warehouse', 'user', 'unit', 'branch'])
             // ->forCompany($companyId)
-            ->forItem($itemId)
+            ->where('item_id', $itemId)
             ->orderBy('transaction_date', 'desc')
             ->get();
 
@@ -147,7 +147,7 @@ class StockMovementController extends Controller
 
         $movements = StockMovement::with(['item', 'user', 'unit', 'branch'])
             // ->forCompany($companyId)
-            ->forWarehouse($warehouseId)
+            ->where('warehouse_id', $warehouseId)
             ->orderBy('transaction_date', 'desc')
             ->get();
 
@@ -217,5 +217,150 @@ class StockMovementController extends Controller
         }
 
         $stock->save();
+    }
+
+    /**
+     * ? Update the specified stock movement.
+     *
+     * Update an existing stock movement with new data.
+     */
+    public function update(StoreStockMovementRequest $request, $id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+        $userId = Auth::id() ?? $request->user_id;
+
+        $movement = StockMovement::findOrFail($id);
+        // StockMovement::forCompany($companyId)->findOrFail($id);
+
+        $data = $request->validated();
+        $data['updated_by'] = $userId;
+
+        $movement->update($data);
+
+        return response()->json([
+            'success' => true,
+            'data' => $movement->load(['item', 'warehouse', 'user', 'unit', 'branch']),
+            'message' => 'Stock movement updated successfully',
+            'message_ar' => 'تم تحديث حركة المخزون بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Remove the specified stock movement (soft delete).
+     *
+     * Soft delete a stock movement, marking it as deleted while preserving the record.
+     */
+    public function destroy($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
+
+        $movement = StockMovement::findOrFail($id);
+        // StockMovement::forCompany($companyId)->findOrFail($id);
+
+        // Set deleted_by before soft delete
+        $movement->update(['deleted_by' => $userId]);
+        $movement->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stock movement deleted successfully',
+            'message_ar' => 'تم حذف حركة المخزون بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Get trashed (soft deleted) stock movements.
+     *
+     * Retrieve all soft deleted stock movements with search and pagination support.
+     */
+    public function trashed(Request $request): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+
+        $query = StockMovement::onlyTrashed()
+            ->with(['item', 'warehouse', 'user', 'unit', 'branch', 'deleter']);
+            // ->forCompany($companyId);
+
+        // Apply search to trashed items
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('reference_number', 'like', "%{$search}%")
+                  ->orWhere('notes', 'like', "%{$search}%")
+                  ->orWhereHas('item', function ($itemQuery) use ($search) {
+                      $itemQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $perPage = $request->get('per_page', 15);
+        $movements = $query->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $movements,
+            'message' => 'Trashed stock movements retrieved successfully',
+            'message_ar' => 'تم استرداد حركات المخزون المحذوفة بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Restore a soft deleted stock movement.
+     *
+     * Restore a previously soft deleted stock movement back to active status.
+     */
+    public function restore($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
+
+        $movement = StockMovement::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        if (!$movement->trashed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Stock movement is not deleted',
+                'message_ar' => 'حركة المخزون غير محذوفة'
+            ], 422);
+        }
+
+        // Clear deleted_by and restore
+        $movement->update([
+            'deleted_by' => null,
+            'updated_by' => $userId
+        ]);
+        $movement->restore();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stock movement restored successfully',
+            'message_ar' => 'تم استعادة حركة المخزون بنجاح',
+            'data' => $movement->load(['item', 'warehouse', 'user', 'unit', 'branch'])
+        ]);
+    }
+
+    /**
+     * ? Permanently delete a stock movement (force delete).
+     *
+     * Permanently remove a stock movement from the database. This action cannot be undone.
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+
+        $movement = StockMovement::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        $movement->forceDelete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stock movement permanently deleted',
+            'message_ar' => 'تم حذف حركة المخزون نهائياً'
+        ]);
     }
 }

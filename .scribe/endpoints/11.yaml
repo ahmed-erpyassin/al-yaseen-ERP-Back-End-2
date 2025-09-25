@@ -91,7 +91,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: manufacturing
+        example: inbound
         type: string
         enumValues:
           - outbound
@@ -106,7 +106,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-23T07:29:19'
+        example: '2025-09-25T13:42:25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -116,7 +116,7 @@ endpoints:
         name: movement_time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '07:29:19'
+        example: '13:42:25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -266,7 +266,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: cancelled
+        example: draft
         type: string
         enumValues:
           - draft
@@ -370,7 +370,7 @@ endpoints:
         name: 'movement_data[].expiry_date'
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-23T07:29:19'
+        example: '2025-09-25T13:42:25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -418,9 +418,9 @@ endpoints:
         custom: []
     cleanBodyParameters:
       movement_number: vmqeopfuudtdsufvyvddq
-      movement_type: manufacturing
-      movement_date: '2025-09-23T07:29:19'
-      movement_time: '07:29:19'
+      movement_type: inbound
+      movement_date: '2025-09-25T13:42:25'
+      movement_time: '13:42:25'
       vendor_id: 17
       customer_id: 17
       vendor_name: mqeopfuudtdsufvyvddqa
@@ -435,7 +435,7 @@ endpoints:
       invoice_number: yickznkygloigmkwxphlv
       reference: azjrcnfbaqywuxhgjjmzu
       warehouse_id: 17
-      status: cancelled
+      status: draft
       movement_data:
         -
           item_id: 17
@@ -446,7 +446,7 @@ endpoints:
           inventory_count: 50
           notes: pfuudtdsufvyvddqamnii
           batch_number: hfqcoynlazghdtqtqxbaj
-          expiry_date: '2025-09-23T07:29:19'
+          expiry_date: '2025-09-25T13:42:25'
           serial_number: wbpilpmufinllwloauydl
           location_code: smsjuryvojcybzvrbyick
           shelf_number: znkygloigmkwxphlvazjr
@@ -572,7 +572,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: manufacturing
+        example: inventory_count
         type: string
         enumValues:
           - outbound
@@ -587,7 +587,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-23T07:29:19'
+        example: '2025-09-25T13:42:25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -597,7 +597,7 @@ endpoints:
         name: movement_time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '07:29:19'
+        example: '13:42:25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -747,7 +747,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: cancelled
+        example: confirmed
         type: string
         enumValues:
           - draft
@@ -860,7 +860,7 @@ endpoints:
         name: 'movement_data[].expiry_date'
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-23T07:29:19'
+        example: '2025-09-25T13:42:25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -918,9 +918,9 @@ endpoints:
         custom: []
     cleanBodyParameters:
       movement_number: vmqeopfuudtdsufvyvddq
-      movement_type: manufacturing
-      movement_date: '2025-09-23T07:29:19'
-      movement_time: '07:29:19'
+      movement_type: inventory_count
+      movement_date: '2025-09-25T13:42:25'
+      movement_time: '13:42:25'
       vendor_id: 17
       customer_id: 17
       vendor_name: mqeopfuudtdsufvyvddqa
@@ -935,7 +935,7 @@ endpoints:
       invoice_number: yickznkygloigmkwxphlv
       reference: azjrcnfbaqywuxhgjjmzu
       warehouse_id: 17
-      status: cancelled
+      status: confirmed
       movement_data:
         -
           id: 17
@@ -947,7 +947,7 @@ endpoints:
           inventory_count: 50
           notes: pfuudtdsufvyvddqamnii
           batch_number: hfqcoynlazghdtqtqxbaj
-          expiry_date: '2025-09-23T07:29:19'
+          expiry_date: '2025-09-25T13:42:25'
           serial_number: wbpilpmufinllwloauydl
           location_code: smsjuryvojcybzvrbyick
           shelf_number: znkygloigmkwxphlvazjr

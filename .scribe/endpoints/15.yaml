@@ -101,7 +101,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: true
-        example: '2106-10-22'
+        example: '2106-10-25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -111,7 +111,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: not_started
+        example: completed
         type: string
         enumValues:
           - not_started
@@ -144,7 +144,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
         required: false
-        example: '2106-10-22'
+        example: '2106-10-25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -203,11 +203,11 @@ endpoints:
     cleanBodyParameters:
       project_id: consequatur
       name: mqeopfuudtdsufvyvddqa
-      start_date: '2106-10-22'
-      status: not_started
+      start_date: '2106-10-25'
+      status: completed
       milestone_number: 45
       description: 'Amet iste laborum eius est dolor dolores.'
-      end_date: '2106-10-22'
+      end_date: '2106-10-25'
       progress: 13
       notes: qeopfuudtdsufvyvddqam
     fileParameters: []
@@ -341,7 +341,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-23T07:29:21'
+        example: '2025-09-25T13:42:26'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -384,7 +384,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
         required: false
-        example: '2106-10-22'
+        example: '2106-10-25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -412,11 +412,11 @@ endpoints:
         custom: []
     cleanBodyParameters:
       name: vmqeopfuudtdsufvyvddq
-      start_date: '2025-09-23T07:29:21'
+      start_date: '2025-09-25T13:42:26'
       status: completed
       milestone_number: 2
       description: 'Molestias ipsam sit veniam sed fuga aspernatur.'
-      end_date: '2106-10-22'
+      end_date: '2106-10-25'
       progress: 13
       notes: qeopfuudtdsufvyvddqam
     fileParameters: []
