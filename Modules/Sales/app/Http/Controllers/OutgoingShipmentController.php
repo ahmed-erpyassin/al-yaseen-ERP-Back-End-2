@@ -57,24 +57,60 @@ class OutgoingShipmentController extends Controller
      */
     public function show($id)
     {
-        return view('sales::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('sales::edit');
+        try {
+            $shipment = $this->outgoingShipmentService->show($id);
+            return response()->json([
+                'success' => true,
+                'data' => new OutgoingShipmentResource($shipment),
+                'message' => 'Outgoing shipment retrieved successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching outgoing shipment.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(OutgoingShipmentRequest $request, $id)
+    {
+        try {
+            $shipment = $this->outgoingShipmentService->update($request, $id);
+            return response()->json([
+                'success' => true,
+                'data' => new OutgoingShipmentResource($shipment),
+                'message' => 'Outgoing shipment updated successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while updating outgoing shipment.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+        try {
+            $this->outgoingShipmentService->destroy($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Outgoing shipment deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while deleting outgoing shipment.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
