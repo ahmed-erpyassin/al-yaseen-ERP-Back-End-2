@@ -42,6 +42,14 @@ class SaleItem extends Model
     }
 
     /**
+     * Get the unit for this item
+     */
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Inventory\Models\Unit::class, 'unit_id');
+    }
+
+    /**
      * Calculate total amount for this item
      */
     public function calculateTotal(): float
@@ -50,7 +58,7 @@ class SaleItem extends Model
         $discount = $subtotal * ($this->discount_rate / 100);
         $afterDiscount = $subtotal - $discount;
         $tax = $afterDiscount * ($this->tax_rate / 100);
-        
+
         return $afterDiscount + $tax;
     }
 }

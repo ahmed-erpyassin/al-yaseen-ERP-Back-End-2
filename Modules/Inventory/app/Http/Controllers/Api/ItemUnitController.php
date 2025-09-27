@@ -144,35 +144,40 @@ class ItemUnitController extends Controller
     }
 
     /**
-     * Remove the specified item unit.
+     * Remove the specified item unit (soft delete).
      */
     public function destroy($id): JsonResponse
     {
-      //  $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
         $itemUnit = ItemUnit::findOrFail($id);
-        //forCompany($companyId)->
+        // ->forCompany($companyId)
 
         // Don't allow deletion of default unit if it's the only one
         if ($itemUnit->is_default) {
             $otherUnits = ItemUnit::where('item_id', $itemUnit->item_id)
-              //  ->where('company_id', $companyId)
+                // ->where('company_id', $companyId)
                 ->where('id', '!=', $id)
                 ->count();
 
             if ($otherUnits == 0) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Cannot delete the only unit for this item'
+                    'message' => 'Cannot delete the only unit for this item',
+                    'message_ar' => 'لا يمكن حذف الوحدة الوحيدة لهذا الصنف'
                 ], 422);
             }
         }
 
+        // Set deleted_by before soft delete
+        $itemUnit->update(['deleted_by' => $userId]);
         $itemUnit->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Item unit deleted successfully'
+            'message' => 'Item unit deleted successfully',
+            'message_ar' => 'تم حذف وحدة الصنف بنجاح'
         ]);
     }
 
@@ -185,8 +190,8 @@ class ItemUnitController extends Controller
 
         $itemUnits = ItemUnit::with(['unit'])
           //  ->forCompany($companyId)
-            ->forItem($itemId)
-            ->active()
+            ->where('item_id', $itemId)
+            ->where('is_active', true)
             ->get();
 
         return response()->json([
@@ -384,6 +389,101 @@ class ItemUnitController extends Controller
             'data' => $data,
             'message' => 'Item unit form data retrieved successfully',
             'message_ar' => 'تم استرداد بيانات نموذج وحدة الصنف بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Get trashed (soft deleted) item units.
+     *
+     * Retrieve all soft deleted item units with search and pagination support.
+     */
+    public function trashed(Request $request): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+
+        $query = ItemUnit::onlyTrashed()
+            ->with(['item', 'unit', 'creator', 'updater', 'deleter']);
+            // ->forCompany($companyId);
+
+        // Apply search to trashed items
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereHas('item', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%");
+            })->orWhereHas('unit', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('symbol', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = $request->get('per_page', 15);
+        $itemUnits = $query->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $itemUnits,
+            'message' => 'Trashed item units retrieved successfully',
+            'message_ar' => 'تم استرداد وحدات الأصناف المحذوفة بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Restore a soft deleted item unit.
+     *
+     * Restore a previously soft deleted item unit back to active status.
+     */
+    public function restore($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
+
+        $itemUnit = ItemUnit::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        if (!$itemUnit->trashed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item unit is not deleted',
+                'message_ar' => 'وحدة الصنف غير محذوفة'
+            ], 422);
+        }
+
+        // Clear deleted_by and restore
+        $itemUnit->update([
+            'deleted_by' => null,
+            'updated_by' => $userId
+        ]);
+        $itemUnit->restore();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item unit restored successfully',
+            'message_ar' => 'تم استعادة وحدة الصنف بنجاح',
+            'data' => $itemUnit->load(['item', 'unit'])
+        ]);
+    }
+
+    /**
+     * ? Permanently delete an item unit (force delete).
+     *
+     * Permanently remove an item unit from the database. This action cannot be undone.
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+
+        $itemUnit = ItemUnit::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        $itemUnit->forceDelete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item unit permanently deleted',
+            'message_ar' => 'تم حذف وحدة الصنف نهائياً'
         ]);
     }
 }

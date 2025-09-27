@@ -349,7 +349,7 @@ endpoints:
         name: include_vat
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -533,7 +533,7 @@ endpoints:
       customer_id: consequatur
       currency_id: consequatur
       currency_price: 45
-      include_vat: true
+      include_vat: false
       project_number: PRJ-001
       name: niihfqcoynlazghdtqtqx
       description: 'Complete website redesign and development'
@@ -846,7 +846,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-23T07:29:20'
+        example: '2025-09-25T13:42:26'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -856,7 +856,7 @@ endpoints:
         name: end_date
         description: 'Must be a valid date. Must be a date after <code>start_date</code>.'
         required: false
-        example: '2106-10-22'
+        example: '2106-10-25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -866,7 +866,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: on-hold
+        example: open
         type: string
         enumValues:
           - draft
@@ -975,9 +975,9 @@ endpoints:
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       project_value: 12
       project_manager_name: tdsufvyvddqamniihfqco
-      start_date: '2025-09-23T07:29:20'
-      end_date: '2106-10-22'
-      status: on-hold
+      start_date: '2025-09-25T13:42:26'
+      end_date: '2106-10-25'
+      status: open
       notes: consequatur
       customer_name: mqeopfuudtdsufvyvddqa
       customer_email: eloisa.harber@example.com

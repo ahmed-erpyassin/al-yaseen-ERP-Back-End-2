@@ -77,6 +77,26 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_id:
+        name: unit_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
       inventory_item_id:
         name: inventory_item_id
         description: 'The <code>id</code> of an existing record in the inventory_items table.'
@@ -101,7 +121,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: out
+        example: transfer
         type: string
         enumValues:
           - in
@@ -175,7 +195,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-23T07:29:17'
+        example: '2025-09-25T13:42:22'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -184,14 +204,14 @@ endpoints:
     cleanBodyParameters:
       inventory_item_id: consequatur
       warehouse_id: consequatur
-      movement_type: out
+      movement_type: transfer
       reference_type: mqeopfuudtdsufvyvddqa
       reference_id: 17
       quantity: 45
       unit_cost: 56
       total_cost: 16
       notes: consequatur
-      movement_date: '2025-09-23T07:29:17'
+      movement_date: '2025-09-25T13:42:22'
     fileParameters: []
     responses: []
     responseFields: []
@@ -254,6 +274,236 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/stock-movements/modify-movement/{id}'
+    metadata:
+      groupName: 'Inventory Management / Stock Movements'
+      groupDescription: |-
+
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified stock movement.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the modify movement.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_id:
+        name: unit_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      inventory_item_id:
+        name: inventory_item_id
+        description: 'The <code>id</code> of an existing record in the inventory_items table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      warehouse_id:
+        name: warehouse_id
+        description: 'The <code>id</code> of an existing record in the warehouses table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      movement_type:
+        name: movement_type
+        description: ''
+        required: true
+        example: adjustment
+        type: string
+        enumValues:
+          - in
+          - out
+          - transfer
+          - adjustment
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      reference_type:
+        name: reference_type
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      reference_id:
+        name: reference_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      quantity:
+        name: quantity
+        description: 'Must be at least 0.01.'
+        required: true
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      unit_cost:
+        name: unit_cost
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_cost:
+        name: total_cost
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_date:
+        name: movement_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-25T13:42:22'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      inventory_item_id: consequatur
+      warehouse_id: consequatur
+      movement_type: adjustment
+      reference_type: mqeopfuudtdsufvyvddqa
+      reference_id: 17
+      quantity: 45
+      unit_cost: 56
+      total_cost: 16
+      notes: consequatur
+      movement_date: '2025-09-25T13:42:22'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/stock-movements/remove-movement/{id}'
+    metadata:
+      groupName: 'Inventory Management / Stock Movements'
+      groupDescription: |-
+
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified stock movement (soft delete).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the remove movement.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
     responseFields: []
     auth:
       - headers
@@ -423,6 +673,151 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/stock-movements/deleted-movements
+    metadata:
+      groupName: 'Inventory Management / Stock Movements'
+      groupDescription: |-
+
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get trashed (soft deleted) stock movements.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/stock-movements/deleted-movements could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/stock-movements/{id}/restore-movement'
+    metadata:
+      groupName: 'Inventory Management / Stock Movements'
+      groupDescription: |-
+
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Restore a soft deleted stock movement.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the stock movement.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/stock-movements/{id}/permanently-delete'
+    metadata:
+      groupName: 'Inventory Management / Stock Movements'
+      groupDescription: |-
+
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Permanently delete a stock movement (force delete).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the stock movement.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
     responseFields: []
     auth:
       - headers

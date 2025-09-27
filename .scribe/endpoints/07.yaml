@@ -131,7 +131,7 @@ endpoints:
         name: unit_type
         description: ''
         required: true
-        example: third
+        example: balance
         type: string
         enumValues:
           - balance
@@ -154,7 +154,7 @@ endpoints:
         name: balance_unit
         description: ''
         required: true
-        example: liter
+        example: kilo
         type: string
         enumValues:
           - piece
@@ -210,494 +210,6 @@ endpoints:
         description: ''
         required: false
         example: piece
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_second_unit:
-        name: custom_second_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: fqcoynlazghdtqtqxbajw
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_contains:
-        name: second_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: bpilpmufinllwloauydls
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_second_unit_contains:
-        name: custom_second_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: msjuryvojcybzvrbyickz
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_content:
-        name: second_unit_content
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_item_number:
-        name: second_unit_item_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit:
-        name: third_unit
-        description: ''
-        required: false
-        example: ton
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_third_unit:
-        name: custom_third_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mniihfqcoynlazghdtqtq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_contains:
-        name: third_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: xbajwbpilpmufinllwloa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_third_unit_contains:
-        name: custom_third_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: uydlsmsjuryvojcybzvrb
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_content:
-        name: third_unit_content
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_item_number:
-        name: third_unit_item_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      default_handling_unit_id:
-        name: default_handling_unit_id
-        description: 'The <code>id</code> of an existing record in the units table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      default_warehouse_id:
-        name: default_warehouse_id
-        description: 'The <code>id</code> of an existing record in the warehouses table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      contains:
-        name: contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mniihfqcoynlazghdtqtq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_contains:
-        name: custom_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: xbajwbpilpmufinllwloa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit_content:
-        name: unit_content
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit_item_number:
-        name: unit_item_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit_purchase_price:
-        name: unit_purchase_price
-        description: 'Must be at least 0.'
-        required: false
-        example: 45
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit_sale_price:
-        name: unit_sale_price
-        description: 'Must be at least 0.'
-        required: false
-        example: 46
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      status:
-        name: status
-        description: ''
-        required: true
-        example: active
-        type: string
-        enumValues:
-          - active
-          - inactive
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      item_id: consequatur
-      unit_id: consequatur
-      conversion_rate: 45
-      is_default: true
-      unit_type: third
-      quantity_factor: 56
-      balance_unit: liter
-      custom_balance_unit: eopfuudtdsufvyvddqamn
-      length: 28
-      width: 30
-      height: 25
-      second_unit: piece
-      custom_second_unit: fqcoynlazghdtqtqxbajw
-      second_unit_contains: bpilpmufinllwloauydls
-      custom_second_unit_contains: msjuryvojcybzvrbyickz
-      second_unit_content: consequatur
-      second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: ton
-      custom_third_unit: mniihfqcoynlazghdtqtq
-      third_unit_contains: xbajwbpilpmufinllwloa
-      custom_third_unit_contains: uydlsmsjuryvojcybzvrb
-      third_unit_content: consequatur
-      third_unit_item_number: mqeopfuudtdsufvyvddqa
-      contains: mniihfqcoynlazghdtqtq
-      custom_contains: xbajwbpilpmufinllwloa
-      unit_content: consequatur
-      unit_item_number: mqeopfuudtdsufvyvddqa
-      unit_purchase_price: 45
-      unit_sale_price: 46
-      status: active
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/item-units/examine-unit/{id}'
-    metadata:
-      groupName: 'Inventory Management / Item Units'
-      groupDescription: |-
-
-        APIs for managing item unit relationships, conversions, and unit-specific operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Display the specified item unit.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the examine unit.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/item-units/examine-unit/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: 'api/v1/item-units/adjust-unit/{id}'
-    metadata:
-      groupName: 'Inventory Management / Item Units'
-      groupDescription: |-
-
-        APIs for managing item unit relationships, conversions, and unit-specific operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Update the specified item unit.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the adjust unit.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      branch_id:
-        name: branch_id
-        description: 'The <code>id</code> of an existing record in the branches table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      item_id:
-        name: item_id
-        description: 'The <code>id</code> of an existing record in the items table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      unit_id:
-        name: unit_id
-        description: 'The <code>id</code> of an existing record in the units table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      conversion_rate:
-        name: conversion_rate
-        description: 'Must be at least 0.000001.'
-        required: true
-        example: 45
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      is_default:
-        name: is_default
-        description: ''
-        required: false
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      unit_type:
-        name: unit_type
-        description: ''
-        required: true
-        example: second
-        type: string
-        enumValues:
-          - balance
-          - second
-          - third
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      quantity_factor:
-        name: quantity_factor
-        description: 'Must be at least 0.0001.'
-        required: false
-        example: 56
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      balance_unit:
-        name: balance_unit
-        description: ''
-        required: true
-        example: piece
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      custom_balance_unit:
-        name: custom_balance_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: eopfuudtdsufvyvddqamn
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      length:
-        name: length
-        description: 'Must be at least 0.'
-        required: false
-        example: 28
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      width:
-        name: width
-        description: 'Must be at least 0.'
-        required: false
-        example: 30
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      height:
-        name: height
-        description: 'Must be at least 0.'
-        required: false
-        example: 25
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit:
-        name: second_unit
-        description: ''
-        required: false
-        example: ton
         type: string
         enumValues:
           - piece
@@ -920,14 +432,14 @@ endpoints:
       unit_id: consequatur
       conversion_rate: 45
       is_default: true
-      unit_type: second
+      unit_type: balance
       quantity_factor: 56
-      balance_unit: piece
+      balance_unit: kilo
       custom_balance_unit: eopfuudtdsufvyvddqamn
       length: 28
       width: 30
       height: 25
-      second_unit: ton
+      second_unit: piece
       custom_second_unit: fqcoynlazghdtqtqxbajw
       second_unit_contains: bpilpmufinllwloauydls
       custom_second_unit_contains: msjuryvojcybzvrbyickz
@@ -959,6 +471,494 @@ endpoints:
     custom: []
   -
     httpMethods:
+      - GET
+    uri: 'api/v1/item-units/examine-unit/{id}'
+    metadata:
+      groupName: 'Inventory Management / Item Units'
+      groupDescription: |-
+
+        APIs for managing item unit relationships, conversions, and unit-specific operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified item unit.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the examine unit.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/examine-unit/consequatur could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/item-units/adjust-unit/{id}'
+    metadata:
+      groupName: 'Inventory Management / Item Units'
+      groupDescription: |-
+
+        APIs for managing item unit relationships, conversions, and unit-specific operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified item unit.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the adjust unit.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      unit_id:
+        name: unit_id
+        description: 'The <code>id</code> of an existing record in the units table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      conversion_rate:
+        name: conversion_rate
+        description: 'Must be at least 0.000001.'
+        required: true
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      is_default:
+        name: is_default
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      unit_type:
+        name: unit_type
+        description: ''
+        required: true
+        example: third
+        type: string
+        enumValues:
+          - balance
+          - second
+          - third
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      quantity_factor:
+        name: quantity_factor
+        description: 'Must be at least 0.0001.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      balance_unit:
+        name: balance_unit
+        description: ''
+        required: true
+        example: ton
+        type: string
+        enumValues:
+          - piece
+          - liter
+          - kilo
+          - ton
+          - carton
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      custom_balance_unit:
+        name: custom_balance_unit
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: eopfuudtdsufvyvddqamn
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      length:
+        name: length
+        description: 'Must be at least 0.'
+        required: false
+        example: 28
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      width:
+        name: width
+        description: 'Must be at least 0.'
+        required: false
+        example: 30
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      height:
+        name: height
+        description: 'Must be at least 0.'
+        required: false
+        example: 25
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      second_unit:
+        name: second_unit
+        description: ''
+        required: false
+        example: carton
+        type: string
+        enumValues:
+          - piece
+          - liter
+          - kilo
+          - ton
+          - carton
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_second_unit:
+        name: custom_second_unit
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: fqcoynlazghdtqtqxbajw
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      second_unit_contains:
+        name: second_unit_contains
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: bpilpmufinllwloauydls
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_second_unit_contains:
+        name: custom_second_unit_contains
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: msjuryvojcybzvrbyickz
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      second_unit_content:
+        name: second_unit_content
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      second_unit_item_number:
+        name: second_unit_item_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      third_unit:
+        name: third_unit
+        description: ''
+        required: false
+        example: carton
+        type: string
+        enumValues:
+          - piece
+          - liter
+          - kilo
+          - ton
+          - carton
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_third_unit:
+        name: custom_third_unit
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      third_unit_contains:
+        name: third_unit_contains
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_third_unit_contains:
+        name: custom_third_unit_contains
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: uydlsmsjuryvojcybzvrb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      third_unit_content:
+        name: third_unit_content
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      third_unit_item_number:
+        name: third_unit_item_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      default_handling_unit_id:
+        name: default_handling_unit_id
+        description: 'The <code>id</code> of an existing record in the units table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      default_warehouse_id:
+        name: default_warehouse_id
+        description: 'The <code>id</code> of an existing record in the warehouses table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      contains:
+        name: contains
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      custom_contains:
+        name: custom_contains
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_content:
+        name: unit_content
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_item_number:
+        name: unit_item_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_purchase_price:
+        name: unit_purchase_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_sale_price:
+        name: unit_sale_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 46
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: true
+        example: active
+        type: string
+        enumValues:
+          - active
+          - inactive
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      item_id: consequatur
+      unit_id: consequatur
+      conversion_rate: 45
+      is_default: true
+      unit_type: third
+      quantity_factor: 56
+      balance_unit: ton
+      custom_balance_unit: eopfuudtdsufvyvddqamn
+      length: 28
+      width: 30
+      height: 25
+      second_unit: carton
+      custom_second_unit: fqcoynlazghdtqtqxbajw
+      second_unit_contains: bpilpmufinllwloauydls
+      custom_second_unit_contains: msjuryvojcybzvrbyickz
+      second_unit_content: consequatur
+      second_unit_item_number: mqeopfuudtdsufvyvddqa
+      third_unit: carton
+      custom_third_unit: mniihfqcoynlazghdtqtq
+      third_unit_contains: xbajwbpilpmufinllwloa
+      custom_third_unit_contains: uydlsmsjuryvojcybzvrb
+      third_unit_content: consequatur
+      third_unit_item_number: mqeopfuudtdsufvyvddqa
+      contains: mniihfqcoynlazghdtqtq
+      custom_contains: xbajwbpilpmufinllwloa
+      unit_content: consequatur
+      unit_item_number: mqeopfuudtdsufvyvddqa
+      unit_purchase_price: 45
+      unit_sale_price: 46
+      status: active
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
       - DELETE
     uri: 'api/v1/item-units/remove-unit/{id}'
     metadata:
@@ -968,7 +968,7 @@ endpoints:
         APIs for managing item unit relationships, conversions, and unit-specific operations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified item unit.'
+      title: 'Remove the specified item unit (soft delete).'
       description: ''
       authenticated: true
       deprecated: false
@@ -1425,6 +1425,151 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: 'Set default unit for an item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the item unit.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/item-units/deleted-item-units
+    metadata:
+      groupName: 'Inventory Management / Item Units'
+      groupDescription: |-
+
+        APIs for managing item unit relationships, conversions, and unit-specific operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get trashed (soft deleted) item units.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/item-units/deleted-item-units could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/item-units/{id}/restore-item-unit'
+    metadata:
+      groupName: 'Inventory Management / Item Units'
+      groupDescription: |-
+
+        APIs for managing item unit relationships, conversions, and unit-specific operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Restore a soft deleted item unit.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the item unit.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/item-units/{id}/permanently-delete'
+    metadata:
+      groupName: 'Inventory Management / Item Units'
+      groupDescription: |-
+
+        APIs for managing item unit relationships, conversions, and unit-specific operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Permanently delete an item unit (force delete).'
       description: ''
       authenticated: true
       deprecated: false

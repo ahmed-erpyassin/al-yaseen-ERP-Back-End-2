@@ -18,6 +18,7 @@ class Sale extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
+        'date' => 'date',
         'time' => 'datetime:H:i:s',
         'due_date' => 'date',
         'cash_paid' => 'decimal:2',
@@ -76,10 +77,10 @@ class Sale extends Model
     /**
      * Get the employee for this sale
      */
-    // public function employee(): BelongsTo
-    // {
-    //     return $this->belongsTo(\App\Models\Employee::class, 'employee_id');
-    // }
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Employee::class, 'employee_id');
+    }
 
     /**
      * Get the currency for this sale
