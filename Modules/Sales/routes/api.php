@@ -135,6 +135,22 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
             ->name('update-invoice');
         Route::delete('/delete-invoice/{id}', [InvoiceController::class, 'destroy'])
             ->name('delete-invoice');
+
+        // Advanced search and filtering
+        Route::get('/search', [InvoiceController::class, 'search'])
+            ->name('search');
+        Route::get('/search-form-data', [InvoiceController::class, 'getSearchFormData'])
+            ->name('search-form-data');
+        Route::get('/sortable-fields', [InvoiceController::class, 'getSortableFields'])
+            ->name('sortable-fields');
+
+        // Soft delete management
+        Route::get('/deleted', [InvoiceController::class, 'getDeleted'])
+            ->name('deleted');
+        Route::post('/restore-invoice/{id}', [InvoiceController::class, 'restore'])
+            ->name('restore-invoice');
+        Route::delete('/force-delete/{id}', [InvoiceController::class, 'forceDelete'])
+            ->name('force-delete');
     });
 
     // ========================================
@@ -183,6 +199,14 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
         Route::get('/company-vat-rate', [SalesHelperController::class, 'getCompanyVatRate']);
         Route::get('/currency-rate/{currencyId}', [SalesHelperController::class, 'getCurrencyRate']);
         Route::get('/item-details/{itemId}', [SalesHelperController::class, 'getItemDetails']);
+
+        // New invoice-specific helper endpoints
+        Route::get('/search-customers-invoice', [SalesHelperController::class, 'searchCustomersForInvoice']);
+        Route::get('/search-items-invoice', [SalesHelperController::class, 'searchItemsForInvoice']);
+        Route::get('/licensed-operators', [SalesHelperController::class, 'getLicensedOperators']);
+        Route::get('/customer-details/{customerId}', [SalesHelperController::class, 'getCustomerDetails']);
+        Route::get('/item-details-invoice/{itemId}', [SalesHelperController::class, 'getItemDetailsForInvoice']);
+        Route::get('/live-currency-rate/{currencyId}', [SalesHelperController::class, 'getLiveCurrencyRateWithTax']);
     });
 
 });
