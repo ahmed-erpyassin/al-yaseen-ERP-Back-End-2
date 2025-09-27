@@ -165,6 +165,14 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
         Route::get('/company-vat-rate', [SalesHelperController::class, 'getCompanyVatRate']);
         Route::get('/currency-rate/{currencyId}', [SalesHelperController::class, 'getCurrencyRate']);
         Route::get('/item-details/{itemId}', [SalesHelperController::class, 'getItemDetails']);
+
+        // New invoice-specific helper endpoints
+        Route::get('/search-customers-invoice', [SalesHelperController::class, 'searchCustomersForInvoice']);
+        Route::get('/search-items-invoice', [SalesHelperController::class, 'searchItemsForInvoice']);
+        Route::get('/licensed-operators', [SalesHelperController::class, 'getLicensedOperators']);
+        Route::get('/customer-details/{customerId}', [SalesHelperController::class, 'getCustomerDetails']);
+        Route::get('/item-details-invoice/{itemId}', [SalesHelperController::class, 'getItemDetailsForInvoice']);
+        Route::get('/live-currency-rate/{currencyId}', [SalesHelperController::class, 'getLiveCurrencyRateWithTax']);
     });
 
 });

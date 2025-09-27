@@ -90,7 +90,6 @@ class Sale extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(\Modules\Companies\Models\Company::class, 'company_id');
-        return $this->belongsTo(\App\Models\Employee::class, 'employee_id');
     }
 
     /**
@@ -115,6 +114,14 @@ class Sale extends Model
     public function items(): HasMany
     {
         return $this->hasMany(SaleItem::class, 'sale_id');
+    }
+
+    /**
+     * Get the journal for this sale
+     */
+    public function journal(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Billing\Models\Journal::class, 'journal_id');
     }
 
     /**
