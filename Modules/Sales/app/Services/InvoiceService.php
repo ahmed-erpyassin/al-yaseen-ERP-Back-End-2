@@ -20,22 +20,97 @@ class InvoiceService
     public function index(Request $request)
     {
         try {
+            $query = Sale::query()
+                ->where('type', SalesTypeEnum::INVOICE)
+                ->with(['customer', 'currency', 'employee', 'items']);
 
-            $customerSearch = $request->get('customer_search', null);
+            // Apply search filters
+            $this->applySearchFilters($query, $request);
+
+            // Apply sorting
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
 
-            return Sale::query()
-                ->where('type', SalesTypeEnum::INVOICE)
-                ->when($customerSearch, function ($query, $customerSearch) {
-                    $query->whereHas('customer', function ($q) use ($customerSearch) {
-                        $q->where('name', 'like', '%' . $customerSearch . '%');
-                    });
-                })
-                ->orderBy($sortBy, $sortOrder)
-                ->get();
+            // Handle special sorting cases
+            if ($sortBy === 'customer_name') {
+                $query->leftJoin('customers', 'sales.customer_id', '=', 'customers.id')
+                      ->orderBy('customers.name', $sortOrder)
+                      ->select('sales.*');
+            } elseif ($sortBy === 'currency_name') {
+                $query->leftJoin('currencies', 'sales.currency_id', '=', 'currencies.id')
+                      ->orderBy('currencies.name', $sortOrder)
+                      ->select('sales.*');
+            } else {
+                $query->orderBy($sortBy, $sortOrder);
+            }
+
+            // Pagination
+            $perPage = $request->get('per_page', 15);
+
+            return $query->paginate($perPage);
         } catch (\Exception $e) {
-            throw new \Exception('Error fetching outgoing offers: ' . $e->getMessage());
+            throw new \Exception('Error fetching sales invoices: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Apply search filters to the query
+     */
+    private function applySearchFilters($query, Request $request)
+    {
+        // Invoice number search (exact or range)
+        if ($request->filled('invoice_number')) {
+            $query->where('invoice_number', 'like', '%' . $request->invoice_number . '%');
+        }
+
+        if ($request->filled('invoice_number_from') && $request->filled('invoice_number_to')) {
+            $query->whereBetween('invoice_number', [$request->invoice_number_from, $request->invoice_number_to]);
+        }
+
+        // Customer name search
+        if ($request->filled('customer_name')) {
+            $query->whereHas('customer', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->customer_name . '%');
+            });
+        }
+
+        // Date search (exact date)
+        if ($request->filled('date')) {
+            $query->whereDate('date', $request->date);
+        }
+
+        // Date range search
+        if ($request->filled('date_from') && $request->filled('date_to')) {
+            $query->whereBetween('date', [$request->date_from, $request->date_to]);
+        }
+
+        // Amount search
+        if ($request->filled('amount')) {
+            $query->where('total_amount', $request->amount);
+        }
+
+        if ($request->filled('amount_from') && $request->filled('amount_to')) {
+            $query->whereBetween('total_amount', [$request->amount_from, $request->amount_to]);
+        }
+
+        // Currency search
+        if ($request->filled('currency_id')) {
+            $query->where('currency_id', $request->currency_id);
+        }
+
+        // Licensed operator search
+        if ($request->filled('licensed_operator')) {
+            $query->where('licensed_operator', 'like', '%' . $request->licensed_operator . '%');
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Company filter (always apply for multi-tenant)
+        if ($request->user() && $request->user()->company_id) {
+            $query->where('company_id', $request->user()->company_id);
         }
     }
 
@@ -218,14 +293,40 @@ class InvoiceService
     }
 
     /**
-     * Show invoice details
+     * Show comprehensive invoice details with all related data
      */
     public function show($id)
     {
         try {
-            $invoice = Sale::with(['items.item', 'items.unit', 'customer', 'currency', 'employee'])
-                ->where('type', SalesTypeEnum::INVOICE)
-                ->findOrFail($id);
+            $invoice = Sale::with([
+                'items' => function ($query) {
+                    $query->with(['item', 'unit']);
+                },
+                'customer' => function ($query) {
+                    $query->select(['id', 'customer_number', 'name', 'email', 'phone', 'licensed_operator', 'company_name']);
+                },
+                'currency' => function ($query) {
+                    $query->select(['id', 'code', 'name', 'symbol']);
+                },
+                'employee' => function ($query) {
+                    $query->select(['id', 'employee_number', 'first_name', 'second_name', 'email']);
+                },
+                'user' => function ($query) {
+                    $query->select(['id', 'name', 'email']);
+                },
+                'company' => function ($query) {
+                    $query->select(['id', 'name', 'email', 'phone']);
+                },
+                'branch' => function ($query) {
+                    $query->select(['id', 'name', 'address']);
+                }
+            ])
+            ->where('type', SalesTypeEnum::INVOICE)
+            ->findOrFail($id);
+
+            // Add computed fields
+            $invoice->items_count = $invoice->items->count();
+            $invoice->total_quantity = $invoice->items->sum('quantity');
 
             return $invoice;
         } catch (Exception $e) {
@@ -234,7 +335,7 @@ class InvoiceService
     }
 
     /**
-     * Update invoice
+     * Update invoice with comprehensive validation and data handling
      */
     public function update(InvoiceRequest $request, $id)
     {
@@ -247,27 +348,65 @@ class InvoiceService
                     throw new \Exception('Cannot update an invoiced invoice');
                 }
 
-                $data = $request->validated();
                 $userId = $request->user()->id;
+                $companyId = $request->user()->company_id;
 
-                // Update basic invoice data
-                $invoice->update(array_merge($data, [
+                // Get customer details for auto-population if customer changed
+                $customer = null;
+                if ($request->customer_id && $request->customer_id != $invoice->customer_id) {
+                    $customer = Customer::find($request->customer_id);
+                }
+
+                // Get currency details if currency changed
+                $currency = null;
+                if ($request->currency_id && $request->currency_id != $invoice->currency_id) {
+                    $currency = Currency::find($request->currency_id);
+                }
+
+                // Prepare update data
+                $updateData = [
+                    // Customer information
+                    'customer_id' => $request->customer_id ?? $invoice->customer_id,
+                    'customer_email' => $request->customer_email ?? ($customer ? $customer->email : $invoice->customer_email),
+                    'licensed_operator' => $request->licensed_operator ?? $invoice->licensed_operator,
+
+                    // Currency and financial
+                    'currency_id' => $request->currency_id ?? $invoice->currency_id,
+                    'exchange_rate' => $request->exchange_rate ?? $invoice->exchange_rate,
+                    'due_date' => $request->due_date ?? $invoice->due_date,
+
+                    // Financial fields
+                    'cash_paid' => $request->cash_paid ?? $invoice->cash_paid,
+                    'checks_paid' => $request->checks_paid ?? $invoice->checks_paid,
+                    'allowed_discount' => $request->allowed_discount ?? $invoice->allowed_discount,
+                    'discount_percentage' => $request->discount_percentage ?? $invoice->discount_percentage,
+                    'tax_percentage' => $request->tax_percentage ?? $invoice->tax_percentage,
+                    'is_tax_inclusive' => $request->is_tax_inclusive ?? $invoice->is_tax_inclusive,
+                    'notes' => $request->notes ?? $invoice->notes,
+
+                    // Status can be updated
+                    'status' => $request->status ?? $invoice->status,
+
+                    // Audit fields
                     'updated_by' => $userId,
-                ]));
+                ];
+
+                // Update the invoice
+                $invoice->update($updateData);
 
                 // Update items if provided
                 if ($request->has('items') && is_array($request->items)) {
-                    // Delete existing items
+                    // Soft delete existing items (preserve history)
                     $invoice->items()->delete();
 
                     // Create new items
-                    $this->processInvoiceItems($invoice, $request->items, $invoice->company_id, $userId);
+                    $this->processInvoiceItems($invoice, $request->items, $companyId, $userId);
                 }
 
                 // Recalculate totals
                 $this->calculateInvoiceTotals($invoice);
 
-                return $invoice->load(['items', 'customer', 'currency']);
+                return $invoice->load(['items.item', 'items.unit', 'customer', 'currency', 'employee']);
             });
         } catch (Exception $e) {
             throw new \Exception('Error updating invoice: ' . $e->getMessage());
@@ -275,7 +414,7 @@ class InvoiceService
     }
 
     /**
-     * Delete invoice
+     * Soft delete invoice
      */
     public function destroy($id)
     {
@@ -287,10 +426,97 @@ class InvoiceService
                 throw new \Exception('Cannot delete an invoiced invoice');
             }
 
+            // Soft delete the invoice (preserves data for audit trail)
             $invoice->delete();
+
+            // Also soft delete related items
+            $invoice->items()->delete();
+
             return true;
         } catch (Exception $e) {
             throw new \Exception('Error deleting invoice: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Restore soft deleted invoice
+     */
+    public function restore($id)
+    {
+        try {
+            $invoice = Sale::withTrashed()
+                ->where('type', SalesTypeEnum::INVOICE)
+                ->findOrFail($id);
+
+            // Restore the invoice
+            $invoice->restore();
+
+            // Restore related items
+            $invoice->items()->withTrashed()->restore();
+
+            return $invoice->load(['items', 'customer', 'currency']);
+        } catch (Exception $e) {
+            throw new \Exception('Error restoring invoice: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Get deleted invoices
+     */
+    public function getDeleted(Request $request)
+    {
+        try {
+            $query = Sale::onlyTrashed()
+                ->where('type', SalesTypeEnum::INVOICE)
+                ->with(['customer', 'currency', 'employee']);
+
+            // Apply search filters if provided
+            $this->applySearchFilters($query, $request);
+
+            // Apply sorting
+            $sortBy = $request->get('sort_by', 'deleted_at');
+            $sortOrder = $request->get('sort_order', 'desc');
+
+            if ($sortBy === 'customer_name') {
+                $query->leftJoin('customers', 'sales.customer_id', '=', 'customers.id')
+                      ->orderBy('customers.name', $sortOrder)
+                      ->select('sales.*');
+            } elseif ($sortBy === 'currency_name') {
+                $query->leftJoin('currencies', 'sales.currency_id', '=', 'currencies.id')
+                      ->orderBy('currencies.name', $sortOrder)
+                      ->select('sales.*');
+            } else {
+                $query->orderBy($sortBy, $sortOrder);
+            }
+
+            // Pagination
+            $perPage = $request->get('per_page', 15);
+
+            return $query->paginate($perPage);
+        } catch (\Exception $e) {
+            throw new \Exception('Error fetching deleted invoices: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Permanently delete invoice (force delete)
+     */
+    public function forceDelete($id)
+    {
+        try {
+            $invoice = Sale::withTrashed()
+                ->where('type', SalesTypeEnum::INVOICE)
+                ->findOrFail($id);
+
+            // Force delete related items first
+            $invoice->items()->withTrashed()->forceDelete();
+
+            // Force delete the invoice
+            $invoice->forceDelete();
+
+            return true;
+        } catch (Exception $e) {
+            throw new \Exception('Error permanently deleting invoice: ' . $e->getMessage());
         }
     }
 }

@@ -117,6 +117,22 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
             ->name('update-invoice');
         Route::delete('/delete-invoice/{id}', [InvoiceController::class, 'destroy'])
             ->name('delete-invoice');
+
+        // Advanced search and filtering
+        Route::get('/search', [InvoiceController::class, 'search'])
+            ->name('search');
+        Route::get('/search-form-data', [InvoiceController::class, 'getSearchFormData'])
+            ->name('search-form-data');
+        Route::get('/sortable-fields', [InvoiceController::class, 'getSortableFields'])
+            ->name('sortable-fields');
+
+        // Soft delete management
+        Route::get('/deleted', [InvoiceController::class, 'getDeleted'])
+            ->name('deleted');
+        Route::post('/restore-invoice/{id}', [InvoiceController::class, 'restore'])
+            ->name('restore-invoice');
+        Route::delete('/force-delete/{id}', [InvoiceController::class, 'forceDelete'])
+            ->name('force-delete');
     });
 
     // ========================================
