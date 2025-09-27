@@ -15,34 +15,91 @@ class OutgoingShipmentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserResource($this->whenLoaded('user')),
-            'company_id' => $this->company_id,
-            'branch_id' => $this->branch_id,
-            'currency_id' => $this->currency_id,
-            'employee_id' => $this->employee_id,
-            'customer_id' => $this->customer_id,
-            'journal_id' => $this->journal_id,
-            'journal_number' => $this->journal_number,
             'type' => $this->type,
             'status' => $this->status,
-            'cash_paid' => $this->cash_paid,
-            'checks_paid' => $this->checks_paid,
-            'allowed_discount' => $this->allowed_discount,
-            'total_without_tax' => $this->total_without_tax,
-            'tax_percentage' => $this->tax_percentage,
-            'tax_amount' => $this->tax_amount,
-            'remaining_balance' => $this->remaining_balance,
-            'exchange_rate' => $this->exchange_rate,
-            'total_foreign' => $this->total_foreign,
-            'total_local' => $this->total_local,
-            'total_amount' => $this->total_amount,
+
+            // Auto-generated fields
+            'book_code' => $this->book_code,
+            'invoice_number' => $this->invoice_number,
+            'date' => $this->date ? $this->date->format('Y-m-d') : null,
+            'time' => $this->time ? $this->time->format('H:i:s') : null,
+            'due_date' => $this->due_date ? $this->due_date->format('Y-m-d') : null,
+
+            // Customer information
+            'customer_id' => $this->customer_id,
+            'customer' => $this->whenLoaded('customer', function () {
+                return [
+                    'id' => $this->customer->id,
+                    'name' => $this->customer->name,
+                    'email' => $this->customer->email,
+                    'phone' => $this->customer->phone,
+                ];
+            }),
+            'customer_email' => $this->customer_email,
+
+            // Employee information
+            'employee_id' => $this->employee_id,
+            'employee' => $this->whenLoaded('employee', function () {
+                return [
+                    'id' => $this->employee->id,
+                    'name' => $this->employee->name,
+                    'employee_number' => $this->employee->employee_number,
+                ];
+            }),
+
+            // System fields
+            'company_id' => $this->company_id,
+            'branch_id' => $this->branch_id,
+            'user_id' => $this->user_id,
+            'user' => new UserResource($this->whenLoaded('user')),
             'notes' => $this->notes,
+
+            // Items
+            'items' => $this->whenLoaded('items', function () {
+                return $this->items->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'serial_number' => $item->serial_number,
+                        'item_id' => $item->item_id,
+                        'item_number' => $item->item_number,
+                        'item_name' => $item->item_name,
+                        'unit_id' => $item->unit_id,
+                        'unit_name' => $item->unit_name,
+                        'quantity' => $item->quantity,
+                        'warehouse_id' => $item->warehouse_id,
+                        'notes' => $item->notes,
+                        'item' => $item->whenLoaded('item', function () use ($item) {
+                            return [
+                                'id' => $item->item->id,
+                                'name' => $item->item->name,
+                                'item_number' => $item->item->item_number,
+                            ];
+                        }),
+                        'unit' => $item->whenLoaded('unit', function () use ($item) {
+                            return [
+                                'id' => $item->unit->id,
+                                'name' => $item->unit->name,
+                            ];
+                        }),
+                    ];
+                });
+            }),
+
+            // Timestamps
+            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,
+
+            // Computed fields
+            'items_count' => $this->whenLoaded('items', function () {
+                return $this->items->count();
+            }),
+            'total_quantity' => $this->whenLoaded('items', function () {
+                return $this->items->sum('quantity');
+            }),
         ];
     }
 }

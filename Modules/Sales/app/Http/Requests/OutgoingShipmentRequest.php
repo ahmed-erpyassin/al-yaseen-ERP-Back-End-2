@@ -12,21 +12,30 @@ class OutgoingShipmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'currency_id' => 'nullable',
-            'employee_id' => 'nullable',
-            'customer_id' => 'required',
-            'journal_id' => 'nullable',
-            'journal_number' => 'required|integer',
-            'cash_paid' => 'nullable|numeric|min:0',
-            'checks_paid' => 'nullable|numeric|min:0',
-            'allowed_discount' => 'nullable|numeric|min:0',
-            'total_without_tax' => 'nullable|numeric|min:0',
-            'tax_percentage' => 'nullable|numeric|min:0',
-            'tax_amount' => 'nullable|numeric|min:0',
-            'total_amount' => 'nullable|numeric|min:0',
-            'remaining_balance' => 'nullable|numeric|min:0',
-            'exchange_rate' => 'required|numeric|min:0',
-            'total_foreign' => 'nullable|numeric|min:0',
+            // Customer information
+            'customer_id' => 'required|exists:customers,id',
+            'customer_email' => 'nullable|email|max:150',
+
+            // Optional fields
+            'employee_id' => 'nullable|exists:employees,id',
+            'branch_id' => 'nullable|exists:branches,id',
+            'due_date' => 'nullable|date|after:today',
+            'notes' => 'nullable|string|max:1000',
+
+            // Status and licensed operator
+            'status' => 'nullable|in:draft,pending,shipped,delivered,cancelled',
+            'licensed_operator' => 'nullable|string|max:255',
+
+            // Items validation
+            'items' => 'sometimes|required|array|min:1',
+            'items.*.item_id' => 'required|exists:items,id',
+            'items.*.item_number' => 'nullable|string|max:100',
+            'items.*.item_name' => 'nullable|string|max:255',
+            'items.*.unit_id' => 'required|exists:units,id',
+            'items.*.unit_name' => 'nullable|string|max:100',
+            'items.*.quantity' => 'required|numeric|min:0.01',
+            'items.*.warehouse_id' => 'required|exists:warehouses,id',
+            'items.*.notes' => 'nullable|string|max:500',
             'total_local' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
             'items' => 'required|array|min:1',

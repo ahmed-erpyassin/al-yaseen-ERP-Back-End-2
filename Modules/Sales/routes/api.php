@@ -99,6 +99,24 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
             ->name('update-shipment');
         Route::delete('/delete-shipment/{id}', [OutgoingShipmentController::class, 'destroy'])
             ->name('delete-shipment');
+
+        // Restore deleted shipment
+        Route::post('/restore-shipment/{id}', [OutgoingShipmentController::class, 'restore'])
+            ->name('restore-shipment');
+
+        // Preview/Display complete shipment data
+        Route::get('/preview-shipment/{id}', [OutgoingShipmentController::class, 'preview'])
+            ->name('preview-shipment');
+
+        // Form data and helper endpoints
+        Route::get('/form-data/get-complete-data', [OutgoingShipmentController::class, 'getFormData'])
+            ->name('get-form-data');
+
+        // Search and lookup endpoints
+        Route::get('/search/find-customers', [OutgoingShipmentController::class, 'searchCustomers'])
+            ->name('find-customers');
+        Route::get('/search/find-items', [OutgoingShipmentController::class, 'searchItems'])
+            ->name('find-items');
     });
 
     // ========================================

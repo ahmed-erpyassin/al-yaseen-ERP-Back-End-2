@@ -54,6 +54,14 @@ class SaleItem extends Model
     }
 
     /**
+     * Get the warehouse for this item
+     */
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Inventory\Models\Warehouse::class, 'warehouse_id');
+    }
+
+    /**
      * Calculate total amount for this item
      */
     public function calculateTotal(): float

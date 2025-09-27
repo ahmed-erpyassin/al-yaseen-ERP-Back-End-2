@@ -31,6 +31,12 @@ return new class extends Migration
             if (!Schema::hasColumn('sales_items', 'discount_amount')) {
                 $table->decimal('discount_amount', 15, 2)->default(0)->after('discount_percentage');
             }
+            if (!Schema::hasColumn('sales_items', 'warehouse_id')) {
+                $table->unsignedBigInteger('warehouse_id')->nullable()->after('unit_id');
+            }
+            if (!Schema::hasColumn('sales_items', 'notes')) {
+                $table->text('notes')->nullable()->after('warehouse_id');
+            }
         });
 
         // Update column types to match referenced tables
@@ -51,6 +57,14 @@ return new class extends Migration
         try {
             Schema::table('sales_items', function (Blueprint $table) {
                 $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            });
+        } catch (\Exception $e) {
+            // Foreign key already exists, ignore
+        }
+
+        try {
+            Schema::table('sales_items', function (Blueprint $table) {
+                $table->foreign('warehouse_id')->references('id')->on('warehouses')->onDelete('cascade');
             });
         } catch (\Exception $e) {
             // Foreign key already exists, ignore
@@ -77,20 +91,23 @@ return new class extends Migration
             // Drop foreign keys
             $table->dropForeign(['sale_id']);
             $table->dropForeign(['item_id']);
-            
+            $table->dropForeign(['warehouse_id']);
+
             // Drop indexes
             $table->dropIndex(['sale_id', 'item_id']);
             $table->dropIndex(['serial_number']);
             $table->dropIndex(['item_number']);
-            
+
             // Drop columns
             $table->dropColumn([
                 'serial_number',
-                'item_number', 
+                'item_number',
                 'item_name',
                 'unit_name',
                 'discount_percentage',
-                'discount_amount'
+                'discount_amount',
+                'warehouse_id',
+                'notes'
             ]);
         });
     }
