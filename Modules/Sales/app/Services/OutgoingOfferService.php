@@ -7,12 +7,29 @@ use Exception;
 use Illuminate\Http\Request as Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Sales\app\Enums\SalesTypeEnum;
+use Modules\Sales\app\Services\BookNumberingService;
+use Modules\Sales\app\Services\SalesCalculationService;
 use Modules\Sales\Http\Requests\OutgoingOfferRequest;
 use Modules\Sales\Models\Sale;
 use Modules\Sales\Models\SaleItem;
+use Modules\Customers\Models\Customer;
+use Modules\Inventory\Models\Item;
+use Modules\FinancialAccounts\Models\Currency;
+use Modules\FinancialAccounts\Models\ExchangeRate;
+use Modules\Companies\Models\Company;
 
 class OutgoingOfferService
 {
+    protected BookNumberingService $bookNumberingService;
+    protected SalesCalculationService $calculationService;
+
+    public function __construct(
+        BookNumberingService $bookNumberingService,
+        SalesCalculationService $calculationService
+    ) {
+        $this->bookNumberingService = $bookNumberingService;
+        $this->calculationService = $calculationService;
+    }
 
     public function index(Request $request)
     {
@@ -48,8 +65,21 @@ class OutgoingOfferService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = 101 ?? $request->company_id;
-                $userId = $request->user()->id ?? $request->user_id;
+                $companyId = $request->user()->company_id ?? 101;
+                $userId = $request->user()->id;
+                $validatedData = $request->validated();
+
+                // Generate book code and invoice number
+                $numberingData = $this->bookNumberingService->generateBookAndInvoiceNumber(
+                    $companyId,
+                    $validatedData['journal_id'] ?? null
+                );
+
+                // Get customer data for auto-population
+                $customer = Customer::find($validatedData['customer_id']);
+
+                // Get currency exchange rate
+                $exchangeRate = $this->getCurrencyExchangeRate($validatedData['currency_id']);
 
                 $data = [
                     'type' => SalesTypeEnum::QUOTATION,
@@ -57,15 +87,29 @@ class OutgoingOfferService
                     'user_id' => $userId,
                     'status' => 'draft',
                     'created_by' => $userId,
-                ] + $request->validated();
+
+                    // Auto-generated fields
+                    'code' => $numberingData['book_code'],
+                    'invoice_number' => (string) $numberingData['invoice_number'],
+                    'journal_number' => $numberingData['journal_number'],
+                    'date' => now()->toDateString(),
+                    'time' => now()->toTimeString(),
+
+                    // Customer contact fields (auto-populated from customer if not provided)
+                    'email' => $validatedData['email'] ?? $customer?->email,
+                    'licensed_operator' => $validatedData['licensed_operator'] ?? $customer?->licensed_operator,
+
+                    // Exchange rate
+                    'exchange_rate' => $exchangeRate,
+                ] + $validatedData;
 
                 // Calculate totals
-                $this->calculateTotals($data, $request->validated()['items']);
+                $this->calculateTotals($data, $validatedData['items']);
 
                 $offer = Sale::create($data);
 
-                // Create sale items
-                $this->createSaleItems($offer, $request->validated()['items']);
+                // Create sale items with enhanced data
+                $this->createSaleItems($offer, $validatedData['items']);
 
                 return $offer->load(['customer', 'currency', 'items']);
             });
@@ -169,47 +213,66 @@ class OutgoingOfferService
 
     private function calculateTotals(&$data, $items)
     {
-        $totalWithoutTax = 0;
-        $totalTaxAmount = 0;
-        $totalAmount = 0;
+        // Use the comprehensive calculation service
+        $this->calculationService->calculateSaleTotals($data, $items);
 
-        foreach ($items as $item) {
-            $subtotal = $item['quantity'] * $item['unit_price'];
-            $discount = $subtotal * ($item['discount_rate'] / 100);
-            $afterDiscount = $subtotal - $discount;
-            $tax = $afterDiscount * ($item['tax_rate'] / 100);
-
-            $totalWithoutTax += $afterDiscount;
-            $totalTaxAmount += $tax;
-            $totalAmount += $afterDiscount + $tax;
-        }
-
-        $data['total_without_tax'] = $totalWithoutTax;
-        $data['tax_amount'] = $totalTaxAmount;
-        $data['total_amount'] = $totalAmount;
-        $data['remaining_balance'] = $totalAmount - ($data['cash_paid'] ?? 0) - ($data['checks_paid'] ?? 0);
+        // Calculate remaining balance
+        $data['remaining_balance'] = $this->calculationService->calculateRemainingBalance(
+            $data['total_amount'],
+            $data['cash_paid'] ?? 0,
+            $data['checks_paid'] ?? 0
+        );
     }
 
     private function createSaleItems($offer, $items)
     {
-        foreach ($items as $item) {
-            $subtotal = $item['quantity'] * $item['unit_price'];
-            $discount = $subtotal * ($item['discount_rate'] / 100);
-            $afterDiscount = $subtotal - $discount;
-            $tax = $afterDiscount * ($item['tax_rate'] / 100);
+        foreach ($items as $itemData) {
+            // Get item details for auto-population
+            $item = Item::find($itemData['item_id']);
 
-            SaleItem::create([
+            $saleItemData = [
                 'sale_id' => $offer->id,
-                'item_id' => $item['item_id'],
-                'description' => $item['description'],
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['unit_price'],
-                'discount_rate' => $item['discount_rate'],
-                'tax_rate' => $item['tax_rate'],
-                'total_foreign' => $item['total_foreign'] ?? $afterDiscount + $tax,
-                'total_local' => $item['total_local'] ?? $afterDiscount + $tax,
-                'total' => $item['total'] ?? $afterDiscount + $tax,
-            ]);
+                'item_id' => $itemData['item_id'],
+                'unit_id' => $itemData['unit_id'] ?? $item?->unit_id,
+                'item_number' => $itemData['item_number'] ?? $item?->item_number,
+                'item_name' => $itemData['item_name'] ?? $item?->name,
+                'description' => $itemData['description'] ?? $item?->description,
+                'quantity' => $itemData['quantity'],
+                'unit_price' => $itemData['unit_price'] ?? $item?->first_sale_price ?? 0,
+                'discount_rate' => $itemData['discount_rate'] ?? 0,
+                'tax_rate' => $itemData['tax_rate'] ?? 0,
+            ];
+
+            // Calculate item total
+            $subtotal = $saleItemData['quantity'] * $saleItemData['unit_price'];
+            $discount = $subtotal * ($saleItemData['discount_rate'] / 100);
+            $afterDiscount = $subtotal - $discount;
+            $tax = $afterDiscount * ($saleItemData['tax_rate'] / 100);
+            $total = $afterDiscount + $tax;
+
+            $saleItemData['total_foreign'] = $itemData['total_foreign'] ?? $total;
+            $saleItemData['total_local'] = $itemData['total_local'] ?? $total;
+            $saleItemData['total'] = $itemData['total'] ?? $total;
+
+            SaleItem::create($saleItemData);
         }
+    }
+
+    /**
+     * Get currency exchange rate
+     */
+    private function getCurrencyExchangeRate($currencyId): float
+    {
+        // Try to get the latest exchange rate
+        $exchangeRate = ExchangeRate::where('currency_id', $currencyId)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($exchangeRate) {
+            return $exchangeRate->rate;
+        }
+
+        // Fallback to default exchange rate
+        return 1.0;
     }
 }
