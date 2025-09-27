@@ -55,24 +55,60 @@ class ReturnInvoiceController extends Controller
      */
     public function show($id)
     {
-        return view('sales::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('sales::edit');
+        try {
+            $returnInvoice = $this->returnInvoiceService->show($id);
+            return response()->json([
+                'success' => true,
+                'data' => new ReturnInvoiceResource($returnInvoice),
+                'message' => 'Return invoice retrieved successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching return invoice.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(ReturnInvoiceRequest $request, $id)
+    {
+        try {
+            $returnInvoice = $this->returnInvoiceService->update($request, $id);
+            return response()->json([
+                'success' => true,
+                'data' => new ReturnInvoiceResource($returnInvoice),
+                'message' => 'Return invoice updated successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while updating return invoice.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+        try {
+            $this->returnInvoiceService->destroy($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Return invoice deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while deleting return invoice.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

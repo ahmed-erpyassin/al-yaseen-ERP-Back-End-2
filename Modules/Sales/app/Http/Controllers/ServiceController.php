@@ -54,24 +54,60 @@ class ServiceController extends Controller
      */
     public function show($id)
     {
-        return view('sales::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('sales::edit');
+        try {
+            $service = $this->serviceService->show($id);
+            return response()->json([
+                'success' => true,
+                'data' => new ServiceResource($service),
+                'message' => 'Service retrieved successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching service.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {}
+    public function update(ServiceRequest $request, $id)
+    {
+        try {
+            $service = $this->serviceService->update($request, $id);
+            return response()->json([
+                'success' => true,
+                'data' => new ServiceResource($service),
+                'message' => 'Service updated successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while updating service.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+        try {
+            $this->serviceService->destroy($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Service deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while deleting service.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

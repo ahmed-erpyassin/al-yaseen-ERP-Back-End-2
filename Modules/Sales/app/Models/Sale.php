@@ -24,6 +24,7 @@ class Sale extends Model
         'cash_paid' => 'decimal:2',
         'checks_paid' => 'decimal:2',
         'allowed_discount' => 'decimal:2',
+        'discount_percentage' => 'decimal:2',
         'total_without_tax' => 'decimal:2',
         'tax_percentage' => 'decimal:2',
         'tax_amount' => 'decimal:2',
@@ -32,6 +33,7 @@ class Sale extends Model
         'total_foreign' => 'decimal:4',
         'total_local' => 'decimal:4',
         'total_amount' => 'decimal:4',
+        'is_tax_inclusive' => 'boolean',
     ];
 
     /**
@@ -79,6 +81,15 @@ class Sale extends Model
      */
     public function employee(): BelongsTo
     {
+        return $this->belongsTo(\Modules\HumanResources\Models\Employee::class, 'employee_id');
+    }
+
+    /**
+     * Get the company for this sale
+     */
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Companies\Models\Company::class, 'company_id');
         return $this->belongsTo(\App\Models\Employee::class, 'employee_id');
     }
 
@@ -128,5 +139,88 @@ class Sale extends Model
     public function scopeInvoices($query)
     {
         return $query->where('type', 'invoice');
+    }
+
+    /**
+     * Scope for incoming orders
+     */
+    public function scopeIncomingOrders($query)
+    {
+        return $query->where('type', 'incoming_order');
+    }
+
+    /**
+     * Generate the next sequential book code for incoming orders.
+     */
+    public static function generateBookCode($companyId): string
+    {
+        // Get the last book code for this company
+        $lastSale = self::where('company_id', $companyId)
+            ->where('type', 'incoming_order')
+            ->whereNotNull('book_code')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastSale || !$lastSale->book_code) {
+            return 'BOOK-001';
+        }
+
+        // Extract the number from the book code (e.g., BOOK-001 -> 001)
+        $lastNumber = (int) substr($lastSale->book_code, -3);
+
+        // Check if current book has reached 50 invoices
+        $currentBookInvoicesCount = self::where('company_id', $companyId)
+            ->where('type', 'incoming_order')
+            ->where('book_code', $lastSale->book_code)
+            ->count();
+
+        if ($currentBookInvoicesCount >= 50) {
+            // Start new book
+            $newNumber = $lastNumber + 1;
+            return 'BOOK-' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+        }
+
+        // Continue with current book
+        return $lastSale->book_code;
+    }
+
+    /**
+     * Generate the next sequential invoice number for incoming orders.
+     */
+    public static function generateInvoiceNumber($companyId): string
+    {
+        // Get the last invoice number for this company
+        $lastSale = self::where('company_id', $companyId)
+            ->where('type', 'incoming_order')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastSale) {
+            return 'INV-000001';
+        }
+
+        // Extract the number from the invoice number (e.g., INV-000001 -> 1)
+        $lastNumber = (int) substr($lastSale->invoice_number, -6);
+        $newNumber = $lastNumber + 1;
+
+        return 'INV-' . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Get formatted book display
+     */
+    public function getBookDisplayAttribute(): string
+    {
+        return $this->book_code ?? 'N/A';
+    }
+
+    /**
+     * Get formatted total with currency
+     */
+    public function getFormattedTotalAttribute(): string
+    {
+        $currency = $this->currency;
+        $symbol = $currency ? $currency->symbol : '';
+        return $symbol . ' ' . number_format($this->total_amount, 2);
     }
 }
