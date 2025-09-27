@@ -223,7 +223,7 @@ endpoints:
         name: inventory_valuation_method
         description: ''
         required: true
-        example: first_purchase_price
+        example: no_value
         type: string
         enumValues:
           - natural_division
@@ -271,7 +271,7 @@ endpoints:
       purchase_account_id: 17
       branch_id: 17
       department_warehouse_id: 17
-      inventory_valuation_method: first_purchase_price
+      inventory_valuation_method: no_value
       status: active
     fileParameters: []
     responses: []
@@ -504,7 +504,7 @@ endpoints:
         name: inventory_valuation_method
         description: ''
         required: true
-        example: second_purchase_price
+        example: no_value
         type: string
         enumValues:
           - natural_division
@@ -519,7 +519,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: active
+        example: inactive
         type: string
         enumValues:
           - active
@@ -538,8 +538,8 @@ endpoints:
       phone_number: atbxspzmrazsroyjpxmqe
       purchase_account: sedyghenqcopwvownkbam
       sale_account: lnfngefbeilfzsyuxoezb
-      inventory_valuation_method: second_purchase_price
-      status: active
+      inventory_valuation_method: no_value
+      status: inactive
     fileParameters: []
     responses: []
     responseFields: []

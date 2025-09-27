@@ -90,6 +90,7 @@ class Sale extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(\Modules\Companies\Models\Company::class, 'company_id');
+        return $this->belongsTo(\App\Models\Employee::class, 'employee_id');
     }
 
     /**

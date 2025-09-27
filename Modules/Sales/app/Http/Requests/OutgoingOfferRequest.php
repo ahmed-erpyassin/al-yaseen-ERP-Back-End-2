@@ -12,15 +12,23 @@ class OutgoingOfferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'branch_id'             => 'required|integer',
-            'currency_id'           => 'required|integer',
-            'employee_id'           => 'required|integer',
-            'customer_id'           => 'required|integer',
-            'journal_id'            => 'nullable|integer',
-            'journal_number'        => 'required|integer|min:1',
-            'invoice_number'        => 'required|string|max:255',
-            'time'                  => 'required|date_format:H:i:s',
+            'branch_id'             => 'required|integer|exists:branches,id',
+            'currency_id'           => 'required|integer|exists:currencies,id',
+            'employee_id'           => 'nullable|integer|exists:employees,id',
+            'customer_id'           => 'required|integer|exists:customers,id',
+            'journal_id'            => 'nullable|integer|exists:journals,id',
+
+            // Auto-generated fields (optional in request)
+            'code'                  => 'nullable|string|max:255', // Book code (auto-generated)
+            'journal_number'        => 'nullable|integer|min:1', // Auto-generated from journal
+            'invoice_number'        => 'nullable|string|max:255', // Auto-generated sequential
+            'date'                  => 'nullable|date', // Auto-generated (today)
+            'time'                  => 'nullable|date_format:H:i:s', // Auto-generated (now)
             'due_date'              => 'required|date|after_or_equal:today',
+
+            // Customer contact fields
+            'email'                 => 'nullable|email|max:255',
+            'licensed_operator'     => 'nullable|string|max:255',
             'cash_paid'             => 'nullable|numeric|min:0|max:999999999.99',
             'checks_paid'           => 'nullable|numeric|min:0|max:999999999.99',
             'allowed_discount'      => 'nullable|numeric|min:0|max:999999999.99',
@@ -34,12 +42,15 @@ class OutgoingOfferRequest extends FormRequest
             'total_local'           => 'nullable|numeric|min:0|max:999999999.9999',
             'notes'                 => 'nullable|string|max:1000',
             'items'                 => 'required|array|min:1',
-            'items.*.item_id'       => 'required|integer',
-            'items.*.description'   => 'required|string|max:500',
+            'items.*.item_id'       => 'required|integer|exists:items,id',
+            'items.*.unit_id'       => 'nullable|integer|exists:units,id',
+            'items.*.item_number'   => 'nullable|string|max:255', // Auto-populated from item
+            'items.*.item_name'     => 'nullable|string|max:255', // Auto-populated from item
+            'items.*.description'   => 'nullable|string|max:500',
             'items.*.quantity'      => 'required|numeric|min:0.0001|max:999999.9999',
             'items.*.unit_price'    => 'required|numeric|min:0|max:999999.9999',
-            'items.*.discount_rate' => 'required|numeric|min:0|max:100',
-            'items.*.tax_rate'      => 'required|numeric|min:0|max:100',
+            'items.*.discount_rate' => 'nullable|numeric|min:0|max:100',
+            'items.*.tax_rate'      => 'nullable|numeric|min:0|max:100',
             'items.*.total_foreign' => 'nullable|numeric|min:0|max:999999999.9999',
             'items.*.total_local'   => 'nullable|numeric|min:0|max:999999999.9999',
             'items.*.total'         => 'nullable|numeric|min:0|max:999999999.9999',

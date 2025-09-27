@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Al-Yaseen ERP API Documentation",
-        "_postman_id": "3d15a577-ae16-4146-a97e-77eab8656efe",
+        "_postman_id": "2e4a2583-b3c8-4f3f-9d5b-2e1f09a91aa0",
         "description": "API documentation for Al-Yaseen ERP Project Management and Inventory Management modules.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -39,7 +39,10 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"first_name\":\"vmqeopfuudtdsufvyvddq\",\"second_name\":\"amniihfqcoynlazghdtqt\",\"email\":\"andreanne00@example.org\",\"phone\":\"consequatur\",\"phone_country_code\":\"mqeop\",\"password\":\"O[2UZ5ij-e\\\/dl4m{o,\"}"
+                        },
                         "description": ""
                     },
                     "response": []
@@ -64,7 +67,10 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"email\":\"qkunze@example.com\",\"password\":\"O[2UZ5ij-e\\\/dl4m{o,\"}"
+                        },
                         "description": ""
                     },
                     "response": []
@@ -89,7 +95,10 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"phone\":\"consequatur\"}"
+                        },
                         "description": ""
                     },
                     "response": []
@@ -114,7 +123,10 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"phone\":\"consequatur\",\"otp\":\"consequatur\"}"
+                        },
                         "description": ""
                     },
                     "response": []
@@ -358,7 +370,7 @@
                     "response": []
                 },
                 {
-                    "name": "Remove the specified BOM item.",
+                    "name": "Remove the specified BOM item (soft delete).",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -658,6 +670,117 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "Get trashed (soft deleted) BOM items.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/bom-items\/deleted-bom-items",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/bom-items\/deleted-bom-items"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/bom-items\/deleted-bom-items could not be found.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Restore a soft deleted BOM item.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/bom-items\/:id\/restore-bom-item",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/bom-items\/:id\/restore-bom-item",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the bom item."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Permanently delete a BOM item (force delete).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/bom-items\/:id\/permanently-delete",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/bom-items\/:id\/permanently-delete",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the bom item."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
                 }
             ]
         },
@@ -1099,7 +1222,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"department_number\":\"vmqeopfuudtdsufvyvddq\",\"department_name_ar\":\"amniihfqcoynlazghdtqt\",\"department_name_en\":\"qxbajwbpilpmufinllwlo\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"manager_name\":\"dtdsufvyvddqamniihfqc\",\"manager_phone\":\"oynlazghdtqtqxbajwbpi\",\"manager_email\":\"jaunita.schamberger@example.com\",\"active\":true}"
+                            "raw": "{\"department_number\":\"vmqeopfuudtdsufvyvddq\",\"department_name_ar\":\"amniihfqcoynlazghdtqt\",\"department_name_en\":\"qxbajwbpilpmufinllwlo\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"manager_name\":\"dtdsufvyvddqamniihfqc\",\"manager_phone\":\"oynlazghdtqtqxbajwbpi\",\"manager_email\":\"jaunita.schamberger@example.com\",\"active\":false}"
                         },
                         "description": ""
                     },
@@ -1337,7 +1460,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_number\":\"vmqeopfuudtdsufvyvddq\",\"item_name_ar\":\"amniihfqcoynlazghdtqt\",\"item_name_en\":\"qxbajwbpilpmufinllwlo\",\"barcode\":\"auydlsmsjuryvojcybzvr\",\"model\":\"byickznkygloigmkwxphl\",\"unit\":\"vazjrcnfbaqywuxhgjjmz\",\"quantity\":72,\"unit_price\":82,\"minimum_limit\":34,\"reorder_limit\":71,\"notes\":\"consequatur\",\"active\":true}"
+                            "raw": "{\"company_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name_ar\":\"mniihfqcoynlazghdtqtq\",\"item_name_en\":\"xbajwbpilpmufinllwloa\",\"barcode\":\"uydlsmsjuryvojcybzvrb\",\"model\":\"yickznkygloigmkwxphlv\",\"unit\":\"azjrcnfbaqywuxhgjjmzu\",\"quantity\":82,\"unit_price\":34,\"minimum_limit\":71,\"reorder_limit\":4,\"notes\":\"consequatur\",\"active\":false}"
                         },
                         "description": ""
                     },
@@ -1426,7 +1549,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_number\":\"vmqeopfuudtdsufvyvddq\",\"item_name_ar\":\"amniihfqcoynlazghdtqt\",\"item_name_en\":\"qxbajwbpilpmufinllwlo\",\"barcode\":\"auydlsmsjuryvojcybzvr\",\"model\":\"byickznkygloigmkwxphl\",\"unit\":\"vazjrcnfbaqywuxhgjjmz\",\"quantity\":72,\"unit_price\":82,\"minimum_limit\":34,\"reorder_limit\":71,\"notes\":\"consequatur\",\"active\":false}"
+                            "raw": "{\"company_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name_ar\":\"mniihfqcoynlazghdtqtq\",\"item_name_en\":\"xbajwbpilpmufinllwloa\",\"barcode\":\"uydlsmsjuryvojcybzvrb\",\"model\":\"yickznkygloigmkwxphlv\",\"unit\":\"azjrcnfbaqywuxhgjjmzu\",\"quantity\":82,\"unit_price\":34,\"minimum_limit\":71,\"reorder_limit\":4,\"notes\":\"consequatur\",\"active\":true}"
                         },
                         "description": ""
                     },
@@ -1644,6 +1767,117 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "Get trashed (soft deleted) inventory items.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/inventory-items\/deleted-inventory",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/inventory-items\/deleted-inventory"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/inventory-items\/deleted-inventory could not be found.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Restore a soft deleted inventory item.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/inventory-items\/:id\/restore-inventory",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/inventory-items\/:id\/restore-inventory",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the inventory item."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Permanently delete an inventory item (force delete).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/inventory-items\/:id\/permanently-delete",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/inventory-items\/:id\/permanently-delete",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the inventory item."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
                 }
             ]
         },
@@ -1718,7 +1952,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"manufacturing\",\"movement_date\":\"2025-09-23T07:29:19\",\"movement_time\":\"07:29:19\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"cancelled\",\"movement_data\":[{\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-23T07:29:19\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\"}]}"
+                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"inbound\",\"movement_date\":\"2025-09-25T13:42:25\",\"movement_time\":\"13:42:25\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"draft\",\"movement_data\":[{\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-25T13:42:25\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\"}]}"
                         },
                         "description": ""
                     },
@@ -1807,7 +2041,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"manufacturing\",\"movement_date\":\"2025-09-23T07:29:19\",\"movement_time\":\"07:29:19\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"cancelled\",\"movement_data\":[{\"id\":17,\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-23T07:29:19\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\",\"_delete\":true}]}"
+                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"inventory_count\",\"movement_date\":\"2025-09-25T13:42:25\",\"movement_time\":\"13:42:25\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"confirmed\",\"movement_data\":[{\"id\":17,\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-25T13:42:25\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\",\"_delete\":true}]}"
                         },
                         "description": ""
                     },
@@ -2626,7 +2860,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"third\",\"quantity_factor\":56,\"balance_unit\":\"liter\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"piece\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"ton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"active\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"balance\",\"quantity_factor\":56,\"balance_unit\":\"kilo\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"piece\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"liter\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -2715,14 +2949,14 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"second\",\"quantity_factor\":56,\"balance_unit\":\"piece\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"ton\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"liter\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"inactive\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"third\",\"quantity_factor\":56,\"balance_unit\":\"ton\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"carton\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"carton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"active\"}"
                         },
                         "description": ""
                     },
                     "response": []
                 },
                 {
-                    "name": "Remove the specified item unit.",
+                    "name": "Remove the specified item unit (soft delete).",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -3114,6 +3348,117 @@
                         "description": ""
                     },
                     "response": []
+                },
+                {
+                    "name": "Get trashed (soft deleted) item units.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/item-units\/deleted-item-units",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/item-units\/deleted-item-units"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/item-units\/deleted-item-units could not be found.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Restore a soft deleted item unit.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/item-units\/:id\/restore-item-unit",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/item-units\/:id\/restore-item-unit",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the item unit."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Permanently delete an item unit (force delete).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/item-units\/:id\/permanently-delete",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/item-units\/:id\/permanently-delete",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the item unit."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
                 }
             ]
         },
@@ -3230,7 +3575,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"name_ar\":\"yickznkygloigmkwxphlv\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"model\":\"mqeopfuudtdsufvyvddqa\",\"unit_name\":\"mniihfqcoynlazghdtqtq\",\"type\":\"raw_material\",\"quantity\":80,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"cost_price\":70,\"purchase_price\":12,\"first_purchase_price\":66,\"second_purchase_price\":13,\"third_purchase_price\":65,\"purchase_discount_rate\":20,\"purchase_prices_include_vat\":true,\"sale_price\":18,\"minimum_sale_price\":74,\"first_sale_price\":87,\"second_sale_price\":76,\"third_sale_price\":10,\"sale_discount_rate\":3,\"maximum_sale_discount_rate\":17,\"minimum_allowed_sale_price\":1,\"sale_prices_include_vat\":false,\"item_subject_to_vat\":true,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"C39\",\"expiry_date\":\"2106-10-22\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"custom_item_type\":\"uydlsmsjuryvojcybzvrb\",\"custom_item_type_ar\":\"yickznkygloigmkwxphlv\",\"active\":false,\"stock_tracking\":false}"
+                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"name_ar\":\"yickznkygloigmkwxphlv\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"model\":\"mqeopfuudtdsufvyvddqa\",\"type\":\"material\",\"quantity\":45,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"cost_price\":70,\"purchase_price\":12,\"first_purchase_price\":66,\"second_purchase_price\":13,\"third_purchase_price\":65,\"purchase_discount_rate\":20,\"purchase_prices_include_vat\":false,\"sale_price\":18,\"minimum_sale_price\":74,\"first_sale_price\":87,\"second_sale_price\":76,\"third_sale_price\":10,\"sale_discount_rate\":3,\"maximum_sale_discount_rate\":17,\"minimum_allowed_sale_price\":1,\"sale_prices_include_vat\":true,\"item_subject_to_vat\":false,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"EAN13\",\"expiry_date\":\"2106-10-25\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"custom_item_type\":\"uydlsmsjuryvojcybzvrb\",\"custom_item_type_ar\":\"yickznkygloigmkwxphlv\",\"active\":false,\"stock_tracking\":false}"
                         },
                         "description": ""
                     },
@@ -3319,7 +3664,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"model\":\"dtdsufvyvddqamniihfqc\",\"unit_name\":\"oynlazghdtqtqxbajwbpi\",\"type\":\"service\",\"quantity\":41,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"first_purchase_price\":70,\"second_purchase_price\":12,\"third_purchase_price\":66,\"purchase_discount_rate\":4,\"purchase_prices_include_vat\":true,\"first_sale_price\":65,\"second_sale_price\":72,\"third_sale_price\":18,\"sale_discount_rate\":21,\"maximum_sale_discount_rate\":24,\"minimum_allowed_sale_price\":76,\"sale_prices_include_vat\":false,\"item_subject_to_vat\":false,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"ITF\",\"expiry_date\":\"2106-10-22\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"active\":true,\"stock_tracking\":false}"
+                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"model\":\"dtdsufvyvddqamniihfqc\",\"type\":\"raw_material\",\"quantity\":51,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"first_purchase_price\":70,\"second_purchase_price\":12,\"third_purchase_price\":66,\"purchase_discount_rate\":4,\"purchase_prices_include_vat\":true,\"first_sale_price\":65,\"second_sale_price\":72,\"third_sale_price\":18,\"sale_discount_rate\":21,\"maximum_sale_discount_rate\":24,\"minimum_allowed_sale_price\":76,\"sale_prices_include_vat\":false,\"item_subject_to_vat\":true,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"UPCA\",\"expiry_date\":\"2106-10-25\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"active\":true,\"stock_tracking\":false}"
                         },
                         "description": ""
                     },
@@ -3796,7 +4141,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"barcode\":\"consequatur\",\"barcode_type\":\"C128\"}"
+                            "raw": "{\"barcode\":\"consequatur\",\"barcode_type\":\"EAN13\"}"
                         },
                         "description": ""
                     },
@@ -3904,7 +4249,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"date_from\":\"2025-09-23T07:29:18\",\"date_to\":\"2106-10-22\",\"transaction_type\":\"stock_movements\",\"per_page\":13,\"sort_by\":\"type\",\"sort_direction\":\"asc\"}"
+                            "raw": "{\"date_from\":\"2025-09-25T13:42:23\",\"date_to\":\"2106-10-25\",\"transaction_type\":\"purchases\",\"per_page\":13,\"sort_by\":\"amount\",\"sort_direction\":\"asc\"}"
                         },
                         "description": ""
                     },
@@ -3960,7 +4305,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"date_from\":\"2025-09-23T07:29:18\",\"date_to\":\"2106-10-22\",\"transaction_type\":\"stock_movements\",\"export_type\":\"multi_sheet\",\"format\":\"csv\"}"
+                            "raw": "{\"date_from\":\"2025-09-25T13:42:23\",\"date_to\":\"2106-10-25\",\"transaction_type\":\"all\",\"export_type\":\"transactions\",\"format\":\"csv\"}"
                         },
                         "description": ""
                     },
@@ -4411,7 +4756,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"consumed_quantity\":45,\"produced_quantity\":56,\"labor_cost\":16,\"operating_cost\":50,\"waste_cost\":55,\"formula_name\":\"fuudtdsufvyvddqamniih\",\"formula_description\":\"fqcoynlazghdtqtqxbajw\",\"formula_number\":\"bpilpmufinllwloauydls\",\"selected_purchase_price_type\":\"second\",\"batch_size\":42,\"production_time_minutes\":64,\"preparation_time_minutes\":34,\"production_notes\":\"uryvojcybzvrbyickznky\",\"preparation_notes\":\"gloigmkwxphlvazjrcnfb\",\"usage_instructions\":\"aqywuxhgjjmzuxjubqouz\",\"tolerance_percentage\":18,\"quality_requirements\":\"wiwxtrkimfcatbxspzmra\",\"requires_inspection\":true,\"status\":\"archived\",\"is_active\":true,\"effective_from\":\"2025-09-23T07:29:20\",\"effective_to\":\"2106-10-22\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"consumed_quantity\":45,\"produced_quantity\":56,\"labor_cost\":16,\"operating_cost\":50,\"waste_cost\":55,\"formula_name\":\"fuudtdsufvyvddqamniih\",\"formula_description\":\"fqcoynlazghdtqtqxbajw\",\"formula_number\":\"bpilpmufinllwloauydls\",\"selected_purchase_price_type\":\"second\",\"quality_requirements\":\"msjuryvojcybzvrbyickz\",\"requires_inspection\":true,\"status\":\"active\",\"is_active\":false,\"batch_size\":48,\"production_time_minutes\":36,\"preparation_time_minutes\":87,\"production_notes\":\"gloigmkwxphlvazjrcnfb\",\"preparation_notes\":\"aqywuxhgjjmzuxjubqouz\",\"usage_instructions\":\"swiwxtrkimfcatbxspzmr\",\"tolerance_percentage\":1,\"effective_from\":\"2025-09-25T13:42:25\",\"effective_to\":\"2106-10-25\"}"
                         },
                         "description": ""
                     },
@@ -5175,7 +5520,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"out\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-09-23T07:29:17\"}"
+                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"transfer\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-09-25T13:42:22\"}"
                         },
                         "description": ""
                     },
@@ -5233,6 +5578,75 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "Update the specified stock movement.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/stock-movements\/modify-movement\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/stock-movements\/modify-movement\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the modify movement."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"adjustment\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-09-25T13:42:22\"}"
+                        },
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Remove the specified stock movement (soft delete).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/stock-movements\/remove-movement\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/stock-movements\/remove-movement\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the remove movement."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
                 },
                 {
                     "name": "Get stock summary for all items.",
@@ -5384,6 +5798,117 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "Get trashed (soft deleted) stock movements.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/stock-movements\/deleted-movements",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/stock-movements\/deleted-movements"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/stock-movements\/deleted-movements could not be found.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Restore a soft deleted stock movement.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/stock-movements\/:id\/restore-movement",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/stock-movements\/:id\/restore-movement",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the stock movement."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Permanently delete a stock movement (force delete).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/stock-movements\/:id\/permanently-delete",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/stock-movements\/:id\/permanently-delete",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the stock movement."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
                 }
             ]
         },
@@ -5458,7 +5983,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"piece\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"liter\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"liter\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"ton\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"piece\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"piece\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -5547,14 +6072,14 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"carton\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"piece\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"piece\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"carton\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"ton\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"piece\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
                     "response": []
                 },
                 {
-                    "name": "Remove the specified unit.",
+                    "name": "Remove the specified unit (soft delete).",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -5945,6 +6470,117 @@
                             "name": ""
                         }
                     ]
+                },
+                {
+                    "name": "Get trashed (soft deleted) units.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/units\/deleted-units",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/units\/deleted-units"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/units\/deleted-units could not be found.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Restore a soft deleted unit.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/units\/:id\/restore-unit",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/units\/:id\/restore-unit",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the unit."
+                                }
+                            ]
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Permanently delete a unit (force delete).",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/units\/:id\/permanently-delete",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/units\/:id\/permanently-delete",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "consequatur",
+                                    "description": "The ID of the unit."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": []
                 }
             ]
         },
@@ -6019,7 +6655,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"warehouse_number\":\"vmqeopfuudtdsufvyvddq\",\"name\":\"amniihfqcoynlazghdtqt\",\"description\":\"Necessitatibus architecto aut consequatur debitis et id.\",\"address\":\"ilpmufinllwloauydlsms\",\"warehouse_keeper_employee_number\":\"juryvojcybzvrbyickznk\",\"warehouse_keeper_employee_name\":\"ygloigmkwxphlvazjrcnf\",\"warehouse_keeper_id\":17,\"mobile\":\"mqeopfuudtdsufvyv\",\"fax_number\":\"ddqamniihfqcoynla\",\"phone_number\":\"zghdtqtqxbajwbpil\",\"sales_account_id\":17,\"purchase_account_id\":17,\"branch_id\":17,\"department_warehouse_id\":17,\"inventory_valuation_method\":\"first_purchase_price\",\"status\":\"active\"}"
+                            "raw": "{\"warehouse_number\":\"vmqeopfuudtdsufvyvddq\",\"name\":\"amniihfqcoynlazghdtqt\",\"description\":\"Necessitatibus architecto aut consequatur debitis et id.\",\"address\":\"ilpmufinllwloauydlsms\",\"warehouse_keeper_employee_number\":\"juryvojcybzvrbyickznk\",\"warehouse_keeper_employee_name\":\"ygloigmkwxphlvazjrcnf\",\"warehouse_keeper_id\":17,\"mobile\":\"mqeopfuudtdsufvyv\",\"fax_number\":\"ddqamniihfqcoynla\",\"phone_number\":\"zghdtqtqxbajwbpil\",\"sales_account_id\":17,\"purchase_account_id\":17,\"branch_id\":17,\"department_warehouse_id\":17,\"inventory_valuation_method\":\"no_value\",\"status\":\"active\"}"
                         },
                         "description": ""
                     },
@@ -6108,7 +6744,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"location\":\"qxbajwbpilpmufinllwlo\",\"warehouse_keeper_employee_number\":\"auydlsmsjuryvojcybzvr\",\"warehouse_keeper_name\":\"byickznkygloigmkwxphl\",\"mobile\":\"vazjrcnfbaqywuxhgjjmz\",\"fax_number\":\"uxjubqouzswiwxtrkimfc\",\"phone_number\":\"atbxspzmrazsroyjpxmqe\",\"purchase_account\":\"sedyghenqcopwvownkbam\",\"sale_account\":\"lnfngefbeilfzsyuxoezb\",\"inventory_valuation_method\":\"second_purchase_price\",\"status\":\"active\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"location\":\"qxbajwbpilpmufinllwlo\",\"warehouse_keeper_employee_number\":\"auydlsmsjuryvojcybzvr\",\"warehouse_keeper_name\":\"byickznkygloigmkwxphl\",\"mobile\":\"vazjrcnfbaqywuxhgjjmz\",\"fax_number\":\"uxjubqouzswiwxtrkimfc\",\"phone_number\":\"atbxspzmrazsroyjpxmqe\",\"purchase_account\":\"sedyghenqcopwvownkbam\",\"sale_account\":\"lnfngefbeilfzsyuxoezb\",\"inventory_valuation_method\":\"no_value\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -6547,19 +7183,19 @@
                                 },
                                 {
                                     "key": "document_category",
-                                    "value": "drawing",
+                                    "value": "specification",
                                     "type": "text",
                                     "description": ""
                                 },
                                 {
                                     "key": "status",
-                                    "value": "active",
+                                    "value": "deleted",
                                     "type": "text",
                                     "description": ""
                                 },
                                 {
                                     "key": "upload_date",
-                                    "value": "2025-09-23T07:29:22",
+                                    "value": "2025-09-25T13:42:27",
                                     "type": "text",
                                     "description": "Must be a valid date."
                                 },
@@ -7387,7 +8023,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"exchange_rate\":13,\"reference_type\":\"qeopfuudtdsufvyvddqam\",\"reference_id\":\"niihfqcoynlazghdtqtqx\",\"amount\":2,\"date\":\"2025-09-23T07:29:22\",\"description\":\"Consequatur debitis et id.\"}"
+                            "raw": "{\"project_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"exchange_rate\":13,\"reference_type\":\"qeopfuudtdsufvyvddqam\",\"reference_id\":\"niihfqcoynlazghdtqtqx\",\"amount\":2,\"date\":\"2025-09-25T13:42:28\",\"description\":\"Consequatur debitis et id.\"}"
                         },
                         "description": ""
                     },
@@ -7476,7 +8112,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"exchange_rate\":21,\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":\"mniihfqcoynlazghdtqtq\",\"amount\":23,\"date\":\"2025-09-23T07:29:22\",\"description\":\"Aut consequatur debitis et.\"}"
+                            "raw": "{\"exchange_rate\":21,\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":\"mniihfqcoynlazghdtqtq\",\"amount\":23,\"date\":\"2025-09-25T13:42:28\",\"description\":\"Aut consequatur debitis et.\"}"
                         },
                         "description": ""
                     },
@@ -8139,7 +8775,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"name\":\"mqeopfuudtdsufvyvddqa\",\"start_date\":\"2106-10-22\",\"status\":\"not_started\",\"milestone_number\":45,\"description\":\"Amet iste laborum eius est dolor dolores.\",\"end_date\":\"2106-10-22\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
+                            "raw": "{\"project_id\":\"consequatur\",\"name\":\"mqeopfuudtdsufvyvddqa\",\"start_date\":\"2106-10-25\",\"status\":\"completed\",\"milestone_number\":45,\"description\":\"Amet iste laborum eius est dolor dolores.\",\"end_date\":\"2106-10-25\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
                         },
                         "description": ""
                     },
@@ -8228,7 +8864,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"start_date\":\"2025-09-23T07:29:21\",\"status\":\"completed\",\"milestone_number\":2,\"description\":\"Molestias ipsam sit veniam sed fuga aspernatur.\",\"end_date\":\"2106-10-22\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"start_date\":\"2025-09-25T13:42:26\",\"status\":\"completed\",\"milestone_number\":2,\"description\":\"Molestias ipsam sit veniam sed fuga aspernatur.\",\"end_date\":\"2106-10-25\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
                         },
                         "description": ""
                     },
@@ -8894,7 +9530,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"company_id\":\"consequatur\",\"branch_id\":\"consequatur\",\"fiscal_year_id\":\"consequatur\",\"cost_center_id\":\"consequatur\",\"customer_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"currency_price\":45,\"include_vat\":true,\"project_number\":\"PRJ-001\",\"name\":\"niihfqcoynlazghdtqtqx\",\"description\":\"Complete website redesign and development\",\"project_value\":12,\"manager_id\":\"consequatur\",\"project_manager_name\":\"John Doe\",\"start_date\":\"2024-01-01\",\"end_date\":\"2024-06-30\",\"status\":\"active\",\"country_id\":\"consequatur\",\"notes\":\"consequatur\",\"customer_name\":\"ABC Company\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"project_name\":\"Website Development\",\"budget\":\"50000.00\"}"
+                            "raw": "{\"company_id\":\"consequatur\",\"branch_id\":\"consequatur\",\"fiscal_year_id\":\"consequatur\",\"cost_center_id\":\"consequatur\",\"customer_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"currency_price\":45,\"include_vat\":false,\"project_number\":\"PRJ-001\",\"name\":\"niihfqcoynlazghdtqtqx\",\"description\":\"Complete website redesign and development\",\"project_value\":12,\"manager_id\":\"consequatur\",\"project_manager_name\":\"John Doe\",\"start_date\":\"2024-01-01\",\"end_date\":\"2024-06-30\",\"status\":\"active\",\"country_id\":\"consequatur\",\"notes\":\"consequatur\",\"customer_name\":\"ABC Company\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"project_name\":\"Website Development\",\"budget\":\"50000.00\"}"
                         },
                         "description": "Create a new project with the provided details."
                     },
@@ -9002,7 +9638,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"currency_price\":73,\"include_vat\":false,\"project_number\":\"mqeopfuudtdsufvyvddqa\",\"name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"project_value\":12,\"project_manager_name\":\"tdsufvyvddqamniihfqco\",\"start_date\":\"2025-09-23T07:29:20\",\"end_date\":\"2106-10-22\",\"status\":\"on-hold\",\"notes\":\"consequatur\",\"customer_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"budget\":87,\"actual_cost\":13,\"progress\":12}"
+                            "raw": "{\"currency_price\":73,\"include_vat\":false,\"project_number\":\"mqeopfuudtdsufvyvddqa\",\"name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"project_value\":12,\"project_manager_name\":\"tdsufvyvddqamniihfqco\",\"start_date\":\"2025-09-25T13:42:26\",\"end_date\":\"2106-10-25\",\"status\":\"open\",\"notes\":\"consequatur\",\"customer_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"budget\":87,\"actual_cost\":13,\"progress\":12}"
                         },
                         "description": ""
                     },
@@ -9842,7 +10478,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"role\":\"mqeopfuudtdsufvyvddqa\",\"resource_type\":\"consultant\",\"supplier_number\":\"mniihfqcoynlazghdtqtq\",\"supplier_name\":\"xbajwbpilpmufinllwloa\",\"project_number\":\"uydlsmsjuryvojcybzvrb\",\"project_name\":\"yickznkygloigmkwxphlv\",\"allocation_percentage\":1,\"allocation_value\":87,\"notes\":\"jrcnfbaqywuxhgjjmzuxj\",\"status\":\"completed\",\"allocation\":\"ubqouzswiwxtrkimfcatb\"}"
+                            "raw": "{\"project_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"role\":\"mqeopfuudtdsufvyvddqa\",\"resource_type\":\"internal\",\"supplier_number\":\"mniihfqcoynlazghdtqtq\",\"supplier_name\":\"xbajwbpilpmufinllwloa\",\"project_number\":\"uydlsmsjuryvojcybzvrb\",\"project_name\":\"yickznkygloigmkwxphlv\",\"allocation_percentage\":1,\"allocation_value\":87,\"notes\":\"jrcnfbaqywuxhgjjmzuxj\",\"status\":\"completed\",\"allocation\":\"ubqouzswiwxtrkimfcatb\"}"
                         },
                         "description": ""
                     },
@@ -9931,7 +10567,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"role\":\"vmqeopfuudtdsufvyvddq\",\"resource_type\":\"internal\",\"supplier_number\":\"amniihfqcoynlazghdtqt\",\"supplier_name\":\"qxbajwbpilpmufinllwlo\",\"project_number\":\"auydlsmsjuryvojcybzvr\",\"project_name\":\"byickznkygloigmkwxphl\",\"allocation_percentage\":22,\"allocation_value\":0,\"notes\":\"zjrcnfbaqywuxhgjjmzux\",\"status\":\"inactive\",\"allocation\":\"jubqouzswiwxtrkimfcat\"}"
+                            "raw": "{\"role\":\"vmqeopfuudtdsufvyvddq\",\"resource_type\":\"internal\",\"supplier_number\":\"amniihfqcoynlazghdtqt\",\"supplier_name\":\"qxbajwbpilpmufinllwlo\",\"project_number\":\"auydlsmsjuryvojcybzvr\",\"project_name\":\"byickznkygloigmkwxphl\",\"allocation_percentage\":22,\"allocation_value\":0,\"notes\":\"zjrcnfbaqywuxhgjjmzux\",\"status\":\"completed\",\"allocation\":\"jubqouzswiwxtrkimfcat\"}"
                         },
                         "description": ""
                     },
@@ -10720,7 +11356,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"medium\",\"probability\":\"high\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"open\",\"assigned_to\":17}"
+                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"medium\",\"probability\":\"medium\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"closed\",\"assigned_to\":17}"
                         },
                         "description": ""
                     },
@@ -10809,7 +11445,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"low\",\"probability\":\"medium\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"open\",\"assigned_to\":17}"
+                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"medium\",\"probability\":\"low\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"closed\",\"assigned_to\":17}"
                         },
                         "description": ""
                     },
@@ -11654,7 +12290,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"task_name\":\"mqeopfuudtdsufvyvddqa\",\"assigned_to\":\"consequatur\",\"due_date\":\"2106-10-22\",\"status\":\"in_progress\",\"title\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"medium\",\"start_date\":\"2020-01-19\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
+                            "raw": "{\"project_id\":\"consequatur\",\"task_name\":\"mqeopfuudtdsufvyvddqa\",\"assigned_to\":\"consequatur\",\"due_date\":\"2106-10-25\",\"status\":\"blocked\",\"title\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"low\",\"start_date\":\"2020-01-21\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
                         },
                         "description": ""
                     },
@@ -11743,7 +12379,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"task_name\":\"vmqeopfuudtdsufvyvddq\",\"due_date\":\"2025-09-23T07:29:21\",\"status\":\"blocked\",\"title\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"low\",\"start_date\":\"2025-09-23T07:29:21\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
+                            "raw": "{\"task_name\":\"vmqeopfuudtdsufvyvddq\",\"due_date\":\"2025-09-25T13:42:26\",\"status\":\"in_progress\",\"title\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"high\",\"start_date\":\"2025-09-25T13:42:26\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
                         },
                         "description": ""
                     },

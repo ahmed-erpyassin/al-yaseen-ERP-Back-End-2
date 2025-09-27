@@ -46,6 +46,7 @@ class SaleItem extends Model
 
     /**
      * Get the unit details
+     * Get the unit for this item
      */
     public function unit(): BelongsTo
     {

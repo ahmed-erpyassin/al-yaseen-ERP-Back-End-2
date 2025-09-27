@@ -193,81 +193,11 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      batch_size:
-        name: batch_size
-        description: 'Must be at least 0.'
-        required: false
-        example: 42
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      production_time_minutes:
-        name: production_time_minutes
-        description: 'Must be at least 0.'
-        required: false
-        example: 64
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      preparation_time_minutes:
-        name: preparation_time_minutes
-        description: 'Must be at least 0.'
-        required: false
-        example: 34
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      production_notes:
-        name: production_notes
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: uryvojcybzvrbyickznky
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      preparation_notes:
-        name: preparation_notes
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: gloigmkwxphlvazjrcnfb
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      usage_instructions:
-        name: usage_instructions
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: aqywuxhgjjmzuxjubqouz
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      tolerance_percentage:
-        name: tolerance_percentage
-        description: 'Must be at least 0. Must not be greater than 100.'
-        required: false
-        example: 18
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
       quality_requirements:
         name: quality_requirements
         description: 'Must not be greater than 1000 characters.'
         required: false
-        example: wiwxtrkimfcatbxspzmra
+        example: msjuryvojcybzvrbyickz
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -287,7 +217,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: archived
+        example: active
         type: string
         enumValues:
           - draft
@@ -301,8 +231,78 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      batch_size:
+        name: batch_size
+        description: 'Must be at least 0.'
+        required: false
+        example: 48
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      production_time_minutes:
+        name: production_time_minutes
+        description: 'Must be at least 0.'
+        required: false
+        example: 36
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      preparation_time_minutes:
+        name: preparation_time_minutes
+        description: 'Must be at least 0.'
+        required: false
+        example: 87
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      production_notes:
+        name: production_notes
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: gloigmkwxphlvazjrcnfb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      preparation_notes:
+        name: preparation_notes
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: aqywuxhgjjmzuxjubqouz
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      usage_instructions:
+        name: usage_instructions
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: swiwxtrkimfcatbxspzmr
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tolerance_percentage:
+        name: tolerance_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 1
+        type: number
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -311,7 +311,7 @@ endpoints:
         name: effective_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-23T07:29:20'
+        example: '2025-09-25T13:42:25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -321,7 +321,7 @@ endpoints:
         name: effective_to
         description: 'Must be a valid date. Must be a date after <code>effective_from</code>.'
         required: false
-        example: '2106-10-22'
+        example: '2106-10-25'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -368,19 +368,19 @@ endpoints:
       formula_description: fqcoynlazghdtqtqxbajw
       formula_number: bpilpmufinllwloauydls
       selected_purchase_price_type: second
-      batch_size: 42
-      production_time_minutes: 64
-      preparation_time_minutes: 34
-      production_notes: uryvojcybzvrbyickznky
-      preparation_notes: gloigmkwxphlvazjrcnfb
-      usage_instructions: aqywuxhgjjmzuxjubqouz
-      tolerance_percentage: 18
-      quality_requirements: wiwxtrkimfcatbxspzmra
+      quality_requirements: msjuryvojcybzvrbyickz
       requires_inspection: true
-      status: archived
-      is_active: true
-      effective_from: '2025-09-23T07:29:20'
-      effective_to: '2106-10-22'
+      status: active
+      is_active: false
+      batch_size: 48
+      production_time_minutes: 36
+      preparation_time_minutes: 87
+      production_notes: gloigmkwxphlvazjrcnfb
+      preparation_notes: aqywuxhgjjmzuxjubqouz
+      usage_instructions: swiwxtrkimfcatbxspzmr
+      tolerance_percentage: 1
+      effective_from: '2025-09-25T13:42:25'
+      effective_to: '2106-10-25'
     fileParameters: []
     responses: []
     responseFields: []

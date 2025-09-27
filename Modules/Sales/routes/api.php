@@ -7,6 +7,7 @@ use Modules\Sales\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 use Modules\Sales\Http\Controllers\InvoiceController;
 use Modules\Sales\Http\Controllers\OutgoingOfferController;
+use Modules\Sales\Http\Controllers\SalesHelperController;
 
 /*
 |--------------------------------------------------------------------------
@@ -152,6 +153,18 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
             ->name('update-service');
         Route::delete('/delete-service/{id}', [ServiceController::class, 'destroy'])
             ->name('delete-service');
+    });
+
+    // Helper endpoints for dropdowns and data fetching
+    Route::prefix('helpers')->group(function () {
+        Route::get('/customers', [SalesHelperController::class, 'getCustomers']);
+        Route::get('/currencies', [SalesHelperController::class, 'getCurrencies']);
+        Route::get('/items', [SalesHelperController::class, 'getItems']);
+        Route::get('/units', [SalesHelperController::class, 'getUnits']);
+        Route::get('/tax-rates', [SalesHelperController::class, 'getTaxRates']);
+        Route::get('/company-vat-rate', [SalesHelperController::class, 'getCompanyVatRate']);
+        Route::get('/currency-rate/{currencyId}', [SalesHelperController::class, 'getCurrencyRate']);
+        Route::get('/item-details/{itemId}', [SalesHelperController::class, 'getItemDetails']);
     });
 
 });

@@ -274,19 +274,24 @@ class BomItemController extends Controller
     }
 
     /**
-     * Remove the specified BOM item.
+     * Remove the specified BOM item (soft delete).
      */
     public function destroy($id): JsonResponse
     {
-//    $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
         $bomItem = BomItem::findOrFail($id);
-        //forCompany($companyId)
+        // ->forCompany($companyId)
+
+        // Set deleted_by before soft delete
+        $bomItem->update(['deleted_by' => $userId]);
         $bomItem->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'BOM item deleted successfully'
+            'message' => 'BOM item deleted successfully',
+            'message_ar' => 'تم حذف عنصر قائمة المواد بنجاح'
         ]);
     }
 
@@ -527,6 +532,99 @@ class BomItemController extends Controller
             'data' => $bomItem,
             'message' => 'Last BOM item retrieved successfully',
             'message_ar' => 'تم استرداد آخر عنصر قائمة مواد بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Get trashed (soft deleted) BOM items.
+     *
+     * Retrieve all soft deleted BOM items with search and pagination support.
+     */
+    public function trashed(Request $request): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+
+        $query = BomItem::onlyTrashed()
+            ->with(['item', 'component', 'unit', 'creator', 'updater', 'deleter']);
+            // ->forCompany($companyId);
+
+        // Apply search to trashed items
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('formula_number', 'like', "%{$search}%")
+                  ->orWhere('formula_name', 'like', "%{$search}%")
+                  ->orWhere('formula_description', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = $request->get('per_page', 15);
+        $bomItems = $query->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $bomItems,
+            'message' => 'Trashed BOM items retrieved successfully',
+            'message_ar' => 'تم استرداد عناصر قائمة المواد المحذوفة بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Restore a soft deleted BOM item.
+     *
+     * Restore a previously soft deleted BOM item back to active status.
+     */
+    public function restore($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
+
+        $bomItem = BomItem::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        if (!$bomItem->trashed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'BOM item is not deleted',
+                'message_ar' => 'عنصر قائمة المواد غير محذوف'
+            ], 422);
+        }
+
+        // Clear deleted_by and restore
+        $bomItem->update([
+            'deleted_by' => null,
+            'updated_by' => $userId
+        ]);
+        $bomItem->restore();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'BOM item restored successfully',
+            'message_ar' => 'تم استعادة عنصر قائمة المواد بنجاح',
+            'data' => $bomItem->load(['item', 'component', 'unit'])
+        ]);
+    }
+
+    /**
+     * ? Permanently delete a BOM item (force delete).
+     *
+     * Permanently remove a BOM item from the database. This action cannot be undone.
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+
+        $bomItem = BomItem::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        $bomItem->forceDelete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'BOM item permanently deleted',
+            'message_ar' => 'تم حذف عنصر قائمة المواد نهائياً'
         ]);
     }
 }

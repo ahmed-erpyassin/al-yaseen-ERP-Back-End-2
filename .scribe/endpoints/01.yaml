@@ -175,11 +175,21 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
       item_number:
         name: item_number
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: vmqeopfuudtdsufvyvddq
+        example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -189,7 +199,7 @@ endpoints:
         name: item_name_ar
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: amniihfqcoynlazghdtqt
+        example: mniihfqcoynlazghdtqtq
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -199,7 +209,7 @@ endpoints:
         name: item_name_en
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: qxbajwbpilpmufinllwlo
+        example: xbajwbpilpmufinllwloa
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -209,7 +219,7 @@ endpoints:
         name: barcode
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: auydlsmsjuryvojcybzvr
+        example: uydlsmsjuryvojcybzvrb
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -219,7 +229,7 @@ endpoints:
         name: model
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: byickznkygloigmkwxphl
+        example: yickznkygloigmkwxphlv
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -229,7 +239,7 @@ endpoints:
         name: unit
         description: 'Must not be greater than 50 characters.'
         required: true
-        example: vazjrcnfbaqywuxhgjjmz
+        example: azjrcnfbaqywuxhgjjmzu
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -239,7 +249,7 @@ endpoints:
         name: quantity
         description: 'Must be at least 0.'
         required: false
-        example: 72
+        example: 82
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -249,7 +259,7 @@ endpoints:
         name: unit_price
         description: 'Must be at least 0.'
         required: false
-        example: 82
+        example: 34
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -259,7 +269,7 @@ endpoints:
         name: minimum_limit
         description: 'Must be at least 0.'
         required: false
-        example: 34
+        example: 71
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -269,7 +279,7 @@ endpoints:
         name: reorder_limit
         description: 'Must be at least 0.'
         required: false
-        example: 71
+        example: 4
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -289,25 +299,26 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      item_number: vmqeopfuudtdsufvyvddq
-      item_name_ar: amniihfqcoynlazghdtqt
-      item_name_en: qxbajwbpilpmufinllwlo
-      barcode: auydlsmsjuryvojcybzvr
-      model: byickznkygloigmkwxphl
-      unit: vazjrcnfbaqywuxhgjjmz
-      quantity: 72
-      unit_price: 82
-      minimum_limit: 34
-      reorder_limit: 71
+      company_id: consequatur
+      item_number: mqeopfuudtdsufvyvddqa
+      item_name_ar: mniihfqcoynlazghdtqtq
+      item_name_en: xbajwbpilpmufinllwloa
+      barcode: uydlsmsjuryvojcybzvrb
+      model: yickznkygloigmkwxphlv
+      unit: azjrcnfbaqywuxhgjjmzu
+      quantity: 82
+      unit_price: 34
+      minimum_limit: 71
+      reorder_limit: 4
       notes: consequatur
-      active: true
+      active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -415,11 +426,21 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
       item_number:
         name: item_number
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: vmqeopfuudtdsufvyvddq
+        example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -429,7 +450,7 @@ endpoints:
         name: item_name_ar
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: amniihfqcoynlazghdtqt
+        example: mniihfqcoynlazghdtqtq
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -439,7 +460,7 @@ endpoints:
         name: item_name_en
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: qxbajwbpilpmufinllwlo
+        example: xbajwbpilpmufinllwloa
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -449,7 +470,7 @@ endpoints:
         name: barcode
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: auydlsmsjuryvojcybzvr
+        example: uydlsmsjuryvojcybzvrb
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -459,7 +480,7 @@ endpoints:
         name: model
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: byickznkygloigmkwxphl
+        example: yickznkygloigmkwxphlv
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -469,7 +490,7 @@ endpoints:
         name: unit
         description: 'Must not be greater than 50 characters.'
         required: true
-        example: vazjrcnfbaqywuxhgjjmz
+        example: azjrcnfbaqywuxhgjjmzu
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -479,7 +500,7 @@ endpoints:
         name: quantity
         description: 'Must be at least 0.'
         required: false
-        example: 72
+        example: 82
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -489,7 +510,7 @@ endpoints:
         name: unit_price
         description: 'Must be at least 0.'
         required: false
-        example: 82
+        example: 34
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -499,7 +520,7 @@ endpoints:
         name: minimum_limit
         description: 'Must be at least 0.'
         required: false
-        example: 34
+        example: 71
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -509,7 +530,7 @@ endpoints:
         name: reorder_limit
         description: 'Must be at least 0.'
         required: false
-        example: 71
+        example: 4
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -529,25 +550,26 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      item_number: vmqeopfuudtdsufvyvddq
-      item_name_ar: amniihfqcoynlazghdtqt
-      item_name_en: qxbajwbpilpmufinllwlo
-      barcode: auydlsmsjuryvojcybzvr
-      model: byickznkygloigmkwxphl
-      unit: vazjrcnfbaqywuxhgjjmz
-      quantity: 72
-      unit_price: 82
-      minimum_limit: 34
-      reorder_limit: 71
+      company_id: consequatur
+      item_number: mqeopfuudtdsufvyvddqa
+      item_name_ar: mniihfqcoynlazghdtqtq
+      item_name_en: xbajwbpilpmufinllwloa
+      barcode: uydlsmsjuryvojcybzvrb
+      model: yickznkygloigmkwxphlv
+      unit: azjrcnfbaqywuxhgjjmzu
+      quantity: 82
+      unit_price: 34
+      minimum_limit: 71
+      reorder_limit: 4
       notes: consequatur
-      active: false
+      active: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -794,6 +816,151 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/inventory-items/deleted-inventory
+    metadata:
+      groupName: 'Inventory Management / Inventory Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, stock levels, and warehouse operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get trashed (soft deleted) inventory items.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-items/deleted-inventory could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/inventory-items/{id}/restore-inventory'
+    metadata:
+      groupName: 'Inventory Management / Inventory Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, stock levels, and warehouse operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Restore a soft deleted inventory item.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the inventory item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/inventory-items/{id}/permanently-delete'
+    metadata:
+      groupName: 'Inventory Management / Inventory Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, stock levels, and warehouse operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Permanently delete an inventory item (force delete).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the inventory item.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
     responseFields: []
     auth:
       - headers

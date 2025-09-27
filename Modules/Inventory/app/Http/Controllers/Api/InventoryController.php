@@ -302,4 +302,84 @@ class InventoryController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * ? Get trashed (soft deleted) inventory items.
+     *
+     * Retrieve all soft deleted inventory items with search and pagination support.
+     */
+    public function trashed(Request $request): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+            $perPage = $request->get('per_page', 15);
+
+            // Get trashed items using service
+            $items = $this->inventoryService->getTrashedInventoryItems($user, $perPage);
+
+            return response()->json([
+                'success' => true,
+                'data' => InventoryResource::collection($items),
+                'message' => 'Trashed inventory items retrieved successfully',
+                'message_ar' => 'تم استرداد عناصر المخزون المحذوفة بنجاح'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving trashed inventory items: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ? Restore a soft deleted inventory item.
+     *
+     * Restore a previously soft deleted inventory item back to active status.
+     */
+    public function restore($id): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            // Restore inventory item using service
+            $this->inventoryService->restoreInventoryItem($id, $user);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Inventory item restored successfully',
+                'message_ar' => 'تم استعادة عنصر المخزون بنجاح'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error restoring inventory item: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * ? Permanently delete an inventory item (force delete).
+     *
+     * Permanently remove an inventory item from the database. This action cannot be undone.
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            // Force delete inventory item using service
+            $this->inventoryService->forceDeleteInventoryItem($id, $user);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Inventory item permanently deleted',
+                'message_ar' => 'تم حذف عنصر المخزون نهائياً'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error permanently deleting inventory item: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
