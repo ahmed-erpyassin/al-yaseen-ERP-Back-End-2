@@ -67,10 +67,10 @@ class ItemController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+      //  $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $query = Item::with(['company', 'branch', 'user', 'unit', 'parent', 'itemUnits.unit'])
-            ->forCompany($companyId);
+        $query = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent', 'itemUnits.unit']);
+           // ->forCompany($companyId);
 
         // Apply filters
         if ($request->has('type')) {
@@ -234,12 +234,12 @@ class ItemController extends Controller
 
             // Load all relationships for comprehensive response
             $item->load([
-                'company:id,name',
+                'company:id,title',
                 'branch:id,name',
-                'user:id,name,email',
+                'user:id,first_name,second_name,email',
                 'unit:id,name,symbol',
                 'parent:id,item_number,name',
-                'createdBy:id,name,email',
+                'createdBy:id,first_name,second_name,email',
                 'children:id,item_number,name',
                 'itemUnits.unit:id,name,symbol'
             ]);
@@ -307,11 +307,12 @@ class ItemController extends Controller
      */
     public function getAvailableWarehouses(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $warehouses = \Modules\Inventory\Models\Warehouse::forCompany($companyId)
-            ->select('id', 'name', 'code', 'address', 'is_default')
-            ->orderBy('is_default', 'desc')
+        $warehouses = \Modules\Inventory\Models\Warehouse::where('status', 'active')
+
+            ->select('id', 'warehouse_number', 'name', 'address', 'status')
+            ->orderBy('warehouse_number')
             ->orderBy('name', 'asc')
             ->get();
 
@@ -325,13 +326,21 @@ class ItemController extends Controller
             ]);
         }
 
+        // Find a default warehouse (first one with "main" in name or first by warehouse_number)
+        $defaultWarehouse = $warehouses->first(function ($warehouse) {
+            return stripos($warehouse->name, 'main') !== false ||
+                   stripos($warehouse->name, 'رئيسي') !== false ||
+                   stripos($warehouse->name, 'المخزن الرئيسي') !== false ||
+                   stripos($warehouse->name, 'المستودع الرئيسي') !== false;
+        }) ?: $warehouses->first();
+
         return response()->json([
             'success' => true,
             'data' => $warehouses,
             'message' => 'Available warehouses retrieved successfully',
             'message_ar' => 'تم استرداد المخازن المتاحة بنجاح',
             'can_add_items' => true,
-            'default_warehouse' => $warehouses->where('is_default', true)->first()
+            'default_warehouse' => $defaultWarehouse
         ]);
     }
 
@@ -365,28 +374,28 @@ class ItemController extends Controller
      */
     private function getDefaultWarehouse($companyId)
     {
-        // First try to get warehouse marked as default
-        $defaultWarehouse = \Modules\Inventory\Models\Warehouse::forCompany($companyId)
-            ->where('is_default', true)
-            ->first();
-
-        if ($defaultWarehouse) {
-            return $defaultWarehouse;
-        }
-
-        // If no default warehouse, try to find "Main Warehouse"
+        // Try to find "Main Warehouse" or similar names
         $mainWarehouse = \Modules\Inventory\Models\Warehouse::forCompany($companyId)
-            ->where('name', 'like', '%main%')
-            ->orWhere('name', 'like', '%رئيسي%')
-            ->orWhere('name', 'like', '%المخزن الرئيسي%')
+            ->where('status', 'active')
+            ->where(function ($query) {
+                $query->where('name', 'like', '%main%')
+                      ->orWhere('name', 'like', '%رئيسي%')
+                      ->orWhere('name', 'like', '%المخزن الرئيسي%')
+                      ->orWhere('name', 'like', '%المستودع الرئيسي%')
+                      ->orWhere('warehouse_number', 'like', 'WH-001')
+                      ->orWhere('warehouse_number', 'like', 'WH-01');
+            })
             ->first();
 
         if ($mainWarehouse) {
             return $mainWarehouse;
         }
 
-        // If still no warehouse found, get the first available warehouse
-        return \Modules\Inventory\Models\Warehouse::forCompany($companyId)->first();
+        // If no main warehouse found, get the first active warehouse
+        return \Modules\Inventory\Models\Warehouse::forCompany($companyId)
+            ->where('status', 'active')
+            ->orderBy('warehouse_number')
+            ->first();
     }
 
     /**
@@ -396,14 +405,33 @@ class ItemController extends Controller
     {
         $initialQuantity = $data['quantity'] ?? 0;
 
-        \Modules\Inventory\Models\InventoryStock::create([
+        // Clean up any orphaned stock records for this item first
+        // This handles cases where previous failed transactions left orphaned records
+        \Modules\Inventory\Models\InventoryStock::where('inventory_item_id', $item->id)
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('items')
+                    ->whereRaw('items.id = inventory_stock.inventory_item_id');
+            })
+            ->delete();
+
+        // Use firstOrCreate to avoid duplicate key errors
+        $stock = \Modules\Inventory\Models\InventoryStock::firstOrCreate([
             'company_id' => $item->company_id,
             'inventory_item_id' => $item->id,
             'warehouse_id' => $warehouseId,
+        ], [
             'quantity' => $initialQuantity,
             'reserved_quantity' => 0,
             'available_quantity' => $initialQuantity,
         ]);
+
+        // If the record already existed, update the quantities
+        if (!$stock->wasRecentlyCreated && $initialQuantity > 0) {
+            $stock->quantity = $initialQuantity;
+            $stock->available_quantity = $initialQuantity;
+            $stock->save();
+        }
     }
 
     /**
@@ -411,21 +439,21 @@ class ItemController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+      //  $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $item = Item::with([
-            'company:id,name,email,phone',
+            'company:id,title,email,landline',
             'branch:id,name,address,phone',
-            'user:id,name,email',
+            'user:id,first_name,second_name,email',
             'unit:id,name,symbol,description',
             'parent:id,item_number,name,code',
             'children:id,item_number,name,code,parent_id',
             'itemUnits.unit:id,name,symbol',
-            'createdBy:id,name,email',
-            'updatedBy:id,name,email',
-            'deletedBy:id,name,email'
+            'createdBy:id,first_name,second_name,email',
+            'updatedBy:id,first_name,second_name,email',
+            'deletedBy:id,first_name,second_name,email'
         ])
-        ->forCompany($companyId)
+       // ->forCompany($companyId)
         ->findOrFail($id);
 
         // Get comprehensive item data
@@ -443,21 +471,21 @@ class ItemController extends Controller
      */
     public function preview($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $item = Item::with([
-            'company:id,name,email,phone,address',
+            'company:id,title,email,landline,address',
             'branch:id,name,address,phone,email',
-            'user:id,name,email,phone',
+            'user:id,first_name,second_name,email,phone',
             'unit:id,name,symbol,description',
             'parent:id,item_number,name,code,description',
             'children:id,item_number,name,code,parent_id,quantity,balance',
             'itemUnits.unit:id,name,symbol,description',
-            'createdBy:id,name,email',
-            'updatedBy:id,name,email',
-            'deletedBy:id,name,email'
+            'createdBy:id,first_name,second_name,email',
+            'updatedBy:id,first_name,second_name,email',
+            'deletedBy:id,first_name,second_name,email'
         ])
-        ->forCompany($companyId)
+        // ->forCompany($companyId)
         ->findOrFail($id);
 
         // Get comprehensive preview data
@@ -475,10 +503,12 @@ class ItemController extends Controller
      */
     public function update(UpdateItemRequest $request, $id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
         $userId = Auth::id() ?? $request->user_id;
 
-        $item = Item::forCompany($companyId)->findOrFail($id);
+        $item = Item::findOrFail($id);
+
+        //forCompany($companyId)->
 
         $data = $request->validated();
         $data['updated_by'] = $userId;
@@ -490,7 +520,7 @@ class ItemController extends Controller
         ]);
 
         $item->update($data);
-        $item->load(['company', 'branch', 'user', 'unit', 'parent']);
+        $item->load(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent']);
 
         // Get updated values for response
         $updatedFields = [];
@@ -516,10 +546,12 @@ class ItemController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+    //    $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
-        $item = Item::forCompany($companyId)->findOrFail($id);
+        $item = Item::findOrFail($id);
+
+        // forCompany($companyId)->
 
         // Check if item has children or item units
         if ($item->children()->exists() || $item->itemUnits()->exists()) {
@@ -548,11 +580,11 @@ class ItemController extends Controller
      */
     public function restore($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
         $item = Item::withTrashed()
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->findOrFail($id);
 
         if (!$item->trashed()) {
@@ -574,7 +606,7 @@ class ItemController extends Controller
             'success' => true,
             'message' => 'Item restored successfully',
             'message_ar' => 'تم استعادة الصنف بنجاح',
-            'data' => $item->load(['unit', 'company', 'branch'])
+            'data' => $item->load(['unit', 'company:id,title', 'branch'])
         ]);
     }
 
@@ -583,10 +615,10 @@ class ItemController extends Controller
      */
     public function forceDelete($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $item = Item::withTrashed()
-            ->forCompany($companyId)
+            // ->forCompany($companyId)
             ->findOrFail($id);
 
         // Check if item has children or item units
@@ -614,11 +646,11 @@ class ItemController extends Controller
      */
     public function trashed(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $query = Item::onlyTrashed()
-            ->with(['company', 'branch', 'unit', 'deletedBy'])
-            ->forCompany($companyId);
+            ->with(['company:id,title', 'branch', 'unit', 'deletedBy']);
+            // ->forCompany($companyId);
 
         // Apply search to trashed items
         if ($request->has('search')) {
@@ -652,10 +684,10 @@ class ItemController extends Controller
      */
     public function first(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $item = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
-            ->forCompany($companyId)
+        $item = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
+            // ->forCompany($companyId)
             ->orderBy('name')
             ->first();
 
@@ -678,10 +710,10 @@ class ItemController extends Controller
      */
     public function last(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $item = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
-            ->forCompany($companyId)
+        $item = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
+            // ->forCompany($companyId)
             ->orderBy('name', 'desc')
             ->first();
 
@@ -704,10 +736,10 @@ class ItemController extends Controller
      */
     public function byType($type): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $items = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
-            ->forCompany($companyId)
+        $items = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent'])
+            // ->forCompany($companyId)
             ->byType($type)
             ->get();
 
@@ -723,10 +755,10 @@ class ItemController extends Controller
      */
     public function parents(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $items = Item::with(['company', 'branch', 'user', 'unit', 'children'])
-            ->forCompany($companyId)
+        $items = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'children'])
+            // ->forCompany($companyId)
             ->parentsOnly()
             ->get();
 
@@ -742,10 +774,10 @@ class ItemController extends Controller
      */
     public function search(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $query = Item::with(['company', 'branch', 'user', 'unit', 'parent'])
-            ->forCompany($companyId);
+        $query = Item::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'unit', 'parent']);
+           // ->forCompany($companyId);
 
         // Search by ID (Item Number)
         if ($request->has('id') && !empty($request->get('id'))) {
@@ -1363,11 +1395,11 @@ class ItemController extends Controller
      */
     public function getCategories(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+     //   $companyId = Auth::user()->company_id ?? request()->company_id;
 
         // Get distinct types from items
-        $types = Item::forCompany($companyId)
-            ->select('type')
+        $types = Item::select('type')
+
             ->distinct()
             ->whereNotNull('type')
             ->pluck('type')
@@ -1525,7 +1557,7 @@ class ItemController extends Controller
      */
     public function getPricingFormData(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+      ///  $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $data = [
             'pricing_fields' => [
@@ -1632,7 +1664,7 @@ class ItemController extends Controller
                     'fields' => ['tax_rate'],
                     'module' => 'sales'
                 ],
-              
+
                 'tax_rates' => [
                     'fields' => ['rate'],
                     'module' => 'invoices'
@@ -1659,8 +1691,8 @@ class ItemController extends Controller
             'proposed_discount_rate' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $item = Item::forCompany($companyId)->findOrFail($request->item_id);
+      //  $companyId = Auth::user()->company_id ?? $request->company_id;
+        $item = Item::findOrFail($request->item_id);
 
         $validations = [];
 
@@ -1734,10 +1766,10 @@ class ItemController extends Controller
      */
     public function getItemTypes(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $itemTypes = \Modules\Inventory\Models\ItemType::forCompany($companyId)
-            ->active()
+        $itemTypes = \Modules\Inventory\Models\ItemType::active()
+
             ->orderBy('sort_order', 'asc')
             ->orderBy('name', 'asc')
             ->get(['id', 'code', 'name', 'name_ar', 'is_system']);
@@ -1837,19 +1869,35 @@ class ItemController extends Controller
      */
     public function createCustomItemType(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-
         $request->validate([
             'name' => 'required|string|max:255',
             'name_ar' => 'nullable|string|max:255',
         ]);
 
         try {
-            $itemType = \Modules\Inventory\Models\ItemType::createCustomType(
-                $companyId,
-                $request->name,
-                $request->name_ar
-            );
+            // Generate unique code from name
+            $code = strtolower(str_replace(' ', '_', $request->name));
+
+            // Ensure unique code globally (not company-specific)
+            $originalCode = $code;
+            $counter = 1;
+            while (\Modules\Inventory\Models\ItemType::where('code', $code)->exists()) {
+                $code = $originalCode . '_' . $counter;
+                $counter++;
+            }
+
+            // Create custom item type without company restriction
+            $itemType = \Modules\Inventory\Models\ItemType::create([
+                'company_id' => 1, // Use a default company ID or make it nullable in migration
+                'code' => $code,
+                'name' => $request->name,
+                'name_ar' => $request->name_ar ?? $request->name,
+                'description' => "Custom item type: {$request->name}",
+                'description_ar' => "نوع صنف مخصص: " . ($request->name_ar ?? $request->name),
+                'is_system' => false,
+                'is_active' => true,
+                'sort_order' => \Modules\Inventory\Models\ItemType::max('sort_order') + 1,
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -1876,8 +1924,10 @@ class ItemController extends Controller
      */
     public function generateBarcodeSVG(Request $request, $id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $item = Item::forCompany($companyId)->findOrFail($id);
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+        $item = Item::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         $request->validate([
             'width' => 'nullable|integer|min:1|max:10',
@@ -1954,8 +2004,10 @@ class ItemController extends Controller
      */
     public function getItemTransactions(Request $request, $id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $item = Item::forCompany($companyId)->findOrFail($id);
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+        $item = Item::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         $request->validate([
             'date_from' => 'nullable|date',
@@ -2057,26 +2109,29 @@ class ItemController extends Controller
             ->where('sales_items.item_id', $itemId);
 
         if ($dateFrom) {
-            $query->where('sales.sale_date', '>=', $dateFrom);
+            $query->whereDate('sales.created_at', '>=', $dateFrom);
         }
         if ($dateTo) {
-            $query->where('sales.sale_date', '<=', $dateTo);
+            $query->whereDate('sales.created_at', '<=', $dateTo);
         }
 
         $salesItems = $query->select([
             'sales.id as transaction_id',
-            'sales.sale_number as document_number',
-            'sales.sale_date as transaction_date',
+            'sales.invoice_number as document_number',
+            'sales.created_at as transaction_date',
             'sales_items.quantity',
             'sales_items.unit_price',
-            'sales_items.total_amount',
-            'sales_items.discount_amount',
-            'customers.name as customer_name',
+            'sales_items.total',
+            'sales_items.discount_rate',
+            'customers.company_name as customer_name',
             'sales.notes',
             'sales.status'
         ])->get();
 
         return $salesItems->map(function ($item) {
+            // Calculate discount amount from discount rate
+            $discountAmount = ($item->unit_price * $item->quantity * $item->discount_rate) / 100;
+
             return [
                 'id' => 'sale_' . $item->transaction_id,
                 'type' => 'sale',
@@ -2085,9 +2140,9 @@ class ItemController extends Controller
                 'transaction_date' => $item->transaction_date,
                 'quantity' => -abs($item->quantity), // Negative for outgoing
                 'unit_price' => $item->unit_price,
-                'total_amount' => $item->total_amount,
-                'discount_amount' => $item->discount_amount ?? 0,
-                'net_amount' => $item->total_amount - ($item->discount_amount ?? 0),
+                'total_amount' => $item->total,
+                'discount_amount' => $discountAmount,
+                'net_amount' => $item->total - $discountAmount,
                 'reference' => $item->customer_name ?? 'عميل غير محدد',
                 'notes' => $item->notes,
                 'status' => $item->status,
@@ -2111,26 +2166,29 @@ class ItemController extends Controller
             ->where('purchase_items.item_id', $itemId);
 
         if ($dateFrom) {
-            $query->where('purchases.purchase_date', '>=', $dateFrom);
+            $query->whereDate('purchases.created_at', '>=', $dateFrom);
         }
         if ($dateTo) {
-            $query->where('purchases.purchase_date', '<=', $dateTo);
+            $query->whereDate('purchases.created_at', '<=', $dateTo);
         }
 
         $purchaseItems = $query->select([
             'purchases.id as transaction_id',
-            'purchases.purchase_number as document_number',
-            'purchases.purchase_date as transaction_date',
+            'purchases.journal_number as document_number',
+            'purchases.created_at as transaction_date',
             'purchase_items.quantity',
             'purchase_items.unit_price',
-            'purchase_items.total_amount',
-            'purchase_items.discount_amount',
-            'suppliers.name as supplier_name',
+            'purchase_items.total',
+            'purchase_items.discount_rate',
+            'suppliers.supplier_name_ar as supplier_name',
             'purchases.notes',
             'purchases.status'
         ])->get();
 
         return $purchaseItems->map(function ($item) {
+            // Calculate discount amount from discount rate
+            $discountAmount = ($item->unit_price * $item->quantity * $item->discount_rate) / 100;
+
             return [
                 'id' => 'purchase_' . $item->transaction_id,
                 'type' => 'purchase',
@@ -2139,9 +2197,9 @@ class ItemController extends Controller
                 'transaction_date' => $item->transaction_date,
                 'quantity' => abs($item->quantity), // Positive for incoming
                 'unit_price' => $item->unit_price,
-                'total_amount' => $item->total_amount,
-                'discount_amount' => $item->discount_amount ?? 0,
-                'net_amount' => $item->total_amount - ($item->discount_amount ?? 0),
+                'total_amount' => $item->total,
+                'discount_amount' => $discountAmount,
+                'net_amount' => $item->total - $discountAmount,
                 'reference' => $item->supplier_name ?? 'مورد غير محدد',
                 'notes' => $item->notes,
                 'status' => $item->status,
@@ -2160,47 +2218,45 @@ class ItemController extends Controller
     private function getStockMovements($itemId, $dateFrom = null, $dateTo = null): \Illuminate\Support\Collection
     {
         $query = DB::table('stock_movements')
-            ->leftJoin('warehouses as from_warehouse', 'stock_movements.from_warehouse_id', '=', 'from_warehouse.id')
-            ->leftJoin('warehouses as to_warehouse', 'stock_movements.to_warehouse_id', '=', 'to_warehouse.id')
+            ->leftJoin('warehouses', 'stock_movements.warehouse_id', '=', 'warehouses.id')
             ->leftJoin('users', 'stock_movements.created_by', '=', 'users.id')
             ->where('stock_movements.item_id', $itemId);
 
         if ($dateFrom) {
-            $query->where('stock_movements.movement_date', '>=', $dateFrom);
+            $query->where('stock_movements.transaction_date', '>=', $dateFrom);
         }
         if ($dateTo) {
-            $query->where('stock_movements.movement_date', '<=', $dateTo);
+            $query->where('stock_movements.transaction_date', '<=', $dateTo);
         }
 
         $stockMovements = $query->select([
             'stock_movements.id as transaction_id',
-            'stock_movements.movement_number as document_number',
-            'stock_movements.movement_date as transaction_date',
+            'stock_movements.id as document_number',
+            'stock_movements.transaction_date',
             'stock_movements.quantity',
             'stock_movements.movement_type',
-            'stock_movements.reason',
+            'stock_movements.type',
             'stock_movements.notes',
-            'from_warehouse.name as from_warehouse_name',
-            'to_warehouse.name as to_warehouse_name',
-            'users.name as created_by_name'
+            'warehouses.name as warehouse_name',
+            DB::raw("CONCAT(users.first_name, ' ', users.second_name) as created_by_name")
         ])->get();
 
         return $stockMovements->map(function ($item) {
             $movementTypeAr = $this->getMovementTypeArabic($item->movement_type);
-            $isIncoming = in_array($item->movement_type, ['adjustment_in', 'transfer_in', 'return_in']);
+            $isIncoming = $item->movement_type === 'in';
 
             return [
                 'id' => 'stock_' . $item->transaction_id,
                 'type' => 'stock_movement',
                 'type_ar' => 'حركة مخزون',
-                'document_number' => $item->document_number,
+                'document_number' => 'STK-' . $item->document_number,
                 'transaction_date' => $item->transaction_date,
                 'quantity' => $isIncoming ? abs($item->quantity) : -abs($item->quantity),
                 'unit_price' => null,
                 'total_amount' => null,
                 'discount_amount' => 0,
                 'net_amount' => null,
-                'reference' => $this->getStockMovementReference($item),
+                'reference' => $item->warehouse_name ?? 'حركة مخزون',
                 'notes' => $item->notes,
                 'status' => 'completed',
                 'status_ar' => 'مكتمل',
@@ -2208,7 +2264,7 @@ class ItemController extends Controller
                 'direction_ar' => $isIncoming ? 'وارد' : 'صادر',
                 'movement_type' => $item->movement_type,
                 'movement_type_ar' => $movementTypeAr,
-                'reason' => $item->reason,
+                'type_detail' => $item->type,
                 'created_by' => $item->created_by_name,
                 'icon' => 'stock_movement',
                 'color' => $isIncoming ? 'info' : 'warning'
@@ -2321,12 +2377,8 @@ class ItemController extends Controller
      */
     private function getStockMovementReference($item)
     {
-        if ($item->from_warehouse_name && $item->to_warehouse_name) {
-            return "من {$item->from_warehouse_name} إلى {$item->to_warehouse_name}";
-        } elseif ($item->from_warehouse_name) {
-            return "من {$item->from_warehouse_name}";
-        } elseif ($item->to_warehouse_name) {
-            return "إلى {$item->to_warehouse_name}";
+        if ($item->warehouse_name) {
+            return "مستودع: {$item->warehouse_name}";
         } elseif ($item->created_by_name) {
             return "بواسطة {$item->created_by_name}";
         } else {
@@ -2339,8 +2391,8 @@ class ItemController extends Controller
      */
     public function exportItemTransactions(Request $request, $id)
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $item = Item::forCompany($companyId)->findOrFail($id);
+       //$companyId = Auth::user()->company_id ?? $request->company_id;
+        $item = Item::findOrFail($id);
 
         $request->validate([
             'date_from' => 'nullable|date',

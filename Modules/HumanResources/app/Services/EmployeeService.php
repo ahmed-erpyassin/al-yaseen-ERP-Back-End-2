@@ -2,6 +2,7 @@
 
 namespace Modules\HumanResources\app\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\HumanResources\Http\Requests\EmployeeRequest;
 use Modules\HumanResources\Models\Employee;
 
@@ -15,14 +16,14 @@ class EmployeeService
     public function create(EmployeeRequest $request): Employee
     {
         return Employee::create($request->validated() + [
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
     }
 
     public function update(EmployeeRequest $request, Employee $employee): Employee
     {
         $employee->update($request->validated() + [
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return $employee;
@@ -30,7 +31,7 @@ class EmployeeService
 
     public function delete(Employee $employee): void
     {
-        $employee->update(['deleted_by' => auth()->id()]);
+        $employee->update(['deleted_by' => Auth::id()]);
         $employee->delete();
     }
 }

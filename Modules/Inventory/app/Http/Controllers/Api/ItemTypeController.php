@@ -20,9 +20,11 @@ class ItemTypeController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $query = ItemType::forCompany($companyId)->active();
+        $query = ItemType::
+        // forCompany($companyId)->
+        active();
 
         // Apply search
         if ($request->has('search')) {
@@ -108,8 +110,10 @@ class ItemTypeController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
-        $itemType = ItemType::forCompany($companyId)->findOrFail($id);
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $itemType = ItemType::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         return response()->json([
             'success' => true,
@@ -124,8 +128,10 @@ class ItemTypeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $itemType = ItemType::forCompany($companyId)->findOrFail($id);
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+        $itemType = ItemType::
+        // forCompany($companyId)->
+        findOrFail($id);
 
         // Prevent updating system types
         if ($itemType->is_system) {
@@ -171,7 +177,7 @@ class ItemTypeController extends Controller
                 'message' => 'Cannot delete system item type',
                 'message_ar' => 'لا يمكن حذف نوع الصنف النظامي'
             ], 422);
-        }
+        }      
 
         // Check if item type is in use
         if ($itemType->items()->exists()) {
@@ -196,10 +202,11 @@ class ItemTypeController extends Controller
      */
     public function getOptions(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $itemTypes = ItemType::forCompany($companyId)
-            ->active()
+        $itemTypes = ItemType::
+        // forCompany($companyId)->
+        active()
             ->orderBy('sort_order', 'asc')
             ->orderBy('name', 'asc')
             ->get(['id', 'code', 'name', 'name_ar', 'is_system']);

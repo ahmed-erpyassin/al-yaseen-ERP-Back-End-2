@@ -14,7 +14,8 @@ use Modules\Inventory\Http\Controllers\Api\ItemTypeController;
 use Modules\Inventory\Http\Controllers\Api\InventoryMovementController;
 use Modules\Inventory\Http\Controllers\Api\ManufacturingFormulaController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
+// Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
+Route::prefix('v1')->group(function () {
 
     // Inventory Items Routes
     Route::prefix('inventory-items')->group(function () {
@@ -32,6 +33,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         // ! Additional inventory management endpoints
         Route::get('/low-stock-items', [InventoryController::class, 'lowStock'])->name('inventory-mgmt.inventory-items.low-stock-items'); // ! Get low stock items
         Route::get('/reorder-required-items', [InventoryController::class, 'reorderItems'])->name('inventory-mgmt.inventory-items.reorder-required-items'); // ! Get items that need reordering
+
+        // Soft delete management
+        Route::get('/deleted-inventory', [InventoryController::class, 'trashed'])->name('inventory-mgmt.inventory-items.deleted-inventory');
+        Route::post('/{id}/restore-inventory', [InventoryController::class, 'restore'])->name('inventory-mgmt.inventory-items.restore-inventory');
+        Route::delete('/{id}/permanently-delete', [InventoryController::class, 'forceDelete'])->name('inventory-mgmt.inventory-items.permanently-delete');
     });
 
     // ✅ Enhanced Warehouses Routes with Search, Sorting, and Soft Delete
@@ -73,11 +79,18 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/track-all', [StockMovementController::class, 'index'])->name('inventory-mgmt.stock-moves.track-all');
         Route::post('/record-movement', [StockMovementController::class, 'store'])->name('inventory-mgmt.stock-moves.record-movement');
         Route::get('/examine-movement/{id}', [StockMovementController::class, 'show'])->name('inventory-mgmt.stock-moves.examine-movement');
+        Route::put('/modify-movement/{id}', [StockMovementController::class, 'update'])->name('inventory-mgmt.stock-moves.modify-movement');
+        Route::delete('/remove-movement/{id}', [StockMovementController::class, 'destroy'])->name('inventory-mgmt.stock-moves.remove-movement');
 
         // Specialized views
         Route::get('/movement-summary', [StockMovementController::class, 'stockSummary'])->name('inventory-mgmt.stock-moves.movement-summary');
         Route::get('/by-item/{itemId}', [StockMovementController::class, 'byItem'])->name('inventory-mgmt.stock-moves.by-item');
         Route::get('/by-warehouse/{warehouseId}', [StockMovementController::class, 'byWarehouse'])->name('inventory-mgmt.stock-moves.by-warehouse');
+
+        // Soft delete management
+        Route::get('/deleted-movements', [StockMovementController::class, 'trashed'])->name('inventory-mgmt.stock-moves.deleted-movements');
+        Route::post('/{id}/restore-movement', [StockMovementController::class, 'restore'])->name('inventory-mgmt.stock-moves.restore-movement');
+        Route::delete('/{id}/permanently-delete', [StockMovementController::class, 'forceDelete'])->name('inventory-mgmt.stock-moves.permanently-delete');
     });
 
     // Units Routes
@@ -98,6 +111,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/form-configuration', [UnitController::class, 'getUnitFormData'])->name('inventory-mgmt.units.form-configuration');
         Route::get('/initial-unit', [UnitController::class, 'first'])->name('inventory-mgmt.units.initial-unit');
         Route::get('/final-unit', [UnitController::class, 'last'])->name('inventory-mgmt.units.final-unit');
+
+        // Soft delete management
+        Route::get('/deleted-units', [UnitController::class, 'trashed'])->name('inventory-mgmt.units.deleted-units');
+        Route::post('/{id}/restore-unit', [UnitController::class, 'restore'])->name('inventory-mgmt.units.restore-unit');
+        Route::delete('/{id}/permanently-delete', [UnitController::class, 'forceDelete'])->name('inventory-mgmt.units.permanently-delete');
     });
 
     // Items Routes
@@ -167,6 +185,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
         // Unit management
         Route::put('/{id}/designate-default', [ItemUnitController::class, 'setDefault'])->name('inventory-mgmt.item-units.designate-default');
+
+        // Soft delete management
+        Route::get('/deleted-item-units', [ItemUnitController::class, 'trashed'])->name('inventory-mgmt.item-units.deleted-item-units');
+        Route::post('/{id}/restore-item-unit', [ItemUnitController::class, 'restore'])->name('inventory-mgmt.item-units.restore-item-unit');
+        Route::delete('/{id}/permanently-delete', [ItemUnitController::class, 'forceDelete'])->name('inventory-mgmt.item-units.permanently-delete');
     });
 
     // Barcode Types Routes
@@ -216,6 +239,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/filter-by-criteria', [BomItemController::class, 'filterByField'])->name('inventory-mgmt.bom-items.filter-by-criteria'); // ! Filter BOM items by field value
         Route::get('/first-component', [BomItemController::class, 'first'])->name('inventory-mgmt.bom-items.first-component'); // ! Get first BOM component
         Route::get('/last-component', [BomItemController::class, 'last'])->name('inventory-mgmt.bom-items.last-component'); // ! Get last BOM component
+
+        // Soft delete management
+        Route::get('/deleted-bom-items', [BomItemController::class, 'trashed'])->name('inventory-mgmt.bom-items.deleted-bom-items');
+        Route::post('/{id}/restore-bom-item', [BomItemController::class, 'restore'])->name('inventory-mgmt.bom-items.restore-bom-item');
+        Route::delete('/{id}/permanently-delete', [BomItemController::class, 'forceDelete'])->name('inventory-mgmt.bom-items.permanently-delete');
     });
 
     // ✅ Complete Inventory Movement Routes (Add Warehouse Movement System)

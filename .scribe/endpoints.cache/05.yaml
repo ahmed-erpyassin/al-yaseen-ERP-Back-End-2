@@ -79,6 +79,16 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
       branch_id:
         name: branch_id
         description: 'The <code>id</code> of an existing record in the branches table.'
@@ -143,7 +153,7 @@ endpoints:
         name: balance_unit
         description: ''
         required: true
-        example: piece
+        example: ton
         type: string
         enumValues:
           - piece
@@ -208,7 +218,7 @@ endpoints:
         name: second_unit
         description: ''
         required: false
-        example: liter
+        example: piece
         type: string
         enumValues:
           - piece
@@ -273,7 +283,7 @@ endpoints:
         name: third_unit
         description: ''
         required: false
-        example: liter
+        example: piece
         type: string
         enumValues:
           - piece
@@ -372,19 +382,19 @@ endpoints:
       symbol: qxbajwbpi
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       decimal_places: 1
-      balance_unit: piece
+      balance_unit: ton
       custom_balance_unit: tdsufvyvddqamniihfqco
       length: 85
       width: 45
       height: 40
       quantity_factor: 1
-      second_unit: liter
+      second_unit: piece
       custom_second_unit: zghdtqtqxbajwbpilpmuf
       second_unit_contains: inllwloauydlsmsjuryvo
       custom_second_unit_contains: jcybzvrbyickznkygloig
       second_unit_content: consequatur
       second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: liter
+      third_unit: piece
       custom_third_unit: mniihfqcoynlazghdtqtq
       third_unit_contains: xbajwbpilpmufinllwloa
       custom_third_unit_contains: uydlsmsjuryvojcybzvrb
@@ -627,7 +637,7 @@ endpoints:
         name: second_unit
         description: ''
         required: false
-        example: piece
+        example: ton
         type: string
         enumValues:
           - piece
@@ -797,7 +807,7 @@ endpoints:
       width: 45
       height: 40
       quantity_factor: 1
-      second_unit: piece
+      second_unit: ton
       custom_second_unit: zghdtqtqxbajwbpilpmuf
       second_unit_contains: inllwloauydlsmsjuryvo
       custom_second_unit_contains: jcybzvrbyickznkygloig
@@ -832,7 +842,7 @@ endpoints:
         APIs for managing units of measure, including creation, updates, and unit conversions.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified unit.'
+      title: 'Remove the specified unit (soft delete).'
       description: ''
       authenticated: true
       deprecated: false
@@ -1252,6 +1262,151 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/units/deleted-units
+    metadata:
+      groupName: 'Inventory Management / Units'
+      groupDescription: |-
+
+        APIs for managing units of measure, including creation, updates, and unit conversions.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get trashed (soft deleted) units.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/units/deleted-units could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/units/{id}/restore-unit'
+    metadata:
+      groupName: 'Inventory Management / Units'
+      groupDescription: |-
+
+        APIs for managing units of measure, including creation, updates, and unit conversions.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Restore a soft deleted unit.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the unit.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/units/{id}/permanently-delete'
+    metadata:
+      groupName: 'Inventory Management / Units'
+      groupDescription: |-
+
+        APIs for managing units of measure, including creation, updates, and unit conversions.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Permanently delete a unit (force delete).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the unit.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
     responseFields: []
     auth:
       - headers

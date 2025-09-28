@@ -2,6 +2,7 @@
 
 namespace Modules\HumanResources\app\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\HumanResources\Http\Requests\DepartmentRequest;
 use Modules\HumanResources\Models\Department;
 
@@ -17,14 +18,14 @@ class DepartmentService
     public function create(DepartmentRequest $request): Department
     {
         return Department::create($request->validated() + [
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
     }
 
     public function update(DepartmentRequest $request, Department $department): Department
     {
         $department->update($request->validated() + [
-            'updated_by' => auth()->id(),
+            'updated_by' => Auth::id(),
         ]);
 
         return $department;
@@ -32,7 +33,7 @@ class DepartmentService
 
     public function delete(Department $department): void
     {
-        $department->update(['deleted_by' => auth()->id()]);
+        $department->update(['deleted_by' => Auth::id()]);
         $department->delete();
     }
 }

@@ -22,10 +22,10 @@ class ItemUnitController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+       // $companyId = Auth::user()->company_id ?? $request->company_id;
 
-        $query = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
-            ->forCompany($companyId);
+        $query = ItemUnit::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'item', 'unit']);
+           // ->forCompany($companyId);
 
         // Apply filters
         if ($request->has('status')) {
@@ -85,7 +85,7 @@ class ItemUnitController extends Controller
         }
 
         $itemUnit = ItemUnit::create($data);
-        $itemUnit->load(['company', 'branch', 'user', 'item', 'unit']);
+        $itemUnit->load(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'item', 'unit']);
 
         return response()->json([
             'success' => true,
@@ -99,10 +99,10 @@ class ItemUnitController extends Controller
      */
     public function show($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
-        $itemUnit = ItemUnit::with(['company', 'branch', 'user', 'item', 'unit'])
-            ->forCompany($companyId)
+        $itemUnit = ItemUnit::with(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'item', 'unit'])
+            //->forCompany($companyId)
             ->findOrFail($id);
 
         return response()->json([
@@ -134,7 +134,7 @@ class ItemUnitController extends Controller
         }
 
         $itemUnit->update($data);
-        $itemUnit->load(['company', 'branch', 'user', 'item', 'unit']);
+        $itemUnit->load(['company:id,title', 'branch', 'user:id,first_name,second_name,email', 'item', 'unit']);
 
         return response()->json([
             'success' => true,
@@ -144,34 +144,40 @@ class ItemUnitController extends Controller
     }
 
     /**
-     * Remove the specified item unit.
+     * Remove the specified item unit (soft delete).
      */
     public function destroy($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
 
-        $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
+        $itemUnit = ItemUnit::findOrFail($id);
+        // ->forCompany($companyId)
 
         // Don't allow deletion of default unit if it's the only one
         if ($itemUnit->is_default) {
             $otherUnits = ItemUnit::where('item_id', $itemUnit->item_id)
-                ->where('company_id', $companyId)
+                // ->where('company_id', $companyId)
                 ->where('id', '!=', $id)
                 ->count();
 
             if ($otherUnits == 0) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Cannot delete the only unit for this item'
+                    'message' => 'Cannot delete the only unit for this item',
+                    'message_ar' => 'لا يمكن حذف الوحدة الوحيدة لهذا الصنف'
                 ], 422);
             }
         }
 
+        // Set deleted_by before soft delete
+        $itemUnit->update(['deleted_by' => $userId]);
         $itemUnit->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Item unit deleted successfully'
+            'message' => 'Item unit deleted successfully',
+            'message_ar' => 'تم حذف وحدة الصنف بنجاح'
         ]);
     }
 
@@ -180,12 +186,12 @@ class ItemUnitController extends Controller
      */
     public function byItem($itemId): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+       // $companyId = Auth::user()->company_id ?? request()->company_id;
 
         $itemUnits = ItemUnit::with(['unit'])
-            ->forCompany($companyId)
-            ->forItem($itemId)
-            ->active()
+          //  ->forCompany($companyId)
+            ->where('item_id', $itemId)
+            ->where('is_active', true)
             ->get();
 
         return response()->json([
@@ -200,14 +206,15 @@ class ItemUnitController extends Controller
      */
     public function setDefault($id): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? request()->company_id;
+     //   $companyId = Auth::user()->company_id ?? request()->company_id;
         $userId = Auth::id() ?? request()->user_id;
 
-        $itemUnit = ItemUnit::forCompany($companyId)->findOrFail($id);
+        $itemUnit = ItemUnit::findOrFail($id);
+        //forCompany($companyId)->
 
         // Unset other defaults for the same item
         ItemUnit::where('item_id', $itemUnit->item_id)
-            ->where('company_id', $companyId)
+           // ->where('company_id', $companyId)
             ->update(['is_default' => false]);
 
         // Set this as default
@@ -228,10 +235,10 @@ class ItemUnitController extends Controller
      */
     public function getByType(Request $request, $itemId, $type): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+      //  $companyId = Auth::user()->company_id ?? $request->company_id;
 
         $itemUnits = ItemUnit::with(['unit:id,name,symbol', 'item:id,name'])
-            ->forCompany($companyId)
+           // ->forCompany($companyId)
             ->forItem($itemId)
             ->byType($type)
             ->active()
@@ -253,10 +260,10 @@ class ItemUnitController extends Controller
      */
     public function getComprehensiveData(Request $request, $itemId): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
+        //$companyId = Auth::user()->company_id ?? $request->company_id;
 
         $itemUnits = ItemUnit::with(['unit:id,name,symbol', 'item:id,name'])
-            ->forCompany($companyId)
+           // ->forCompany($companyId)
             ->forItem($itemId)
             ->active()
             ->get();
@@ -299,10 +306,10 @@ class ItemUnitController extends Controller
     /**
      * Get contains options for item units.
      */
-    public function getItemUnitContainsOptions(Request $request): JsonResponse
+    public function getItemUnitContainsOptions(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-        $options = ItemUnit::getAllContainsOptions($companyId);
+        // Return predefined options without company filtering
+        $options = ItemUnit::CONTAINS_OPTIONS;
 
         return response()->json([
             'success' => true,
@@ -323,10 +330,8 @@ class ItemUnitController extends Controller
             'quantity' => 'required|numeric|min:0',
         ]);
 
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-
-        $fromUnit = ItemUnit::forCompany($companyId)->findOrFail($request->from_unit_id);
-        $toUnit = ItemUnit::forCompany($companyId)->findOrFail($request->to_unit_id);
+        $fromUnit = ItemUnit::findOrFail($request->from_unit_id);
+        $toUnit = ItemUnit::findOrFail($request->to_unit_id);
 
         // Ensure both units belong to the same item
         if ($fromUnit->item_id !== $toUnit->item_id) {
@@ -366,19 +371,15 @@ class ItemUnitController extends Controller
     /**
      * Get item unit form data.
      */
-    public function getFormData(Request $request): JsonResponse
+    public function getFormData(): JsonResponse
     {
-        $companyId = Auth::user()->company_id ?? $request->company_id;
-
         $data = [
             'unit_type_options' => ItemUnit::UNIT_TYPE_OPTIONS,
-            'contains_options' => ItemUnit::getAllContainsOptions($companyId),
-            'available_units' => \Modules\Inventory\Models\Unit::forCompany($companyId)
-                ->where('status', 'active')
+            'contains_options' => ItemUnit::CONTAINS_OPTIONS,
+            'available_units' => \Modules\Inventory\Models\Unit::where('status', 'active')
                 ->select('id', 'name', 'symbol', 'code')
                 ->get(),
-            'available_items' => \Modules\Inventory\Models\Item::forCompany($companyId)
-                ->where('active', true)
+            'available_items' => \Modules\Inventory\Models\Item::where('active', true)
                 ->select('id', 'name', 'item_number', 'code')
                 ->get(),
         ];
@@ -388,6 +389,101 @@ class ItemUnitController extends Controller
             'data' => $data,
             'message' => 'Item unit form data retrieved successfully',
             'message_ar' => 'تم استرداد بيانات نموذج وحدة الصنف بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Get trashed (soft deleted) item units.
+     *
+     * Retrieve all soft deleted item units with search and pagination support.
+     */
+    public function trashed(Request $request): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? $request->company_id;
+
+        $query = ItemUnit::onlyTrashed()
+            ->with(['item', 'unit', 'creator', 'updater', 'deleter']);
+            // ->forCompany($companyId);
+
+        // Apply search to trashed items
+        if ($request->has('search')) {
+            $search = $request->get('search');
+            $query->whereHas('item', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('code', 'like', "%{$search}%");
+            })->orWhereHas('unit', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('symbol', 'like', "%{$search}%");
+            });
+        }
+
+        $perPage = $request->get('per_page', 15);
+        $itemUnits = $query->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $itemUnits,
+            'message' => 'Trashed item units retrieved successfully',
+            'message_ar' => 'تم استرداد وحدات الأصناف المحذوفة بنجاح'
+        ]);
+    }
+
+    /**
+     * ? Restore a soft deleted item unit.
+     *
+     * Restore a previously soft deleted item unit back to active status.
+     */
+    public function restore($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+        $userId = Auth::id() ?? request()->user_id;
+
+        $itemUnit = ItemUnit::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        if (!$itemUnit->trashed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item unit is not deleted',
+                'message_ar' => 'وحدة الصنف غير محذوفة'
+            ], 422);
+        }
+
+        // Clear deleted_by and restore
+        $itemUnit->update([
+            'deleted_by' => null,
+            'updated_by' => $userId
+        ]);
+        $itemUnit->restore();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item unit restored successfully',
+            'message_ar' => 'تم استعادة وحدة الصنف بنجاح',
+            'data' => $itemUnit->load(['item', 'unit'])
+        ]);
+    }
+
+    /**
+     * ? Permanently delete an item unit (force delete).
+     *
+     * Permanently remove an item unit from the database. This action cannot be undone.
+     */
+    public function forceDelete($id): JsonResponse
+    {
+        // $companyId = Auth::user()->company_id ?? request()->company_id;
+
+        $itemUnit = ItemUnit::onlyTrashed()
+            // ->forCompany($companyId)
+            ->findOrFail($id);
+
+        $itemUnit->forceDelete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item unit permanently deleted',
+            'message_ar' => 'تم حذف وحدة الصنف نهائياً'
         ]);
     }
 }

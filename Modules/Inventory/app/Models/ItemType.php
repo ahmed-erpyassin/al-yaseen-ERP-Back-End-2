@@ -39,7 +39,7 @@ class ItemType extends Model
      */
     public function items(): HasMany
     {
-        return $this->hasMany(Item::class, 'item_type_id');
+        return $this->hasMany(Item::class, 'item_type', 'code');
     }
 
     /**

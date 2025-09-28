@@ -17,7 +17,9 @@ use Modules\Users\Models\User;
 
 class AuthController extends Controller
 {
-    // تسجيل مستخدم جديد
+    /**
+     * Register a new user.
+     */
     public function register(RegisterUserRequest $request)
     {
         DB::beginTransaction();
@@ -64,7 +66,9 @@ class AuthController extends Controller
         }
     }
 
-    // تسجيل الدخول
+    /**
+     * Authenticate user and return access token.
+     */
     public function login(LoginUserRequest $request)
     {
         DB::beginTransaction();
@@ -115,7 +119,9 @@ class AuthController extends Controller
         }
     }
 
-    // تسجيل الدخول بالهاتف + OTP (اختياري)
+    /**
+     * Send OTP verification code to user's phone.
+     */
     public function sendOtp(SendOTPRequest $request)
     {
         DB::beginTransaction();
@@ -140,6 +146,9 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Verify OTP code and authenticate user.
+     */
     public function verifyOtp(VerifyOTPRequest $request)
     {
         DB::beginTransaction();
@@ -174,13 +183,18 @@ class AuthController extends Controller
             ], 500);
         }
     }
-    // المستخدم الحالي
+
+    /**
+     * Get the authenticated user's information.
+     */
     public function me(Request $request)
     {
         return response()->json($request->user());
     }
 
-    // تسجيل الخروج
+    /**
+     * Logout the authenticated user.
+     */
     public function logout(Request $request)
     {
         DB::beginTransaction();
@@ -195,6 +209,9 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Verify user's email address.
+     */
     public function verifyEmail($id, $hash)
     {
         $user = User::findOrFail($id);
@@ -213,6 +230,9 @@ class AuthController extends Controller
         return response()->json(['message' => __('Email verified successfully.')]);
     }
 
+    /**
+     * Resend email verification notification.
+     */
     public function resendEmailVerification(Request $request)
     {
         $request->user()->sendEmailVerificationNotification();
