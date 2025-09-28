@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 // Commented out unused controllers (not implemented yet)
 // use Modules\Sales\Http\Controllers\InvoiceController;
-// use Modules\Sales\Http\Controllers\ReturnInvoiceController;
+use Modules\Sales\Http\Controllers\ReturnInvoiceController;
 // use Modules\Sales\Http\Controllers\SalesHelperController;
 
 /*
@@ -191,9 +191,8 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
     */
 
     // ========================================
-    // RETURN INVOICES MANAGEMENT (COMMENTED OUT - CONTROLLER NOT IMPLEMENTED YET)
+    // RETURN INVOICES MANAGEMENT
     // ========================================
-    /*
     Route::prefix('return-invoices')->name('sales-management.return-invoices.')->group(function () {
 
         // Basic CRUD operations
@@ -207,8 +206,41 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
             ->name('update-return-invoice');
         Route::delete('/delete-return-invoice/{id}', [ReturnInvoiceController::class, 'destroy'])
             ->name('delete-return-invoice');
+
+        // Advanced search and filtering
+        Route::get('/search', [ReturnInvoiceController::class, 'search'])
+            ->name('search');
+        Route::get('/search-form-data', [ReturnInvoiceController::class, 'getSearchFormData'])
+            ->name('search-form-data');
+        Route::get('/sortable-fields', [ReturnInvoiceController::class, 'getSortableFields'])
+            ->name('sortable-fields');
+
+        // Soft delete management
+        Route::get('/deleted', [ReturnInvoiceController::class, 'getDeleted'])
+            ->name('deleted');
+        Route::post('/restore-return-invoice/{id}', [ReturnInvoiceController::class, 'restore'])
+            ->name('restore-return-invoice');
+        Route::delete('/force-delete/{id}', [ReturnInvoiceController::class, 'forceDelete'])
+            ->name('force-delete');
+
+        // Helper endpoints for return invoice management
+        Route::get('/search-customers', [ReturnInvoiceController::class, 'searchCustomers'])
+            ->name('search-customers');
+        Route::get('/customer-by-number', [ReturnInvoiceController::class, 'getCustomerByNumber'])
+            ->name('customer-by-number');
+        Route::get('/customer-by-name', [ReturnInvoiceController::class, 'getCustomerByName'])
+            ->name('customer-by-name');
+        Route::get('/search-items', [ReturnInvoiceController::class, 'searchItems'])
+            ->name('search-items');
+        Route::get('/item-by-number', [ReturnInvoiceController::class, 'getItemByNumber'])
+            ->name('item-by-number');
+        Route::get('/item-by-name', [ReturnInvoiceController::class, 'getItemByName'])
+            ->name('item-by-name');
+        Route::get('/live-exchange-rate', [ReturnInvoiceController::class, 'getLiveExchangeRate'])
+            ->name('live-exchange-rate');
+        Route::get('/form-data', [ReturnInvoiceController::class, 'getFormData'])
+            ->name('form-data');
     });
-    */
 
     // ========================================
     // SERVICES MANAGEMENT
