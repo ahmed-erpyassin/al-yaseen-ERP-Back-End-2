@@ -2,12 +2,14 @@
 
 use Modules\Sales\Http\Controllers\IncomingOrderController;
 use Modules\Sales\Http\Controllers\OutgoingShipmentController;
-use Modules\Sales\Http\Controllers\ReturnInvoiceController;
 use Modules\Sales\Http\Controllers\ServiceController;
-use Illuminate\Support\Facades\Route;
-use Modules\Sales\Http\Controllers\InvoiceController;
 use Modules\Sales\Http\Controllers\OutgoingOfferController;
-use Modules\Sales\Http\Controllers\SalesHelperController;
+use Illuminate\Support\Facades\Route;
+
+// Commented out unused controllers (not implemented yet)
+// use Modules\Sales\Http\Controllers\InvoiceController;
+// use Modules\Sales\Http\Controllers\ReturnInvoiceController;
+// use Modules\Sales\Http\Controllers\SalesHelperController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,11 +119,45 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
             ->name('find-customers');
         Route::get('/search/find-items', [OutgoingShipmentController::class, 'searchItems'])
             ->name('find-items');
+
+    // Services Routes
+    Route::prefix('services')->name('services.')->group(function () {
+        // Basic CRUD operations
+        Route::get('/list-all', [ServiceController::class, 'index'])
+            ->name('list-all');
+        Route::post('/create-new', [ServiceController::class, 'store'])
+            ->name('create-new');
+        Route::get('/show-details/{id}', [ServiceController::class, 'show'])
+            ->name('show-details');
+        Route::put('/update-service/{id}', [ServiceController::class, 'update'])
+            ->name('update-service');
+        Route::delete('/delete-service/{id}', [ServiceController::class, 'destroy'])
+            ->name('delete-service');
+
+        // Form data and helper endpoints
+        Route::get('/form-data/get-complete-data', [ServiceController::class, 'getFormData'])
+            ->name('get-form-data');
+
+        // Search and lookup endpoints
+        Route::get('/search/find-customers', [ServiceController::class, 'searchCustomers'])
+            ->name('find-customers');
+        Route::get('/search/find-accounts', [ServiceController::class, 'searchAccounts'])
+            ->name('find-accounts');
+
+        // Account integration endpoints
+        Route::get('/accounts/get-all-numbers', [ServiceController::class, 'getAllAccountNumbers'])
+            ->name('get-all-account-numbers');
+        Route::get('/accounts/get-by-number', [ServiceController::class, 'getAccountByNumber'])
+            ->name('get-account-by-number');
+        Route::get('/accounts/get-by-name', [ServiceController::class, 'getAccountByName'])
+            ->name('get-account-by-name');
+    });
     });
 
     // ========================================
-    // INVOICES MANAGEMENT
+    // INVOICES MANAGEMENT (COMMENTED OUT - CONTROLLER NOT IMPLEMENTED YET)
     // ========================================
+    /*
     Route::prefix('invoices')->name('sales-management.invoices.')->group(function () {
 
         // Basic CRUD operations
@@ -152,10 +188,12 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
         Route::delete('/force-delete/{id}', [InvoiceController::class, 'forceDelete'])
             ->name('force-delete');
     });
+    */
 
     // ========================================
-    // RETURN INVOICES MANAGEMENT
+    // RETURN INVOICES MANAGEMENT (COMMENTED OUT - CONTROLLER NOT IMPLEMENTED YET)
     // ========================================
+    /*
     Route::prefix('return-invoices')->name('sales-management.return-invoices.')->group(function () {
 
         // Basic CRUD operations
@@ -170,6 +208,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
         Route::delete('/delete-return-invoice/{id}', [ReturnInvoiceController::class, 'destroy'])
             ->name('delete-return-invoice');
     });
+    */
 
     // ========================================
     // SERVICES MANAGEMENT
@@ -187,8 +226,42 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
             ->name('update-service');
         Route::delete('/delete-service/{id}', [ServiceController::class, 'destroy'])
             ->name('delete-service');
+
+        // Advanced search and filtering
+        Route::get('/search', [ServiceController::class, 'search'])
+            ->name('search');
+        Route::get('/search-form-data', [ServiceController::class, 'getSearchFormData'])
+            ->name('search-form-data');
+        Route::get('/sortable-fields', [ServiceController::class, 'getSortableFields'])
+            ->name('sortable-fields');
+
+        // Soft delete management
+        Route::get('/deleted', [ServiceController::class, 'getDeleted'])
+            ->name('deleted');
+        Route::post('/restore-service/{id}', [ServiceController::class, 'restore'])
+            ->name('restore-service');
+        Route::delete('/force-delete/{id}', [ServiceController::class, 'forceDelete'])
+            ->name('force-delete');
+
+        // Helper endpoints for service management
+        Route::get('/search-customers', [ServiceController::class, 'searchCustomers'])
+            ->name('search-customers');
+        Route::get('/search-accounts', [ServiceController::class, 'searchAccounts'])
+            ->name('search-accounts');
+        Route::get('/account-numbers', [ServiceController::class, 'getAllAccountNumbers'])
+            ->name('account-numbers');
+        Route::get('/account-by-number', [ServiceController::class, 'getAccountByNumber'])
+            ->name('account-by-number');
+        Route::get('/account-by-name', [ServiceController::class, 'getAccountByName'])
+            ->name('account-by-name');
+        Route::get('/form-data', [ServiceController::class, 'getFormData'])
+            ->name('form-data');
     });
 
+    // ========================================
+    // HELPER ENDPOINTS (COMMENTED OUT - CONTROLLER NOT IMPLEMENTED YET)
+    // ========================================
+    /*
     // Helper endpoints for dropdowns and data fetching
     Route::prefix('helpers')->group(function () {
         Route::get('/customers', [SalesHelperController::class, 'getCustomers']);
@@ -208,5 +281,6 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
         Route::get('/item-details-invoice/{itemId}', [SalesHelperController::class, 'getItemDetailsForInvoice']);
         Route::get('/live-currency-rate/{currencyId}', [SalesHelperController::class, 'getLiveCurrencyRateWithTax']);
     });
+    */
 
 });

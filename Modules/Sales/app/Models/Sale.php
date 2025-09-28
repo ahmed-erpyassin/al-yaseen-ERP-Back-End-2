@@ -157,6 +157,14 @@ class Sale extends Model
     }
 
     /**
+     * Scope for services
+     */
+    public function scopeServices($query)
+    {
+        return $query->where('type', 'service');
+    }
+
+    /**
      * Generate the next sequential book code for incoming orders.
      */
     public static function generateBookCode($companyId): string

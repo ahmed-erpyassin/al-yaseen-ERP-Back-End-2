@@ -12,33 +12,36 @@ class ServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'currency_id' => 'nullable',
-            'employee_id' => 'nullable',
-            'customer_id' => 'required',
-            'journal_id' => 'nullable',
-            'journal_number' => 'required|integer',
-            'cash_paid' => 'nullable|numeric|min:0',
-            'checks_paid' => 'nullable|numeric|min:0',
-            'allowed_discount' => 'nullable|numeric|min:0',
-            'total_without_tax' => 'nullable|numeric|min:0',
-            'tax_percentage' => 'nullable|numeric|min:0',
-            'tax_amount' => 'nullable|numeric|min:0',
-            'total_amount' => 'nullable|numeric|min:0',
-            'remaining_balance' => 'nullable|numeric|min:0',
-            'exchange_rate' => 'required|numeric|min:0',
-            'total_foreign' => 'nullable|numeric|min:0',
-            'total_local' => 'nullable|numeric|min:0',
-            'notes' => 'nullable|string',
+            // Customer information
+            'customer_id' => 'required|exists:customers,id',
+            'customer_email' => 'nullable|email|max:150',
+
+            // Service details
+            'due_date' => 'nullable|date|after:today',
+            'licensed_operator' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:1000',
+
+            // Optional fields
+            'employee_id' => 'nullable|exists:employees,id',
+            'branch_id' => 'nullable|exists:branches,id',
+            'currency_id' => 'nullable|exists:currencies,id',
+
+            // Tax settings
+            'is_tax_inclusive' => 'nullable|boolean',
+            'tax_percentage' => 'nullable|numeric|min:0|max:100',
+
+            // Service items validation
             'items' => 'required|array|min:1',
-            'items.*.item_id' => 'required|integer',
-            'items.*.description' => 'nullable|string',
-            'items.*.quantity' => 'required|numeric|min:0',
+            'items.*.account_id' => 'required|exists:accounts,id',
+            'items.*.account_number' => 'nullable|string|max:50',
+            'items.*.account_name' => 'nullable|string|max:150',
+            'items.*.unit_id' => 'nullable|exists:units,id',
+            'items.*.unit_name' => 'nullable|string|max:100',
+            'items.*.quantity' => 'required|numeric|min:0.01',
             'items.*.unit_price' => 'required|numeric|min:0',
-            'items.*.discount_rate' => 'nullable|numeric|min:0',
-            'items.*.tax_rate' => 'nullable|numeric|min:0',
-            'items.*.total_foreign' => 'nullable|numeric|min:0',
-            'items.*.total_local' => 'nullable|numeric|min:0',
-            'items.*.total' => 'nullable|numeric|min:0',
+            'items.*.apply_tax' => 'nullable|boolean',
+            'items.*.tax_rate_id' => 'nullable|exists:tax_rates,id',
+            'items.*.notes' => 'nullable|string|max:500',
         ];
     }
 
