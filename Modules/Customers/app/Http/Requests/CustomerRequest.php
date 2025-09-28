@@ -7,132 +7,85 @@ use Illuminate\Validation\Rule;
 
 class CustomerRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     */
-    public function rules(): array
-    {
-        $customerId = $this->route('customer'); // or however you get the current customer ID
-
-        return [
-            // Required fields
-            'company_id'        => 'required|integer|exists:companies,id',
-            'branch_id'         => 'nullable|integer|exists:branches,id',
-            'currency_id'       => 'required|integer|exists:currencies,id',
-            'employee_id'       => 'required|integer|exists:employees,id',
-            'country_id'        => 'nullable|integer|exists:countries,id',
-            'region_id'         => 'nullable|integer|exists:regions,id',
-            'city_id'           => 'nullable|integer|exists:cities,id',
-
-            // Customer identification
-            'customer_number'   => [
-                'nullable', // Will be auto-generated if not provided
-                'string',
-                'max:50',
-                Rule::unique('customers', 'customer_number')->ignore($customerId),
-            ],
-            'customer_type'     => 'required|in:individual,business',
-            'balance'           => 'nullable|numeric|min:0',
-
-            // Company/Business information
-            'company_name'      => 'required|string|max:255', // Required as per your request
-            'first_name'        => 'nullable|string|max:100', // Optional as per your request
-            'second_name'       => 'nullable|string|max:100', // Optional as per your request
-            'contact_name'      => 'nullable|string|max:100',
-
-            // Contact information
-            'email'             => [
-                'nullable', // Optional as per your request
-                'email',
-                'max:150',
-                Rule::unique('customers', 'email')->ignore($customerId),
-            ],
-            'phone'             => 'nullable|string|max:50', // Optional as per your request
-            'mobile'            => 'nullable|string|max:50', // Optional as per your request
-
-            // Address information
-            'address_one'       => 'nullable|string|max:255', // Optional as per your request
-            'address_two'       => 'nullable|string|max:255', // Optional as per your request
-            'postal_code'       => 'nullable|string|max:20', // Optional as per your request
-            'licensed_operator' => 'nullable|string|max:255', // Optional as per your request
-
-            // Tax and business information
-            'tax_number'        => [
-                'nullable',
-                'string',
-                'max:50',
-                Rule::unique('customers', 'tax_number')->ignore($customerId),
-            ],
-
-            // Barcode information
-            'code'              => [
-                'nullable', // Optional as per your request
-                'string',
-                'max:50',
-                Rule::unique('customers', 'code')->ignore($customerId),
-            ],
-            'barcode'           => 'nullable|string|max:100',
-            'barcode_type'      => 'nullable|string|in:C128,EAN13,C39,UPCA,ITF',
-
-            // Additional information
-            'notes'             => 'nullable|string|max:1000',
-            'status'            => 'nullable|in:active,inactive',
-            'invoice_type'      => 'nullable|string|max:100',
-            'category'          => 'nullable|string|max:100',
-        ];
-    }
-
-    /**
-     * Get custom validation messages.
-     */
-    public function messages(): array
-    {
-        return [
-            'company_id.required' => 'Company selection is required.',
-            'company_id.exists' => 'Selected company does not exist.',
-            'branch_id.required' => 'Branch selection is required.',
-            'branch_id.exists' => 'Selected branch does not exist.',
-            'currency_id.required' => 'Currency selection is required.',
-            'currency_id.exists' => 'Selected currency does not exist.',
-            'employee_id.required' => 'Employee selection is required.',
-            'employee_id.exists' => 'Selected employee does not exist.',
-            'country_id.required' => 'Country selection is required.',
-            'country_id.exists' => 'Selected country does not exist.',
-            'region_id.required' => 'Region selection is required.',
-            'region_id.exists' => 'Selected region does not exist.',
-            'city_id.required' => 'City selection is required.',
-            'city_id.exists' => 'Selected city does not exist.',
-            'customer_number.required' => 'Customer number is required.',
-            'customer_number.unique' => 'This customer number already exists.',
-            'company_name.required' => 'Company name is required.',
-            'first_name.required' => 'First name is required.',
-            'second_name.required' => 'Second name is required.',
-            'contact_name.required' => 'Contact name is required.',
-            'email.required' => 'Email address is required.',
-            'email.email' => 'Please enter a valid email address.',
-            'email.unique' => 'This email address is already registered.',
-            'phone.required' => 'Phone number is required.',
-            'mobile.required' => 'Mobile number is required.',
-            'address_one.required' => 'Address line 1 is required.',
-            'address_two.required' => 'Address line 2 is required.',
-            'postal_code.required' => 'Postal code is required.',
-            'licensed_operator.required' => 'Licensed operator is required.',
-            'tax_number.required' => 'Tax number is required.',
-            'tax_number.unique' => 'This tax number already exists.',
-            'status.required' => 'Status is required.',
-            'status.in' => 'Status must be either active or inactive.',
-            'code.required' => 'Code is required.',
-            'code.unique' => 'This code already exists.',
-            'invoice_type.required' => 'Invoice type is required.',
-            'category.required' => 'Category is required.',
-        ];
-    }
-
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function rules(): array
+    {
+        return  [
+            // 'company_id' => ['required', 'integer', 'exists:companies,id'],
+            // 'branch_id' => ['nullable', 'integer', 'exists:branches,id'],
+            'currency_id' => ['required', 'integer', 'exists:currencies,id'],
+            'employee_id' => ['nullable', 'integer', 'exists:users,id'],
+            'country_id' => ['nullable', 'integer', 'exists:countries,id'],
+            'region_id' => ['nullable', 'integer', 'exists:regions,id'],
+            'city_id' => ['nullable', 'integer', 'exists:cities,id'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'second_name' => ['nullable', 'string', 'max:255'],
+            'contact_name' => ['nullable', 'string', 'max:255'],
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+                Rule::unique('customers')->ignore($this->customer),
+            ],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'mobile' => ['nullable', 'string', 'max:50'],
+            'address_one' => ['nullable', 'string', 'max:255'],
+            'address_two' => ['nullable', 'string', 'max:255'],
+            'postal_code' => ['nullable', 'string', 'max:20'],
+            'tax_number' => ['nullable', 'string', 'max:100'],
+            'notes' => ['nullable', 'string'],
+            'status' => ['required', Rule::in(['active', 'inactive'])],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            // 'company_id.required' => __('The company field is required.'),
+            // 'company_id.integer' => __('The company must be a valid integer.'),
+            // 'company_id.exists' => __('The selected company does not exist.'),
+            // 'branch_id.integer' => __('The branch must be a valid integer.'),
+            // 'branch_id.exists' => __('The selected branch does not exist.'),
+            'currency_id.required' => __('The currency field is required.'),
+            'currency_id.integer' => __('The currency must be a valid integer.'),
+            'currency_id.exists' => __('The selected currency does not exist.'),
+            'employee_id.integer' => __('The employee must be a valid integer.'),
+            'employee_id.exists' => __('The selected employee does not exist.'),
+            'country_id.integer' => __('The country must be a valid integer.'),
+            'country_id.exists' => __('The selected country does not exist.'),
+            'region_id.integer' => __('The region must be a valid integer.'),
+            'region_id.exists' => __('The selected region does not exist.'),
+            'city_id.integer' => __('The city must be a valid integer.'),
+            'city_id.exists' => __('The selected city does not exist.'),
+            'first_name.required' => __('The first name field is required.'),
+            'first_name.string' => __('The first name must be a string.'),
+            'first_name.max' => __('The first name may not be greater than 255 characters.'),
+            'second_name.string' => __('The second name must be a string.'),
+            'second_name.max' => __('The second name may not be greater than 255 characters.'),
+            'contact_name.string' => __('The contact name must be a string.'),
+            'contact_name.max' => __('The contact name may not be greater than 255 characters.'),
+            'email.email' => __('The email must be a valid email address.'),
+            'email.max' => __('The email may not be greater than 255 characters.'),
+            'email.unique' => __('The email has already been taken.'),
+            'phone.string' => __('The phone must be a string.'),
+            'phone.max' => __('The phone may not be greater than 50 characters.'),
+            'mobile.string' => __('The mobile must be a string.'),
+            'mobile.max' => __('The mobile may not be greater than 50 characters.'),
+            'address_one.string' => __('The address one must be a string.'),
+            'address_one.max' => __('The address one may not be greater than 255 characters.'),
+            'address_two.string' => __('The address two must be a string.'),
+            'address_two.max' => __('The address two may not be greater than 255 characters.'),
+            'postal_code.string' => __('The postal code must be a string.'),
+            'postal_code.max' => __('The postal code may not be greater than 20 characters.'),
+            'tax_number.string' => __('The tax number must be a string.'),
+            'tax_number.max' => __('The tax number may not be greater than 100 characters.'),
+            'notes.string' => __('The notes must be a string.'),
+            'status.required' => __('The status field is required.'),
+            'status.in' => __('The selected status is invalid. Allowed values are active or inactive.'),
+        ];
     }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Suppliers\Http\Controllers\SupplierController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
+
     Route::prefix('suppliers')->group(function () {
         // Basic CRUD operations
         Route::get('/', [SupplierController::class, 'index'])->name('suppliers.index');
@@ -25,4 +26,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
         Route::get('/deleted/list', [SupplierController::class, 'getDeleted'])->name('suppliers.get-deleted');
         Route::delete('/deleted/{id}/force-delete', [SupplierController::class, 'forceDelete'])->name('suppliers.force-delete');
     });
+
+    Route::apiResource('suppliers', SupplierController::class);
+
 });

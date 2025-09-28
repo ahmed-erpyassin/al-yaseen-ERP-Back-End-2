@@ -4,6 +4,8 @@ namespace Modules\Suppliers\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Modules\Suppliers\app\Services\SupplierService;
 use Modules\Suppliers\Http\Requests\SupplierRequest;
 use Modules\Suppliers\Models\Supplier;
@@ -11,8 +13,7 @@ use Modules\Suppliers\Transformers\SupplierResource;
 
 class SupplierController extends Controller
 {
-
-    protected SupplierService $supplierService;
+    protected $supplierService;
 
     public function __construct(SupplierService $supplierService)
     {
@@ -52,80 +53,69 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(SupplierRequest $request)
     {
         try {
-            $supplier = $this->supplierService->store($request);
-            return response()->json([
-                'success' => true,
-                'data'    => new SupplierResource($supplier)
-            ], 200);
+            DB::beginTransaction();
+            $supplier = $this->supplierService->createSupplier($request->validated(), $request->user());
+            DB::commit();
+            return new SupplierResource($supplier);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            DB::rollBack();
+            return response()->json([
+                'error' => __('Failed to create supplier.'),
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
-
-    /**
-     * Show the specified resource.
-     */
-    public function show(Supplier $supplier)
+/*
+    public function index(Request $request)
     {
         try {
-            $supplier = $this->supplierService->show($supplier);
-            return response()->json([
-                'success' => true,
-                'data'    => new SupplierResource($supplier)
-            ], 200);
+            $suppliers = $this->supplierService->getSuppliers($request->user());
+            return SupplierResource::collection($suppliers);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'error' => __('Failed to retrieve suppliers.'),
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+*/
+    public function show($id)
+    {
+        try {
+            $supplier = $this->supplierService->getSupplierById($id);
+            return new SupplierResource($supplier);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => __('Failed to retrieve supplier.'),
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(SupplierRequest $request, Supplier $supplier)
     {
         try {
-            $supplier = $this->supplierService->update($request, $supplier);
-            return response()->json([
-                'success' => true,
-                'data'    => new SupplierResource($supplier)
-            ], 200);
+            $updatedSupplier = $this->supplierService->update($request, $supplier);
+            return new SupplierResource($updatedSupplier);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'error' => __('Failed to update supplier.'),
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Supplier $supplier)
     {
         try {
-            $supplier = $this->supplierService->destroy($supplier);
-            return response()->json([
-                'success' => true,
-                'message' => 'Supplier deleted successfully',
-            ], 200);
+            $this->supplierService->destroy($supplier);
+            return response()->json(['message' => __('Supplier deleted successfully.')]);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
-        }
-    }
-
-    /**
-     * Restore the specified resource from storage.
-     */
-    public function restore(Supplier $supplier)
-    {
-        try {
-            $supplier = $this->supplierService->restore($supplier);
-            return response()->json([
-                'success' => true,
-                'data'    => new SupplierResource($supplier)
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while restoring supplier: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'An error occurred while deleting supplier: ' . $e->getMessage()], 500);
         }
     }
 
@@ -229,7 +219,7 @@ class SupplierController extends Controller
     /**
      * Get sortable fields for suppliers
      */
-    public function getSortableFields(Request $request)
+    public function getSortableFields()
     {
         try {
             $sortableFields = $this->supplierService->getSortableFields();
@@ -238,7 +228,27 @@ class SupplierController extends Controller
                 'data'    => $sortableFields
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching sortable fields: ' . $e->getMessage()], 500);
+         //   return response()->json(['error' => 'An error occurred while fetching sortable fields: ' . $e->getMessage()], 500);
+
+            return response()->json([
+                'error' => __('Failed to delete supplier.'),
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
+
+    public function restore($id)
+    {
+        try {
+            $supplier = $this->supplierService->restoreSupplier($id);
+            return new SupplierResource($supplier);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => __('Failed to restore supplier.'),
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
 }

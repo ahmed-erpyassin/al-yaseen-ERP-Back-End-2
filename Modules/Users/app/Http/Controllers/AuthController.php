@@ -157,7 +157,7 @@ class AuthController extends Controller
 
             $user = User::where('phone', $data['phone'])->first();
 
-            if (! $user || $user->otp_code !== $data['otp'] || $user->otp_expires_at->isPast()) {
+            if (!$user || $user->otp_code !== $data['otp'] || $user->otp_expires_at->isPast()) {
                 DB::rollBack();
                 return response()->json(['message' => __('Invalid verification code.')], 422);
             }
@@ -174,7 +174,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => __('OTP verified successfully.'),
                 'user' => $user,
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([

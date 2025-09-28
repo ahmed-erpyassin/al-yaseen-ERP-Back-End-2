@@ -12,7 +12,6 @@ class CustomersDatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            CustomerSeeder::class,
         ]);
     }
 }

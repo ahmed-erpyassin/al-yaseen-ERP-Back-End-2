@@ -8,6 +8,9 @@ use Modules\Companies\Models\Company;
 use Modules\Users\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Modules\FinancialAccounts\Models\Currency;
+use Modules\FinancialAccounts\Models\FiscalYear;
+use Carbon\Carbon;
 
 class UserSeeder extends Seeder
 {
@@ -74,9 +77,42 @@ class UserSeeder extends Seeder
             $roles['api'],
         ]);
 
+        // ===== FISCAL YEAR =====
+        $fiscalYear = FiscalYear::firstOrCreate(
+            ['name' => 'FY ' . now()->year],
+            [
+                'company_id' => 1,
+                'user_id' => 1,
+                'start_date' => Carbon::create(now()->year, 1, 1),
+                'end_date' => Carbon::create(now()->year, 12, 31),
+                'status' => 'open',
+            ]
+        );
+
+        // ===== CURRENCIES =====
+        $currencies = [
+            ['code' => 'USD', 'name' => 'US Dollar', 'symbol' => '$', 'decimal_places' => 2],
+            ['code' => 'EUR', 'name' => 'Euro', 'symbol' => '€', 'decimal_places' => 2],
+            ['code' => 'GBP', 'name' => 'British Pound', 'symbol' => '£', 'decimal_places' => 2],
+            ['code' => 'JPY', 'name' => 'Japanese Yen', 'symbol' => '¥', 'decimal_places' => 0],
+            ['code' => 'SAR', 'name' => 'Saudi Riyal', 'symbol' => '﷼', 'decimal_places' => 2],
+            ['code' => 'AED', 'name' => 'UAE Dirham', 'symbol' => 'د.إ', 'decimal_places' => 2],
+            ['code' => 'ILS', 'name' => 'Israeli Shekel', 'symbol' => '₪', 'decimal_places' => 2],
+        ];
+
+        foreach ($currencies as $c) {
+            Currency::firstOrCreate(
+                ['code' => $c['code']],
+                array_merge($c, [
+                    'company_id' => 1,
+                    'user_id' => 1,
+                ])
+            );
+        }
+
         $company = Company::create([
-            'currency_id'                           => null,
-            'financial_year_id'                     => null,
+            'currency_id'                           => 1,
+            'financial_year_id'                     => 1,
             'industry_id'                           => 1,
             'business_type_id'                      => 1,
             'country_id'                            => 1,

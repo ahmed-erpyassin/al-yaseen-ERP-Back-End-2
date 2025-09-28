@@ -2,18 +2,20 @@
 
 namespace Modules\Suppliers\app\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\Suppliers\Http\Requests\SupplierRequest;
 use Modules\Suppliers\Models\Supplier;
 use Modules\Suppliers\Models\Donor;
 use Modules\Suppliers\Models\SalesRepresentative;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 class SupplierService
 {
-
-    public function index($request)
+    /**
+     * Get suppliers with search and pagination
+     */
+    public function index(Request $request)
     {
         try {
             $companyId = $request->user()->company_id ?? 101;
@@ -79,6 +81,9 @@ class SupplierService
         }
     }
 
+    /**
+     * Create a new supplier
+     */
     public function store(SupplierRequest $request)
     {
         try {
@@ -106,6 +111,12 @@ class SupplierService
                 return $supplier->load([
                     'user',
                     'company',
+                    'branch',
+                    'currency',
+                    'department',
+                    'project',
+                    'donor',
+                    'salesRepresentative',
                     'creator',
                     'updater'
                 ]);
@@ -114,14 +125,36 @@ class SupplierService
             throw new \Exception('Error creating supplier: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Show a specific supplier
+     */
     public function show(Supplier $supplier)
     {
         try {
-            return $supplier;
+            return $supplier->load([
+                'user',
+                'company',
+                'branch',
+                'currency',
+                'department',
+                'project',
+                'donor',
+                'salesRepresentative',
+                'country',
+                'region',
+                'city',
+                'barcodeType',
+                'creator',
+                'updater'
+            ]);
         } catch (\Exception $e) {
             throw new \Exception('Error fetching supplier: ' . $e->getMessage());
         }
     }
+    /**
+     * Update a supplier
+     */
     public function update(SupplierRequest $request, Supplier $supplier)
     {
         try {
@@ -142,6 +175,12 @@ class SupplierService
                 return $supplier->load([
                     'user',
                     'company',
+                    'branch',
+                    'currency',
+                    'department',
+                    'project',
+                    'donor',
+                    'salesRepresentative',
                     'creator',
                     'updater'
                 ]);
@@ -151,6 +190,9 @@ class SupplierService
         }
     }
 
+    /**
+     * Delete a supplier (soft delete)
+     */
     public function destroy(Supplier $supplier)
     {
         try {
@@ -165,7 +207,9 @@ class SupplierService
         }
     }
 
-
+    /**
+     * Restore a soft deleted supplier
+     */
     public function restore(Supplier $supplier)
     {
         try {
@@ -190,6 +234,8 @@ class SupplierService
             throw new \Exception('Error restoring supplier: ' . $e->getMessage());
         }
     }
+
+
 
     /**
      * Get form data for supplier creation/editing

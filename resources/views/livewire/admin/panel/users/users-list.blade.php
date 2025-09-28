@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid px-5">
 
     <!-- Heading -->
     <div class="pt-5 bg-body-tertiary mb-4">
@@ -94,6 +94,8 @@
                     <th>{{ __('Role') }}</th>
                     <th>{{ __('Status') }}</th>
                     <th>{{ __('Type') }}</th>
+                    <th>{{ __('Email Verified') }}</th>
+                    <th>{{ __('Phone Verified') }}</th>
                     <th>{{ __('CreatedBy') }}</th>
                     <th>{{ __('Actions') }}</th>
                 </tr>
@@ -121,7 +123,7 @@
                                 ];
                             @endphp
                             <span class="badge badge-{{ $statusColors[$user->status] ?? 'light' }}">
-                                    {{ ucfirst($user->status) }}
+                                {{ ucfirst($user->status) }}
                             </span>
                         </td>
                         <td>
@@ -135,6 +137,20 @@
                             <span class="badge badge-{{ $typeColors[$user->type] ?? 'light' }}">
                                 {{ __(ucwords(str_replace('_', ' ', $user->type))) }}
                             </span>
+                        </td>
+                        <td>
+                            @if ($user->email_verified_at)
+                                <span class="badge badge-success">{{ __('Yes') }}</span>
+                            @else
+                                <span class="badge badge-danger">{{ __('No') }}</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($user->phone_verified_at)
+                                <span class="badge badge-success">{{ __('Yes') }}</span>
+                            @else
+                                <span class="badge badge-danger">{{ __('No') }}</span>
+                            @endif
                         </td>
                         <td>{{ $user->creator?->full_name }}</td>
                         <td>

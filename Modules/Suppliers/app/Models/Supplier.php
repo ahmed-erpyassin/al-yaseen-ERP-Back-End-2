@@ -163,7 +163,7 @@ class Supplier extends Model
      */
     public function donor(): BelongsTo
     {
-        return $this->belongsTo(Donor::class);
+        return $this->belongsTo(\Modules\Suppliers\Models\Donor::class);
     }
 
     /**
@@ -171,7 +171,7 @@ class Supplier extends Model
      */
     public function salesRepresentative(): BelongsTo
     {
-        return $this->belongsTo(SalesRepresentative::class, 'sales_representative_id');
+        return $this->belongsTo(\Modules\Suppliers\Models\SalesRepresentative::class, 'sales_representative_id');
     }
 
     /**
@@ -204,6 +204,14 @@ class Supplier extends Model
     public function barcodeType(): BelongsTo
     {
         return $this->belongsTo(\Modules\Inventory\Models\BarcodeType::class);
+    }
+
+    /**
+     * Get the employee for the supplier.
+     */
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'employee_id');
     }
 
     /**
