@@ -22,15 +22,30 @@ class SupplierController extends Controller
 
     public function index(Request $request)
     {
-
         try {
             $suppliers = $this->supplierService->index($request);
-            return response()->json([
-                'success' => true,
-                'data'    => SupplierResource::collection($suppliers)
-            ], 200);
+
+            if ($request->get('paginate', true)) {
+                return response()->json([
+                    'success' => true,
+                    'data'    => SupplierResource::collection($suppliers->items()),
+                    'meta'    => [
+                        'current_page' => $suppliers->currentPage(),
+                        'last_page'    => $suppliers->lastPage(),
+                        'per_page'     => $suppliers->perPage(),
+                        'total'        => $suppliers->total(),
+                        'from'         => $suppliers->firstItem(),
+                        'to'           => $suppliers->lastItem(),
+                    ]
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => true,
+                    'data'    => SupplierResource::collection($suppliers)
+                ], 200);
+            }
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json(['error' => 'An error occurred while fetching suppliers: ' . $e->getMessage()], 500);
         }
     }
 
@@ -110,7 +125,120 @@ class SupplierController extends Controller
                 'data'    => new SupplierResource($supplier)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json(['error' => 'An error occurred while restoring supplier: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Advanced search for suppliers with multiple criteria
+     */
+    public function search(Request $request)
+    {
+        try {
+            $suppliers = $this->supplierService->search($request);
+            return response()->json([
+                'success' => true,
+                'data'    => SupplierResource::collection($suppliers->items()),
+                'meta'    => [
+                    'current_page' => $suppliers->currentPage(),
+                    'last_page'    => $suppliers->lastPage(),
+                    'per_page'     => $suppliers->perPage(),
+                    'total'        => $suppliers->total(),
+                    'from'         => $suppliers->firstItem(),
+                    'to'           => $suppliers->lastItem(),
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while searching suppliers: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get form data for supplier search
+     */
+    public function getSearchFormData(Request $request)
+    {
+        try {
+            $formData = $this->supplierService->getSearchFormData($request);
+            return response()->json([
+                'success' => true,
+                'data'    => $formData
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while fetching search form data: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get form data for supplier creation/editing
+     */
+    public function getFormData(Request $request)
+    {
+        try {
+            $formData = $this->supplierService->getFormData($request);
+            return response()->json([
+                'success' => true,
+                'data'    => $formData
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while fetching form data: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get deleted suppliers (soft deleted)
+     */
+    public function getDeleted(Request $request)
+    {
+        try {
+            $suppliers = $this->supplierService->getDeleted($request);
+            return response()->json([
+                'success' => true,
+                'data'    => SupplierResource::collection($suppliers->items()),
+                'meta'    => [
+                    'current_page' => $suppliers->currentPage(),
+                    'last_page'    => $suppliers->lastPage(),
+                    'per_page'     => $suppliers->perPage(),
+                    'total'        => $suppliers->total(),
+                    'from'         => $suppliers->firstItem(),
+                    'to'           => $suppliers->lastItem(),
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while fetching deleted suppliers: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Force delete a supplier (permanent delete)
+     */
+    public function forceDelete($id)
+    {
+        try {
+            $result = $this->supplierService->forceDelete($id);
+            return response()->json([
+                'success' => true,
+                'message' => $result['message'],
+                'supplier_number' => $result['supplier_number']
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while permanently deleting supplier: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get sortable fields for suppliers
+     */
+    public function getSortableFields(Request $request)
+    {
+        try {
+            $sortableFields = $this->supplierService->getSortableFields();
+            return response()->json([
+                'success' => true,
+                'data'    => $sortableFields
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while fetching sortable fields: ' . $e->getMessage()], 500);
         }
     }
 }

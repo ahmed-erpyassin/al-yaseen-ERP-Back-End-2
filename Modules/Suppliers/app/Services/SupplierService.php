@@ -16,19 +16,66 @@ class SupplierService
     public function index($request)
     {
         try {
-
+            $companyId = $request->user()->company_id ?? 101;
             $supplier_search = $request->get('supplier_search', null);
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
+            $perPage = $request->get('per_page', 15);
 
-            return Supplier::query()
-                ->when($supplier_search, function ($query, $supplier_search) {
-                    $query->where('name', 'like', '%' . $supplier_search . '%');
-                })
-                ->orderBy($sortBy, $sortOrder)
-                ->get();
+            // Validate sort fields to prevent SQL injection
+            $allowedSortFields = [
+                'id', 'supplier_number', 'supplier_name_ar', 'supplier_name_en', 'supplier_type',
+                'balance', 'last_transaction_date', 'classification', 'status', 'email', 'phone',
+                'mobile', 'created_at', 'updated_at'
+            ];
+
+            if (!in_array($sortBy, $allowedSortFields)) {
+                $sortBy = 'created_at';
+            }
+
+            $query = Supplier::query()
+                ->with([
+                    'user',
+                    'company',
+                    'branch',
+                    'currency',
+                    'department',
+                    'project',
+                    'donor',
+                    'salesRepresentative',
+                    'country',
+                    'region',
+                    'city',
+                    'barcodeType',
+                    'creator',
+                    'updater'
+                ])
+                ->where('company_id', $companyId);
+
+            // Apply search filter
+            if ($supplier_search) {
+                $query->where(function ($q) use ($supplier_search) {
+                    $q->where('supplier_name_ar', 'like', '%' . $supplier_search . '%')
+                      ->orWhere('supplier_name_en', 'like', '%' . $supplier_search . '%')
+                      ->orWhere('supplier_number', 'like', '%' . $supplier_search . '%')
+                      ->orWhere('supplier_code', 'like', '%' . $supplier_search . '%')
+                      ->orWhere('email', 'like', '%' . $supplier_search . '%')
+                      ->orWhere('phone', 'like', '%' . $supplier_search . '%')
+                      ->orWhere('mobile', 'like', '%' . $supplier_search . '%');
+                });
+            }
+
+            // Apply sorting and pagination
+            $query->orderBy($sortBy, $sortOrder);
+
+            if ($request->get('paginate', true)) {
+                return $query->paginate($perPage);
+            } else {
+                return $query->get();
+            }
+
         } catch (\Exception $e) {
-            throw new \Exception('Error fetching outgoing offers: ' . $e->getMessage());
+            throw new \Exception('Error fetching suppliers: ' . $e->getMessage());
         }
     }
 
@@ -107,8 +154,12 @@ class SupplierService
     public function destroy(Supplier $supplier)
     {
         try {
-            $supplier->delete();
-            return true;
+            return DB::transaction(function () use ($supplier) {
+                // Set the deleted_by field before soft deleting
+                $supplier->update(['deleted_by' => Auth::id()]);
+                $supplier->delete();
+                return true;
+            });
         } catch (\Exception $e) {
             throw new \Exception('Error deleting supplier: ' . $e->getMessage());
         }
@@ -118,8 +169,23 @@ class SupplierService
     public function restore(Supplier $supplier)
     {
         try {
-            $supplier->restore();
-            return true;
+            return DB::transaction(function () use ($supplier) {
+                // Clear the deleted_by field when restoring
+                $supplier->restore();
+                $supplier->update(['deleted_by' => null]);
+                return $supplier->load([
+                    'user',
+                    'company',
+                    'branch',
+                    'currency',
+                    'department',
+                    'project',
+                    'donor',
+                    'salesRepresentative',
+                    'creator',
+                    'updater'
+                ]);
+            });
         } catch (\Exception $e) {
             throw new \Exception('Error restoring supplier: ' . $e->getMessage());
         }
@@ -144,14 +210,107 @@ class SupplierService
                 // Generate next supplier number
                 'next_supplier_number' => Supplier::generateSupplierNumber(),
 
-                // Dropdown data (simplified for now - will be enhanced when relationships are ready)
-                'branches' => [],
-                'departments' => [],
-                'projects' => [],
-                'donors' => Donor::forCompany($companyId)->active()->get(['id', 'donor_number', 'donor_name_ar']),
-                'sales_representatives' => SalesRepresentative::forCompany($companyId)->active()->get(['id', 'representative_number', 'first_name', 'last_name']),
-                'currencies' => [],
-                'barcode_types' => [],
+                // Dropdown data with proper relationships
+                'branches' => \Modules\Companies\Models\Branch::where('company_id', $companyId)
+                    ->select('id', 'name', 'code')
+                    ->get()
+                    ->map(function ($branch) {
+                        return [
+                            'id' => $branch->id,
+                            'name' => $branch->name,
+                            'code' => $branch->code,
+                            'display_name' => $branch->code . ' - ' . $branch->name
+                        ];
+                    }),
+
+                'departments' => \Modules\HumanResources\Models\Department::where('company_id', $companyId)
+                    ->select('id', 'name', 'number')
+                    ->get()
+                    ->map(function ($department) {
+                        return [
+                            'id' => $department->id,
+                            'name' => $department->name,
+                            'number' => $department->number,
+                            'display_name' => $department->number . ' - ' . $department->name
+                        ];
+                    }),
+
+                'projects' => \Modules\ProjectsManagment\Models\Project::where('company_id', $companyId)
+                    ->select('id', 'name', 'project_number')
+                    ->get()
+                    ->map(function ($project) {
+                        return [
+                            'id' => $project->id,
+                            'name' => $project->name,
+                            'project_number' => $project->project_number,
+                            'display_name' => $project->project_number . ' - ' . $project->name
+                        ];
+                    }),
+
+                'donors' => Donor::forCompany($companyId)->active()
+                    ->select('id', 'donor_number', 'donor_name_ar', 'donor_name_en')
+                    ->get()
+                    ->map(function ($donor) {
+                        return [
+                            'id' => $donor->id,
+                            'donor_number' => $donor->donor_number,
+                            'donor_name_ar' => $donor->donor_name_ar,
+                            'donor_name_en' => $donor->donor_name_en,
+                            'display_name' => $donor->donor_number . ' - ' . ($donor->donor_name_ar ?? $donor->donor_name_en)
+                        ];
+                    }),
+
+                'sales_representatives' => SalesRepresentative::forCompany($companyId)->active()
+                    ->select('id', 'representative_number', 'first_name', 'last_name')
+                    ->get()
+                    ->map(function ($rep) {
+                        return [
+                            'id' => $rep->id,
+                            'representative_number' => $rep->representative_number,
+                            'first_name' => $rep->first_name,
+                            'last_name' => $rep->last_name,
+                            'full_name' => trim($rep->first_name . ' ' . $rep->last_name),
+                            'display_name' => $rep->representative_number . ' - ' . trim($rep->first_name . ' ' . $rep->last_name)
+                        ];
+                    }),
+
+                'currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
+                    ->select('id', 'code', 'name', 'symbol')
+                    ->get()
+                    ->map(function ($currency) {
+                        return [
+                            'id' => $currency->id,
+                            'code' => $currency->code,
+                            'name' => $currency->name,
+                            'symbol' => $currency->symbol,
+                            'display_name' => $currency->code . ' - ' . $currency->name . ' (' . $currency->symbol . ')'
+                        ];
+                    }),
+
+                'barcode_types' => \Modules\Inventory\Models\BarcodeType::active()
+                    ->select('id', 'code', 'name', 'name_ar')
+                    ->get()
+                    ->map(function ($barcodeType) {
+                        return [
+                            'id' => $barcodeType->id,
+                            'code' => $barcodeType->code,
+                            'name' => $barcodeType->name,
+                            'name_ar' => $barcodeType->name_ar,
+                            'display_name' => $barcodeType->code . ' - ' . $barcodeType->name
+                        ];
+                    }),
+
+                'countries' => \Modules\Companies\Models\Country::select('id', 'name', 'name_en', 'code')
+                    ->get()
+                    ->map(function ($country) {
+                        return [
+                            'id' => $country->id,
+                            'name' => $country->name,
+                            'name_en' => $country->name_en,
+                            'code' => $country->code,
+                            'display_name' => $country->name . ' (' . $country->code . ')'
+                        ];
+                    }),
 
                 // Classification options for dropdown
                 'classification_dropdown' => [
@@ -452,15 +611,34 @@ class SupplierService
                 ->with([
                     'user',
                     'company',
+                    'branch',
+                    'currency',
+                    'department',
+                    'project',
+                    'donor',
+                    'salesRepresentative',
                     'creator',
-                    'updater'
+                    'updater',
+                    'deleter'
                 ])
                 ->where('company_id', $companyId);
 
             // Sorting
             $sortBy = $request->get('sort_by', 'deleted_at');
             $sortOrder = $request->get('sort_order', 'desc');
-            $query->orderBy($sortBy, $sortOrder);
+
+            // Validate sort fields
+            $allowedSortFields = [
+                'id', 'supplier_number', 'supplier_name_ar', 'supplier_name_en', 'supplier_type',
+                'balance', 'last_transaction_date', 'classification', 'status', 'email', 'phone',
+                'mobile', 'created_at', 'updated_at', 'deleted_at'
+            ];
+
+            if (in_array($sortBy, $allowedSortFields)) {
+                $query->orderBy($sortBy, $sortOrder);
+            } else {
+                $query->orderBy('deleted_at', 'desc');
+            }
 
             // Pagination
             $perPage = $request->get('per_page', 15);
