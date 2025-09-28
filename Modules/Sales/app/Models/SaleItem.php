@@ -62,6 +62,22 @@ class SaleItem extends Model
     }
 
     /**
+     * Get the account for this service item
+     */
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\FinancialAccounts\Models\Account::class, 'account_id');
+    }
+
+    /**
+     * Get the tax rate for this item
+     */
+    public function taxRate(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\FinancialAccounts\Models\TaxRate::class, 'tax_rate_id');
+    }
+
+    /**
      * Calculate total amount for this item
      */
     public function calculateTotal(): float
