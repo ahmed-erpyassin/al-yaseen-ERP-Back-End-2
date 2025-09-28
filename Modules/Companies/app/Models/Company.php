@@ -2,6 +2,8 @@
 
 namespace Modules\Companies\Models;
 
+use App\Traits\HasFileAttributes;
+use App\Traits\HasUserStamps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +16,8 @@ class Company extends Model
 {
     use SoftDeletes;
     use HasFactory;
+    use HasFileAttributes;
+    use HasUserStamps;
 
     protected $fillable = [
         'user_id',
@@ -36,6 +40,11 @@ class Company extends Model
         'status',
         'created_by',
         'updated_by',
+    ];
+
+    // مهم جدًا! لو ناقصة رح يرجع null
+    protected array $fileAttributes = [
+        'logo' => 'companies/logos',
     ];
 
     public function scopeData($builder)

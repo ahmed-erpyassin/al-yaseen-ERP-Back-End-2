@@ -2,91 +2,86 @@
 
 namespace Modules\Suppliers\app\Services;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\Suppliers\Http\Requests\SupplierRequest;
 use Modules\Suppliers\Models\Supplier;
 
 class SupplierService
 {
-
-    public function index($request)
+    public function createSupplier(array $data, $user)
     {
-        try {
+        $data['user_id'] = $user->id;
+        $data['company_id'] = $user->company?->id;
+        $data['branch_id'] = $user->branch?->id;
+        $data['created_by'] = $user->id;
+        $data['updated_by'] = $user->id;
 
-            $supplier_search = $request->get('supplier_search', null);
-            $sortBy = $request->get('sort_by', 'created_at');
-            $sortOrder = $request->get('sort_order', 'desc');
+        $supplier = Supplier::create($data);
 
-            return Supplier::query()
-                ->when($supplier_search, function ($query, $supplier_search) {
-                    $query->where('name', 'like', '%' . $supplier_search . '%');
-                })
-                ->orderBy($sortBy, $sortOrder)
-                ->get();
-        } catch (\Exception $e) {
-            throw new \Exception('Error fetching outgoing offers: ' . $e->getMessage());
-        }
+        return $supplier;
     }
 
-    public function store(SupplierRequest $request)
+    public function getSuppliers($user)
     {
-
-        try {
-            $companyId = $request->user()->company_id;
-            $userId = $request->user()->id;
-
-            $data = [
-                'company_id' => $companyId,
-                'user_id'    => $userId,
-                'status'     => 'active',
-            ] + $request->validated();
-
-            $supplier = Supplier::create($data);
-
-            return $supplier;
-        } catch (\Exception $e) {
-            throw new \Exception('Error creating outgoing offer: ' . $e->getMessage());
-        }
-    }
-    public function show(Supplier $supplier)
-    {
-        try {
-            return $supplier;
-        } catch (\Exception $e) {
-            throw new \Exception('Error fetching supplier: ' . $e->getMessage());
-        }
-    }
-    public function update(SupplierRequest $request, Supplier $supplier)
-    {
-        try {
-
-            $data = $request->validated();
-
-            $supplier->update($data);
-
-            return $supplier;
-        } catch (\Exception $e) {
-            throw new \Exception('Error updating supplier: ' . $e->getMessage());
-        }
+        return Supplier::with(['user', 'company', 'branch', 'currency', 'employee', 'country', 'region', 'city'])->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->get();
     }
 
-    public function destroy(Supplier $supplier)
+    public function getSupplierById($id)
     {
-        try {
+        $user = Auth::user();
+        return Supplier::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->firstOrFail();
+    }
+
+    public function updateSupplier($id, array $data)
+    {
+        $user = Auth::user();
+        $supplier = Supplier::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->firstOrFail();
+        $supplier->update($data);
+        return $supplier;
+    }
+
+    public function deleteSupplier($id, $userId)
+    {
+        $user = Auth::user();
+
+        $supplier = Supplier::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->firstOrFail();
+        $supplier->deleted_by = $userId;
+        $supplier->save();
+        $supplier->delete();
+    }
+
+    public function restoreSupplier($id)
+    {
+        $user = Auth::user();
+        $supplier = Supplier::withTrashed()
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->findOrFail($id);
+        $supplier->restore();
+    }
+
+    public function bulkDelete(array $ids, $userId)
+    {
+        $user = Auth::user();
+        $suppliers = Supplier::whereIn('id', $ids)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->get();
+        foreach ($suppliers as $supplier) {
+            $supplier->deleted_by = $userId;
+            $supplier->save();
             $supplier->delete();
-            return true;
-        } catch (\Exception $e) {
-            throw new \Exception('Error deleting supplier: ' . $e->getMessage());
-        }
-    }
-
-
-    public function restore(Supplier $supplier)
-    {
-        try {
-            $supplier->restore();
-            return true;
-        } catch (\Exception $e) {
-            throw new \Exception('Error restoring supplier: ' . $e->getMessage());
         }
     }
 }

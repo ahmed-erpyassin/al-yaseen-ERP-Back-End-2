@@ -13,37 +13,39 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('branch_id');
-            $table->unsignedBigInteger('currency_id');
-            $table->unsignedBigInteger('employee_id');
-            $table->unsignedBigInteger('country_id');
-            $table->unsignedBigInteger('region_id');
-            $table->unsignedBigInteger('city_id');
-            $table->string('customer_number');
-            $table->string('company_name');
+
+            // علاقات مفتاحية محتملة
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('company_id')->constrained('companies')->onDelete('cascade');
+            $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('set null');
+            $table->foreignId('currency_id')->nullable()->constrained('currencies')->onDelete('set null');
+            $table->foreignId('employee_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('country_id')->nullable()->constrained('countries')->onDelete('set null');
+            $table->foreignId('region_id')->nullable()->constrained('regions')->onDelete('set null');
+            $table->foreignId('city_id')->nullable()->constrained('cities')->onDelete('set null');
+
+            // بيانات العميل
             $table->string('first_name');
-            $table->string('second_name');
-            $table->string('contact_name');
-            $table->string('email');
-            $table->string('phone');
-            $table->string('mobile');
-            $table->string('address_one');
-            $table->string('address_two');
-            $table->string('postal_code');
-            $table->string('licensed_operator');
-            $table->string('tax_number');
+            $table->string('second_name')->nullable();
+            $table->string('contact_name')->nullable();
+            $table->string('email')->nullable()->unique();
+            $table->string('phone')->nullable();
+            $table->string('mobile')->nullable();
+            $table->string('address_one')->nullable();
+            $table->string('address_two')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('tax_number')->nullable();
             $table->text('notes')->nullable();
-            $table->string('code');
-            $table->string('invoice_type');
-            $table->string('category');
+
+            // إدارة المستخدمين
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
+
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->softDeletes();
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

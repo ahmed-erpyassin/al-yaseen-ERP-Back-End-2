@@ -2,149 +2,85 @@
 
 namespace Modules\Customers\app\Services;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Modules\Customers\Http\Requests\CustomerRequest;
 use Modules\Customers\Models\Customer;
 
 class CustomerService
 {
-    public function index($request)
+    public function createCustomer(array $data, $user)
     {
-        try {
+        $data['user_id'] = $user->id;
+        $data['company_id'] = $user->company?->id;
+        $data['branch_id'] = $user->branch?->id;
+        $data['created_by'] = $user->id;
+        $data['updated_by'] = $user->id;
 
-            $customerSearch = $request->get('customerSearch', null);
-            $sortBy = $request->get('sort_by', 'created_at');
-            $sortOrder = $request->get('sort_order', 'desc');
+        $customer = Customer::create($data);
 
-            return Customer::query()
-                ->when($customerSearch, function ($query, $customerSearch) {
-                    $query->where(function ($q) use ($customerSearch) {
-                        $q->where('first_name', 'like', '%' . $customerSearch . '%')
-                          ->orWhere('second_name', 'like', '%' . $customerSearch . '%')
-                          ->orWhere('company_name', 'like', '%' . $customerSearch . '%')
-                          ->orWhere('email', 'like', '%' . $customerSearch . '%')
-                          ->orWhere('customer_number', 'like', '%' . $customerSearch . '%');
-                    });
-                })
-                ->orderBy($sortBy, $sortOrder)
-                ->get();
-        } catch (\Exception $e) {
-            throw new \Exception('Error fetching customers: ' . $e->getMessage());
-        }
+        return $customer;
     }
 
-    public function store(CustomerRequest $request)
+    public function getCustomers($user)
     {
-
-        try {
-            $companyId = $request->user()->company_id ?? $request->company_id;
-            $userId = $request->user()->id;
-
-            $data = [
-                'company_id' => $companyId,
-                'user_id'    => $userId,
-                'status'     => 'active',
-            ] + $request->validated();
-
-            $customer = Customer::create($data);
-
-            return $customer;
-        } catch (\Exception $e) {
-            throw new \Exception('Error creating customer: ' . $e->getMessage());
-        }
-    }
-    public function show(Customer $customer)
-    {
-        try {
-            return $customer;
-        } catch (\Exception $e) {
-            throw new \Exception('Error fetching customer: ' . $e->getMessage());
-        }
-    }
-    public function update(CustomerRequest $request, Customer $customer)
-    {
-        try {
-            $data = $request->validated();
-            // Add updated_by information
-            $data['updated_by'] = $request->user()->id;
-
-            $customer->update($data);
-
-            return $customer;
-        } catch (\Exception $e) {
-            throw new \Exception('Error updating customer: ' . $e->getMessage());
-        }
+        return Customer::where('user_id', $user->id)->where('company_id', $user->company?->id)->get();
     }
 
-    public function destroy(Customer $customer, $userId = null)
+    public function getCustomerById($id)
     {
-        try {
-            // Add deleted_by information before soft delete
-            $customer->update(['deleted_by' => $userId]);
+        $user = Auth::user();
+        return Customer::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->firstOrFail();
+    }
+
+    public function updateCustomer($id, array $data)
+    {
+        $user = Auth::user();
+        $customer = Customer::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->firstOrFail();
+        $customer->update($data);
+        return $customer;
+    }
+
+    public function deleteCustomer($id, $userId)
+    {
+        $user = Auth::user();
+
+        $customer = Customer::where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->firstOrFail();
+        $customer->deleted_by = $userId;
+        $customer->save();
+        $customer->delete();
+    }
+
+    public function restoreCustomer($id)
+    {
+        $user = Auth::user();
+        $customer = Customer::withTrashed()->where('id', $id)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->firstOrFail();
+        $customer->restore();
+    }
+
+    public function bulkDelete(array $ids, $userId)
+    {
+        $user = Auth::user();
+        $customers = Customer::whereIn('id', $ids)
+            ->where('user_id', $user->id)
+            ->where('company_id', $user->company?->id)
+            ->get();
+        foreach ($customers as $customer) {
+            $customer->deleted_by = $userId;
+            $customer->save();
             $customer->delete();
-            
-            return true;
-        } catch (\Exception $e) {
-            throw new \Exception('Error deleting customer: ' . $e->getMessage());
-        }
-    }
-
-
-    public function restore(Customer $customer)
-    {
-        try {
-            $customer->restore();
-            return true;
-        } catch (\Exception $e) {
-            throw new \Exception('Error restoring customer: ' . $e->getMessage());
-        }
-    }
-
-    public function findById($id)
-    {
-        try {
-            return Customer::findOrFail($id);
-        } catch (\Exception $e) {
-            throw new \Exception('Customer not found: ' . $e->getMessage());
-        }
-    }
-
-    public function getCustomersWithPagination($request, $perPage = 10)
-    {
-        try {
-            $customerSearch = $request->get('customerSearch', null);
-            $sortBy = $request->get('sort_by', 'created_at');
-            $sortOrder = $request->get('sort_order', 'desc');
-
-            return Customer::query()
-                ->when($customerSearch, function ($query, $customerSearch) {
-                    $query->where(function ($q) use ($customerSearch) {
-                        $q->where('first_name', 'like', '%' . $customerSearch . '%')
-                          ->orWhere('second_name', 'like', '%' . $customerSearch . '%')
-                          ->orWhere('company_name', 'like', '%' . $customerSearch . '%')
-                          ->orWhere('email', 'like', '%' . $customerSearch . '%')
-                          ->orWhere('customer_number', 'like', '%' . $customerSearch . '%');
-                    });
-                })
-                ->orderBy($sortBy, $sortOrder)
-                ->paginate($perPage);
-        } catch (\Exception $e) {
-            throw new \Exception('Error fetching customers with pagination: ' . $e->getMessage());
-        }
-    }
-
-    public function bulkDelete($customerIds, $userId = null)
-    {
-        try {
-            $customers = Customer::whereIn('id', $customerIds)->get();
-            
-            foreach ($customers as $customer) {
-                $customer->update(['deleted_by' => $userId]);
-                $customer->delete();
-            }
-            
-            return true;
-        } catch (\Exception $e) {
-            throw new \Exception('Error bulk deleting customers: ' . $e->getMessage());
         }
     }
 }
