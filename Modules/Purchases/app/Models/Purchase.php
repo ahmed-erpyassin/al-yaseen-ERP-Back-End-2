@@ -29,6 +29,8 @@ class Purchase extends Model
         // Quotation Information
         'quotation_number',
         'invoice_number',
+        'purchase_invoice_number',
+        'entry_number',
         'date',
         'time',
         'due_date',
@@ -41,6 +43,9 @@ class Purchase extends Model
 
         // Supplier Information
         'supplier_name',
+        'supplier_number',
+        'supplier_email',
+        'supplier_mobile',
         'licensed_operator',
 
         // Ledger System

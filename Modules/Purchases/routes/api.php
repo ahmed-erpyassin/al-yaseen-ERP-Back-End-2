@@ -61,8 +61,28 @@ Route::middleware(['auth:sanctum'])->prefix('v1/purchase')->group(function () {
         Route::get('/search/items', [IncomingShipmentController::class, 'searchItems'])->name('incoming-shipments.search-items');
     });
     Route::prefix('invoices')->group(function () {
-        Route::get('/', [InvoiceController::class, 'index']);
-        Route::post('/', [InvoiceController::class, 'store']);
+        // Basic CRUD operations
+        Route::get('/', [InvoiceController::class, 'index'])->name('purchase-invoices.index');
+        Route::post('/', [InvoiceController::class, 'store'])->name('purchase-invoices.store');
+        Route::get('/{id}', [InvoiceController::class, 'show'])->name('purchase-invoices.show');
+        Route::put('/{id}', [InvoiceController::class, 'update'])->name('purchase-invoices.update');
+        Route::delete('/{id}', [InvoiceController::class, 'destroy'])->name('purchase-invoices.destroy');
+
+        // Advanced search and filtering
+        Route::get('/search/advanced', [InvoiceController::class, 'advancedSearch'])->name('purchase-invoices.advanced-search');
+        Route::get('/sortable-fields', [InvoiceController::class, 'getSortableFields'])->name('purchase-invoices.sortable-fields');
+
+        // Form data endpoints
+        Route::get('/form-data/get-form-data', [InvoiceController::class, 'getFormData'])->name('purchase-invoices.get-form-data');
+        Route::get('/form-data/get-search-form-data', [InvoiceController::class, 'getSearchFormData'])->name('purchase-invoices.get-search-form-data');
+        Route::get('/form-data/get-sortable-fields', [InvoiceController::class, 'getSortableFields'])->name('purchase-invoices.get-sortable-fields');
+
+        // Search endpoints
+        Route::get('/search/suppliers', [InvoiceController::class, 'searchSuppliers'])->name('purchase-invoices.search-suppliers');
+        Route::get('/search/items', [InvoiceController::class, 'searchItems'])->name('purchase-invoices.search-items');
+
+        // Utility endpoints
+        Route::get('/currency/rate', [InvoiceController::class, 'getCurrencyRate'])->name('purchase-invoices.get-currency-rate');
     });
     Route::prefix('expenses')->group(function () {
         Route::get('/', [ExpenseController::class, 'index']);
