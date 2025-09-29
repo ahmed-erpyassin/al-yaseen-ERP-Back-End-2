@@ -16,11 +16,14 @@ class PurchaseItem extends Model
     protected $fillable = [
         'purchase_id',
         'serial_number',
+        'shipment_number',
         'item_id',
         'item_number',
         'item_name',
         'unit_id',
         'unit_name',
+        'warehouse_number',
+        'warehouse_id',
         'description',
         'quantity',
         'unit_price',
@@ -80,18 +83,26 @@ class PurchaseItem extends Model
     }
 
     /**
+     * Get the warehouse details
+     */
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Inventory\Models\Warehouse::class, 'warehouse_id');
+    }
+
+    /**
      * Calculate net unit price after discount
      */
     public function calculateNetUnitPrice(): float
     {
         $discountAmount = 0;
-        
+
         if ($this->discount_percentage > 0) {
             $discountAmount = ($this->unit_price * $this->discount_percentage) / 100;
         } elseif ($this->discount_amount > 0) {
             $discountAmount = $this->discount_amount;
         }
-        
+
         return $this->unit_price - $discountAmount;
     }
 
@@ -111,7 +122,7 @@ class PurchaseItem extends Model
         if ($this->tax_rate > 0) {
             return ($this->calculateLineTotalBeforeTax() * $this->tax_rate) / 100;
         }
-        
+
         return 0;
     }
 
