@@ -14,8 +14,26 @@ Route::middleware(['auth:sanctum'])->prefix('v1/purchase')->group(function () {
         Route::post('/', [IncomingOfferController::class, 'store']);
     });
     Route::prefix('outgoing-orders')->group(function () {
+        // CRUD operations
         Route::get('/', [OutgoingOrderController::class, 'index']);
         Route::post('/', [OutgoingOrderController::class, 'store']);
+        Route::get('/{id}', [OutgoingOrderController::class, 'show']);
+        Route::put('/{id}', [OutgoingOrderController::class, 'update']);
+        Route::delete('/{id}', [OutgoingOrderController::class, 'destroy']);
+
+        // Soft delete management
+        Route::get('/deleted/list', [OutgoingOrderController::class, 'getDeleted']);
+        Route::post('/{id}/restore', [OutgoingOrderController::class, 'restore']);
+
+        // Helper endpoints
+        Route::get('/helpers/customers', [OutgoingOrderController::class, 'getCustomers']);
+        Route::get('/helpers/items', [OutgoingOrderController::class, 'getItems']);
+        Route::get('/helpers/currencies', [OutgoingOrderController::class, 'getCurrencies']);
+        Route::get('/helpers/tax-rates', [OutgoingOrderController::class, 'getTaxRates']);
+        Route::get('/helpers/live-exchange-rate', [OutgoingOrderController::class, 'getLiveExchangeRate']);
+        Route::get('/helpers/form-data', [OutgoingOrderController::class, 'getFormData']);
+        Route::get('/helpers/search-form-data', [OutgoingOrderController::class, 'getSearchFormData']);
+        Route::get('/helpers/sortable-fields', [OutgoingOrderController::class, 'getSortableFields']);
     });
     Route::prefix('incoming-shipments')->group(function () {
         Route::get('/', [IncomingShipmentController::class, 'index']);
