@@ -37,8 +37,28 @@ Route::middleware(['auth:sanctum'])->prefix('v1/purchase')->group(function () {
         Route::post('/', [OutgoingOrderController::class, 'store']);
     });
     Route::prefix('incoming-shipments')->group(function () {
-        Route::get('/', [IncomingShipmentController::class, 'index']);
-        Route::post('/', [IncomingShipmentController::class, 'store']);
+        // Basic CRUD operations
+        Route::get('/', [IncomingShipmentController::class, 'index'])->name('incoming-shipments.index');
+        Route::post('/', [IncomingShipmentController::class, 'store'])->name('incoming-shipments.store');
+        Route::get('/{id}', [IncomingShipmentController::class, 'show'])->name('incoming-shipments.show');
+        Route::put('/{id}', [IncomingShipmentController::class, 'update'])->name('incoming-shipments.update');
+        Route::delete('/{id}', [IncomingShipmentController::class, 'destroy'])->name('incoming-shipments.destroy');
+
+        // Advanced search and filtering
+        Route::get('/search/advanced', [IncomingShipmentController::class, 'search'])->name('incoming-shipments.search');
+        Route::get('/sortable-fields', [IncomingShipmentController::class, 'getSortableFields'])->name('incoming-shipments.sortable-fields');
+        Route::get('/sorting-options', [IncomingShipmentController::class, 'getSortingOptions'])->name('incoming-shipments.sorting-options');
+
+        // Soft delete management
+        Route::get('/trashed/list', [IncomingShipmentController::class, 'getTrashed'])->name('incoming-shipments.trashed');
+        Route::post('/{id}/restore', [IncomingShipmentController::class, 'restore'])->name('incoming-shipments.restore');
+
+        // Form data endpoints
+        Route::get('/form-data/get-form-data', [IncomingShipmentController::class, 'getFormData'])->name('incoming-shipments.get-form-data');
+
+        // Search endpoints
+        Route::get('/search/customers', [IncomingShipmentController::class, 'searchCustomers'])->name('incoming-shipments.search-customers');
+        Route::get('/search/items', [IncomingShipmentController::class, 'searchItems'])->name('incoming-shipments.search-items');
     });
     Route::prefix('invoices')->group(function () {
         Route::get('/', [InvoiceController::class, 'index']);

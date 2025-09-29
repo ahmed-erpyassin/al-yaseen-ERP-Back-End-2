@@ -260,9 +260,17 @@ class Purchase extends Model
      */
     public static function generateLedgerCode($companyId): array
     {
-        // Find the current active ledger
+        return self::generateLedgerInfo($companyId, 'quotation');
+    }
+
+    /**
+     * Generate ledger information for any purchase type
+     */
+    public static function generateLedgerInfo($companyId, $type): array
+    {
+        // Find the current active ledger for this type
         $currentLedger = self::where('company_id', $companyId)
-            ->where('type', 'quotation')
+            ->where('type', $type)
             ->whereNotNull('ledger_code')
             ->orderBy('ledger_number', 'desc')
             ->first();
@@ -270,7 +278,8 @@ class Purchase extends Model
         if (!$currentLedger || $currentLedger->ledger_invoice_count >= 50) {
             // Create new ledger
             $newLedgerNumber = $currentLedger ? $currentLedger->ledger_number + 1 : 1;
-            $ledgerCode = 'LED-' . str_pad($newLedgerNumber, 3, '0', STR_PAD_LEFT);
+            $ledgerPrefix = self::getLedgerPrefix($type);
+            $ledgerCode = $ledgerPrefix . '-' . str_pad($newLedgerNumber, 3, '0', STR_PAD_LEFT);
 
             return [
                 'ledger_code' => $ledgerCode,
@@ -285,6 +294,23 @@ class Purchase extends Model
                 'ledger_invoice_count' => $currentLedger->ledger_invoice_count + 1
             ];
         }
+    }
+
+    /**
+     * Get ledger prefix based on purchase type
+     */
+    private static function getLedgerPrefix($type): string
+    {
+        $prefixes = [
+            'quotation' => 'LED',
+            'incoming_shipment' => 'SHIP-LED',
+            'outgoing_order' => 'ORD-LED',
+            'invoice' => 'INV-LED',
+            'service' => 'SRV-LED',
+            'return_invoice' => 'RET-LED',
+        ];
+
+        return $prefixes[$type] ?? 'LED';
     }
 
     /**
