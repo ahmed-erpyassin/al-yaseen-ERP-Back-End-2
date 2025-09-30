@@ -40,6 +40,14 @@ class Purchase extends Model
         'invoice_number',
         'outgoing_order_number',
         'expense_number',
+        'purchase_reference_invoice_number',
+        'ledger_code',
+        'affects_inventory',
+        'is_tax_applied_to_currency_rate',
+        'currency_rate_with_tax',
+        'ledger_invoice_count',
+        'journal_code',
+        'journal_invoice_count',
         'date',
         'time',
         'due_date',
@@ -121,6 +129,9 @@ class Purchase extends Model
         'grand_total' => 'decimal:2',
         'is_tax_inclusive' => 'boolean',
         'is_tax_applied_to_currency' => 'boolean',
+        'is_tax_applied_to_currency_rate' => 'boolean',
+        'affects_inventory' => 'boolean',
+        'ledger_invoice_count' => 'integer',
     ];
 
     // Constants for purchase types
@@ -132,6 +143,7 @@ class Purchase extends Model
         'invoice' => 'Invoice',
         'expense' => 'Expense',
         'return_invoice' => 'Return Invoice',
+        'purchase_reference_invoice' => 'Purchase Reference Invoice',
     ];
 
     // Constants for status
@@ -302,6 +314,25 @@ class Purchase extends Model
     }
 
     /**
+     * Generate purchase reference invoice number
+     */
+    public static function generatePurchaseReferenceInvoiceNumber(): string
+    {
+        $lastInvoice = self::where('type', 'purchase_reference_invoice')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastInvoice || !$lastInvoice->purchase_reference_invoice_number) {
+            return 'PRI-0001';
+        }
+
+        $lastNumber = (int) substr($lastInvoice->purchase_reference_invoice_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'PRI-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * Generate journal code and invoice number for outgoing orders
      */
     public static function generateJournalAndInvoiceNumber($companyId): array
@@ -447,6 +478,14 @@ class Purchase extends Model
     public function scopeQuotations($query)
     {
         return $query->where('type', 'quotation');
+    }
+
+    /**
+     * Scope for purchase reference invoices only
+     */
+    public function scopePurchaseReferenceInvoices($query)
+    {
+        return $query->where('type', 'purchase_reference_invoice');
     }
 
     /**
