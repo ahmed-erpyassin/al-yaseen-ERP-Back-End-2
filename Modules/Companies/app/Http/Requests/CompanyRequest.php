@@ -15,7 +15,7 @@ class CompanyRequest extends FormRequest
             'title' => 'required|string|max:255',
             'commercial_registeration_number' => 'required|string|max:100',
             'address' => 'nullable|string|max:255',
-            'logo' => 'nullable|string|max:255',
+            'logo' => 'nullable|max:1024|mimes:jpg,jpeg,png,gif',
             'email' => 'required|email|max:150',
             'landline' => 'nullable|string|max:50',
             'mobile' => 'nullable|string|max:50',

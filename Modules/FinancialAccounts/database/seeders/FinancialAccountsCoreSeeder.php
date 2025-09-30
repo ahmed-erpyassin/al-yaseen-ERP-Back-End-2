@@ -8,7 +8,6 @@ use Modules\FinancialAccounts\Models\Account;
 use Modules\FinancialAccounts\Models\AccountGroup;
 use Modules\FinancialAccounts\Models\Currency;
 use Modules\FinancialAccounts\Models\ExchangeRate;
-use Modules\FinancialAccounts\Models\FiscalYear;
 use Modules\FinancialAccounts\Models\TaxRate;
 
 class FinancialAccountsCoreSeeder extends Seeder
@@ -18,40 +17,6 @@ class FinancialAccountsCoreSeeder extends Seeder
      */
     public function run(): void
     {
-
-        // ===== FISCAL YEAR =====
-        $fiscalYear = FiscalYear::firstOrCreate(
-            ['name' => 'FY ' . now()->year],
-            [
-                'company_id' => 1,
-                'user_id' => 1,
-                'start_date' => Carbon::create(now()->year, 1, 1),
-                'end_date' => Carbon::create(now()->year, 12, 31),
-                'status' => 'open',
-            ]
-        );
-
-        // ===== CURRENCIES =====
-        $currencies = [
-            ['code' => 'USD', 'name' => 'US Dollar', 'symbol' => '$', 'decimal_places' => 2],
-            ['code' => 'EUR', 'name' => 'Euro', 'symbol' => '€', 'decimal_places' => 2],
-            ['code' => 'GBP', 'name' => 'British Pound', 'symbol' => '£', 'decimal_places' => 2],
-            ['code' => 'JPY', 'name' => 'Japanese Yen', 'symbol' => '¥', 'decimal_places' => 0],
-            ['code' => 'SAR', 'name' => 'Saudi Riyal', 'symbol' => '﷼', 'decimal_places' => 2],
-            ['code' => 'AED', 'name' => 'UAE Dirham', 'symbol' => 'د.إ', 'decimal_places' => 2],
-            ['code' => 'ILS', 'name' => 'Israeli Shekel', 'symbol' => '₪', 'decimal_places' => 2],
-        ];
-
-        foreach ($currencies as $c) {
-            Currency::firstOrCreate(
-                ['code' => $c['code']],
-                array_merge($c, [
-                    'company_id' => 1,
-                    'user_id' => 1,
-                ])
-            );
-        }
-
         // ===== EXCHANGE RATES =====
         $usd = Currency::where('code', 'USD')->first();
         $eur = Currency::where('code', 'EUR')->first();

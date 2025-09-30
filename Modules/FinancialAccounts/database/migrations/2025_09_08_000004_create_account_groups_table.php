@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('currency_id')->nullable()->constrained('currencies')->nullOnDelete();
             $table->foreignId('parent_id')->nullable()->constrained('account_groups')->nullOnDelete();
 
-            $table->string('code', 50)->unique();
+            $table->string('code', 50);
             $table->string('name', 150);
             $table->enum('type', ['asset', 'liability', 'equity', 'revenue', 'expense']);
 

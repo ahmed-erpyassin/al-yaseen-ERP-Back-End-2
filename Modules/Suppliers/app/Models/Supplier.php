@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\User;
-use App\Models\Company;
+use Modules\Users\Models\User;
+use Modules\Companies\Models\Company;
 
 class Supplier extends Model
 {
@@ -126,7 +126,93 @@ class Supplier extends Model
         return $this->belongsTo(Company::class);
     }
 
-    // Note: Additional relationships will be added when the related models are properly set up
+    /**
+     * Get the branch that owns the supplier.
+     */
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Companies\Models\Branch::class);
+    }
+
+    /**
+     * Get the currency for the supplier.
+     */
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\FinancialAccounts\Models\Currency::class);
+    }
+
+    /**
+     * Get the department for the supplier.
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\HumanResources\Models\Department::class);
+    }
+
+    /**
+     * Get the project for the supplier.
+     */
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\ProjectsManagment\Models\Project::class);
+    }
+
+    /**
+     * Get the donor for the supplier.
+     */
+    public function donor(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Suppliers\Models\Donor::class);
+    }
+
+    /**
+     * Get the sales representative for the supplier.
+     */
+    public function salesRepresentative(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Suppliers\Models\SalesRepresentative::class, 'sales_representative_id');
+    }
+
+    /**
+     * Get the country for the supplier.
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Companies\Models\Country::class);
+    }
+
+    /**
+     * Get the region for the supplier.
+     */
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Companies\Models\Region::class);
+    }
+
+    /**
+     * Get the city for the supplier.
+     */
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Companies\Models\City::class);
+    }
+
+    /**
+     * Get the barcode type for the supplier.
+     */
+    public function barcodeType(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Inventory\Models\BarcodeType::class);
+    }
+
+    /**
+     * Get the employee for the supplier.
+     */
+    public function employee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'employee_id');
+    }
 
     /**
      * Get the user who created the supplier.

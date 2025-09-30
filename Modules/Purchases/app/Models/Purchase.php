@@ -13,6 +13,7 @@ use Modules\Companies\Models\Branch;
 use Modules\Customers\Models\Customer;
 use Modules\Suppliers\Models\Supplier;
 use Modules\FinancialAccounts\Models\Currency;
+use Modules\FinancialAccounts\Models\TaxRate;
 use Modules\Billing\Models\Journal;
 use Illuminate\Support\Facades\DB;
 
@@ -23,6 +24,7 @@ class Purchase extends Model
     protected $table = 'purchases';
 
     protected $fillable = [
+        // Basic Information
         'user_id',
         'company_id',
         'branch_id',
@@ -32,19 +34,37 @@ class Purchase extends Model
         'customer_id',
         'journal_id',
         'journal_number',
+
+        // Quotation Information
+        'quotation_number',
+        'invoice_number',
         'outgoing_order_number',
+        'date',
+        'time',
+        'due_date',
+
+        // Customer Information
         'customer_number',
         'customer_name',
         'customer_email',
         'customer_mobile',
+
+        // Supplier Information
+        'supplier_name',
         'licensed_operator',
-        'type',
-        'status',
-        'date',
-        'time',
-        'due_date',
+
+        // Ledger System
+        'ledger_code',
+        'ledger_number',
+        'ledger_invoice_count',
         'journal_code',
         'journal_invoice_count',
+
+        // Type and Status
+        'type',
+        'status',
+
+        // Financial Information
         'cash_paid',
         'checks_paid',
         'allowed_discount',
@@ -56,12 +76,22 @@ class Purchase extends Model
         'is_tax_inclusive',
         'remaining_balance',
         'exchange_rate',
+        'currency_rate',
+        'currency_rate_with_tax',
+        'tax_rate_id',
+        'is_tax_applied_to_currency',
         'total_foreign',
         'total_local',
         'total_amount',
+        'grand_total',
+
+        // Additional Information
         'notes',
+
+        // Audit Fields
         'created_by',
         'updated_by',
+        'deleted_by',
     ];
 
     protected $casts = [
@@ -70,6 +100,7 @@ class Purchase extends Model
         'due_date' => 'date',
         'journal_number' => 'integer',
         'journal_invoice_count' => 'integer',
+        'ledger_invoice_count' => 'integer',
         'cash_paid' => 'decimal:2',
         'checks_paid' => 'decimal:2',
         'allowed_discount' => 'decimal:2',
@@ -80,10 +111,14 @@ class Purchase extends Model
         'tax_amount' => 'decimal:2',
         'remaining_balance' => 'decimal:2',
         'exchange_rate' => 'decimal:4',
+        'currency_rate' => 'decimal:4',
+        'currency_rate_with_tax' => 'decimal:4',
         'total_foreign' => 'decimal:4',
         'total_local' => 'decimal:4',
         'total_amount' => 'decimal:4',
+        'grand_total' => 'decimal:2',
         'is_tax_inclusive' => 'boolean',
+        'is_tax_applied_to_currency' => 'boolean',
     ];
 
     // Constants for purchase types
@@ -109,71 +144,79 @@ class Purchase extends Model
     const INVOICES_PER_JOURNAL = 50;
 
     /**
-     * Get the user that owns the purchase.
+     * Get the user who created the purchase
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
-     * Get the company that owns the purchase.
+     * Get the company that owns the purchase
      */
     public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     /**
-     * Get the branch that owns the purchase.
+     * Get the branch for the purchase
      */
     public function branch(): BelongsTo
     {
-        return $this->belongsTo(Branch::class);
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
     /**
-     * Get the currency for this purchase.
+     * Get the currency for the purchase
      */
     public function currency(): BelongsTo
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     /**
-     * Get the supplier for this purchase.
+     * Get the supplier for the purchase
      */
     public function supplier(): BelongsTo
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
     /**
-     * Get the customer for this purchase (for outgoing orders).
+     * Get the customer for the purchase (for outgoing orders and quotations)
      */
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     /**
-     * Get the journal for this purchase.
+     * Get the journal for this purchase
      */
     public function journal(): BelongsTo
     {
-        return $this->belongsTo(Journal::class);
+        return $this->belongsTo(Journal::class, 'journal_id');
     }
 
     /**
-     * Get the items for this purchase.
+     * Get the tax rate for currency conversion
+     */
+    public function taxRate(): BelongsTo
+    {
+        return $this->belongsTo(TaxRate::class, 'tax_rate_id');
+    }
+
+    /**
+     * Get the purchase items
      */
     public function items(): HasMany
     {
-        return $this->hasMany(PurchaseItem::class);
+        return $this->hasMany(PurchaseItem::class, 'purchase_id');
     }
 
     /**
-     * Get the user who created the purchase.
+     * Get the user who created the record
      */
     public function creator(): BelongsTo
     {
@@ -181,7 +224,7 @@ class Purchase extends Model
     }
 
     /**
-     * Get the user who last updated the purchase.
+     * Get the user who last updated the record
      */
     public function updater(): BelongsTo
     {
@@ -189,7 +232,15 @@ class Purchase extends Model
     }
 
     /**
-     * Generate the next sequential outgoing order number.
+     * Get the user who deleted the record
+     */
+    public function deleter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'deleted_by');
+    }
+
+    /**
+     * Generate the next sequential outgoing order number
      */
     public static function generateOutgoingOrderNumber(): string
     {
@@ -206,6 +257,26 @@ class Purchase extends Model
         $nextNumber = $lastNumber + 1;
 
         return 'OUT-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Generate the next sequential quotation number
+     */
+    public static function generateQuotationNumber(): string
+    {
+        $lastPurchase = self::where('type', 'quotation')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastPurchase || !$lastPurchase->quotation_number) {
+            return 'QUO-0001';
+        }
+
+        // Extract number from last quotation number (assuming format QUO-XXXX)
+        $lastNumber = (int) substr($lastPurchase->quotation_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'QUO-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -229,6 +300,38 @@ class Purchase extends Model
                 'journal_number' => self::getJournalNumber($companyId)
             ];
         });
+    }
+
+    /**
+     * Generate or get ledger code with invoice counting system
+     */
+    public static function generateLedgerCode($companyId): array
+    {
+        // Find the current active ledger
+        $currentLedger = self::where('company_id', $companyId)
+            ->where('type', 'quotation')
+            ->whereNotNull('ledger_code')
+            ->orderBy('ledger_number', 'desc')
+            ->first();
+
+        if (!$currentLedger || $currentLedger->ledger_invoice_count >= 50) {
+            // Create new ledger
+            $newLedgerNumber = $currentLedger ? $currentLedger->ledger_number + 1 : 1;
+            $ledgerCode = 'LED-' . str_pad($newLedgerNumber, 3, '0', STR_PAD_LEFT);
+
+            return [
+                'ledger_code' => $ledgerCode,
+                'ledger_number' => $newLedgerNumber,
+                'ledger_invoice_count' => 1
+            ];
+        } else {
+            // Use existing ledger and increment count
+            return [
+                'ledger_code' => $currentLedger->ledger_code,
+                'ledger_number' => $currentLedger->ledger_number,
+                'ledger_invoice_count' => $currentLedger->ledger_invoice_count + 1
+            ];
+        }
     }
 
     /**
@@ -309,7 +412,7 @@ class Purchase extends Model
     }
 
     /**
-     * Scope to get outgoing orders only.
+     * Scope to get outgoing orders only
      */
     public function scopeOutgoingOrders($query)
     {
@@ -317,15 +420,15 @@ class Purchase extends Model
     }
 
     /**
-     * Scope to get purchases for a specific company.
+     * Scope to get quotations only
      */
-    public function scopeForCompany($query, $companyId)
+    public function scopeQuotations($query)
     {
-        return $query->where('company_id', $companyId);
+        return $query->where('type', 'quotation');
     }
 
     /**
-     * Scope to get purchases by type.
+     * Scope to get purchases by type
      */
     public function scopeByType($query, $type)
     {
@@ -333,7 +436,15 @@ class Purchase extends Model
     }
 
     /**
-     * Scope to get purchases by status.
+     * Scope to get purchases for a specific company
+     */
+    public function scopeForCompany($query, $companyId)
+    {
+        return $query->where('company_id', $companyId);
+    }
+
+    /**
+     * Scope to get purchases by status
      */
     public function scopeByStatus($query, $status)
     {

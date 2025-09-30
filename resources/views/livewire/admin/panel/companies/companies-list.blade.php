@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid py-4 px-md-5" style="min-height: 130vh;">
 
     <!-- Heading -->
     <div class="pt-5 bg-body-tertiary mb-4">
@@ -120,7 +120,13 @@
                         <td>{{ $company->mobile }}</td>
                         <td>{{ optional($company->industry)?->name ?? '-' }}</td>
                         <td>{{ optional($company->country)?->name ?? '-' }}</td>
-                        <td>{{ $company->status }}</td>
+                        <td>
+                            @if ($company->status == 'active')
+                                <span class="badge badge-success">{{ __('Active') }}</span>
+                            @else
+                                <span class="badge badge-secondary">{{ __('Inactive') }}</span>
+                            @endif
+                        </td>
                         <td>{{ optional($company->creator)->full_name }}</td>
                         <td>
 

@@ -2,6 +2,7 @@
 
 namespace Modules\FinancialAccounts\Models;
 
+use App\Traits\HasUserStamps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ class FiscalYear extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use HasUserStamps;
 
     protected $fillable = [
         'user_id',

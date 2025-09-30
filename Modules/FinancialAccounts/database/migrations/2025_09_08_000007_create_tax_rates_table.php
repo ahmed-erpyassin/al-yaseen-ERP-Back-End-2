@@ -20,9 +20,9 @@ return new class extends Migration
 
             $table->foreignId('account_id')->nullable()->constrained('accounts')->nullOnDelete();
             $table->string('name', 100);
-            $table->string('code', 50)->unique();
+            $table->string('code', 50);
             $table->decimal('rate', 8, 2);
-            $table->enum('type', ['vat', 'withholding', 'custom'])->default('vat');
+            $table->enum('type', ['vat', 'withholding', 'custom', 'income_tax'])->default('vat');
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();

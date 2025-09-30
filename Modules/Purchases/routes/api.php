@@ -10,8 +10,27 @@ use Modules\Purchases\Http\Controllers\ReturnInvoiceController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1/purchase')->group(function () {
     Route::prefix('incoming-offers')->group(function () {
-        Route::get('/', [IncomingOfferController::class, 'index']);
-        Route::post('/', [IncomingOfferController::class, 'store']);
+        // CRUD operations
+        Route::get('/', [IncomingOfferController::class, 'index'])->name('incoming-offers.index');
+        Route::post('/', [IncomingOfferController::class, 'store'])->name('incoming-offers.store');
+        Route::get('/{id}', [IncomingOfferController::class, 'show'])->name('incoming-offers.show');
+        Route::put('/{id}', [IncomingOfferController::class, 'update'])->name('incoming-offers.update');
+        Route::delete('/{id}', [IncomingOfferController::class, 'destroy'])->name('incoming-offers.destroy');
+
+        // Advanced search
+        Route::get('/search/advanced', [IncomingOfferController::class, 'search'])->name('incoming-offers.search');
+
+        // Form data endpoints
+        Route::get('/form-data/get-form-data', [IncomingOfferController::class, 'getFormData'])->name('incoming-offers.get-form-data');
+        Route::get('/form-data/get-search-form-data', [IncomingOfferController::class, 'getSearchFormData'])->name('incoming-offers.get-search-form-data');
+        Route::get('/form-data/get-sortable-fields', [IncomingOfferController::class, 'getSortableFields'])->name('incoming-offers.get-sortable-fields');
+
+        // Search endpoints
+        Route::get('/search/items', [IncomingOfferController::class, 'searchItems'])->name('incoming-offers.search-items');
+        Route::get('/search/customers', [IncomingOfferController::class, 'searchCustomers'])->name('incoming-offers.search-customers');
+
+        // Utility endpoints
+        Route::get('/currency/rate', [IncomingOfferController::class, 'getCurrencyRate'])->name('incoming-offers.get-currency-rate');
     });
     Route::prefix('outgoing-orders')->group(function () {
         // CRUD operations
