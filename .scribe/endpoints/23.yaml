@@ -1,0 +1,543 @@
+name: 'Purchase Management / Incoming Shipments'
+description: |-
+
+  APIs for managing incoming shipments from suppliers, including receipt, inspection, and inventory updates.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-shipments/list
+    metadata:
+      groupName: 'Purchase Management / Incoming Shipments'
+      groupDescription: |-
+
+        APIs for managing incoming shipments from suppliers, including receipt, inspection, and inventory updates.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-shipments/list could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/purchase/incoming-shipments/create
+    metadata:
+      groupName: 'Purchase Management / Incoming Shipments'
+      groupDescription: |-
+
+        APIs for managing incoming shipments from suppliers, including receipt, inspection, and inventory updates.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      currency_id:
+        name: currency_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      employee_id:
+        name: employee_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      journal_id:
+        name: journal_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_number:
+        name: journal_number
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      cash_paid:
+        name: cash_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      checks_paid:
+        name: checks_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allowed_discount:
+        name: allowed_discount
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_without_tax:
+        name: total_without_tax
+        description: 'Must be at least 0.'
+        required: false
+        example: 50
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_percentage:
+        name: tax_percentage
+        description: 'Must be at least 0.'
+        required: false
+        example: 55
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_amount:
+        name: tax_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 19
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_amount:
+        name: total_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      remaining_balance:
+        name: remaining_balance
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Must be at least 0.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      total_foreign:
+        name: total_foreign
+        description: 'Must be at least 0.'
+        required: false
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_local:
+        name: total_local
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      items:
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].description':
+        name: 'items[].description'
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].quantity':
+        name: 'items[].quantity'
+        description: 'Must be at least 0.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].unit_price':
+        name: 'items[].unit_price'
+        description: 'Must be at least 0.'
+        required: true
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].discount_rate':
+        name: 'items[].discount_rate'
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].tax_rate':
+        name: 'items[].tax_rate'
+        description: 'Must be at least 0.'
+        required: false
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_foreign':
+        name: 'items[].total_foreign'
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_local':
+        name: 'items[].total_local'
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total':
+        name: 'items[].total'
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      customer_id: consequatur
+      journal_number: 17
+      cash_paid: 45
+      checks_paid: 56
+      allowed_discount: 16
+      total_without_tax: 50
+      tax_percentage: 55
+      tax_amount: 19
+      total_amount: 70
+      remaining_balance: 70
+      exchange_rate: 12
+      total_foreign: 66
+      total_local: 13
+      notes: consequatur
+      items:
+        -
+          item_id: 17
+          description: 'Dolores dolorum amet iste laborum eius est dolor.'
+          quantity: 12
+          unit_price: 66
+          discount_rate: 13
+          tax_rate: 65
+          total_foreign: 72
+          total_local: 18
+          total: 74
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/purchase/incoming-shipments/details/{id}'
+    metadata:
+      groupName: 'Purchase Management / Incoming Shipments'
+      groupDescription: |-
+
+        APIs for managing incoming shipments from suppliers, including receipt, inspection, and inventory updates.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified incoming shipment with all related data.'
+      description: 'Returns shipment details with relationships loaded for comprehensive view.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the detail.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-shipments/details/consequatur could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/purchase/incoming-shipments/update/{id}'
+    metadata:
+      groupName: 'Purchase Management / Incoming Shipments'
+      groupDescription: |-
+
+        APIs for managing incoming shipments from suppliers, including receipt, inspection, and inventory updates.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified incoming shipment in storage.'
+      description: 'Updates shipment data with comprehensive validation and relationship handling.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the update.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/purchase/incoming-shipments/delete/{id}'
+    metadata:
+      groupName: 'Purchase Management / Incoming Shipments'
+      groupDescription: |-
+
+        APIs for managing incoming shipments from suppliers, including receipt, inspection, and inventory updates.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified incoming shipment from storage (soft delete).'
+      description: 'Performs soft delete with audit trail tracking who deleted the shipment.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the delete.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []

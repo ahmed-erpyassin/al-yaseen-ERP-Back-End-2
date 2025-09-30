@@ -10,6 +10,11 @@ use Modules\Purchases\Http\Requests\IncomingOfferSearchRequest;
 use Modules\Purchases\Transformers\IncomingOfferResource;
 use Modules\Purchases\Models\Purchase;
 
+/**
+ * @group Purchase Management / Incoming Offers
+ *
+ * APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+ */
 class IncomingOfferController extends Controller
 {
 

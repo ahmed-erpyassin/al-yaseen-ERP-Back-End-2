@@ -9,6 +9,11 @@ use Modules\Sales\Http\Requests\OutgoingOfferRequest;
 use Modules\Sales\Transformers\OutgoingOfferResource;
 use Modules\Sales\Models\Sale;
 
+/**
+ * @group Sales Management / Outgoing Offers
+ *
+ * APIs for managing outgoing sales offers, including offer creation, tracking, and conversion to orders.
+ */
 class OutgoingOfferController extends Controller
 {
 

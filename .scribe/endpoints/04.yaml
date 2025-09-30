@@ -1,20 +1,20 @@
-name: 'Inventory Management / Stock Movements'
+name: 'Inventory Management / Department Warehouses'
 description: |-
 
-  APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+  APIs for managing department-warehouse relationships and access control.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/stock-movements/track-all
+    uri: api/v1/department-warehouses/enumerate-all
     metadata:
-      groupName: 'Inventory Management / Stock Movements'
+      groupName: 'Inventory Management / Department Warehouses'
       groupDescription: |-
 
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+        APIs for managing department-warehouse relationships and access control.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of stock movements.'
+      title: 'Display a listing of department warehouses.'
       description: ''
       authenticated: true
       deprecated: false
@@ -35,7 +35,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/stock-movements/track-all could not be found."
+              "message": "The route api/v1/department-warehouses/enumerate-all could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -55,15 +55,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/stock-movements/record-movement
+    uri: api/v1/department-warehouses/create-assignment
     metadata:
-      groupName: 'Inventory Management / Stock Movements'
+      groupName: 'Inventory Management / Department Warehouses'
       groupDescription: |-
 
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+        APIs for managing department-warehouse relationships and access control.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Store a newly created stock movement.'
+      title: 'Store a newly created department warehouse.'
       description: ''
       authenticated: true
       deprecated: false
@@ -77,141 +77,95 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      item_id:
-        name: item_id
-        description: 'The <code>id</code> of an existing record in the items table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit_id:
-        name: unit_id
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      inventory_item_id:
-        name: inventory_item_id
-        description: 'The <code>id</code> of an existing record in the inventory_items table.'
+      department_number:
+        name: department_number
+        description: 'Must not be greater than 255 characters.'
         required: true
-        example: consequatur
+        example: vmqeopfuudtdsufvyvddq
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      warehouse_id:
-        name: warehouse_id
-        description: 'The <code>id</code> of an existing record in the warehouses table.'
+      department_name_ar:
+        name: department_name_ar
+        description: 'Must not be greater than 255 characters.'
         required: true
-        example: consequatur
+        example: amniihfqcoynlazghdtqt
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      movement_type:
-        name: movement_type
-        description: ''
-        required: true
-        example: transfer
-        type: string
-        enumValues:
-          - in
-          - out
-          - transfer
-          - adjustment
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      reference_type:
-        name: reference_type
+      department_name_en:
+        name: department_name_en
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: mqeopfuudtdsufvyvddqa
+        example: qxbajwbpilpmufinllwlo
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      reference_id:
-        name: reference_id
+      description:
+        name: description
         description: ''
         required: false
-        example: 17
-        type: integer
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      quantity:
-        name: quantity
-        description: 'Must be at least 0.01.'
-        required: true
-        example: 45
-        type: number
+      manager_name:
+        name: manager_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: dtdsufvyvddqamniihfqc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      manager_phone:
+        name: manager_phone
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: oynlazghdtqtqxbajwbpi
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      manager_email:
+        name: manager_email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: jaunita.schamberger@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      active:
+        name: active
+        description: ''
+        required: false
+        example: false
+        type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      unit_cost:
-        name: unit_cost
-        description: 'Must be at least 0.'
-        required: false
-        example: 56
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      total_cost:
-        name: total_cost
-        description: 'Must be at least 0.'
-        required: false
-        example: 16
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      notes:
-        name: notes
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      movement_date:
-        name: movement_date
-        description: 'Must be a valid date.'
-        required: false
-        example: '2025-09-25T13:42:22'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
     cleanBodyParameters:
-      inventory_item_id: consequatur
-      warehouse_id: consequatur
-      movement_type: transfer
-      reference_type: mqeopfuudtdsufvyvddqa
-      reference_id: 17
-      quantity: 45
-      unit_cost: 56
-      total_cost: 16
-      notes: consequatur
-      movement_date: '2025-09-25T13:42:22'
+      department_number: vmqeopfuudtdsufvyvddq
+      department_name_ar: amniihfqcoynlazghdtqt
+      department_name_en: qxbajwbpilpmufinllwlo
+      description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      manager_name: dtdsufvyvddqamniihfqc
+      manager_phone: oynlazghdtqtqxbajwbpi
+      manager_email: jaunita.schamberger@example.com
+      active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -226,15 +180,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/stock-movements/examine-movement/{id}'
+    uri: 'api/v1/department-warehouses/view-assignment/{id}'
     metadata:
-      groupName: 'Inventory Management / Stock Movements'
+      groupName: 'Inventory Management / Department Warehouses'
       groupDescription: |-
 
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+        APIs for managing department-warehouse relationships and access control.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified stock movement.'
+      title: 'Display the specified department warehouse.'
       description: ''
       authenticated: true
       deprecated: false
@@ -246,7 +200,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the examine movement.'
+        description: 'The ID of the view assignment.'
         required: true
         example: consequatur
         type: string
@@ -266,7 +220,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/stock-movements/examine-movement/consequatur could not be found."
+              "message": "The route api/v1/department-warehouses/view-assignment/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -286,15 +240,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/stock-movements/modify-movement/{id}'
+    uri: 'api/v1/department-warehouses/update-assignment/{id}'
     metadata:
-      groupName: 'Inventory Management / Stock Movements'
+      groupName: 'Inventory Management / Department Warehouses'
       groupDescription: |-
 
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+        APIs for managing department-warehouse relationships and access control.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified stock movement.'
+      title: 'Update the specified department warehouse.'
       description: ''
       authenticated: true
       deprecated: false
@@ -306,7 +260,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the modify movement.'
+        description: 'The ID of the update assignment.'
         required: true
         example: consequatur
         type: string
@@ -319,141 +273,95 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      item_id:
-        name: item_id
-        description: 'The <code>id</code> of an existing record in the items table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit_id:
-        name: unit_id
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      inventory_item_id:
-        name: inventory_item_id
-        description: 'The <code>id</code> of an existing record in the inventory_items table.'
+      department_number:
+        name: department_number
+        description: 'Must not be greater than 255 characters.'
         required: true
-        example: consequatur
+        example: vmqeopfuudtdsufvyvddq
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      warehouse_id:
-        name: warehouse_id
-        description: 'The <code>id</code> of an existing record in the warehouses table.'
+      department_name_ar:
+        name: department_name_ar
+        description: 'Must not be greater than 255 characters.'
         required: true
-        example: consequatur
+        example: amniihfqcoynlazghdtqt
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      movement_type:
-        name: movement_type
-        description: ''
-        required: true
-        example: adjustment
-        type: string
-        enumValues:
-          - in
-          - out
-          - transfer
-          - adjustment
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      reference_type:
-        name: reference_type
+      department_name_en:
+        name: department_name_en
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: mqeopfuudtdsufvyvddqa
+        example: qxbajwbpilpmufinllwlo
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      reference_id:
-        name: reference_id
+      description:
+        name: description
         description: ''
         required: false
-        example: 17
-        type: integer
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      quantity:
-        name: quantity
-        description: 'Must be at least 0.01.'
-        required: true
-        example: 45
-        type: number
+      manager_name:
+        name: manager_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: dtdsufvyvddqamniihfqc
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      manager_phone:
+        name: manager_phone
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: oynlazghdtqtqxbajwbpi
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      manager_email:
+        name: manager_email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: jaunita.schamberger@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      active:
+        name: active
+        description: ''
+        required: false
+        example: false
+        type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
-        custom: []
-      unit_cost:
-        name: unit_cost
-        description: 'Must be at least 0.'
-        required: false
-        example: 56
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      total_cost:
-        name: total_cost
-        description: 'Must be at least 0.'
-        required: false
-        example: 16
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      notes:
-        name: notes
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      movement_date:
-        name: movement_date
-        description: 'Must be a valid date.'
-        required: false
-        example: '2025-09-25T13:42:22'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
         custom: []
     cleanBodyParameters:
-      inventory_item_id: consequatur
-      warehouse_id: consequatur
-      movement_type: adjustment
-      reference_type: mqeopfuudtdsufvyvddqa
-      reference_id: 17
-      quantity: 45
-      unit_cost: 56
-      total_cost: 16
-      notes: consequatur
-      movement_date: '2025-09-25T13:42:22'
+      department_number: vmqeopfuudtdsufvyvddq
+      department_name_ar: amniihfqcoynlazghdtqt
+      department_name_en: qxbajwbpilpmufinllwlo
+      description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      manager_name: dtdsufvyvddqamniihfqc
+      manager_phone: oynlazghdtqtqxbajwbpi
+      manager_email: jaunita.schamberger@example.com
+      active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -468,15 +376,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/stock-movements/remove-movement/{id}'
+    uri: 'api/v1/department-warehouses/remove-assignment/{id}'
     metadata:
-      groupName: 'Inventory Management / Stock Movements'
+      groupName: 'Inventory Management / Department Warehouses'
       groupDescription: |-
 
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+        APIs for managing department-warehouse relationships and access control.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified stock movement (soft delete).'
+      title: 'Remove the specified department warehouse.'
       description: ''
       authenticated: true
       deprecated: false
@@ -488,7 +396,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the remove movement.'
+        description: 'The ID of the remove assignment.'
         required: true
         example: consequatur
         type: string
@@ -516,15 +424,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/stock-movements/movement-summary
+    uri: api/v1/department-warehouses/primary-assignment
     metadata:
-      groupName: 'Inventory Management / Stock Movements'
+      groupName: 'Inventory Management / Department Warehouses'
       groupDescription: |-
 
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+        APIs for managing department-warehouse relationships and access control.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get stock summary for all items.'
+      title: 'Get the first department warehouse.'
       description: ''
       authenticated: true
       deprecated: false
@@ -545,7 +453,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/stock-movements/movement-summary could not be found."
+              "message": "The route api/v1/department-warehouses/primary-assignment could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -565,135 +473,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/stock-movements/by-item/{itemId}'
+    uri: api/v1/department-warehouses/ultimate-assignment
     metadata:
-      groupName: 'Inventory Management / Stock Movements'
+      groupName: 'Inventory Management / Department Warehouses'
       groupDescription: |-
 
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
+        APIs for managing department-warehouse relationships and access control.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get stock movements for a specific item.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      itemId:
-        name: itemId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      itemId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/stock-movements/by-item/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/stock-movements/by-warehouse/{warehouseId}'
-    metadata:
-      groupName: 'Inventory Management / Stock Movements'
-      groupDescription: |-
-
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get stock movements for a specific warehouse.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      warehouseId:
-        name: warehouseId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      warehouseId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/stock-movements/by-warehouse/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/stock-movements/deleted-movements
-    metadata:
-      groupName: 'Inventory Management / Stock Movements'
-      groupDescription: |-
-
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get trashed (soft deleted) stock movements.'
+      title: 'Get the last department warehouse.'
       description: ''
       authenticated: true
       deprecated: false
@@ -714,7 +502,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/stock-movements/deleted-movements could not be found."
+              "message": "The route api/v1/department-warehouses/ultimate-assignment could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -722,102 +510,6 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: 'api/v1/stock-movements/{id}/restore-movement'
-    metadata:
-      groupName: 'Inventory Management / Stock Movements'
-      groupDescription: |-
-
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Restore a soft deleted stock movement.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the stock movement.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/stock-movements/{id}/permanently-delete'
-    metadata:
-      groupName: 'Inventory Management / Stock Movements'
-      groupDescription: |-
-
-        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Permanently delete a stock movement (force delete).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the stock movement.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
     responseFields: []
     auth:
       - headers

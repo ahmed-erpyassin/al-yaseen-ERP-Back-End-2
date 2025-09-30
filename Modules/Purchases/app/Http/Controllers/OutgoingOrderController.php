@@ -9,6 +9,11 @@ use Modules\Purchases\Http\Requests\OutgoingOrderRequest;
 use Modules\Purchases\Http\Resources\OutgoingOrderResource;
 use Modules\Purchases\Models\Purchase;
 
+/**
+ * @group Purchase Management / Outgoing Orders
+ *
+ * APIs for managing outgoing purchase orders, including order creation, tracking, and supplier management.
+ */
 class OutgoingOrderController extends Controller
 {
 

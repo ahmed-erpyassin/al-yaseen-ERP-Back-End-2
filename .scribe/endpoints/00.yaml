@@ -10,7 +10,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Register a new user.'
       description: ''
       authenticated: true
       deprecated: false
@@ -111,7 +111,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Authenticate user and return access token.'
       description: ''
       authenticated: true
       deprecated: false
@@ -168,7 +168,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: "Send OTP verification code to user's phone."
       description: ''
       authenticated: true
       deprecated: false
@@ -214,7 +214,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Verify OTP code and authenticate user.'
       description: ''
       authenticated: true
       deprecated: false
@@ -271,7 +271,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: "Get the authenticated user's information."
       description: ''
       authenticated: true
       deprecated: false
@@ -318,7 +318,7 @@ endpoints:
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Logout the authenticated user.'
       description: ''
       authenticated: true
       deprecated: false

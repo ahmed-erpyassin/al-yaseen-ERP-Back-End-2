@@ -10,6 +10,11 @@ use Modules\Customers\app\Services\CustomerService;
 use Modules\Customers\Http\Requests\CustomerRequest;
 use Modules\Customers\Transformers\CustomerResource;
 
+/**
+ * @group Customer Management / Customers
+ *
+ * APIs for managing customers, including creation, updates, search, and customer relationship management.
+ */
 class CustomerController extends Controller
 {
     protected $customerService;

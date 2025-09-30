@@ -8,6 +8,11 @@ use Modules\Purchases\app\Services\IncomingShipmentService;
 use Modules\Purchases\Http\Requests\IncomingShipmentRequest;
 use Modules\Purchases\Transformers\IncomingShipmentResource;
 
+/**
+ * @group Purchase Management / Incoming Shipments
+ *
+ * APIs for managing incoming shipments from suppliers, including receipt, inspection, and inventory updates.
+ */
 class IncomingShipmentController extends Controller
 {
 

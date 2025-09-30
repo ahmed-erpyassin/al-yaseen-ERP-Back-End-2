@@ -9,6 +9,11 @@ use Modules\Sales\app\Services\IncomingOrderService;
 use Modules\Sales\Http\Requests\IncomingOrderRequest;
 use Modules\Sales\Transformers\IncomingOrderResource;
 
+/**
+ * @group Sales Management / Incoming Orders
+ *
+ * APIs for managing incoming sales orders, including order processing, tracking, and fulfillment.
+ */
 class IncomingOrderController extends Controller
 {
 

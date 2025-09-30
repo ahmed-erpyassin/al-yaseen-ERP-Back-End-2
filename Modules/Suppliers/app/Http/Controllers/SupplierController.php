@@ -10,6 +10,11 @@ use Modules\Suppliers\Http\Requests\SupplierRequest;
 use Modules\Suppliers\Models\Supplier;
 use Modules\Suppliers\Transformers\SupplierResource;
 
+/**
+ * @group Supplier Management / Suppliers
+ *
+ * APIs for managing suppliers, including creation, updates, search, and supplier relationship management.
+ */
 class SupplierController extends Controller
 {
     protected $supplierService;

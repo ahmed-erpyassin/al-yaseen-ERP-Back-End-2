@@ -12,11 +12,11 @@ return [
     'title' => 'Al-Yaseen ERP API Documentation',
 
     // A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
-    'description' => 'API documentation for Al-Yaseen ERP Project Management and Inventory Management modules.',
+    'description' => 'API documentation for Al-Yaseen ERP system including Project Management, Inventory Management, Customer Management, Supplier Management, Sales Management, and Purchase Management modules.',
 
     // Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
     'intro_text' => <<<INTRO
-        Welcome to the Al-Yaseen ERP API documentation for Project Management and Inventory Management modules. This API provides comprehensive endpoints for:
+        Welcome to the Al-Yaseen ERP API documentation. This comprehensive API provides endpoints for:
 
         ## Project Management Module
         - **Projects**: Complete project lifecycle management with CRUD operations, search, and filtering
@@ -35,6 +35,28 @@ return [
         - **Units**: Unit of measure management and conversions
         - **BOM (Bill of Materials)**: Product structure and component management
         - **Barcode Management**: Barcode types and scanning integration
+
+        ## Customer Management Module
+        - **Customers**: Customer relationship management with comprehensive customer data
+
+        ## Supplier Management Module
+        - **Suppliers**: Supplier management with vendor information and relationships
+
+        ## Sales Management Module
+        - **Incoming Orders**: Sales order processing and tracking
+        - **Outgoing Offers**: Sales quotation and offer management
+        - **Outgoing Shipments**: Shipment tracking and delivery management
+        - **Services**: Service management and tracking
+        - **Return Invoices**: Sales return processing and refunds
+
+        ## Purchase Management Module
+        - **Outgoing Orders**: Purchase order creation and management
+        - **Incoming Offers**: Supplier offer evaluation and acceptance
+        - **Incoming Shipments**: Receipt and inspection of purchased goods
+        - **Expenses**: Purchase expense tracking and reporting
+        - **Invoices**: Purchase invoice processing and payment
+        - **Return Invoices**: Purchase return processing
+        - **Reference Invoices**: Invoice referencing and reconciliation
 
         All endpoints require authentication using Laravel Sanctum tokens unless otherwise specified.
 
@@ -86,6 +108,18 @@ return [
                     'api/v1/bom-items/*',
                     'api/v1/inventory-movements/*',
                     'api/v1/manufacturing-formulas/*',
+
+                    // Customer Module Routes
+                    'api/v1/customers/*',
+
+                    // Supplier Module Routes
+                    'api/v1/suppliers/*',
+
+                    // Sales Module Routes (prefix: api/v1/sales-management)
+                    'api/v1/sales-management/*',
+
+                    // Purchases Module Routes (prefix: api/v1/purchase)
+                    'api/v1/purchase/*',
                 ],
                 'domains' => ['*'],
             ],

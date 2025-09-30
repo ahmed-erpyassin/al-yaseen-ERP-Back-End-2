@@ -9,6 +9,11 @@ use Modules\Purchases\Services\PurchaseReferenceInvoiceService;
 use Modules\Purchases\Http\Requests\PurchaseReferenceInvoiceRequest;
 use Modules\Purchases\Http\Resources\PurchaseReferenceInvoiceResource;
 
+/**
+ * @group Purchase Management / Reference Invoices
+ *
+ * APIs for managing purchase reference invoices, including invoice referencing, tracking, and reconciliation.
+ */
 class PurchaseReferenceInvoiceController extends Controller
 {
     protected PurchaseReferenceInvoiceService $invoiceService;

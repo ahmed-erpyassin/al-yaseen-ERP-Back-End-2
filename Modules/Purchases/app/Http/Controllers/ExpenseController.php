@@ -8,6 +8,11 @@ use Modules\Purchases\app\Services\ExpenseService;
 use Modules\Purchases\Http\Requests\ExpenseRequest;
 use Modules\Purchases\Http\Resources\ExpenseResource;
 
+/**
+ * @group Purchase Management / Expenses
+ *
+ * APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+ */
 class ExpenseController extends Controller
 {
     protected ExpenseService $expenseService;

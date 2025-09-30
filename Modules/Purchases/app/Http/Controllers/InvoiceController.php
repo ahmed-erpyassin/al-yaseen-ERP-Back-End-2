@@ -8,6 +8,11 @@ use Modules\Sales\app\Services\InvoiceService;
 use Modules\Sales\Http\Requests\InvoiceRequest;
 use Modules\Sales\Transformers\InvoiceResource;
 
+/**
+ * @group Purchase Management / Invoices
+ *
+ * APIs for managing purchase invoices, including invoice processing, payment tracking, and vendor management.
+ */
 class InvoiceController extends Controller
 {
 

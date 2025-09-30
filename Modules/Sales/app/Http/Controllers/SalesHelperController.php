@@ -12,10 +12,41 @@ use Modules\Inventory\Models\Item;
 use Modules\Inventory\Models\Unit;
 use Modules\Companies\Models\Company;
 
+
+
+/**
+ * @group Sales Management / Helpers
+ *
+ * Helper APIs for sales operations including customer lookup, item search, currency rates, and form data preparation.
+ */
 class SalesHelperController extends Controller
 {
     /**
-     * Get customers for dropdown (number and name sync)
+     * Get customers for dropdown
+     *
+     * Retrieve a list of active customers for dropdown/autocomplete fields with optional search functionality.
+     *
+     * @queryParam search string Optional search term to filter customers by name, code, or email. Example: John
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "customer_number": "CUST-001",
+     *       "customer_name": "John Doe",
+     *       "email": "john@example.com",
+     *       "licensed_operator": "Operator A",
+     *       "phone": "+1234567890",
+     *       "mobile": "+0987654321"
+     *     }
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching customers: Database connection failed"
+     * }
      */
     public function getCustomers(Request $request)
     {
@@ -58,6 +89,33 @@ class SalesHelperController extends Controller
 
     /**
      * Get currencies with exchange rates
+     *
+     * Retrieve all available currencies with their current exchange rates for the company.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "code": "USD",
+     *       "name": "US Dollar",
+     *       "symbol": "$",
+     *       "exchange_rate": 1.0
+     *     },
+     *     {
+     *       "id": 2,
+     *       "code": "EUR",
+     *       "name": "Euro",
+     *       "symbol": "€",
+     *       "exchange_rate": 0.85
+     *     }
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching currencies: Database error"
+     * }
      */
     public function getCurrencies(Request $request)
     {
@@ -88,7 +146,38 @@ class SalesHelperController extends Controller
     }
 
     /**
-     * Get items for dropdown with auto-complete
+     * Get items for dropdown with autocomplete
+     *
+     * Retrieve active inventory items for dropdown/autocomplete fields with optional search functionality.
+     * Limited to 50 items for performance.
+     *
+     * @queryParam search string Optional search term to filter items by name, item number, or code. Example: Laptop
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "item_number": "ITEM-001",
+     *       "name": "Laptop Dell XPS 15",
+     *       "description": "High-performance laptop",
+     *       "unit_id": 1,
+     *       "first_sale_price": 1200.00,
+     *       "second_sale_price": 1150.00,
+     *       "third_sale_price": 1100.00,
+     *       "unit": {
+     *         "id": 1,
+     *         "name": "Piece",
+     *         "symbol": "pc"
+     *       }
+     *     }
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching items: Database error"
+     * }
      */
     public function getItems(Request $request)
     {
@@ -135,6 +224,31 @@ class SalesHelperController extends Controller
 
     /**
      * Get units for dropdown
+     *
+     * Retrieve all active measurement units for dropdown fields.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "Piece",
+     *       "code": "PC",
+     *       "symbol": "pc"
+     *     },
+     *     {
+     *       "id": 2,
+     *       "name": "Kilogram",
+     *       "code": "KG",
+     *       "symbol": "kg"
+     *     }
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching units: Database error"
+     * }
      */
     public function getUnits(Request $request)
     {
@@ -158,6 +272,33 @@ class SalesHelperController extends Controller
 
     /**
      * Get tax rates for dropdown
+     *
+     * Retrieve all tax rates configured for the company.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "Standard VAT",
+     *       "code": "VAT",
+     *       "rate": 15.0,
+     *       "type": "vat"
+     *     },
+     *     {
+     *       "id": 2,
+     *       "name": "Zero Rated",
+     *       "code": "ZERO",
+     *       "rate": 0.0,
+     *       "type": "vat"
+     *     }
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching tax rates: Database error"
+     * }
      */
     public function getTaxRates(Request $request)
     {
@@ -180,6 +321,21 @@ class SalesHelperController extends Controller
 
     /**
      * Get company VAT rate
+     *
+     * Retrieve the company's configured VAT and income tax rates.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "vat_rate": 15.0,
+     *     "income_tax_rate": 5.0
+     *   }
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching company VAT rate: Database error"
+     * }
      */
     public function getCompanyVatRate(Request $request)
     {
@@ -203,6 +359,24 @@ class SalesHelperController extends Controller
 
     /**
      * Get exchange rate for specific currency
+     *
+     * Retrieve the latest exchange rate for a specific currency.
+     *
+     * @urlParam currencyId integer required The ID of the currency. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "currency_id": 1,
+     *     "exchange_rate": 1.0,
+     *     "updated_at": "2025-09-30T10:30:00.000000Z"
+     *   }
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching currency rate: Database error"
+     * }
      */
     public function getCurrencyRate(Request $request, $currencyId)
     {
@@ -231,6 +405,39 @@ class SalesHelperController extends Controller
 
     /**
      * Get item details by ID
+     *
+     * Retrieve detailed information about a specific item including unit and pricing.
+     *
+     * @urlParam itemId integer required The ID of the item. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "id": 1,
+     *     "item_number": "ITEM-001",
+     *     "name": "Laptop Dell XPS 15",
+     *     "description": "High-performance laptop",
+     *     "unit_id": 1,
+     *     "first_sale_price": 1200.00,
+     *     "second_sale_price": 1150.00,
+     *     "third_sale_price": 1100.00,
+     *     "unit": {
+     *       "id": 1,
+     *       "name": "Piece",
+     *       "symbol": "pc"
+     *     }
+     *   }
+     * }
+     *
+     * @response 404 {
+     *   "success": false,
+     *   "message": "Item not found"
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching item details: Database error"
+     * }
      */
     public function getItemDetails(Request $request, $itemId)
     {
@@ -271,6 +478,42 @@ class SalesHelperController extends Controller
 
     /**
      * Get live currency rate with tax calculation
+     *
+     * Fetch real-time exchange rate from external API with optional tax rates.
+     * Uses exchangerate-api.com for live rates.
+     *
+     * @urlParam currencyId integer required The ID of the currency. Example: 2
+     * @queryParam include_tax boolean Optional flag to include tax rates in response. Example: true
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "currency_id": 2,
+     *     "currency_code": "EUR",
+     *     "currency_name": "Euro",
+     *     "exchange_rate": 0.85,
+     *     "tax_rates": [
+     *       {
+     *         "id": 1,
+     *         "name": "Standard VAT",
+     *         "code": "VAT",
+     *         "rate": 15.0
+     *       }
+     *     ],
+     *     "updated_at": "2025-09-30T10:30:00.000000Z"
+     *   }
+     * }
+     *
+     * @response 404 {
+     *   "success": false,
+     *   "error": "Currency not found."
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "error": "An error occurred while fetching live currency rate.",
+     *   "message": "API timeout"
+     * }
      */
     public function getLiveCurrencyRateWithTax(Request $request, $currencyId)
     {
@@ -340,7 +583,31 @@ class SalesHelperController extends Controller
     }
 
     /**
-     * Search customers by number or name for invoice creation
+     * Search customers for invoice creation
+     *
+     * Search customers by number, name, or email for invoice/order creation with result limit.
+     *
+     * @queryParam search string Optional search term to filter customers. Example: John
+     * @queryParam limit integer Optional maximum number of results (default: 10). Example: 20
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "customer_number": "CUST-001",
+     *       "name": "John Doe",
+     *       "email": "john@example.com",
+     *       "phone": "+1234567890",
+     *       "licensed_operator": "Operator A"
+     *     }
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error searching customers: Database error"
+     * }
      */
     public function searchCustomersForInvoice(Request $request)
     {
@@ -381,7 +648,32 @@ class SalesHelperController extends Controller
     }
 
     /**
-     * Search items by number or name for invoice creation
+     * Search items for invoice creation
+     *
+     * Search items by number or name for invoice/order creation with formatted response including pricing.
+     *
+     * @queryParam search string Optional search term to filter items by number or name. Example: Laptop
+     * @queryParam limit integer Optional maximum number of results (default: 10). Example: 20
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "item_number": "ITEM-001",
+     *       "item_name": "Laptop Dell XPS 15",
+     *       "unit": "Piece",
+     *       "unit_price": 1200.00,
+     *       "category": "Electronics",
+     *       "supplier": "Dell Inc."
+     *     }
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error searching items: Database error"
+     * }
      */
     public function searchItemsForInvoice(Request $request)
     {
@@ -441,6 +733,22 @@ class SalesHelperController extends Controller
 
     /**
      * Get licensed operators for dropdown
+     *
+     * Retrieve a list of unique licensed operators from the customers database for dropdown selection.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     "Operator A",
+     *     "Operator B",
+     *     "Operator C"
+     *   ]
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching licensed operators: Database error"
+     * }
      */
     public function getLicensedOperators(Request $request)
     {
@@ -467,7 +775,35 @@ class SalesHelperController extends Controller
     }
 
     /**
-     * Get customer details by ID for auto-population
+     * Get customer details by ID
+     *
+     * Retrieve complete customer information by ID for auto-population in forms.
+     *
+     * @urlParam customerId integer required The ID of the customer. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "id": 1,
+     *     "customer_number": "CUST-001",
+     *     "name": "John Doe",
+     *     "email": "john@example.com",
+     *     "phone": "+1234567890",
+     *     "licensed_operator": "Operator A",
+     *     "address_one": "123 Main St",
+     *     "address_two": "Suite 100"
+     *   }
+     * }
+     *
+     * @response 404 {
+     *   "success": false,
+     *   "error": "Customer not found."
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching customer details: Database error"
+     * }
      */
     public function getCustomerDetails(Request $request, $customerId)
     {
@@ -506,7 +842,44 @@ class SalesHelperController extends Controller
     }
 
     /**
-     * Get item details with unit information for auto-population
+     * Get item details for invoice creation
+     *
+     * Retrieve complete item information including pricing, units, category, and supplier for invoice/order creation.
+     *
+     * @urlParam itemId integer required The ID of the item. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "id": 1,
+     *     "item_number": "ITEM-001",
+     *     "item_name": "Laptop Dell XPS 15",
+     *     "unit": "Piece",
+     *     "first_sale_price": 1200.00,
+     *     "second_sale_price": 1150.00,
+     *     "third_sale_price": 1100.00,
+     *     "category": "Electronics",
+     *     "supplier": "Dell Inc.",
+     *     "available_units": [
+     *       {
+     *         "id": 1,
+     *         "name": "Piece",
+     *         "code": "PC",
+     *         "symbol": "pc"
+     *       }
+     *     ]
+     *   }
+     * }
+     *
+     * @response 404 {
+     *   "success": false,
+     *   "error": "Item not found."
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error fetching item details: Database error"
+     * }
      */
     public function getItemDetailsForInvoice(Request $request, $itemId)
     {
