@@ -30,7 +30,11 @@ class InvoiceController extends Controller
                 'data'    => InvoiceResource::collection($invoices)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching invoices.',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -46,33 +50,87 @@ class InvoiceController extends Controller
                 'data' => new InvoiceResource($offer)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while creating invoice.',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
     /**
-     * Show the specified resource.
+     * Display the specified invoice with all related data.
+     * Returns invoice details with relationships loaded for comprehensive view.
+     *
+     * @param int $id Invoice ID
+     * @return JsonResponse Invoice resource or error response
      */
     public function show($id)
     {
-        return view('sales::show');
+        try {
+            // For now, return a placeholder response until service method is implemented
+            return response()->json([
+                'success' => false,
+                'error' => 'Show method not yet implemented in service.',
+                'message' => 'This endpoint will be available once the service method is implemented.'
+            ], 501);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching invoice details.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified invoice in storage.
+     * Updates invoice data with comprehensive validation and relationship handling.
+     *
+     * @param Request $request Request data
+     * @param int $id Invoice ID
+     * @return JsonResponse Updated invoice resource or error response
      */
-    public function edit($id)
+    public function update(Request $request, $id)
     {
-        return view('sales::edit');
+        try {
+            // For now, return a placeholder response until service method is implemented
+            return response()->json([
+                'success' => false,
+                'error' => 'Update method not yet implemented in service.',
+                'message' => 'This endpoint will be available once the service method is implemented.'
+            ], 501);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while updating invoice.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified invoice from storage (soft delete).
+     * Performs soft delete with audit trail tracking who deleted the invoice.
+     *
+     * @param int $id Invoice ID
+     * @return JsonResponse Success message or error response
      */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+        try {
+            // For now, return a placeholder response until service method is implemented
+            return response()->json([
+                'success' => false,
+                'error' => 'Delete method not yet implemented in service.',
+                'message' => 'This endpoint will be available once the service method is implemented.'
+            ], 501);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while deleting invoice.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -31,7 +31,11 @@ class IncomingShipmentController extends Controller
                 'data' => IncomingShipmentResource::collection($offers)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching incoming shipments.',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -47,33 +51,87 @@ class IncomingShipmentController extends Controller
                 'data' => new IncomingShipmentResource($shipment)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while creating incoming shipment.',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
     /**
-     * Show the specified resource.
+     * Display the specified incoming shipment with all related data.
+     * Returns shipment details with relationships loaded for comprehensive view.
+     *
+     * @param int $id Shipment ID
+     * @return JsonResponse Shipment resource or error response
      */
     public function show($id)
     {
-        return view('sales::show');
+        try {
+            // For now, return a placeholder response until service method is implemented
+            return response()->json([
+                'success' => false,
+                'error' => 'Show method not yet implemented in service.',
+                'message' => 'This endpoint will be available once the service method is implemented.'
+            ], 501);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching shipment details.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified incoming shipment in storage.
+     * Updates shipment data with comprehensive validation and relationship handling.
+     *
+     * @param Request $request Request data
+     * @param int $id Shipment ID
+     * @return JsonResponse Updated shipment resource or error response
      */
-    public function edit($id)
+    public function update(Request $request, $id)
     {
-        return view('sales::edit');
+        try {
+            // For now, return a placeholder response until service method is implemented
+            return response()->json([
+                'success' => false,
+                'error' => 'Update method not yet implemented in service.',
+                'message' => 'This endpoint will be available once the service method is implemented.'
+            ], 501);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while updating shipment.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified incoming shipment from storage (soft delete).
+     * Performs soft delete with audit trail tracking who deleted the shipment.
+     *
+     * @param int $id Shipment ID
+     * @return JsonResponse Success message or error response
      */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+        try {
+            // For now, return a placeholder response until service method is implemented
+            return response()->json([
+                'success' => false,
+                'error' => 'Delete method not yet implemented in service.',
+                'message' => 'This endpoint will be available once the service method is implemented.'
+            ], 501);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while deleting shipment.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -4,7 +4,6 @@ namespace Modules\Suppliers\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Suppliers\app\Services\SupplierService;
 use Modules\Suppliers\Http\Requests\SupplierRequest;
@@ -20,7 +19,13 @@ class SupplierController extends Controller
         $this->supplierService = $supplierService;
     }
 
-
+    /**
+     * Display a listing of suppliers with advanced search and filtering.
+     * Supports pagination, sorting, and comprehensive search across multiple fields.
+     *
+     * @param Request $request Request parameters for filtering and pagination
+     * @return JsonResponse Collection of suppliers with pagination metadata
+     */
     public function index(Request $request)
     {
         try {
@@ -51,14 +56,17 @@ class SupplierController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created supplier in storage.
+     * Creates a new supplier with comprehensive validation and audit trail.
+     *
+     * @param SupplierRequest $request Validated supplier data
+     * @return SupplierResource|JsonResponse Supplier resource or error response
      */
-
     public function store(SupplierRequest $request)
     {
         try {
             DB::beginTransaction();
-            $supplier = $this->supplierService->createSupplier($request->validated(), $request->user());
+            $supplier = $this->supplierService->store($request);
             DB::commit();
             return new SupplierResource($supplier);
         } catch (\Exception $e) {
@@ -83,11 +91,18 @@ class SupplierController extends Controller
         }
     }
 */
-    public function show($id)
+    /**
+     * Display the specified supplier with all related data.
+     * Returns supplier details with relationships loaded for comprehensive view.
+     *
+     * @param Supplier $supplier Supplier model instance
+     * @return SupplierResource|JsonResponse Supplier resource or error response
+     */
+    public function show(Supplier $supplier)
     {
         try {
-            $supplier = $this->supplierService->getSupplierById($id);
-            return new SupplierResource($supplier);
+            $supplierData = $this->supplierService->show($supplier);
+            return new SupplierResource($supplierData);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => __('Failed to retrieve supplier.'),
@@ -96,6 +111,14 @@ class SupplierController extends Controller
         }
     }
 
+    /**
+     * Update the specified supplier in storage.
+     * Updates supplier data with comprehensive validation and relationship handling.
+     *
+     * @param SupplierRequest $request Validated supplier data
+     * @param Supplier $supplier Supplier model instance
+     * @return SupplierResource|JsonResponse Updated supplier resource or error response
+     */
     public function update(SupplierRequest $request, Supplier $supplier)
     {
         try {
@@ -109,6 +132,13 @@ class SupplierController extends Controller
         }
     }
 
+    /**
+     * Remove the specified supplier from storage (soft delete).
+     * Performs soft delete with audit trail tracking who deleted the supplier.
+     *
+     * @param Supplier $supplier Supplier model instance
+     * @return JsonResponse Success message or error response
+     */
     public function destroy(Supplier $supplier)
     {
         try {
@@ -120,7 +150,11 @@ class SupplierController extends Controller
     }
 
     /**
-     * Advanced search for suppliers with multiple criteria
+     * Advanced search for suppliers with multiple criteria.
+     * Performs comprehensive search across supplier fields with pagination and sorting.
+     *
+     * @param Request $request Search criteria and pagination parameters
+     * @return JsonResponse Paginated search results with metadata
      */
     public function search(Request $request)
     {
@@ -144,7 +178,11 @@ class SupplierController extends Controller
     }
 
     /**
-     * Get form data for supplier search
+     * Get form data for supplier search interface.
+     * Returns dropdown options and filter data for search forms.
+     *
+     * @param Request $request Request parameters
+     * @return JsonResponse Form data for search interface
      */
     public function getSearchFormData(Request $request)
     {
@@ -160,7 +198,11 @@ class SupplierController extends Controller
     }
 
     /**
-     * Get form data for supplier creation/editing
+     * Get form data for supplier creation and editing.
+     * Returns dropdown options and reference data for supplier forms.
+     *
+     * @param Request $request Request parameters
+     * @return JsonResponse Form data for supplier creation/editing
      */
     public function getFormData(Request $request)
     {
@@ -176,7 +218,11 @@ class SupplierController extends Controller
     }
 
     /**
-     * Get deleted suppliers (soft deleted)
+     * Get soft-deleted suppliers with pagination.
+     * Returns list of suppliers that have been soft deleted for potential restoration.
+     *
+     * @param Request $request Request parameters for pagination
+     * @return JsonResponse Paginated list of deleted suppliers
      */
     public function getDeleted(Request $request)
     {
@@ -200,7 +246,11 @@ class SupplierController extends Controller
     }
 
     /**
-     * Force delete a supplier (permanent delete)
+     * Force delete a supplier (permanent deletion).
+     * Permanently removes supplier from database - cannot be undone.
+     *
+     * @param int $id Supplier ID
+     * @return JsonResponse Success message with supplier number or error response
      */
     public function forceDelete($id)
     {
@@ -217,7 +267,10 @@ class SupplierController extends Controller
     }
 
     /**
-     * Get sortable fields for suppliers
+     * Get sortable fields for supplier listings.
+     * Returns list of fields that can be used for sorting supplier data.
+     *
+     * @return JsonResponse List of sortable fields with display names
      */
     public function getSortableFields()
     {
@@ -228,15 +281,20 @@ class SupplierController extends Controller
                 'data'    => $sortableFields
             ], 200);
         } catch (\Exception $e) {
-         //   return response()->json(['error' => 'An error occurred while fetching sortable fields: ' . $e->getMessage()], 500);
-
             return response()->json([
-                'error' => __('Failed to delete supplier.'),
+                'error' => __('Failed to fetch sortable fields.'),
                 'message' => $e->getMessage()
             ], 500);
         }
     }
 
+    /**
+     * Restore a soft-deleted supplier.
+     * Restores a previously deleted supplier and returns updated resource.
+     *
+     * @param int $id Supplier ID
+     * @return SupplierResource|JsonResponse Restored supplier resource or error response
+     */
     public function restore($id)
     {
         try {
