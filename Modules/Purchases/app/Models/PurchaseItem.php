@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Inventory\Models\Item;
 use Modules\Inventory\Models\Unit;
+use Modules\FinancialAccounts\Models\Account;
 
 class PurchaseItem extends Model
 {
@@ -20,6 +21,9 @@ class PurchaseItem extends Model
         'item_id',
         'item_number',
         'item_name',
+        'account_id',
+        'account_number',
+        'account_name',
         'unit_id',
         'unit_name',
         'unit',
@@ -81,6 +85,14 @@ class PurchaseItem extends Model
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'unit_id');
+    }
+
+    /**
+     * Get the account details (for expense items)
+     */
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'account_id');
     }
 
     /**

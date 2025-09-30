@@ -63,8 +63,26 @@ Route::middleware(['auth:sanctum'])->prefix('v1/purchase')->group(function () {
         Route::post('/', [InvoiceController::class, 'store']);
     });
     Route::prefix('expenses')->group(function () {
-        Route::get('/', [ExpenseController::class, 'index']);
-        Route::post('/', [ExpenseController::class, 'store']);
+        // CRUD operations
+        Route::get('/', [ExpenseController::class, 'index'])->name('expenses.index');
+        Route::post('/', [ExpenseController::class, 'store'])->name('expenses.store');
+        Route::get('/{id}', [ExpenseController::class, 'show'])->name('expenses.show');
+        Route::put('/{id}', [ExpenseController::class, 'update'])->name('expenses.update');
+        Route::delete('/{id}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+
+        // Soft delete management
+        Route::get('/deleted/list', [ExpenseController::class, 'getDeleted'])->name('expenses.deleted');
+        Route::post('/{id}/restore', [ExpenseController::class, 'restore'])->name('expenses.restore');
+
+        // Helper endpoints
+        Route::get('/helpers/suppliers', [ExpenseController::class, 'getSuppliers'])->name('expenses.suppliers');
+        Route::get('/helpers/accounts', [ExpenseController::class, 'getAccounts'])->name('expenses.accounts');
+        Route::get('/helpers/currencies', [ExpenseController::class, 'getCurrencies'])->name('expenses.currencies');
+        Route::get('/helpers/tax-rates', [ExpenseController::class, 'getTaxRates'])->name('expenses.tax-rates');
+        Route::get('/helpers/live-exchange-rate', [ExpenseController::class, 'getLiveExchangeRate'])->name('expenses.live-exchange-rate');
+        Route::get('/helpers/form-data', [ExpenseController::class, 'getFormData'])->name('expenses.form-data');
+        Route::get('/helpers/search-form-data', [ExpenseController::class, 'getSearchFormData'])->name('expenses.search-form-data');
+        Route::get('/helpers/sortable-fields', [ExpenseController::class, 'getSortableFields'])->name('expenses.sortable-fields');
     });
     Route::prefix('return-invoices')->group(function () {
         Route::get('/', [ReturnInvoiceController::class, 'index']);

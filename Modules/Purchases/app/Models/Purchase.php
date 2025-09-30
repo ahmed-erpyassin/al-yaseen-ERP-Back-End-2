@@ -39,6 +39,7 @@ class Purchase extends Model
         'quotation_number',
         'invoice_number',
         'outgoing_order_number',
+        'expense_number',
         'date',
         'time',
         'due_date',
@@ -51,6 +52,7 @@ class Purchase extends Model
 
         // Supplier Information
         'supplier_name',
+        'supplier_email',
         'licensed_operator',
 
         // Ledger System
@@ -280,6 +282,26 @@ class Purchase extends Model
     }
 
     /**
+     * Generate the next sequential expense number
+     */
+    public static function generateExpenseNumber(): string
+    {
+        $lastExpense = self::where('type', 'expense')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastExpense || !$lastExpense->expense_number) {
+            return 'EXP-0001';
+        }
+
+        // Extract number from last expense number (assuming format EXP-XXXX)
+        $lastNumber = (int) substr($lastExpense->expense_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'EXP-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * Generate journal code and invoice number for outgoing orders
      */
     public static function generateJournalAndInvoiceNumber($companyId): array
@@ -449,5 +471,13 @@ class Purchase extends Model
     public function scopeByStatus($query, $status)
     {
         return $query->where('status', $status);
+    }
+
+    /**
+     * Scope to get expenses only
+     */
+    public function scopeExpenses($query)
+    {
+        return $query->where('type', 'expense');
     }
 }
