@@ -4,13 +4,13 @@ namespace Modules\Sales\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Customers\Models\Customer;
 use Modules\FinancialAccounts\Models\Currency;
 use Modules\FinancialAccounts\Models\ExchangeRate;
 use Modules\FinancialAccounts\Models\TaxRate;
 use Modules\Inventory\Models\Item;
 use Modules\Inventory\Models\Unit;
-use Modules\Companies\Models\Company;
 
 
 
@@ -52,7 +52,6 @@ class SalesHelperController extends Controller
     {
         try {
             $query = Customer::query()
-                ->where('company_id', $request->user()->company_id ?? 101)
                 ->where('status', 'active');
 
             // Search functionality
@@ -67,10 +66,7 @@ class SalesHelperController extends Controller
 
             $customers = $query->select([
                 'id',
-                'code as customer_number',
-                'name as customer_name',
                 'email',
-                'licensed_operator',
                 'phone',
                 'mobile'
             ])->get();
@@ -117,11 +113,10 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching currencies: Database error"
      * }
      */
-    public function getCurrencies(Request $request)
+    public function getCurrencies()
     {
         try {
-            $currencies = Currency::where('company_id', $request->user()->company_id ?? 101)
-                ->select(['id', 'code', 'name', 'symbol'])
+            $currencies = Currency::select(['id', 'code', 'name', 'symbol'])
                 ->get();
 
             // Add exchange rates
@@ -183,7 +178,6 @@ class SalesHelperController extends Controller
     {
         try {
             $query = Item::query()
-                ->where('company_id', $request->user()->company_id ?? 101)
                 ->where('active', true);
 
             // Search functionality
@@ -250,11 +244,10 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching units: Database error"
      * }
      */
-    public function getUnits(Request $request)
+    public function getUnits()
     {
         try {
-            $units = Unit::where('company_id', $request->user()->company_id ?? 101)
-                ->where('status', 'active')
+            $units = Unit::where('status', 'active')
                 ->select(['id', 'name', 'code', 'symbol'])
                 ->get();
 
@@ -300,11 +293,10 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching tax rates: Database error"
      * }
      */
-    public function getTaxRates(Request $request)
+    public function getTaxRates()
     {
         try {
-            $taxRates = TaxRate::where('company_id', $request->user()->company_id ?? 101)
-                ->select(['id', 'name', 'code', 'rate', 'type'])
+            $taxRates = TaxRate::select(['id', 'name', 'code', 'rate', 'type'])
                 ->get();
 
             return response()->json([
@@ -337,10 +329,11 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching company VAT rate: Database error"
      * }
      */
-    public function getCompanyVatRate(Request $request)
+    public function getCompanyVatRate()
     {
         try {
-            $company = Company::find($request->user()->company_id ?? 101);
+            $user = Auth::user();
+            $company = $user->company;
 
             return response()->json([
                 'success' => true,
@@ -378,7 +371,7 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching currency rate: Database error"
      * }
      */
-    public function getCurrencyRate(Request $request, $currencyId)
+    public function getCurrencyRate($currencyId)
     {
         try {
             $exchangeRate = ExchangeRate::where('currency_id', $currencyId)
@@ -439,12 +432,11 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching item details: Database error"
      * }
      */
-    public function getItemDetails(Request $request, $itemId)
+    public function getItemDetails($itemId)
     {
         try {
             $item = Item::with('unit:id,name,symbol')
                 ->where('id', $itemId)
-                ->where('company_id', $request->user()->company_id ?? 101)
                 ->select([
                     'id',
                     'item_number',
@@ -519,7 +511,6 @@ class SalesHelperController extends Controller
     {
         try {
             $currency = Currency::where('id', $currencyId)
-                ->where('company_id', $request->user()->company_id ?? 101)
                 ->first();
 
             if (!$currency) {
@@ -535,8 +526,7 @@ class SalesHelperController extends Controller
             // Get tax rates if tax is applicable
             $taxRates = [];
             if ($request->get('include_tax', false)) {
-                $taxRates = TaxRate::where('company_id', $request->user()->company_id ?? 101)
-                    ->where('type', 'vat')
+                $taxRates = TaxRate::where('type', 'vat')
                     ->select(['id', 'name', 'code', 'rate'])
                     ->get();
             }
@@ -615,22 +605,21 @@ class SalesHelperController extends Controller
             $search = $request->get('search', '');
             $limit = $request->get('limit', 10);
 
-            $customers = Customer::where('company_id', $request->user()->company_id ?? 101)
-                ->where('status', 'active')
+            $customers = Customer::where('status', 'active')
                 ->where(function ($query) use ($search) {
                     if ($search) {
                         $query->where('customer_number', 'like', "%{$search}%")
-                            ->orWhere('name', 'like', "%{$search}%")
+                            ->orWhere('first_name', 'like', "%{$search}%")
                             ->orWhere('email', 'like', "%{$search}%");
                     }
                 })
                 ->select([
                     'id',
                     'customer_number',
-                    'name',
+                   'first_name',
                     'email',
                     'phone',
-                    'licensed_operator'
+                   // 'licensed_operator'
                 ])
                 ->limit($limit)
                 ->get();
@@ -681,27 +670,26 @@ class SalesHelperController extends Controller
             $search = $request->get('search', '');
             $limit = $request->get('limit', 10);
 
-            $items = Item::where('company_id', $request->user()->company_id ?? 101)
-                ->where('active', true)
+            $items = Item::where('active', true)
                 ->where(function ($query) use ($search) {
                     if ($search) {
                         $query->where('item_number', 'like', "%{$search}%")
-                            ->orWhere('item_name_en', 'like', "%{$search}%")
-                            ->orWhere('item_name_ar', 'like', "%{$search}%");
+                            ->orWhere('name', 'like', "%{$search}%")
+                            ->orWhere('name_ar', 'like', "%{$search}%");
                     }
                 })
-                ->with(['category', 'supplier'])
+                //->with(['supplier'])
                 ->select([
                     'id',
                     'item_number',
-                    'item_name_en',
-                    'item_name_ar',
-                    'unit',
+                    'name',
+                    'name_ar',
+                  //  'unit',
                     'first_sale_price',
                     'second_sale_price',
                     'third_sale_price',
-                    'category_id',
-                    'supplier_id'
+                   // 'category_id',
+                   // 'supplier_id'
                 ])
                 ->limit($limit)
                 ->get();
@@ -712,10 +700,10 @@ class SalesHelperController extends Controller
                     'id' => $item->id,
                     'item_number' => $item->item_number,
                     'item_name' => $item->item_name_en ?? $item->item_name_ar,
-                    'unit' => $item->unit,
+                   // 'unit' => $item->unit,
                     'unit_price' => $item->first_sale_price,
-                    'category' => $item->category ? $item->category->name : null,
-                    'supplier' => $item->supplier ? $item->supplier->supplier_name_en : null,
+                   // 'category' => $item->category ? $item->category->name : null,
+                 //   'supplier' => $item->supplier ? $item->supplier->supplier_name_en : null,
                 ];
             });
 
@@ -750,12 +738,12 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching licensed operators: Database error"
      * }
      */
-    public function getLicensedOperators(Request $request)
+    /*
+    public function getLicensedOperators()
     {
         try {
             // Get unique licensed operators from customers table
-            $operators = Customer::where('company_id', $request->user()->company_id ?? 101)
-                ->whereNotNull('licensed_operator')
+            $operators = Customer::whereNotNull('licensed_operator')
                 ->where('licensed_operator', '!=', '')
                 ->distinct()
                 ->pluck('licensed_operator')
@@ -773,6 +761,7 @@ class SalesHelperController extends Controller
             ], 500);
         }
     }
+        */
 
     /**
      * Get customer details by ID
@@ -805,18 +794,17 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching customer details: Database error"
      * }
      */
-    public function getCustomerDetails(Request $request, $customerId)
+    public function getCustomerDetails($customerId)
     {
         try {
             $customer = Customer::where('id', $customerId)
-                ->where('company_id', $request->user()->company_id ?? 101)
                 ->select([
                     'id',
                     'customer_number',
-                    'name',
+                    'first_name',
                     'email',
                     'phone',
-                    'licensed_operator',
+                    //'licensed_operator',
                     'address_one',
                     'address_two'
                 ])
@@ -881,12 +869,11 @@ class SalesHelperController extends Controller
      *   "message": "Error fetching item details: Database error"
      * }
      */
-    public function getItemDetailsForInvoice(Request $request, $itemId)
+    public function getItemDetailsForInvoice($itemId)
     {
         try {
             $item = Item::where('id', $itemId)
-                ->where('company_id', $request->user()->company_id ?? 101)
-                ->with(['category', 'supplier'])
+               // ->with(['category', 'supplier'])
                 ->first();
 
             if (!$item) {
@@ -897,8 +884,7 @@ class SalesHelperController extends Controller
             }
 
             // Get available units for this item
-            $units = Unit::where('company_id', $request->user()->company_id ?? 101)
-                ->where('status', 'active')
+            $units = Unit::where('status', 'active')
                 ->select(['id', 'name', 'code', 'symbol'])
                 ->get();
 
@@ -906,12 +892,12 @@ class SalesHelperController extends Controller
                 'id' => $item->id,
                 'item_number' => $item->item_number,
                 'item_name' => $item->item_name_en ?? $item->item_name_ar,
-                'unit' => $item->unit,
+                //'unit' => $item->unit,
                 'first_sale_price' => $item->first_sale_price,
                 'second_sale_price' => $item->second_sale_price,
                 'third_sale_price' => $item->third_sale_price,
-                'category' => $item->category ? $item->category->name : null,
-                'supplier' => $item->supplier ? $item->supplier->supplier_name_en : null,
+              //  'category' => $item->category ? $item->category->name : null,
+               // 'supplier' => $item->supplier ? $item->supplier->supplier_name_en : null,
                 'available_units' => $units
             ];
 
