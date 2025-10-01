@@ -18,7 +18,6 @@ class SupplierService
     public function index(Request $request)
     {
         try {
-            $companyId = Auth::user()->company_id ?? 101;
             $supplier_search = $request->get('supplier_search', null);
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
@@ -38,7 +37,7 @@ class SupplierService
             $query = Supplier::query()
                 ->with([
                     'user',
-                    'company',
+                  //  'company',
                     'branch',
                     'currency',
                     'department',
@@ -51,8 +50,8 @@ class SupplierService
                     'barcodeType',
                     'creator',
                     'updater'
-                ])
-                ->where('company_id', $companyId);
+                ]);
+              //  ->where('company_id', $companyId);
 
             // Apply search filter
             if ($supplier_search) {
@@ -88,7 +87,7 @@ class SupplierService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = Auth::user()->company_id ?? 101;
+                $user = Auth::user();
                 $userId = Auth::id();
 
                 $validatedData = $request->validated();
@@ -99,7 +98,7 @@ class SupplierService
                 }
 
                 $data = [
-                    'company_id' => $companyId,
+                    'company_id' => $user->company_id ?? 1,
                     'user_id'    => $userId,
                     'status'     => 'active',
                     'created_by' => $userId,
@@ -163,11 +162,6 @@ class SupplierService
 
                 // Update audit fields
                 $validatedData['updated_by'] = Auth::id();
-
-                // Handle custom classification
-                if ($request->filled('custom_classification') && !empty($request->custom_classification)) {
-                    $validatedData['classification'] = $request->custom_classification;
-                }
 
                 // Update supplier
                 $supplier->update($validatedData);
@@ -243,8 +237,6 @@ class SupplierService
     public function getFormData()
     {
         try {
-            $companyId = Auth::user()->company_id ?? 101;
-
             return [
                 'supplier_types' => Supplier::SUPPLIER_TYPE_OPTIONS,
                 'classifications' => Supplier::CLASSIFICATION_OPTIONS,
@@ -257,8 +249,7 @@ class SupplierService
                 'next_supplier_number' => Supplier::generateSupplierNumber(),
 
                 // Dropdown data with proper relationships
-                'branches' => \Modules\Companies\Models\Branch::where('company_id', $companyId)
-                    ->select('id', 'name', 'code')
+                'branches' => \Modules\Companies\Models\Branch::select('id', 'name', 'code')
                     ->get()
                     ->map(function ($branch) {
                         return [
@@ -269,7 +260,7 @@ class SupplierService
                         ];
                     }),
 
-                'departments' => \Modules\HumanResources\Models\Department::where('company_id', $companyId)
+                'departments' => DB::table('departments')
                     ->select('id', 'name', 'number')
                     ->get()
                     ->map(function ($department) {
@@ -281,8 +272,7 @@ class SupplierService
                         ];
                     }),
 
-                'projects' => \Modules\ProjectsManagment\Models\Project::where('company_id', $companyId)
-                    ->select('id', 'name', 'project_number')
+                'projects' => \Modules\ProjectsManagment\Models\Project::select('id', 'name', 'project_number')
                     ->get()
                     ->map(function ($project) {
                         return [
@@ -293,7 +283,7 @@ class SupplierService
                         ];
                     }),
 
-                'donors' => Donor::forCompany($companyId)->active()
+                'donors' => Donor::active()
                     ->select('id', 'donor_number', 'donor_name_ar', 'donor_name_en')
                     ->get()
                     ->map(function ($donor) {
@@ -306,7 +296,7 @@ class SupplierService
                         ];
                     }),
 
-                'sales_representatives' => SalesRepresentative::forCompany($companyId)->active()
+                'sales_representatives' => SalesRepresentative::active()
                     ->select('id', 'representative_number', 'first_name', 'last_name')
                     ->get()
                     ->map(function ($rep) {
@@ -320,8 +310,7 @@ class SupplierService
                         ];
                     }),
 
-                'currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
-                    ->select('id', 'code', 'name', 'symbol')
+                'currencies' => \Modules\FinancialAccounts\Models\Currency::select('id', 'code', 'name', 'symbol')
                     ->get()
                     ->map(function ($currency) {
                         return [
@@ -378,8 +367,6 @@ class SupplierService
     {
         try {
             $query = Supplier::query();
-            $companyId = Auth::user()->company_id ?? 101;
-            $query->where('company_id', $companyId);
 
             if ($request->filled('search')) {
                 $search = $request->search;
@@ -408,14 +395,12 @@ class SupplierService
     {
         try {
             $supplierNumber = $request->get('supplier_number');
-            $companyId = Auth::user()->company_id ?? 101;
 
             if (!$supplierNumber) {
                 throw new \Exception('Supplier number is required');
             }
 
-            $supplier = Supplier::where('company_id', $companyId)
-                              ->where('supplier_number', $supplierNumber)
+            $supplier = Supplier::where('supplier_number', $supplierNumber)
                               ->active()
                               ->first();
 
@@ -437,14 +422,12 @@ class SupplierService
     {
         try {
             $supplierName = $request->get('supplier_name');
-            $companyId = Auth::user()->company_id ?? 101;
 
             if (!$supplierName) {
                 throw new \Exception('Supplier name is required');
             }
 
-            $supplier = Supplier::where('company_id', $companyId)
-                              ->where(function ($q) use ($supplierName) {
+            $supplier = Supplier::where(function ($q) use ($supplierName) {
                                   $q->where('supplier_name_ar', 'like', '%' . $supplierName . '%')
                                     ->orWhere('supplier_name_en', 'like', '%' . $supplierName . '%');
                               })
@@ -475,9 +458,6 @@ class SupplierService
                     'creator',
                     'updater'
                 ]);
-
-            $companyId = Auth::user()->company_id ?? 101;
-            $query->where('company_id', $companyId);
 
             // Supplier Number range search (from/to)
             if ($request->filled('supplier_number_from')) {
@@ -612,8 +592,6 @@ class SupplierService
     public function getSearchFormData()
     {
         try {
-            $companyId = Auth::user()->company_id ?? 101;
-
             return [
                 'supplier_types' => Supplier::SUPPLIER_TYPE_OPTIONS,
                 'classifications' => Supplier::CLASSIFICATION_OPTIONS,
@@ -651,8 +629,6 @@ class SupplierService
     public function getDeleted(Request $request)
     {
         try {
-            $companyId = Auth::user()->company_id ?? 101;
-
             $query = Supplier::onlyTrashed()
                 ->with([
                     'user',
@@ -666,8 +642,7 @@ class SupplierService
                     'creator',
                     'updater',
                     'deleter'
-                ])
-                ->where('company_id', $companyId);
+                ]);
 
             // Sorting
             $sortBy = $request->get('sort_by', 'deleted_at');
@@ -702,14 +677,33 @@ class SupplierService
     {
         try {
             return DB::transaction(function () use ($id) {
-                $supplier = Supplier::onlyTrashed()->findOrFail($id);
-                $supplier->restore();
+                // First check if supplier exists in trash
+                $supplier = Supplier::onlyTrashed()->find($id);
 
-                return [
-                    'success' => true,
-                    'message' => 'Supplier restored successfully',
-                    'supplier' => $supplier->load(['user', 'company', 'creator', 'updater'])
-                ];
+                if (!$supplier) {
+                    // Check if supplier exists but is not deleted
+                    $activeSupplier = Supplier::find($id);
+                    if ($activeSupplier) {
+                        throw new \Exception('Supplier is not deleted and cannot be restored.');
+                    }
+                    throw new \Exception('Supplier not found in deleted records.');
+                }
+
+                $supplier->restore();
+                $supplier->update(['deleted_by' => null]);
+
+                return $supplier->load([
+                    'user',
+                    'company',
+                    'branch',
+                    'currency',
+                    'department',
+                    'project',
+                    'donor',
+                    'salesRepresentative',
+                    'creator',
+                    'updater'
+                ]);
             });
 
         } catch (\Exception $e) {

@@ -3,8 +3,8 @@
 namespace Modules\Suppliers\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Suppliers\app\Services\SupplierService;
 use Modules\Suppliers\Http\Requests\SupplierRequest;
@@ -18,7 +18,7 @@ use Modules\Suppliers\Transformers\SupplierResource;
  */
 class SupplierController extends Controller
 {
-    protected $supplierService;
+    protected SupplierService $supplierService;
 
     public function __construct(SupplierService $supplierService)
     {
@@ -32,7 +32,7 @@ class SupplierController extends Controller
      * @param Request $request Request parameters for filtering and pagination
      * @return JsonResponse Collection of suppliers with pagination metadata
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         try {
             $suppliers = $this->supplierService->index($request);
@@ -68,7 +68,7 @@ class SupplierController extends Controller
      * @param SupplierRequest $request Validated supplier data
      * @return SupplierResource|JsonResponse Supplier resource or error response
      */
-    public function store(SupplierRequest $request)
+    public function store(SupplierRequest $request): SupplierResource|JsonResponse
     {
         try {
             DB::beginTransaction();
@@ -104,7 +104,7 @@ class SupplierController extends Controller
      * @param Supplier $supplier Supplier model instance
      * @return SupplierResource|JsonResponse Supplier resource or error response
      */
-    public function show(Supplier $supplier)
+    public function show(Supplier $supplier): SupplierResource|JsonResponse
     {
         try {
             $supplierData = $this->supplierService->show($supplier);
@@ -125,7 +125,7 @@ class SupplierController extends Controller
      * @param Supplier $supplier Supplier model instance
      * @return SupplierResource|JsonResponse Updated supplier resource or error response
      */
-    public function update(SupplierRequest $request, Supplier $supplier)
+    public function update(SupplierRequest $request, Supplier $supplier): SupplierResource|JsonResponse
     {
         try {
             $updatedSupplier = $this->supplierService->update($request, $supplier);
@@ -145,7 +145,7 @@ class SupplierController extends Controller
      * @param Supplier $supplier Supplier model instance
      * @return JsonResponse Success message or error response
      */
-    public function destroy(Supplier $supplier)
+    public function destroy(Supplier $supplier): JsonResponse
     {
         try {
             $this->supplierService->destroy($supplier);
@@ -162,7 +162,7 @@ class SupplierController extends Controller
      * @param Request $request Search criteria and pagination parameters
      * @return JsonResponse Paginated search results with metadata
      */
-    public function search(Request $request)
+    public function search(Request $request): JsonResponse
     {
         try {
             $suppliers = $this->supplierService->search($request);
@@ -189,7 +189,7 @@ class SupplierController extends Controller
      *
      * @return JsonResponse Form data for search interface
      */
-    public function getSearchFormData()
+    public function getSearchFormData(): JsonResponse
     {
         try {
             $formData = $this->supplierService->getSearchFormData();
@@ -208,7 +208,7 @@ class SupplierController extends Controller
      *
      * @return JsonResponse Form data for supplier creation/editing
      */
-    public function getFormData()
+    public function getFormData(): JsonResponse
     {
         try {
             $formData = $this->supplierService->getFormData();
@@ -228,7 +228,7 @@ class SupplierController extends Controller
      * @param Request $request Request parameters for pagination
      * @return JsonResponse Paginated list of deleted suppliers
      */
-    public function getDeleted(Request $request)
+    public function getDeleted(Request $request): JsonResponse
     {
         try {
             $suppliers = $this->supplierService->getDeleted($request);
@@ -256,7 +256,7 @@ class SupplierController extends Controller
      * @param int $id Supplier ID
      * @return JsonResponse Success message with supplier number or error response
      */
-    public function forceDelete($id)
+    public function forceDelete(int $id): JsonResponse
     {
         try {
             $result = $this->supplierService->forceDelete($id);
@@ -276,7 +276,7 @@ class SupplierController extends Controller
      *
      * @return JsonResponse List of sortable fields with display names
      */
-    public function getSortableFields()
+    public function getSortableFields(): JsonResponse
     {
         try {
             $sortableFields = $this->supplierService->getSortableFields();
@@ -299,7 +299,7 @@ class SupplierController extends Controller
      * @param int $id Supplier ID
      * @return SupplierResource|JsonResponse Restored supplier resource or error response
      */
-    public function restore($id)
+    public function restore(int $id): SupplierResource|JsonResponse
     {
         try {
             $supplier = $this->supplierService->restoreSupplier($id);
