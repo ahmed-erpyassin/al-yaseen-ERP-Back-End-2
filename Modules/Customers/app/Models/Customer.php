@@ -30,6 +30,8 @@ class Customer extends Model
         'country_id',
         'region_id',
         'city_id',
+        'customer_number',
+        'company_name',
         'first_name',
         'second_name',
         'contact_name',
@@ -162,5 +164,25 @@ class Customer extends Model
     {
         $customer = $builder->findOrFail($id);
         return $customer->delete();
+    }
+
+    /**
+     * Generate the next sequential customer number.
+     *
+     * @return string The generated customer number in format CUS-XXXX
+     */
+    public static function generateCustomerNumber(): string
+    {
+        $lastCustomer = self::orderBy('id', 'desc')->first();
+
+        if (!$lastCustomer || !$lastCustomer->customer_number) {
+            return 'CUS-0001';
+        }
+
+        // Extract number from last customer number (assuming format CUS-XXXX)
+        $lastNumber = (int) substr($lastCustomer->customer_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'CUS-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
 }
