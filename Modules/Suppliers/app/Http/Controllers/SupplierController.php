@@ -4,6 +4,7 @@ namespace Modules\Suppliers\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Suppliers\app\Services\SupplierService;
 use Modules\Suppliers\Http\Requests\SupplierRequest;
@@ -186,13 +187,12 @@ class SupplierController extends Controller
      * Get form data for supplier search interface.
      * Returns dropdown options and filter data for search forms.
      *
-     * @param Request $request Request parameters
      * @return JsonResponse Form data for search interface
      */
-    public function getSearchFormData(Request $request)
+    public function getSearchFormData()
     {
         try {
-            $formData = $this->supplierService->getSearchFormData($request);
+            $formData = $this->supplierService->getSearchFormData();
             return response()->json([
                 'success' => true,
                 'data'    => $formData
@@ -206,13 +206,12 @@ class SupplierController extends Controller
      * Get form data for supplier creation and editing.
      * Returns dropdown options and reference data for supplier forms.
      *
-     * @param Request $request Request parameters
      * @return JsonResponse Form data for supplier creation/editing
      */
-    public function getFormData(Request $request)
+    public function getFormData()
     {
         try {
-            $formData = $this->supplierService->getFormData($request);
+            $formData = $this->supplierService->getFormData();
             return response()->json([
                 'success' => true,
                 'data'    => $formData

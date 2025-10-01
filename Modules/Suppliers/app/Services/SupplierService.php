@@ -18,7 +18,7 @@ class SupplierService
     public function index(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
+            $companyId = Auth::user()->company_id ?? 101;
             $supplier_search = $request->get('supplier_search', null);
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
@@ -88,8 +88,8 @@ class SupplierService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = $request->user()->company_id ?? 101;
-                $userId = $request->user()->id;
+                $companyId = Auth::user()->company_id ?? 101;
+                $userId = Auth::id();
 
                 $validatedData = $request->validated();
 
@@ -240,10 +240,10 @@ class SupplierService
     /**
      * Get form data for supplier creation/editing
      */
-    public function getFormData(Request $request)
+    public function getFormData()
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
+            $companyId = Auth::user()->company_id ?? 101;
 
             return [
                 'supplier_types' => Supplier::SUPPLIER_TYPE_OPTIONS,
@@ -378,7 +378,7 @@ class SupplierService
     {
         try {
             $query = Supplier::query();
-            $companyId = $request->user()->company_id ?? 101;
+            $companyId = Auth::user()->company_id ?? 101;
             $query->where('company_id', $companyId);
 
             if ($request->filled('search')) {
@@ -408,7 +408,7 @@ class SupplierService
     {
         try {
             $supplierNumber = $request->get('supplier_number');
-            $companyId = $request->user()->company_id ?? 101;
+            $companyId = Auth::user()->company_id ?? 101;
 
             if (!$supplierNumber) {
                 throw new \Exception('Supplier number is required');
@@ -437,7 +437,7 @@ class SupplierService
     {
         try {
             $supplierName = $request->get('supplier_name');
-            $companyId = $request->user()->company_id ?? 101;
+            $companyId = Auth::user()->company_id ?? 101;
 
             if (!$supplierName) {
                 throw new \Exception('Supplier name is required');
@@ -476,7 +476,7 @@ class SupplierService
                     'updater'
                 ]);
 
-            $companyId = $request->user()->company_id ?? 101;
+            $companyId = Auth::user()->company_id ?? 101;
             $query->where('company_id', $companyId);
 
             // Supplier Number range search (from/to)
@@ -609,10 +609,10 @@ class SupplierService
     /**
      * Get search form data for suppliers
      */
-    public function getSearchFormData(Request $request)
+    public function getSearchFormData()
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
+            $companyId = Auth::user()->company_id ?? 101;
 
             return [
                 'supplier_types' => Supplier::SUPPLIER_TYPE_OPTIONS,
@@ -651,7 +651,7 @@ class SupplierService
     public function getDeleted(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
+            $companyId = Auth::user()->company_id ?? 101;
 
             $query = Supplier::onlyTrashed()
                 ->with([
