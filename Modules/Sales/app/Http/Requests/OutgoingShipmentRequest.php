@@ -19,6 +19,7 @@ class OutgoingShipmentRequest extends FormRequest
             // Optional fields
             'employee_id' => 'nullable|exists:employees,id',
             'branch_id' => 'nullable|exists:branches,id',
+            'currency_id' => 'required|exists:currencies,id',
             'due_date' => 'nullable|date|after:today',
             'notes' => 'nullable|string|max:1000',
 
@@ -38,10 +39,7 @@ class OutgoingShipmentRequest extends FormRequest
             'items.*.notes' => 'nullable|string|max:500',
             'total_local' => 'nullable|numeric|min:0',
             'notes' => 'nullable|string',
-            'items' => 'required|array|min:1',
-            'items.*.item_id' => 'required|integer',
             'items.*.description' => 'nullable|string',
-            'items.*.quantity' => 'required|numeric|min:0',
             'items.*.unit_price' => 'required|numeric|min:0',
             'items.*.discount_rate' => 'nullable|numeric|min:0',
             'items.*.tax_rate' => 'nullable|numeric|min:0',
