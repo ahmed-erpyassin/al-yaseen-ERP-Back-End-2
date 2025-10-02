@@ -268,31 +268,68 @@ class IncomingOrderController extends Controller
     {
         try {
             $currencyId = $request->get('currency_id');
-            $currency = \Modules\FinancialAccounts\Models\Currency::find($currencyId);
+
+            // Get current user's company
+            $user = Auth::user();
+            $companyId = $user->company_id ?? 1; // Default to company 1 if not set
+
+            // Validate currency_id parameter
+            if (!$currencyId) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Currency ID is required.',
+                    'available_currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
+                        ->select('id', 'code', 'name')->get()
+                ], 400);
+            }
+
+            // Find currency within the user's company
+            $currency = \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
+                ->where('id', $currencyId)
+                ->first();
 
             if (!$currency) {
                 return response()->json([
                     'success' => false,
-                    'error' => 'Currency not found.'
+                    'error' => 'Currency not found.',
+                    'available_currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
+                        ->select('id', 'code', 'name')->get()
                 ], 404);
             }
 
             // Get live rate from external API
-            $response = \Illuminate\Support\Facades\Http::timeout(10)
-                ->get("https://api.exchangerate-api.com/v4/latest/USD");
-
             $rate = 1; // Default rate
-            if ($response->successful()) {
-                $rates = $response->json()['rates'] ?? [];
-                $rate = $rates[$currency->code] ?? 1;
+            $apiError = null;
+
+            try {
+                $response = \Illuminate\Support\Facades\Http::timeout(10)
+                    ->get("https://api.exchangerate-api.com/v4/latest/USD");
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $rates = $data['rates'] ?? [];
+
+                    if (isset($rates[$currency->code])) {
+                        $rate = $rates[$currency->code];
+                    } else {
+                        $apiError = "Currency code '{$currency->code}' not found in exchange rate API";
+                    }
+                } else {
+                    $apiError = "Exchange rate API returned error: " . $response->status();
+                }
+            } catch (\Exception $e) {
+                $apiError = "Failed to fetch exchange rate: " . $e->getMessage();
             }
 
             return response()->json([
                 'success' => true,
                 'data' => [
+                    'currency_id' => $currency->id,
                     'currency_code' => $currency->code,
                     'currency_name' => $currency->name,
-                    'exchange_rate' => $rate
+                    'exchange_rate' => $rate,
+                    'is_default_rate' => $rate === 1,
+                    'api_error' => $apiError
                 ]
             ], 200);
         } catch (\Exception $e) {

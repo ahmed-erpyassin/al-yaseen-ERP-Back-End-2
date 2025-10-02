@@ -26,6 +26,10 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
     // ========================================
     Route::prefix('outgoing-offers')->name('sales-management.outgoing-offers.')->group(function () {
 
+        // Form data endpoint
+        Route::get('/form-data', [OutgoingOfferController::class, 'getFormData'])
+            ->name('form-data');
+
         // Basic CRUD operations
         Route::get('/list-all', [OutgoingOfferController::class, 'index'])
             ->name('list-all');

@@ -4,6 +4,7 @@ namespace Modules\Sales\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Sales\app\Services\OutgoingOfferService;
 use Modules\Sales\Http\Requests\OutgoingOfferRequest;
 use Modules\Sales\Transformers\OutgoingOfferResource;
@@ -22,6 +23,44 @@ class OutgoingOfferController extends Controller
     public function __construct(OutgoingOfferService $outgoingOfferService)
     {
         $this->outgoingOfferService = $outgoingOfferService;
+    }
+
+    /**
+     * Get form data for creating outgoing offers
+     */
+    public function getFormData()
+    {
+        try {
+            $user = Auth::user();
+            $companyId = $user->company_id ?? 1;
+
+            $data = [
+                'currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
+                    ->select('id', 'name', 'code', 'symbol')->get(),
+                'journals' => \Modules\Billing\Models\Journal::where('company_id', $companyId)
+                    ->where('type', 'sales')
+                    ->select('id', 'name', 'code', 'type')->get(),
+                'units' => \Modules\Inventory\Models\Unit::where('company_id', $companyId)
+                    ->select('id', 'name', 'code', 'symbol')->get(),
+                'customers' => \Modules\Customers\Models\Customer::where('company_id', $companyId)
+                    ->select('id', 'first_name', 'second_name', 'email', 'mobile')->get(),
+                'branches' => \Modules\Companies\Models\Branch::where('company_id', $companyId)
+                    ->select('id', 'name', 'code')->get(),
+                'items' => \Modules\Inventory\Models\Item::where('company_id', $companyId)
+                    ->select('id', 'name', 'item_number', 'description')->get(),
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching form data.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

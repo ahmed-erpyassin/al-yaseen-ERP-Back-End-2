@@ -157,7 +157,7 @@ class OutgoingShipmentService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = $request->user()->company_id ?? 101;
+                $companyId = $request->user()->company_id ?? 1;
                 $userId = $request->user()->id;
                 $validatedData = $request->validated();
 

@@ -13,6 +13,9 @@ class SaleSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if employees exist, if not use null
+        $employeeId = \Modules\HumanResources\Models\Employee::first()?->id;
+
         $sales = [
             // Incoming Orders
             [
@@ -20,7 +23,7 @@ class SaleSeeder extends Seeder
                 'company_id' => 1,
                 'branch_id' => 1,
                 'currency_id' => 1,
-                'employee_id' => 1,
+                'employee_id' => $employeeId,
                 'customer_id' => 1,
                 'journal_id' => null,
                 'journal_number' => 1001,
@@ -49,7 +52,7 @@ class SaleSeeder extends Seeder
                 'company_id' => 1,
                 'branch_id' => 1,
                 'currency_id' => 1,
-                'employee_id' => 1,
+                'employee_id' => $employeeId,
                 'customer_id' => 2,
                 'journal_id' => null,
                 'journal_number' => 1002,
@@ -80,7 +83,7 @@ class SaleSeeder extends Seeder
                 'company_id' => 1,
                 'branch_id' => 1,
                 'currency_id' => 1,
-                'employee_id' => 1,
+                'employee_id' => $employeeId,
                 'customer_id' => 3,
                 'journal_id' => null,
                 'journal_number' => 2001,
@@ -111,7 +114,7 @@ class SaleSeeder extends Seeder
                 'company_id' => 1,
                 'branch_id' => 1,
                 'currency_id' => 1,
-                'employee_id' => 1,
+                'employee_id' => $employeeId,
                 'customer_id' => 1,
                 'journal_id' => null,
                 'journal_number' => 3001,
@@ -140,7 +143,7 @@ class SaleSeeder extends Seeder
                 'company_id' => 1,
                 'branch_id' => 1,
                 'currency_id' => 1,
-                'employee_id' => 1,
+                'employee_id' => $employeeId,
                 'customer_id' => 2,
                 'journal_id' => null,
                 'journal_number' => 3002,
@@ -171,7 +174,7 @@ class SaleSeeder extends Seeder
                 'company_id' => 1,
                 'branch_id' => 1,
                 'currency_id' => 1,
-                'employee_id' => 1,
+                'employee_id' => $employeeId,
                 'customer_id' => 3,
                 'journal_id' => null,
                 'journal_number' => 4001,
@@ -202,7 +205,7 @@ class SaleSeeder extends Seeder
                 'company_id' => 1,
                 'branch_id' => 1,
                 'currency_id' => 1,
-                'employee_id' => 1,
+                'employee_id' => $employeeId,
                 'customer_id' => 1,
                 'journal_id' => null,
                 'journal_number' => 5001,
