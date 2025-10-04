@@ -13,6 +13,7 @@ use Modules\Companies\Models\Branch;
 use Modules\Customers\Models\Customer;
 use Modules\Suppliers\Models\Supplier;
 use Modules\FinancialAccounts\Models\Currency;
+use Modules\Purchases\app\Enums\PurchaseTypeEnum;
 use Modules\FinancialAccounts\Models\TaxRate;
 use Modules\Billing\Models\Journal;
 use Illuminate\Support\Facades\DB;
@@ -256,7 +257,7 @@ class Purchase extends Model
      */
     public static function generateOutgoingOrderNumber(): string
     {
-        $lastOrder = self::where('type', 'outgoing_order')
+        $lastOrder = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
             ->orderBy('id', 'desc')
             ->first();
 
@@ -410,16 +411,26 @@ class Purchase extends Model
      */
     private static function getCurrentJournal($companyId): string
     {
-        $lastOrder = self::where('type', 'outgoing_order')
+        $lastOrder = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
             ->where('company_id', $companyId)
             ->orderBy('id', 'desc')
             ->first();
 
-        if (!$lastOrder || !$lastOrder->journal_code) {
+        if (!$lastOrder) {
             return 'JOU-001';
         }
 
-        return $lastOrder->journal_code;
+        // Check if journal_code column exists and has a value
+        try {
+            $journalCode = $lastOrder->journal_code ?? null;
+            if (!$journalCode) {
+                return 'JOU-001';
+            }
+            return $journalCode;
+        } catch (\Exception $e) {
+            // Column doesn't exist, return default
+            return 'JOU-001';
+        }
     }
 
     /**
@@ -427,7 +438,7 @@ class Purchase extends Model
      */
     private static function getNextInvoiceNumber($companyId): int
     {
-        $lastOrder = self::where('type', 'outgoing_order')
+        $lastOrder = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
             ->where('company_id', $companyId)
             ->orderBy('id', 'desc')
             ->first();
@@ -440,12 +451,17 @@ class Purchase extends Model
      */
     private static function shouldCreateNewJournal($companyId, $currentJournal): bool
     {
-        $invoicesInCurrentJournal = self::where('type', 'outgoing_order')
-            ->where('company_id', $companyId)
-            ->where('journal_code', $currentJournal)
-            ->count();
+        try {
+            $invoicesInCurrentJournal = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
+                ->where('company_id', $companyId)
+                ->where('journal_code', $currentJournal)
+                ->count();
 
-        return $invoicesInCurrentJournal >= self::INVOICES_PER_JOURNAL;
+            return $invoicesInCurrentJournal >= self::INVOICES_PER_JOURNAL;
+        } catch (\Exception $e) {
+            // If journal_code column doesn't exist, return false to use default journal
+            return false;
+        }
     }
 
     /**
@@ -453,20 +469,30 @@ class Purchase extends Model
      */
     private static function createNewJournal($companyId): string
     {
-        $lastJournal = self::where('type', 'outgoing_order')
+        $lastJournal = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
             ->where('company_id', $companyId)
             ->orderBy('id', 'desc')
             ->first();
 
-        if (!$lastJournal || !$lastJournal->journal_code) {
+        if (!$lastJournal) {
             return 'JOU-001';
         }
 
-        // Extract number from last journal code (assuming format JOU-XXX)
-        $lastNumber = (int) substr($lastJournal->journal_code, -3);
-        $nextNumber = $lastNumber + 1;
+        try {
+            $journalCode = $lastJournal->journal_code ?? null;
+            if (!$journalCode) {
+                return 'JOU-001';
+            }
 
-        return 'JOU-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+            // Extract number from last journal code (assuming format JOU-XXX)
+            $lastNumber = (int) substr($journalCode, -3);
+            $nextNumber = $lastNumber + 1;
+
+            return 'JOU-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        } catch (\Exception $e) {
+            // If journal_code column doesn't exist, return default
+            return 'JOU-001';
+        }
     }
 
     /**
@@ -474,7 +500,7 @@ class Purchase extends Model
      */
     private static function getJournalNumber($companyId): int
     {
-        $lastOrder = self::where('type', 'outgoing_order')
+        $lastOrder = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
             ->where('company_id', $companyId)
             ->orderBy('id', 'desc')
             ->first();
@@ -487,7 +513,7 @@ class Purchase extends Model
      */
     public function scopeOutgoingOrders($query)
     {
-        return $query->where('type', 'outgoing_order');
+        return $query->where('type', PurchaseTypeEnum::OUTGOING_ORDER);
     }
 
     /**

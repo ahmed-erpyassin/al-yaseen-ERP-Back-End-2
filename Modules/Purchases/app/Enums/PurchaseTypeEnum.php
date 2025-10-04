@@ -6,7 +6,7 @@ interface PurchaseTypeEnum
 {
     const QUOTATION = 'quotation';
     const ORDER = 'order';
-    const OUTGOING_ORDER = 'outgoing_order';
+    const OUTGOING_ORDER = 'order';
     const INCOMING_SHIPMENT = 'shipment';
     const INVOICE = 'invoice';
     const EXPENSE = 'expense';
