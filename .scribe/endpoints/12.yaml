@@ -1,22 +1,20 @@
-name: 'Inventory Management / ManufacturingFormula'
+name: 'Inventory Management / Inventory Movements'
 description: |-
-   *
-   *
-   
+
+  APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/manufacturing-formulas/catalog-all
+    uri: api/v1/inventory-movements/monitor-all
     metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
+      groupName: 'Inventory Management / Inventory Movements'
       groupDescription: |-
-         *
-         *
-         
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of manufacturing formulas with advanced search and filtering.'
+      title: '✅ Display a listing of inventory movements.'
       description: ''
       authenticated: true
       deprecated: false
@@ -37,7 +35,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/manufacturing-formulas/catalog-all could not be found."
+              "message": "The route api/v1/inventory-movements/monitor-all could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -57,16 +55,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/manufacturing-formulas/establish-formula
+    uri: api/v1/inventory-movements/initiate-movement
     metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
+      groupName: 'Inventory Management / Inventory Movements'
       groupDescription: |-
-         *
-         *
-         
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Store Manufacturing Formula via API.'
+      title: '✅ Store a newly created inventory movement (Add Warehouse Movement).'
       description: ''
       authenticated: true
       deprecated: false
@@ -80,19 +77,238 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      item_id:
-        name: item_id
-        description: 'The <code>id</code> of an existing record in the items table.'
-        required: true
-        example: consequatur
+      movement_number:
+        name: movement_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: vmqeopfuudtdsufvyvddq
         type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_type:
+        name: movement_type
+        description: ''
+        required: true
+        example: inventory_count
+        type: string
+        enumValues:
+          - outbound
+          - inbound
+          - transfer
+          - manufacturing
+          - inventory_count
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      movement_date:
+        name: movement_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:27'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_time:
+        name: movement_time
+        description: 'Must be a valid date in the format <code>H:i:s</code>.'
+        required: false
+        example: '13:03:27'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      vendor_id:
+        name: vendor_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      vendor_name:
+        name: vendor_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_description:
+        name: movement_description
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      inbound_invoice_id:
+        name: inbound_invoice_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      outbound_invoice_id:
+        name: outbound_invoice_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      inbound_invoice_number:
+        name: inbound_invoice_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      outbound_invoice_number:
+        name: outbound_invoice_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      user_number:
+        name: user_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      shipment_number:
+        name: shipment_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: uydlsmsjuryvojcybzvrb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      invoice_number:
+        name: invoice_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: yickznkygloigmkwxphlv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      reference:
+        name: reference
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: azjrcnfbaqywuxhgjjmzu
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      warehouse_id:
+        name: warehouse_id
+        description: ''
+        required: true
+        example: 17
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      consumed_quantity:
-        name: consumed_quantity
-        description: 'Must be at least 0.'
+      status:
+        name: status
+        description: ''
+        required: false
+        example: confirmed
+        type: string
+        enumValues:
+          - draft
+          - confirmed
+          - cancelled
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_data:
+        name: movement_data
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'movement_data[].item_id':
+        name: 'movement_data[].item_id'
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'movement_data[].unit_id':
+        name: 'movement_data[].unit_id'
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].quantity':
+        name: 'movement_data[].quantity'
+        description: 'Must be at least 0.0001.'
         required: true
         example: 45
         type: number
@@ -100,135 +316,598 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      produced_quantity:
-        name: produced_quantity
+      'movement_data[].unit_cost':
+        name: 'movement_data[].unit_cost'
         description: 'Must be at least 0.'
-        required: true
+        required: false
         example: 56
         type: number
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      labor_cost:
-        name: labor_cost
+      'movement_data[].unit_price':
+        name: 'movement_data[].unit_price'
         description: 'Must be at least 0.'
-        required: true
+        required: false
         example: 16
         type: number
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      operating_cost:
-        name: operating_cost
+      'movement_data[].inventory_count':
+        name: 'movement_data[].inventory_count'
         description: 'Must be at least 0.'
-        required: true
+        required: false
         example: 50
         type: number
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      waste_cost:
-        name: waste_cost
-        description: 'Must be at least 0.'
-        required: true
-        example: 55
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      unit_id:
-        name: unit_id
-        description: 'The <code>id</code> of an existing record in the units table.'
+      'movement_data[].notes':
+        name: 'movement_data[].notes'
+        description: 'Must not be greater than 500 characters.'
         required: false
-        example: null
+        example: pfuudtdsufvyvddqamnii
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      formula_name:
-        name: formula_name
+      'movement_data[].batch_number':
+        name: 'movement_data[].batch_number'
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: fuudtdsufvyvddqamniih
+        example: hfqcoynlazghdtqtqxbaj
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      formula_description:
-        name: formula_description
-        description: 'Must not be greater than 1000 characters.'
+      'movement_data[].expiry_date':
+        name: 'movement_data[].expiry_date'
+        description: 'Must be a valid date.'
         required: false
-        example: fqcoynlazghdtqtqxbajw
+        example: '2025-09-30T13:03:27'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      formula_number:
-        name: formula_number
-        description: 'Must not be greater than 50 characters.'
+      'movement_data[].serial_number':
+        name: 'movement_data[].serial_number'
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: bpilpmufinllwloauydls
+        example: wbpilpmufinllwloauydl
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      selected_purchase_price_type:
-        name: selected_purchase_price_type
+      'movement_data[].location_code':
+        name: 'movement_data[].location_code'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: smsjuryvojcybzvrbyick
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].shelf_number':
+        name: 'movement_data[].shelf_number'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: znkygloigmkwxphlvazjr
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].bin_number':
+        name: 'movement_data[].bin_number'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: cnfbaqywuxhgjjmzuxjub
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      movement_number: vmqeopfuudtdsufvyvddq
+      movement_type: inventory_count
+      movement_date: '2025-09-30T13:03:27'
+      movement_time: '13:03:27'
+      vendor_id: 17
+      customer_id: 17
+      vendor_name: mqeopfuudtdsufvyvddqa
+      customer_name: mniihfqcoynlazghdtqtq
+      movement_description: xbajwbpilpmufinllwloa
+      inbound_invoice_id: 17
+      outbound_invoice_id: 17
+      inbound_invoice_number: mqeopfuudtdsufvyvddqa
+      outbound_invoice_number: mniihfqcoynlazghdtqtq
+      user_number: xbajwbpilpmufinllwloa
+      shipment_number: uydlsmsjuryvojcybzvrb
+      invoice_number: yickznkygloigmkwxphlv
+      reference: azjrcnfbaqywuxhgjjmzu
+      warehouse_id: 17
+      status: confirmed
+      movement_data:
+        -
+          item_id: 17
+          unit_id: 17
+          quantity: 45
+          unit_cost: 56
+          unit_price: 16
+          inventory_count: 50
+          notes: pfuudtdsufvyvddqamnii
+          batch_number: hfqcoynlazghdtqtqxbaj
+          expiry_date: '2025-09-30T13:03:27'
+          serial_number: wbpilpmufinllwloauydl
+          location_code: smsjuryvojcybzvrbyick
+          shelf_number: znkygloigmkwxphlvazjr
+          bin_number: cnfbaqywuxhgjjmzuxjub
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/inventory-movements/review-movement/{id}'
+    metadata:
+      groupName: 'Inventory Management / Inventory Movements'
+      groupDescription: |-
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '✅ Display the specified inventory movement.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the review movement.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/review-movement/consequatur could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/inventory-movements/adjust-movement/{id}'
+    metadata:
+      groupName: 'Inventory Management / Inventory Movements'
+      groupDescription: |-
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '✅ Update the specified inventory movement.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the adjust movement.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      movement_number:
+        name: movement_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_type:
+        name: movement_type
         description: ''
-        required: false
-        example: second
+        required: true
+        example: outbound
         type: string
         enumValues:
-          - first
-          - second
-          - third
+          - outbound
+          - inbound
+          - transfer
+          - manufacturing
+          - inventory_count
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
-      quality_requirements:
-        name: quality_requirements
-        description: 'Must not be greater than 1000 characters.'
+      movement_date:
+        name: movement_date
+        description: 'Must be a valid date.'
         required: false
-        example: msjuryvojcybzvrbyickz
+        example: '2025-09-30T13:03:27'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      requires_inspection:
-        name: requires_inspection
-        description: ''
+      movement_time:
+        name: movement_time
+        description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: true
-        type: boolean
+        example: '13:03:27'
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
+        custom: []
+      vendor_id:
+        name: vendor_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      vendor_name:
+        name: vendor_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_description:
+        name: movement_description
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      inbound_invoice_id:
+        name: inbound_invoice_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      outbound_invoice_id:
+        name: outbound_invoice_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      inbound_invoice_number:
+        name: inbound_invoice_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      outbound_invoice_number:
+        name: outbound_invoice_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      user_number:
+        name: user_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      shipment_number:
+        name: shipment_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: uydlsmsjuryvojcybzvrb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      invoice_number:
+        name: invoice_number
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: yickznkygloigmkwxphlv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      reference:
+        name: reference
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: azjrcnfbaqywuxhgjjmzu
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      warehouse_id:
+        name: warehouse_id
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
         custom: []
       status:
         name: status
         description: ''
         required: false
-        example: active
+        example: draft
         type: string
         enumValues:
           - draft
-          - active
-          - inactive
-          - archived
+          - confirmed
+          - cancelled
         exampleWasSpecified: false
         nullable: true
         custom: []
-      is_active:
-        name: is_active
+      movement_data:
+        name: movement_data
+        description: ''
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].id':
+        name: 'movement_data[].id'
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].item_id':
+        name: 'movement_data[].item_id'
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'movement_data[].unit_id':
+        name: 'movement_data[].unit_id'
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].quantity':
+        name: 'movement_data[].quantity'
+        description: 'Must be at least 0.0001.'
+        required: true
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'movement_data[].unit_cost':
+        name: 'movement_data[].unit_cost'
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].unit_price':
+        name: 'movement_data[].unit_price'
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].inventory_count':
+        name: 'movement_data[].inventory_count'
+        description: 'Must be at least 0.'
+        required: false
+        example: 50
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].notes':
+        name: 'movement_data[].notes'
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: pfuudtdsufvyvddqamnii
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].batch_number':
+        name: 'movement_data[].batch_number'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: hfqcoynlazghdtqtqxbaj
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].expiry_date':
+        name: 'movement_data[].expiry_date'
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:27'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].serial_number':
+        name: 'movement_data[].serial_number'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: wbpilpmufinllwloauydl
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].location_code':
+        name: 'movement_data[].location_code'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: smsjuryvojcybzvrbyick
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].shelf_number':
+        name: 'movement_data[].shelf_number'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: znkygloigmkwxphlvazjr
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[].bin_number':
+        name: 'movement_data[].bin_number'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: cnfbaqywuxhgjjmzuxjub
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'movement_data[]._delete':
+        name: 'movement_data[]._delete'
         description: ''
         required: false
         example: false
@@ -237,206 +916,241 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      batch_size:
-        name: batch_size
-        description: 'Must be at least 0.'
-        required: false
-        example: 48
-        type: number
+    cleanBodyParameters:
+      movement_number: vmqeopfuudtdsufvyvddq
+      movement_type: outbound
+      movement_date: '2025-09-30T13:03:27'
+      movement_time: '13:03:27'
+      vendor_id: 17
+      customer_id: 17
+      vendor_name: mqeopfuudtdsufvyvddqa
+      customer_name: mniihfqcoynlazghdtqtq
+      movement_description: xbajwbpilpmufinllwloa
+      inbound_invoice_id: 17
+      outbound_invoice_id: 17
+      inbound_invoice_number: mqeopfuudtdsufvyvddqa
+      outbound_invoice_number: mniihfqcoynlazghdtqtq
+      user_number: xbajwbpilpmufinllwloa
+      shipment_number: uydlsmsjuryvojcybzvrb
+      invoice_number: yickznkygloigmkwxphlv
+      reference: azjrcnfbaqywuxhgjjmzu
+      warehouse_id: 17
+      status: draft
+      movement_data:
+        -
+          id: 17
+          item_id: 17
+          unit_id: 17
+          quantity: 45
+          unit_cost: 56
+          unit_price: 16
+          inventory_count: 50
+          notes: pfuudtdsufvyvddqamnii
+          batch_number: hfqcoynlazghdtqtqxbaj
+          expiry_date: '2025-09-30T13:03:27'
+          serial_number: wbpilpmufinllwloauydl
+          location_code: smsjuryvojcybzvrbyick
+          shelf_number: znkygloigmkwxphlvazjr
+          bin_number: cnfbaqywuxhgjjmzuxjub
+          _delete: false
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/inventory-movements/cancel-movement/{id}'
+    metadata:
+      groupName: 'Inventory Management / Inventory Movements'
+      groupDescription: |-
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '✅ Remove the specified inventory movement (soft delete).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the cancel movement.'
+        required: true
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
-      production_time_minutes:
-        name: production_time_minutes
-        description: 'Must be at least 0.'
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/inventory-movements/setup-data
+    metadata:
+      groupName: 'Inventory Management / Inventory Movements'
+      groupDescription: |-
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '✅ Get form data for inventory movement.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/setup-data could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/inventory-movements/filter-by-criteria
+    metadata:
+      groupName: 'Inventory Management / Inventory Movements'
+      groupDescription: |-
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '✅ Filter inventory movements by specific field value (Selection-Driven Display).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      field:
+        name: field
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      value:
+        name: value
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Must be at least 1. Must not be greater than 100.'
         required: false
-        example: 36
+        example: 13
         type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      preparation_time_minutes:
-        name: preparation_time_minutes
-        description: 'Must be at least 0.'
+      sort_by:
+        name: sort_by
+        description: ''
         required: false
-        example: 87
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      production_notes:
-        name: production_notes
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: gloigmkwxphlvazjrcnfb
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      preparation_notes:
-        name: preparation_notes
-        description: 'Must not be greater than 1000 characters.'
+      sort_direction:
+        name: sort_direction
+        description: ''
         required: false
-        example: aqywuxhgjjmzuxjubqouz
+        example: desc
         type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      usage_instructions:
-        name: usage_instructions
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: swiwxtrkimfcatbxspzmr
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      tolerance_percentage:
-        name: tolerance_percentage
-        description: 'Must be at least 0. Must not be greater than 100.'
-        required: false
-        example: 1
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      effective_from:
-        name: effective_from
-        description: 'Must be a valid date.'
-        required: false
-        example: '2025-09-25T13:42:25'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      effective_to:
-        name: effective_to
-        description: 'Must be a valid date. Must be a date after <code>effective_from</code>.'
-        required: false
-        example: '2106-10-25'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      company_id:
-        name: company_id
-        description: 'The <code>id</code> of an existing record in the companies table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      user_id:
-        name: user_id
-        description: 'The <code>id</code> of an existing record in the users table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      branch_id:
-        name: branch_id
-        description: 'The <code>id</code> of an existing record in the branches table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
+        enumValues:
+          - asc
+          - desc
         exampleWasSpecified: false
         nullable: true
         custom: []
     cleanBodyParameters:
-      item_id: consequatur
-      consumed_quantity: 45
-      produced_quantity: 56
-      labor_cost: 16
-      operating_cost: 50
-      waste_cost: 55
-      formula_name: fuudtdsufvyvddqamniih
-      formula_description: fqcoynlazghdtqtqxbajw
-      formula_number: bpilpmufinllwloauydls
-      selected_purchase_price_type: second
-      quality_requirements: msjuryvojcybzvrbyickz
-      requires_inspection: true
-      status: active
-      is_active: false
-      batch_size: 48
-      production_time_minutes: 36
-      preparation_time_minutes: 87
-      production_notes: gloigmkwxphlvazjrcnfb
-      preparation_notes: aqywuxhgjjmzuxjubqouz
-      usage_instructions: swiwxtrkimfcatbxspzmr
-      tolerance_percentage: 1
-      effective_from: '2025-09-25T13:42:25'
-      effective_to: '2106-10-25'
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/manufacturing-formulas/examine-formula/{id}'
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Display the specified manufacturing formula.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the examine formula.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+      field: consequatur
+      value: consequatur
+      per_page: 13
+      sort_by: consequatur
+      sort_direction: desc
     fileParameters: []
     responses:
       -
         status: 404
         content: |-
           {
-              "message": "The route api/v1/manufacturing-formulas/examine-formula/consequatur could not be found."
+              "message": "The route api/v1/inventory-movements/filter-by-criteria could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -455,66 +1169,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - DELETE
-    uri: 'api/v1/manufacturing-formulas/remove-formula/{id}'
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Remove the specified manufacturing formula (soft delete).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the remove formula.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
       - GET
-    uri: api/v1/manufacturing-formulas/item-numbers
+    uri: api/v1/inventory-movements/archived-movements
     metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
+      groupName: 'Inventory Management / Inventory Movements'
       groupDescription: |-
-         *
-         *
-         
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Get all Item Numbers for dropdown simulation.'
+      title: '✅ Get trashed inventory movements (soft deleted).'
       description: ''
       authenticated: true
       deprecated: false
@@ -535,7 +1199,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/manufacturing-formulas/item-numbers could not be found."
+              "message": "The route api/v1/inventory-movements/archived-movements could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -555,16 +1219,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/manufacturing-formulas/item-details
+    uri: api/v1/inventory-movements/initial-movement
     metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
+      groupName: 'Inventory Management / Inventory Movements'
       groupDescription: |-
-         *
-         *
-         
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Get Item details by Item Number or Name.'
+      title: '✅ Get first inventory movement (First/Last sorting).'
       description: ''
       authenticated: true
       deprecated: false
@@ -585,7 +1248,192 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/manufacturing-formulas/item-details could not be found."
+              "message": "The route api/v1/inventory-movements/initial-movement could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/inventory-movements/final-movement
+    metadata:
+      groupName: 'Inventory Management / Inventory Movements'
+      groupDescription: |-
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '✅ Get last inventory movement (First/Last sorting).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/final-movement could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/inventory-movements/next-sequence-number
+    metadata:
+      groupName: 'Inventory Management / Inventory Movements'
+      groupDescription: |-
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '✅ Get next sequential movement number for preview.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      warehouse_id:
+        name: warehouse_id
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      movement_type:
+        name: movement_type
+        description: ''
+        required: true
+        example: transfer
+        type: string
+        enumValues:
+          - outbound
+          - inbound
+          - transfer
+          - manufacturing
+          - inventory_count
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      warehouse_id: 17
+      movement_type: transfer
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/next-sequence-number could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/inventory-movements/{id}/movement-details'
+    metadata:
+      groupName: 'Inventory Management / Inventory Movements'
+      groupDescription: |-
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '✅ Get movement data with sorting (First/Last for movement data table).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the inventory movement.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-movements/consequatur/movement-details could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -605,404 +1453,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/manufacturing-formulas/calculate-cost
+    uri: 'api/v1/inventory-movements/{id}/validate-movement'
     metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
+      groupName: 'Inventory Management / Inventory Movements'
       groupDescription: |-
-         *
-         *
-         
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Calculate Final Cost for existing formula (API endpoint).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/manufacturing-formulas/available-fields
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get all available fields for dynamic data display.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/manufacturing-formulas/available-fields could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/manufacturing-formulas/field-values
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get field values for dropdown filtering.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/manufacturing-formulas/field-values could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/manufacturing-formulas/selectable-fields
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get all available fields for selection.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/manufacturing-formulas/selectable-fields could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/manufacturing-formulas/field-based-data
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get field-based data display - Show data based on selected field.'
-      description: 'When user clicks on any field in the table, show related data.'
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/manufacturing-formulas/field-based-data could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/manufacturing-formulas/formula-numbers
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get manufacturing formula numbers for dropdown.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/manufacturing-formulas/formula-numbers could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/manufacturing-formulas/item-by-formula-number
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get item details by manufacturing formula number.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/manufacturing-formulas/item-by-formula-number could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/manufacturing-formulas/warehouses
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get warehouses for dropdown.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/manufacturing-formulas/warehouses could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: 'api/v1/manufacturing-formulas/update-prices-from-suppliers/{id}'
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Update prices from suppliers table for a manufactured formula.'
+      title: '✅ Confirm inventory movement.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1014,7 +1473,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the update prices from supplier.'
+        description: 'The ID of the inventory movement.'
         required: true
         example: consequatur
         type: string
@@ -1041,17 +1500,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - PUT
-    uri: api/v1/manufacturing-formulas/update-all-prices-from-suppliers
+      - POST
+    uri: 'api/v1/inventory-movements/{id}/replicate-movement'
     metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
+      groupName: 'Inventory Management / Inventory Movements'
       groupDescription: |-
-         *
-         *
-         
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Update prices from suppliers table for all manufactured formulas.'
+      title: '✅ Duplicate inventory movement with new date and time.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1060,8 +1518,19 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the inventory movement.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1080,16 +1549,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/v1/manufacturing-formulas/{id}/restore-formula'
+    uri: 'api/v1/inventory-movements/{id}/reactivate-movement'
     metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
+      groupName: 'Inventory Management / Inventory Movements'
       groupDescription: |-
-         *
-         *
-         
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Restore a soft deleted manufacturing formula.'
+      title: '✅ Restore a soft deleted inventory movement.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1101,7 +1569,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the manufacturing formula.'
+        description: 'The ID of the inventory movement.'
         required: true
         example: consequatur
         type: string
@@ -1129,16 +1597,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/manufacturing-formulas/{id}/permanently-remove'
+    uri: 'api/v1/inventory-movements/{id}/permanently-remove'
     metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
+      groupName: 'Inventory Management / Inventory Movements'
       groupDescription: |-
-         *
-         *
-         
+
+        APIs for managing inventory movements, including warehouse transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Force delete a manufacturing formula (permanent deletion).'
+      title: '✅ Permanently delete an inventory movement.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1150,7 +1617,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the manufacturing formula.'
+        description: 'The ID of the inventory movement.'
         required: true
         example: consequatur
         type: string
@@ -1166,56 +1633,6 @@ endpoints:
     cleanBodyParameters: []
     fileParameters: []
     responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/manufacturing-formulas/deleted-formulas
-    metadata:
-      groupName: 'Inventory Management / ManufacturingFormula'
-      groupDescription: |-
-         *
-         *
-         
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get trashed (soft deleted) manufacturing formulas.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/manufacturing-formulas/deleted-formulas could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
     responseFields: []
     auth:
       - headers

@@ -1,0 +1,1588 @@
+name: 'Purchase Management / Expenses'
+description: |-
+
+  APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/list
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of expenses with search and sorting'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/list could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/purchase/expenses/create
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created expense'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      supplier_id:
+        name: supplier_id
+        description: 'The <code>id</code> of an existing record in the suppliers table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      employee_id:
+        name: employee_id
+        description: 'The <code>id</code> of an existing record in the employees table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: 'The <code>id</code> of an existing record in the customers table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_id:
+        name: journal_id
+        description: 'The <code>id</code> of an existing record in the journals table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_number:
+        name: journal_number
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      due_date:
+        name: due_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
+        required: true
+        example: '2106-10-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      supplier_email:
+        name: supplier_email
+        description: 'Must be a valid email address.'
+        required: false
+        example: carolyne.luettgen@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: fuudtdsufvyvddqamniih
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      cash_paid:
+        name: cash_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      checks_paid:
+        name: checks_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 57
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allowed_discount:
+        name: allowed_discount
+        description: 'Must be at least 0.'
+        required: false
+        example: 8
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_without_tax:
+        name: total_without_tax
+        description: 'Must be at least 0.'
+        required: false
+        example: 51
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_percentage:
+        name: tax_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 24
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_amount:
+        name: tax_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_amount:
+        name: total_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 40
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      remaining_balance:
+        name: remaining_balance
+        description: 'Must be at least 0.'
+        required: false
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Must be at least 0.'
+        required: false
+        example: 89
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_foreign:
+        name: total_foreign
+        description: 'Must be at least 0.'
+        required: false
+        example: 21
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_local:
+        name: total_local
+        description: 'Must be at least 0.'
+        required: false
+        example: 26
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_rate_id:
+        name: tax_rate_id
+        description: 'The <code>id</code> of an existing record in the tax_rates table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      is_tax_inclusive:
+        name: is_tax_inclusive
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      is_tax_applied_to_currency:
+        name: is_tax_applied_to_currency
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_percentage:
+        name: discount_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 4
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_amount:
+        name: discount_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 68
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: qtqxbajwbpilpmufinllw
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      items:
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].account_id':
+        name: 'items[].account_id'
+        description: 'The <code>id</code> of an existing record in the accounts table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].description':
+        name: 'items[].description'
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].quantity':
+        name: 'items[].quantity'
+        description: 'Must be at least 0.01.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].unit_price':
+        name: 'items[].unit_price'
+        description: 'Must be at least 0.'
+        required: true
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].discount_rate':
+        name: 'items[].discount_rate'
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].tax_rate':
+        name: 'items[].tax_rate'
+        description: 'Must be at least 0.'
+        required: false
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_foreign':
+        name: 'items[].total_foreign'
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_local':
+        name: 'items[].total_local'
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total':
+        name: 'items[].total'
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].notes':
+        name: 'items[].notes'
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: yvddqamniihfqcoynlazg
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      supplier_id: consequatur
+      currency_id: consequatur
+      journal_number: 17
+      due_date: '2106-10-30'
+      supplier_email: carolyne.luettgen@example.org
+      licensed_operator: fuudtdsufvyvddqamniih
+      cash_paid: 18
+      checks_paid: 57
+      allowed_discount: 8
+      total_without_tax: 51
+      tax_percentage: 24
+      tax_amount: 45
+      total_amount: 40
+      remaining_balance: 1
+      exchange_rate: 89
+      total_foreign: 21
+      total_local: 26
+      is_tax_inclusive: true
+      is_tax_applied_to_currency: true
+      discount_percentage: 4
+      discount_amount: 68
+      notes: qtqxbajwbpilpmufinllw
+      items:
+        -
+          item_id: 17
+          account_id: consequatur
+          description: 'Dolores dolorum amet iste laborum eius est dolor.'
+          quantity: 12
+          unit_price: 66
+          discount_rate: 13
+          tax_rate: 65
+          total_foreign: 72
+          total_local: 18
+          total: 74
+          notes: yvddqamniihfqcoynlazg
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/purchase/expenses/details/{id}'
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified expense with all related data'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the detail.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/details/consequatur could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/purchase/expenses/update/{id}'
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified expense'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the update.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      supplier_id:
+        name: supplier_id
+        description: 'The <code>id</code> of an existing record in the suppliers table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      employee_id:
+        name: employee_id
+        description: 'The <code>id</code> of an existing record in the employees table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: 'The <code>id</code> of an existing record in the customers table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_id:
+        name: journal_id
+        description: 'The <code>id</code> of an existing record in the journals table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_number:
+        name: journal_number
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      due_date:
+        name: due_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
+        required: true
+        example: '2106-10-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      supplier_email:
+        name: supplier_email
+        description: 'Must be a valid email address.'
+        required: false
+        example: carolyne.luettgen@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: fuudtdsufvyvddqamniih
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      cash_paid:
+        name: cash_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      checks_paid:
+        name: checks_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 57
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allowed_discount:
+        name: allowed_discount
+        description: 'Must be at least 0.'
+        required: false
+        example: 8
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_without_tax:
+        name: total_without_tax
+        description: 'Must be at least 0.'
+        required: false
+        example: 51
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_percentage:
+        name: tax_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 24
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_amount:
+        name: tax_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_amount:
+        name: total_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 40
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      remaining_balance:
+        name: remaining_balance
+        description: 'Must be at least 0.'
+        required: false
+        example: 1
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Must be at least 0.'
+        required: false
+        example: 89
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_foreign:
+        name: total_foreign
+        description: 'Must be at least 0.'
+        required: false
+        example: 21
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_local:
+        name: total_local
+        description: 'Must be at least 0.'
+        required: false
+        example: 26
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_rate_id:
+        name: tax_rate_id
+        description: 'The <code>id</code> of an existing record in the tax_rates table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      is_tax_inclusive:
+        name: is_tax_inclusive
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      is_tax_applied_to_currency:
+        name: is_tax_applied_to_currency
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_percentage:
+        name: discount_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 4
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_amount:
+        name: discount_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 68
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: qtqxbajwbpilpmufinllw
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      items:
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].account_id':
+        name: 'items[].account_id'
+        description: 'The <code>id</code> of an existing record in the accounts table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].description':
+        name: 'items[].description'
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].quantity':
+        name: 'items[].quantity'
+        description: 'Must be at least 0.01.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].unit_price':
+        name: 'items[].unit_price'
+        description: 'Must be at least 0.'
+        required: true
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].discount_rate':
+        name: 'items[].discount_rate'
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].tax_rate':
+        name: 'items[].tax_rate'
+        description: 'Must be at least 0.'
+        required: false
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_foreign':
+        name: 'items[].total_foreign'
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_local':
+        name: 'items[].total_local'
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total':
+        name: 'items[].total'
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].notes':
+        name: 'items[].notes'
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: yvddqamniihfqcoynlazg
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      supplier_id: consequatur
+      currency_id: consequatur
+      journal_number: 17
+      due_date: '2106-10-30'
+      supplier_email: carolyne.luettgen@example.org
+      licensed_operator: fuudtdsufvyvddqamniih
+      cash_paid: 18
+      checks_paid: 57
+      allowed_discount: 8
+      total_without_tax: 51
+      tax_percentage: 24
+      tax_amount: 45
+      total_amount: 40
+      remaining_balance: 1
+      exchange_rate: 89
+      total_foreign: 21
+      total_local: 26
+      is_tax_inclusive: false
+      is_tax_applied_to_currency: true
+      discount_percentage: 4
+      discount_amount: 68
+      notes: qtqxbajwbpilpmufinllw
+      items:
+        -
+          item_id: 17
+          account_id: consequatur
+          description: 'Dolores dolorum amet iste laborum eius est dolor.'
+          quantity: 12
+          unit_price: 66
+          discount_rate: 13
+          tax_rate: 65
+          total_foreign: 72
+          total_local: 18
+          total: 74
+          notes: yvddqamniihfqcoynlazg
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/purchase/expenses/delete/{id}'
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Soft delete the specified expense'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the delete.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/deleted/list
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get soft deleted expenses'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/deleted/list could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/purchase/expenses/{id}/restore'
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Restore a soft deleted expense'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the expense.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/helpers/suppliers
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get suppliers for dropdown (with search)'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/helpers/suppliers could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/helpers/accounts
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get accounts for dropdown (with search)'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/helpers/accounts could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/helpers/currencies
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get currencies for dropdown'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/helpers/currencies could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/helpers/tax-rates
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get tax rates for dropdown'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/helpers/tax-rates could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/helpers/live-exchange-rate
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get live exchange rate for currency'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/helpers/live-exchange-rate could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/helpers/form-data
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get complete form data for expense creation'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/helpers/form-data could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/helpers/search-form-data
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get search form data for expenses'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/helpers/search-form-data could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/expenses/helpers/sortable-fields
+    metadata:
+      groupName: 'Purchase Management / Expenses'
+      groupDescription: |-
+
+        APIs for managing purchase expenses, including expense tracking, categorization, and financial reporting.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get sortable fields for expenses'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/expenses/helpers/sortable-fields could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []

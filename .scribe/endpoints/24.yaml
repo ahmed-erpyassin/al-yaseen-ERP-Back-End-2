@@ -1,0 +1,480 @@
+name: 'Purchase Management / Invoices'
+description: |-
+
+  APIs for managing purchase invoices, including invoice processing, payment tracking, and vendor management.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/invoices/list
+    metadata:
+      groupName: 'Purchase Management / Invoices'
+      groupDescription: |-
+
+        APIs for managing purchase invoices, including invoice processing, payment tracking, and vendor management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/invoices/list could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/purchase/invoices/create
+    metadata:
+      groupName: 'Purchase Management / Invoices'
+      groupDescription: |-
+
+        APIs for managing purchase invoices, including invoice processing, payment tracking, and vendor management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      due_date:
+        name: due_date
+        description: 'Must be a valid date. Must be a date after <code>today</code>.'
+        required: true
+        example: '2106-10-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      customer_id:
+        name: customer_id
+        description: 'The <code>id</code> of an existing record in the customers table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      customer_email:
+        name: customer_email
+        description: 'Must be a valid email address. Must not be greater than 150 characters.'
+        required: false
+        example: carolyne.luettgen@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: fuudtdsufvyvddqamniih
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Must be at least 0.'
+        required: true
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      is_tax_inclusive:
+        name: is_tax_inclusive
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      notes:
+        name: notes
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: qeopfuudtdsufvyvddqam
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      cash_paid:
+        name: cash_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 46
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      checks_paid:
+        name: checks_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 28
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allowed_discount:
+        name: allowed_discount
+        description: 'Must be at least 0.'
+        required: false
+        example: 30
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_percentage:
+        name: discount_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 8
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_percentage:
+        name: tax_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 6
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      items:
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].unit_id':
+        name: 'items[].unit_id'
+        description: 'The <code>id</code> of an existing record in the units table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].quantity':
+        name: 'items[].quantity'
+        description: 'Must be at least 0.01.'
+        required: true
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].unit_price':
+        name: 'items[].unit_price'
+        description: 'Must be at least 0.'
+        required: true
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].discount_rate':
+        name: 'items[].discount_rate'
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 5
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].tax_rate':
+        name: 'items[].tax_rate'
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 14
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].description':
+        name: 'items[].description'
+        description: 'Must not be greater than 500 characters.'
+        required: false
+        example: 'Eius est dolor dolores minus voluptatem quisquam.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      due_date: '2106-10-30'
+      customer_id: consequatur
+      customer_email: carolyne.luettgen@example.org
+      licensed_operator: fuudtdsufvyvddqamniih
+      currency_id: consequatur
+      exchange_rate: 45
+      is_tax_inclusive: false
+      notes: qeopfuudtdsufvyvddqam
+      cash_paid: 46
+      checks_paid: 28
+      allowed_discount: 30
+      discount_percentage: 8
+      tax_percentage: 6
+      items:
+        -
+          item_id: consequatur
+          unit_id: consequatur
+          quantity: 45
+          unit_price: 56
+          discount_rate: 5
+          tax_rate: 14
+          description: 'Eius est dolor dolores minus voluptatem quisquam.'
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/purchase/invoices/details/{id}'
+    metadata:
+      groupName: 'Purchase Management / Invoices'
+      groupDescription: |-
+
+        APIs for managing purchase invoices, including invoice processing, payment tracking, and vendor management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified invoice with all related data.'
+      description: 'Returns invoice details with relationships loaded for comprehensive view.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the detail.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/invoices/details/consequatur could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/purchase/invoices/update/{id}'
+    metadata:
+      groupName: 'Purchase Management / Invoices'
+      groupDescription: |-
+
+        APIs for managing purchase invoices, including invoice processing, payment tracking, and vendor management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified invoice in storage.'
+      description: 'Updates invoice data with comprehensive validation and relationship handling.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the update.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/purchase/invoices/delete/{id}'
+    metadata:
+      groupName: 'Purchase Management / Invoices'
+      groupDescription: |-
+
+        APIs for managing purchase invoices, including invoice processing, payment tracking, and vendor management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified invoice from storage (soft delete).'
+      description: 'Performs soft delete with audit trail tracking who deleted the invoice.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the delete.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []

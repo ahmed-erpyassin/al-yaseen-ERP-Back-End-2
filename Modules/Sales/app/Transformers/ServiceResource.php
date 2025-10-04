@@ -98,30 +98,24 @@ class ServiceResource extends JsonResource
                         'tax_rate_id' => $item->tax_rate_id,
                         'tax_amount' => $item->tax_amount,
                         'notes' => $item->notes,
-                        'account' => $item->whenLoaded('account', function () use ($item) {
-                            return [
-                                'id' => $item->account->id,
-                                'code' => $item->account->code,
-                                'name' => $item->account->name,
-                                'type' => $item->account->type,
-                            ];
-                        }),
-                        'unit' => $item->whenLoaded('unit', function () use ($item) {
-                            return [
-                                'id' => $item->unit->id,
-                                'name' => $item->unit->name,
-                                'symbol' => $item->unit->symbol,
-                            ];
-                        }),
-                        'tax_rate' => $item->whenLoaded('taxRate', function () use ($item) {
-                            return [
-                                'id' => $item->taxRate->id,
-                                'name' => $item->taxRate->name,
-                                'code' => $item->taxRate->code,
-                                'rate' => $item->taxRate->rate,
-                                'type' => $item->taxRate->type,
-                            ];
-                        }),
+                        'account' => $item->account ? [
+                            'id' => $item->account->id,
+                            'code' => $item->account->code,
+                            'name' => $item->account->name,
+                            'type' => $item->account->type,
+                        ] : null,
+                        'unit' => $item->unit ? [
+                            'id' => $item->unit->id,
+                            'name' => $item->unit->name,
+                            'symbol' => $item->unit->symbol,
+                        ] : null,
+                        'tax_rate' => $item->taxRate ? [
+                            'id' => $item->taxRate->id,
+                            'name' => $item->taxRate->name,
+                            'code' => $item->taxRate->code,
+                            'rate' => $item->taxRate->rate,
+                            'type' => $item->taxRate->type,
+                        ] : null,
                     ];
                 });
             }),

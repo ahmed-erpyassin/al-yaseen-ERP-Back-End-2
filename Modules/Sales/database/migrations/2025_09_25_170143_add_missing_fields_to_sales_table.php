@@ -12,17 +12,41 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sales', function (Blueprint $table) {
-            // Add missing fields for the new quotation functionality
-            $table->string('code')->nullable()->after('journal_id'); // Book code - sequential reference
-            $table->date('date')->nullable()->after('invoice_number'); // Invoice date (auto-generated)
-            $table->string('email')->nullable()->after('due_date'); // Customer email
-            $table->string('licensed_operator')->nullable()->after('email'); // Licensed operator
+            // Add missing fields for the new quotation functionality (only if they don't exist)
+            if (!Schema::hasColumn('sales', 'code')) {
+                $table->string('code')->nullable()->after('journal_id'); // Book code - sequential reference
+            }
+            if (!Schema::hasColumn('sales', 'date')) {
+                $table->date('date')->nullable()->after('invoice_number'); // Invoice date (auto-generated)
+            }
+            if (!Schema::hasColumn('sales', 'email')) {
+                $table->string('email')->nullable()->after('due_date'); // Customer email
+            }
+            if (!Schema::hasColumn('sales', 'licensed_operator')) {
+                $table->string('licensed_operator')->nullable()->after('email'); // Licensed operator
+            }
 
-            // Fix foreign key constraints
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
-            $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            // Fix foreign key constraints (with try-catch to avoid duplicates)
+            try {
+                $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            } catch (\Exception $e) {
+                // Foreign key already exists
+            }
+            try {
+                $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            } catch (\Exception $e) {
+                // Foreign key already exists
+            }
+            try {
+                $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('cascade');
+            } catch (\Exception $e) {
+                // Foreign key already exists
+            }
+            try {
+                $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            } catch (\Exception $e) {
+                // Foreign key already exists
+            }
         });
     }
 

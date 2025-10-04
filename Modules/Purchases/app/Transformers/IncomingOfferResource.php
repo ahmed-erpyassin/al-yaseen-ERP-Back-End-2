@@ -23,10 +23,26 @@ class IncomingOfferResource extends JsonResource
             'branch_id' => $this->branch_id,
             'branch' => $this->whenLoaded('branch'),
             'currency_id' => $this->currency_id,
-            'currency' => $this->whenLoaded('currency'),
+            'currency' => $this->whenLoaded('currency', function () {
+                return $this->currency ? [
+                    'id' => $this->currency->id,
+                    'code' => $this->currency->code,
+                    'name' => $this->currency->name,
+                    'symbol' => $this->currency->symbol,
+                ] : null;
+            }),
             'employee_id' => $this->employee_id,
             'supplier_id' => $this->supplier_id,
-            'supplier' => $this->whenLoaded('supplier'),
+            'supplier' => $this->whenLoaded('supplier', function () {
+                return $this->supplier ? [
+                    'id' => $this->supplier->id,
+                    'supplier_number' => $this->supplier->supplier_number,
+                    'supplier_name_ar' => $this->supplier->supplier_name_ar,
+                    'supplier_name_en' => $this->supplier->supplier_name_en,
+                    'email' => $this->supplier->email,
+                    'mobile' => $this->supplier->mobile,
+                ] : null;
+            }),
             'customer_id' => $this->customer_id,
             'customer' => $this->whenLoaded('customer'),
 
@@ -93,10 +109,19 @@ class IncomingOfferResource extends JsonResource
                         'item_id' => $item->item_id,
                         'item_number' => $item->item_number,
                         'item_name' => $item->item_name,
-                        'item' => $item->whenLoaded('item'),
+                        'item' => $item->relationLoaded('item') && $item->item ? [
+                            'id' => $item->item->id,
+                            'item_number' => $item->item->item_number,
+                            'name' => $item->item->name,
+                            'name_ar' => $item->item->name_ar,
+                        ] : null,
                         'unit_id' => $item->unit_id,
                         'unit_name' => $item->unit_name,
-                        'unit' => $item->whenLoaded('unit'),
+                        'unit' => $item->relationLoaded('unit') && $item->unit ? [
+                            'id' => $item->unit->id,
+                            'name' => $item->unit->name,
+                            'name_ar' => $item->unit->name_ar,
+                        ] : null,
                         'description' => $item->description,
                         'quantity' => $item->quantity,
                         'unit_price' => $item->unit_price,

@@ -10,6 +10,11 @@ use Modules\Purchases\Http\Requests\IncomingOfferSearchRequest;
 use Modules\Purchases\Transformers\IncomingOfferResource;
 use Modules\Purchases\Models\Purchase;
 
+/**
+ * @group Purchase Management / Incoming Offers
+ *
+ * APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+ */
 class IncomingOfferController extends Controller
 {
 
@@ -176,12 +181,10 @@ class IncomingOfferController extends Controller
     public function searchItems(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $search = $request->get('search', '');
             $limit = $request->get('limit', 10);
 
-            $items = \Modules\Inventory\Models\Item::forCompany($companyId)
-                ->active()
+            $items = \Modules\Inventory\Models\Item::query()
                 ->where(function ($query) use ($search) {
                     $query->where('item_number', 'like', "%{$search}%")
                           ->orWhere('name', 'like', "%{$search}%")
@@ -222,31 +225,26 @@ class IncomingOfferController extends Controller
     public function searchCustomers(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $search = $request->get('search', '');
             $limit = $request->get('limit', 10);
 
-            $customers = \Modules\Customers\Models\Customer::forCompany($companyId)
-                ->active()
+            $customers = \Modules\Customers\Models\Customer::query()
                 ->where(function ($query) use ($search) {
-                    $query->where('customer_number', 'like', "%{$search}%")
-                          ->orWhere('customer_name_ar', 'like', "%{$search}%")
-                          ->orWhere('customer_name_en', 'like', "%{$search}%")
-                          ->orWhere('email', 'like', "%{$search}%")
+                    $query
+
+                          ->Where('email', 'like', "%{$search}%")
                           ->orWhere('mobile', 'like', "%{$search}%");
                 })
-                ->select('id', 'customer_number', 'customer_name_ar', 'customer_name_en', 'email', 'mobile')
+                ->select('id', 'customer_number', 'email', 'mobile')
                 ->limit($limit)
                 ->get()
                 ->map(function ($customer) {
                     return [
                         'id' => $customer->id,
                         'customer_number' => $customer->customer_number,
-                        'customer_name_ar' => $customer->customer_name_ar,
-                        'customer_name_en' => $customer->customer_name_en,
                         'email' => $customer->email,
                         'mobile' => $customer->mobile,
-                        'display_name' => $customer->customer_number . ' - ' . ($customer->customer_name_ar ?? $customer->customer_name_en)
+                      //  'display_name' => $customer->customer_number . ' - ' . ($customer->customer_name_ar ?? $customer->customer_name_en)
                     ];
                 });
 
@@ -361,15 +359,13 @@ class IncomingOfferController extends Controller
     public function getSearchFormData(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
 
             $formData = [
                 // Status options
                 'status_options' => Purchase::STATUS_OPTIONS,
 
                 // Currencies
-                'currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
-                    ->select('id', 'code', 'name', 'symbol')
+                'currencies' => \Modules\FinancialAccounts\Models\Currency::select('id', 'code', 'name', 'symbol')
                     ->get()
                     ->map(function ($currency) {
                         return [
@@ -382,9 +378,7 @@ class IncomingOfferController extends Controller
                     }),
 
                 // Suppliers for dropdown
-                'suppliers' => \Modules\Suppliers\Models\Supplier::where('company_id', $companyId)
-                    ->where('status', 'active')
-                    ->select('id', 'supplier_number', 'supplier_name_ar', 'supplier_name_en')
+                'suppliers' => \Modules\Suppliers\Models\Supplier::select('id', 'supplier_number', 'supplier_name_ar', 'supplier_name_en')
                     ->get()
                     ->map(function ($supplier) {
                         return [

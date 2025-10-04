@@ -1,20 +1,20 @@
-name: 'Project Management / Financials'
+name: 'Project Management / Documents'
 description: |-
 
-  APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+  APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-finance/obtain-all
+    uri: api/v1/project-documents/gather-all
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of project financials.'
+      title: 'Display a listing of documents.'
       description: ''
       authenticated: true
       deprecated: false
@@ -35,7 +35,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-finance/obtain-all could not be found."
+              "message": "The route api/v1/project-documents/gather-all could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -55,22 +55,22 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-finance/register-new
+    uri: api/v1/project-documents/compose-new
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Store a newly created project financial.'
+      title: 'Store a newly created document.'
       description: ''
       authenticated: true
       deprecated: false
       custom: []
     headers:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
+      Content-Type: multipart/form-data
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
@@ -87,81 +87,101 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      currency_id:
-        name: currency_id
-        description: 'The <code>id</code> of an existing record in the currencies table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      exchange_rate:
-        name: exchange_rate
-        description: 'Must be at least 0.0001. Must not be greater than 999999.9999.'
-        required: true
-        example: 13
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      reference_type:
-        name: reference_type
+      title:
+        name: title
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: qeopfuudtdsufvyvddqam
+        example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      reference_id:
-        name: reference_id
-        description: 'Must not be greater than 255 characters.'
+      file:
+        name: file
+        description: 'Must be a file. Must not be greater than 20480 kilobytes.'
         required: true
-        example: niihfqcoynlazghdtqtqx
-        type: string
+        example: null
+        type: file
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      amount:
-        name: amount
-        description: 'Must be at least 0. Must not be greater than 999999999999.99.'
-        required: true
-        example: 2
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      date:
-        name: date
-        description: 'Must be a valid date.'
-        required: true
-        example: '2025-09-25T13:42:28'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      description:
-        name: description
-        description: 'Must not be greater than 1000 characters.'
+      project_number:
+        name: project_number
+        description: 'Must not be greater than 100 characters.'
         required: false
-        example: 'Consequatur debitis et id.'
+        example: mniihfqcoynlazghdtqtq
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      user_id:
-        name: user_id
-        description: 'The <code>id</code> of an existing record in the users table.'
+      project_name:
+        name: project_name
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: null
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      description:
+        name: description
+        description: 'Must not be greater than 2000 characters.'
+        required: false
+        example: 'A qui ducimus nihil laudantium nihil autem omnis.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      document_category:
+        name: document_category
+        description: ''
+        required: false
+        example: other
+        type: string
+        enumValues:
+          - contract
+          - specification
+          - drawing
+          - report
+          - invoice
+          - correspondence
+          - other
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: false
+        example: archived
+        type: string
+        enumValues:
+          - active
+          - archived
+          - deleted
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      upload_date:
+        name: upload_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      version:
+        name: version
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: ryvojcybzvrbyickz
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -175,7 +195,7 @@ endpoints:
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
       branch_id:
         name: branch_id
@@ -185,7 +205,7 @@ endpoints:
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
       fiscal_year_id:
         name: fiscal_year_id
@@ -195,38 +215,20 @@ endpoints:
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
-        custom: []
-      created_by:
-        name: created_by
-        description: 'The <code>id</code> of an existing record in the users table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      updated_by:
-        name: updated_by
-        description: 'The <code>id</code> of an existing record in the users table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
     cleanBodyParameters:
       project_id: consequatur
-      currency_id: consequatur
-      exchange_rate: 13
-      reference_type: qeopfuudtdsufvyvddqam
-      reference_id: niihfqcoynlazghdtqtqx
-      amount: 2
-      date: '2025-09-25T13:42:28'
-      description: 'Consequatur debitis et id.'
-    fileParameters: []
+      title: mqeopfuudtdsufvyvddqa
+      project_number: mniihfqcoynlazghdtqtq
+      project_name: xbajwbpilpmufinllwloa
+      description: 'A qui ducimus nihil laudantium nihil autem omnis.'
+      document_category: other
+      status: archived
+      upload_date: '2025-09-30T13:03:29'
+      version: ryvojcybzvrbyickz
+    fileParameters:
+      file: null
     responses: []
     responseFields: []
     auth:
@@ -240,15 +242,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/project-finance/show/{id}'
+    uri: 'api/v1/project-documents/read/{id}'
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified project financial.'
+      title: 'Display the specified document.'
       description: ''
       authenticated: true
       deprecated: false
@@ -260,7 +262,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the show.'
+        description: 'The ID of the read.'
         required: true
         example: consequatur
         type: string
@@ -280,7 +282,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-finance/show/consequatur could not be found."
+              "message": "The route api/v1/project-documents/read/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -300,15 +302,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/project-finance/adjust/{id}'
+    uri: 'api/v1/project-documents/amend/{id}'
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified project financial.'
+      title: 'Update the specified document.'
       description: ''
       authenticated: true
       deprecated: false
@@ -320,420 +322,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the adjust.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      project_id:
-        name: project_id
-        description: 'The <code>id</code> of an existing record in the projects table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      currency_id:
-        name: currency_id
-        description: 'The <code>id</code> of an existing record in the currencies table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      exchange_rate:
-        name: exchange_rate
-        description: 'Must be at least 0.0001. Must not be greater than 999999.9999.'
-        required: false
-        example: 21
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      reference_type:
-        name: reference_type
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      reference_id:
-        name: reference_id
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mniihfqcoynlazghdtqtq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      amount:
-        name: amount
-        description: 'Must be at least 0. Must not be greater than 999999999999.99.'
-        required: false
-        example: 23
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      date:
-        name: date
-        description: 'Must be a valid date.'
-        required: false
-        example: '2025-09-25T13:42:28'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      description:
-        name: description
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: 'Aut consequatur debitis et.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      updated_by:
-        name: updated_by
-        description: 'The <code>id</code> of an existing record in the users table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-    cleanBodyParameters:
-      exchange_rate: 21
-      reference_type: mqeopfuudtdsufvyvddqa
-      reference_id: mniihfqcoynlazghdtqtq
-      amount: 23
-      date: '2025-09-25T13:42:28'
-      description: 'Aut consequatur debitis et.'
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/project-finance/cancel/{id}'
-    metadata:
-      groupName: 'Project Management / Financials'
-      groupDescription: |-
-
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Remove the specified project financial (soft delete).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the cancel.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/project-finance/advanced-search
-    metadata:
-      groupName: 'Project Management / Financials'
-      groupDescription: |-
-
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Advanced search for project financials.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/project-finance/filter-by-field
-    metadata:
-      groupName: 'Project Management / Financials'
-      groupDescription: |-
-
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get project financials by specific field.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-finance/filter-by-field could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/project-finance/field-values
-    metadata:
-      groupName: 'Project Management / Financials'
-      groupDescription: |-
-
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get field values for dynamic selection.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-finance/field-values could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/project-finance/sortable-fields
-    metadata:
-      groupName: 'Project Management / Financials'
-      groupDescription: |-
-
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get sortable fields.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-finance/sortable-fields could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/project-finance/apply-sort
-    metadata:
-      groupName: 'Project Management / Financials'
-      groupDescription: |-
-
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Sort project financials.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: 'api/v1/project-finance/{id}/restore-financial'
-    metadata:
-      groupName: 'Project Management / Financials'
-      groupDescription: |-
-
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Restore a soft-deleted project financial.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the project finance.'
+        description: 'The ID of the amend.'
         required: true
         example: consequatur
         type: string
@@ -761,15 +350,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/project-finance/{id}/permanent-delete'
+    uri: 'api/v1/project-documents/erase/{id}'
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Force delete a project financial.'
+      title: 'Remove the specified document (soft delete).'
       description: ''
       authenticated: true
       deprecated: false
@@ -781,7 +370,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the project finance.'
+        description: 'The ID of the erase.'
         required: true
         example: consequatur
         type: string
@@ -809,15 +398,112 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-finance/deleted-financials
+    uri: 'api/v1/project-documents/{id}/file-download'
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get trashed project financials.'
+      title: 'Download a document file.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the project document.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/consequatur/file-download could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/project-documents/advanced-search
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Advanced search for documents.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/project-documents/filter-by-field
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get documents by specific field value.'
       description: ''
       authenticated: true
       deprecated: false
@@ -838,7 +524,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-finance/deleted-financials could not be found."
+              "message": "The route api/v1/project-documents/filter-by-field could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -858,15 +544,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-finance/project-options
+    uri: api/v1/project-documents/field-values
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get projects for dropdown.'
+      title: 'Get unique values for a specific field.'
       description: ''
       authenticated: true
       deprecated: false
@@ -887,7 +573,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-finance/project-options could not be found."
+              "message": "The route api/v1/project-documents/field-values could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -907,15 +593,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-finance/currency-options
+    uri: api/v1/project-documents/sortable-fields
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get currencies for dropdown.'
+      title: 'Get sortable fields for documents.'
       description: ''
       authenticated: true
       deprecated: false
@@ -936,7 +622,189 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-finance/currency-options could not be found."
+              "message": "The route api/v1/project-documents/sortable-fields could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/project-documents/apply-sort
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Sort documents by specified field and order.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/project-documents/{id}/restore-document'
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Restore a soft-deleted document.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the project document.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/project-documents/{id}/permanent-delete'
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Permanently delete a document.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the project document.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/project-documents/deleted-documents
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get trashed documents.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/deleted-documents could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -956,15 +824,199 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/project-finance/by-project/{projectId}'
+    uri: api/v1/project-documents/project-options
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get project financials for a specific project.'
+      title: 'Get projects for dropdown (with project number and name).'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/project-options could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/project-documents/category-options
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get document category options.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/category-options could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/project-documents/status-options
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get document status options.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/project-documents/status-options could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/project-documents/number-generation
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Generate next document number for a project.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/project-documents/by-project/{projectId}'
+    metadata:
+      groupName: 'Project Management / Documents'
+      groupDescription: |-
+
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get documents for a specific project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -996,7 +1048,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-finance/by-project/consequatur could not be found."
+              "message": "The route api/v1/project-documents/by-project/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -1016,15 +1068,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/project-finance/by-reference-type/{referenceType}'
+    uri: 'api/v1/project-documents/by-category/{category}'
     metadata:
-      groupName: 'Project Management / Financials'
+      groupName: 'Project Management / Documents'
       groupDescription: |-
 
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
+        APIs for managing project documents, including upload, download, categorization, and document lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get project financials by reference type.'
+      title: 'Get documents by category.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1034,8 +1086,8 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      referenceType:
-        name: referenceType
+      category:
+        name: category
         description: ''
         required: true
         example: consequatur
@@ -1045,7 +1097,7 @@ endpoints:
         nullable: false
         custom: []
     cleanUrlParameters:
-      referenceType: consequatur
+      category: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1056,78 +1108,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-finance/by-reference-type/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/project-finance/by-date-range/{dateFrom}/{dateTo}'
-    metadata:
-      groupName: 'Project Management / Financials'
-      groupDescription: |-
-
-        APIs for managing project financials, including budget tracking, expenses, revenue, and financial reporting.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get project financials by date range.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      dateFrom:
-        name: dateFrom
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      dateTo:
-        name: dateTo
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      dateFrom: consequatur
-      dateTo: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-finance/by-date-range/consequatur/consequatur could not be found."
+              "message": "The route api/v1/project-documents/by-category/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'

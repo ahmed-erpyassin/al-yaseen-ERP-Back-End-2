@@ -1,12 +1,12 @@
 # Introduction
 
-API documentation for Al-Yaseen ERP Project Management and Inventory Management modules.
+API documentation for Al-Yaseen ERP system including Project Management, Inventory Management, Customer Management, Supplier Management, Sales Management, and Purchase Management modules.
 
 <aside>
     <strong>Base URL</strong>: <code>http://127.0.0.1:8000/</code>
 </aside>
 
-    Welcome to the Al-Yaseen ERP API documentation for Project Management and Inventory Management modules. This API provides comprehensive endpoints for:
+    Welcome to the Al-Yaseen ERP API documentation. This comprehensive API provides endpoints for:
 
     ## Project Management Module
     - **Projects**: Complete project lifecycle management with CRUD operations, search, and filtering
@@ -25,6 +25,28 @@ API documentation for Al-Yaseen ERP Project Management and Inventory Management 
     - **Units**: Unit of measure management and conversions
     - **BOM (Bill of Materials)**: Product structure and component management
     - **Barcode Management**: Barcode types and scanning integration
+
+    ## Customer Management Module
+    - **Customers**: Customer relationship management with comprehensive customer data
+
+    ## Supplier Management Module
+    - **Suppliers**: Supplier management with vendor information and relationships
+
+    ## Sales Management Module
+    - **Incoming Orders**: Sales order processing and tracking
+    - **Outgoing Offers**: Sales quotation and offer management
+    - **Outgoing Shipments**: Shipment tracking and delivery management
+    - **Services**: Service management and tracking
+    - **Return Invoices**: Sales return processing and refunds
+
+    ## Purchase Management Module
+    - **Outgoing Orders**: Purchase order creation and management
+    - **Incoming Offers**: Supplier offer evaluation and acceptance
+    - **Incoming Shipments**: Receipt and inspection of purchased goods
+    - **Expenses**: Purchase expense tracking and reporting
+    - **Invoices**: Purchase invoice processing and payment
+    - **Return Invoices**: Purchase return processing
+    - **Reference Invoices**: Invoice referencing and reconciliation
 
     All endpoints require authentication using Laravel Sanctum tokens unless otherwise specified.
 

@@ -68,19 +68,15 @@ class OutgoingShipmentResource extends JsonResource
                         'quantity' => $item->quantity,
                         'warehouse_id' => $item->warehouse_id,
                         'notes' => $item->notes,
-                        'item' => $item->whenLoaded('item', function () use ($item) {
-                            return [
-                                'id' => $item->item->id,
-                                'name' => $item->item->name,
-                                'item_number' => $item->item->item_number,
-                            ];
-                        }),
-                        'unit' => $item->whenLoaded('unit', function () use ($item) {
-                            return [
-                                'id' => $item->unit->id,
-                                'name' => $item->unit->name,
-                            ];
-                        }),
+                        'item' => $item->item ? [
+                            'id' => $item->item->id,
+                            'name' => $item->item->name,
+                            'item_number' => $item->item->item_number,
+                        ] : null,
+                        'unit' => $item->unit ? [
+                            'id' => $item->unit->id,
+                            'name' => $item->unit->name,
+                        ] : null,
                     ];
                 });
             }),

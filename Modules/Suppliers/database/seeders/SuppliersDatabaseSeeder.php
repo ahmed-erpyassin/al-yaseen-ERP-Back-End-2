@@ -11,6 +11,8 @@ class SuppliersDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            SalesRepresentativeSeeder::class,
+        ]);
     }
 }

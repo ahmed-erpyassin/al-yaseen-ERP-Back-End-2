@@ -14,6 +14,8 @@ class JournalEntry extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = 'journals_entries';
+
     protected $fillable = [
         'fiscal_year_id',
         'user_id',

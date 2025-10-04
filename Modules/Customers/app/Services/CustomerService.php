@@ -12,10 +12,19 @@ class CustomerService
     public function createCustomer(array $data, $user)
     {
         $data['user_id'] = $user->id;
-        $data['company_id'] = $user->company?->id;
-        $data['branch_id'] = $user->branch?->id;
+       // $data['company_id'] = $user->company?->id;
+       // $data['branch_id'] = $user->branch?->id;
         $data['created_by'] = $user->id;
         $data['updated_by'] = $user->id;
+
+        // Generate customer number if not provided
+        $customer_number = Customer::generateCustomerNumber();
+        $data['customer_number'] = $customer_number;
+
+        // Set company_name from company relationship if not provided
+        if (!isset($data['company_name']) && $user->company) {
+            $data['company_name'] = $user->company->title;
+        }
 
         $customer = Customer::create($data);
 
@@ -40,8 +49,8 @@ class CustomerService
     {
         $user = Auth::user();
         $customer = Customer::where('id', $id)
-            ->where('user_id', $user->id)
-            ->where('company_id', $user->company?->id)
+           // ->where('user_id', $user->id)
+           // ->where('company_id', $user->company?->id)
             ->firstOrFail();
         $customer->update($data);
         return $customer;

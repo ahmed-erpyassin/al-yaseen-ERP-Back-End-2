@@ -8,6 +8,11 @@ use Modules\Sales\app\Services\ServiceService;
 use Modules\Sales\Http\Requests\ServiceRequest;
 use Modules\Sales\Transformers\ServiceResource;
 
+/**
+ * @group Sales Management / Services
+ *
+ * APIs for managing sales services, including service creation, tracking, and customer service management.
+ */
 class ServiceController extends Controller
 {
     protected ServiceService $serviceService;

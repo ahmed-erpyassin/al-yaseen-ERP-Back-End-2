@@ -1,20 +1,20 @@
-name: 'Inventory Management / Units'
+name: 'Inventory Management / Stock Movements'
 description: |-
 
-  APIs for managing units of measure, including creation, updates, and unit conversions.
+  APIs for managing stock movements, including transfers, adjustments, and movement tracking.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/units/catalog-all
+    uri: api/v1/stock-movements/track-all
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of units.'
+      title: 'Display a listing of stock movements.'
       description: ''
       authenticated: true
       deprecated: false
@@ -35,7 +35,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/units/catalog-all could not be found."
+              "message": "The route api/v1/stock-movements/track-all could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -55,15 +55,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/units/define-unit
+    uri: api/v1/stock-movements/record-movement
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Store a newly created unit.'
+      title: 'Store a newly created stock movement.'
       description: ''
       authenticated: true
       deprecated: false
@@ -77,9 +77,9 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      company_id:
-        name: company_id
-        description: 'The <code>id</code> of an existing record in the companies table.'
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
         required: false
         example: null
         type: string
@@ -87,9 +87,9 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      branch_id:
-        name: branch_id
-        description: 'The <code>id</code> of an existing record in the branches table.'
+      unit_id:
+        name: unit_id
+        description: ''
         required: false
         example: null
         type: string
@@ -97,308 +97,121 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      name:
-        name: name
-        description: 'Must not be greater than 255 characters.'
+      inventory_item_id:
+        name: inventory_item_id
+        description: 'The <code>id</code> of an existing record in the inventory_items table.'
         required: true
-        example: vmqeopfuudtdsufvyvddq
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      code:
-        name: code
+      warehouse_id:
+        name: warehouse_id
+        description: 'The <code>id</code> of an existing record in the warehouses table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      movement_type:
+        name: movement_type
+        description: ''
+        required: true
+        example: transfer
+        type: string
+        enumValues:
+          - in
+          - out
+          - transfer
+          - adjustment
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      reference_type:
+        name: reference_type
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: amniihfqcoynlazghdtqt
+        example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      symbol:
-        name: symbol
-        description: 'Must not be greater than 10 characters.'
-        required: false
-        example: qxbajwbpi
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      description:
-        name: description
+      reference_id:
+        name: reference_id
         description: ''
         required: false
-        example: 'Dolores dolorum amet iste laborum eius est dolor.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      decimal_places:
-        name: decimal_places
-        description: 'Must be at least 0. Must not be greater than 6.'
-        required: true
-        example: 1
+        example: 17
         type: integer
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      balance_unit:
-        name: balance_unit
-        description: ''
+      quantity:
+        name: quantity
+        description: 'Must be at least 0.01.'
         required: true
-        example: ton
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      custom_balance_unit:
-        name: custom_balance_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: tdsufvyvddqamniihfqco
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      length:
-        name: length
-        description: 'Must be at least 0.'
-        required: false
-        example: 85
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      width:
-        name: width
-        description: 'Must be at least 0.'
-        required: false
         example: 45
         type: number
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
-        custom: []
-      height:
-        name: height
-        description: 'Must be at least 0.'
-        required: false
-        example: 40
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      quantity_factor:
-        name: quantity_factor
-        description: 'Must be at least 0.0001.'
-        required: false
-        example: 1
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit:
-        name: second_unit
-        description: ''
-        required: false
-        example: piece
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_second_unit:
-        name: custom_second_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: zghdtqtqxbajwbpilpmuf
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_contains:
-        name: second_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: inllwloauydlsmsjuryvo
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_second_unit_contains:
-        name: custom_second_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: jcybzvrbyickznkygloig
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_content:
-        name: second_unit_content
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_item_number:
-        name: second_unit_item_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit:
-        name: third_unit
-        description: ''
-        required: false
-        example: piece
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_third_unit:
-        name: custom_third_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mniihfqcoynlazghdtqtq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_contains:
-        name: third_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: xbajwbpilpmufinllwloa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_third_unit_contains:
-        name: custom_third_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: uydlsmsjuryvojcybzvrb
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_content:
-        name: third_unit_content
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_item_number:
-        name: third_unit_item_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      default_handling_unit_id:
-        name: default_handling_unit_id
-        description: 'The <code>id</code> of an existing record in the units table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      default_warehouse_id:
-        name: default_warehouse_id
-        description: 'The <code>id</code> of an existing record in the warehouses table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      status:
-        name: status
-        description: ''
-        required: true
-        example: inactive
-        type: string
-        enumValues:
-          - active
-          - inactive
-        exampleWasSpecified: false
         nullable: false
         custom: []
+      unit_cost:
+        name: unit_cost
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_cost:
+        name: total_cost
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_date:
+        name: movement_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:26'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
     cleanBodyParameters:
-      name: vmqeopfuudtdsufvyvddq
-      code: amniihfqcoynlazghdtqt
-      symbol: qxbajwbpi
-      description: 'Dolores dolorum amet iste laborum eius est dolor.'
-      decimal_places: 1
-      balance_unit: ton
-      custom_balance_unit: tdsufvyvddqamniihfqco
-      length: 85
-      width: 45
-      height: 40
-      quantity_factor: 1
-      second_unit: piece
-      custom_second_unit: zghdtqtqxbajwbpilpmuf
-      second_unit_contains: inllwloauydlsmsjuryvo
-      custom_second_unit_contains: jcybzvrbyickznkygloig
-      second_unit_content: consequatur
-      second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: piece
-      custom_third_unit: mniihfqcoynlazghdtqtq
-      third_unit_contains: xbajwbpilpmufinllwloa
-      custom_third_unit_contains: uydlsmsjuryvojcybzvrb
-      third_unit_content: consequatur
-      third_unit_item_number: mqeopfuudtdsufvyvddqa
-      status: inactive
+      inventory_item_id: consequatur
+      warehouse_id: consequatur
+      movement_type: transfer
+      reference_type: mqeopfuudtdsufvyvddqa
+      reference_id: 17
+      quantity: 45
+      unit_cost: 56
+      total_cost: 16
+      notes: consequatur
+      movement_date: '2025-09-30T13:03:26'
     fileParameters: []
     responses: []
     responseFields: []
@@ -413,15 +226,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/units/review-unit/{id}'
+    uri: 'api/v1/stock-movements/examine-movement/{id}'
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified unit.'
+      title: 'Display the specified stock movement.'
       description: ''
       authenticated: true
       deprecated: false
@@ -433,7 +246,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the review unit.'
+        description: 'The ID of the examine movement.'
         required: true
         example: consequatur
         type: string
@@ -453,7 +266,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/units/review-unit/consequatur could not be found."
+              "message": "The route api/v1/stock-movements/examine-movement/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -473,16 +286,16 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/units/revise-unit/{id}'
+    uri: 'api/v1/stock-movements/modify-movement/{id}'
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified unit.'
-      description: ''
+      title: '? Update the specified stock movement.'
+      description: 'Update an existing stock movement with new data.'
       authenticated: true
       deprecated: false
       custom: []
@@ -493,7 +306,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the revise unit.'
+        description: 'The ID of the modify movement.'
         required: true
         example: consequatur
         type: string
@@ -506,9 +319,9 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      branch_id:
-        name: branch_id
-        description: 'The <code>id</code> of an existing record in the branches table.'
+      item_id:
+        name: item_id
+        description: 'The <code>id</code> of an existing record in the items table.'
         required: false
         example: null
         type: string
@@ -516,308 +329,131 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      name:
-        name: name
-        description: 'Must not be greater than 255 characters.'
+      unit_id:
+        name: unit_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      inventory_item_id:
+        name: inventory_item_id
+        description: 'The <code>id</code> of an existing record in the inventory_items table.'
         required: true
-        example: vmqeopfuudtdsufvyvddq
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      code:
-        name: code
+      warehouse_id:
+        name: warehouse_id
+        description: 'The <code>id</code> of an existing record in the warehouses table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      movement_type:
+        name: movement_type
+        description: ''
+        required: true
+        example: out
+        type: string
+        enumValues:
+          - in
+          - out
+          - transfer
+          - adjustment
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      reference_type:
+        name: reference_type
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: amniihfqcoynlazghdtqt
+        example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      symbol:
-        name: symbol
-        description: 'Must not be greater than 10 characters.'
-        required: false
-        example: qxbajwbpi
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      description:
-        name: description
+      reference_id:
+        name: reference_id
         description: ''
         required: false
-        example: 'Dolores dolorum amet iste laborum eius est dolor.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      decimal_places:
-        name: decimal_places
-        description: 'Must be at least 0. Must not be greater than 6.'
-        required: true
-        example: 1
+        example: 17
         type: integer
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      balance_unit:
-        name: balance_unit
-        description: ''
+      quantity:
+        name: quantity
+        description: 'Must be at least 0.01.'
         required: true
-        example: carton
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      custom_balance_unit:
-        name: custom_balance_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: tdsufvyvddqamniihfqco
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      length:
-        name: length
-        description: 'Must be at least 0.'
-        required: false
-        example: 85
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      width:
-        name: width
-        description: 'Must be at least 0.'
-        required: false
         example: 45
         type: number
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
-        custom: []
-      height:
-        name: height
-        description: 'Must be at least 0.'
-        required: false
-        example: 40
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      quantity_factor:
-        name: quantity_factor
-        description: 'Must be at least 0.0001.'
-        required: false
-        example: 1
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit:
-        name: second_unit
-        description: ''
-        required: false
-        example: ton
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_second_unit:
-        name: custom_second_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: zghdtqtqxbajwbpilpmuf
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_contains:
-        name: second_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: inllwloauydlsmsjuryvo
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_second_unit_contains:
-        name: custom_second_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: jcybzvrbyickznkygloig
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_content:
-        name: second_unit_content
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      second_unit_item_number:
-        name: second_unit_item_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit:
-        name: third_unit
-        description: ''
-        required: false
-        example: piece
-        type: string
-        enumValues:
-          - piece
-          - liter
-          - kilo
-          - ton
-          - carton
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_third_unit:
-        name: custom_third_unit
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mniihfqcoynlazghdtqtq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_contains:
-        name: third_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: xbajwbpilpmufinllwloa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      custom_third_unit_contains:
-        name: custom_third_unit_contains
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: uydlsmsjuryvojcybzvrb
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_content:
-        name: third_unit_content
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      third_unit_item_number:
-        name: third_unit_item_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      default_handling_unit_id:
-        name: default_handling_unit_id
-        description: 'The <code>id</code> of an existing record in the units table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      default_warehouse_id:
-        name: default_warehouse_id
-        description: 'The <code>id</code> of an existing record in the warehouses table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      status:
-        name: status
-        description: ''
-        required: true
-        example: inactive
-        type: string
-        enumValues:
-          - active
-          - inactive
-        exampleWasSpecified: false
         nullable: false
         custom: []
+      unit_cost:
+        name: unit_cost
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_cost:
+        name: total_cost
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      movement_date:
+        name: movement_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:26'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
     cleanBodyParameters:
-      name: vmqeopfuudtdsufvyvddq
-      code: amniihfqcoynlazghdtqt
-      symbol: qxbajwbpi
-      description: 'Dolores dolorum amet iste laborum eius est dolor.'
-      decimal_places: 1
-      balance_unit: carton
-      custom_balance_unit: tdsufvyvddqamniihfqco
-      length: 85
-      width: 45
-      height: 40
-      quantity_factor: 1
-      second_unit: ton
-      custom_second_unit: zghdtqtqxbajwbpilpmuf
-      second_unit_contains: inllwloauydlsmsjuryvo
-      custom_second_unit_contains: jcybzvrbyickznkygloig
-      second_unit_content: consequatur
-      second_unit_item_number: mqeopfuudtdsufvyvddqa
-      third_unit: piece
-      custom_third_unit: mniihfqcoynlazghdtqtq
-      third_unit_contains: xbajwbpilpmufinllwloa
-      custom_third_unit_contains: uydlsmsjuryvojcybzvrb
-      third_unit_content: consequatur
-      third_unit_item_number: mqeopfuudtdsufvyvddqa
-      status: inactive
+      inventory_item_id: consequatur
+      warehouse_id: consequatur
+      movement_type: out
+      reference_type: mqeopfuudtdsufvyvddqa
+      reference_id: 17
+      quantity: 45
+      unit_cost: 56
+      total_cost: 16
+      notes: consequatur
+      movement_date: '2025-09-30T13:03:26'
     fileParameters: []
     responses: []
     responseFields: []
@@ -832,16 +468,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/units/eliminate-unit/{id}'
+    uri: 'api/v1/stock-movements/remove-movement/{id}'
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified unit (soft delete).'
-      description: ''
+      title: '? Remove the specified stock movement (soft delete).'
+      description: 'Soft delete a stock movement, marking it as deleted while preserving the record.'
       authenticated: true
       deprecated: false
       custom: []
@@ -852,7 +488,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the eliminate unit.'
+        description: 'The ID of the remove movement.'
         required: true
         example: consequatur
         type: string
@@ -880,15 +516,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/units/unit-choices
+    uri: api/v1/stock-movements/movement-summary
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get predefined unit options.'
+      title: 'Get stock summary for all items.'
       description: ''
       authenticated: true
       deprecated: false
@@ -909,7 +545,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/units/unit-choices could not be found."
+              "message": "The route api/v1/stock-movements/movement-summary could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -929,15 +565,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/units/comprehensive-choices
+    uri: 'api/v1/stock-movements/by-item/{itemId}'
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get all unit options including custom ones.'
+      title: 'Get stock movements for a specific item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -946,8 +582,19 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      itemId:
+        name: itemId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      itemId: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -958,7 +605,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/units/comprehensive-choices could not be found."
+              "message": "The route api/v1/stock-movements/by-item/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -978,15 +625,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/units/container-choices
+    uri: 'api/v1/stock-movements/by-warehouse/{warehouseId}'
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get contains options.'
+      title: 'Get stock movements for a specific warehouse.'
       description: ''
       authenticated: true
       deprecated: false
@@ -995,8 +642,19 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      warehouseId:
+        name: warehouseId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      warehouseId: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1007,7 +665,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/units/container-choices could not be found."
+              "message": "The route api/v1/stock-movements/by-warehouse/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -1027,16 +685,16 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/units/selection-dropdown
+    uri: api/v1/stock-movements/deleted-movements
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get units for dropdown selection.'
-      description: ''
+      title: '? Get trashed (soft deleted) stock movements.'
+      description: 'Retrieve all soft deleted stock movements with search and pagination support.'
       authenticated: true
       deprecated: false
       custom: []
@@ -1056,252 +714,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/units/selection-dropdown could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/units/warehouse-selection
-    metadata:
-      groupName: 'Inventory Management / Units'
-      groupDescription: |-
-
-        APIs for managing units of measure, including creation, updates, and unit conversions.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get warehouses for dropdown selection.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/units/warehouse-selection could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/units/form-configuration
-    metadata:
-      groupName: 'Inventory Management / Units'
-      groupDescription: |-
-
-        APIs for managing units of measure, including creation, updates, and unit conversions.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get comprehensive unit data for form.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/units/form-configuration could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/units/initial-unit
-    metadata:
-      groupName: 'Inventory Management / Units'
-      groupDescription: |-
-
-        APIs for managing units of measure, including creation, updates, and unit conversions.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get the first unit.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/units/initial-unit could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/units/final-unit
-    metadata:
-      groupName: 'Inventory Management / Units'
-      groupDescription: |-
-
-        APIs for managing units of measure, including creation, updates, and unit conversions.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get the last unit.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/units/final-unit could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/units/deleted-units
-    metadata:
-      groupName: 'Inventory Management / Units'
-      groupDescription: |-
-
-        APIs for managing units of measure, including creation, updates, and unit conversions.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get trashed (soft deleted) units.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/units/deleted-units could not be found."
+              "message": "The route api/v1/stock-movements/deleted-movements could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -1321,16 +734,16 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/v1/units/{id}/restore-unit'
+    uri: 'api/v1/stock-movements/{id}/restore-movement'
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Restore a soft deleted unit.'
-      description: ''
+      title: '? Restore a soft deleted stock movement.'
+      description: 'Restore a previously soft deleted stock movement back to active status.'
       authenticated: true
       deprecated: false
       custom: []
@@ -1341,7 +754,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the unit.'
+        description: 'The ID of the stock movement.'
         required: true
         example: consequatur
         type: string
@@ -1369,16 +782,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/units/{id}/permanently-delete'
+    uri: 'api/v1/stock-movements/{id}/permanently-delete'
     metadata:
-      groupName: 'Inventory Management / Units'
+      groupName: 'Inventory Management / Stock Movements'
       groupDescription: |-
 
-        APIs for managing units of measure, including creation, updates, and unit conversions.
+        APIs for managing stock movements, including transfers, adjustments, and movement tracking.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Permanently delete a unit (force delete).'
-      description: ''
+      title: '? Permanently delete a stock movement (force delete).'
+      description: 'Permanently remove a stock movement from the database. This action cannot be undone.'
       authenticated: true
       deprecated: false
       custom: []
@@ -1389,7 +802,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the unit.'
+        description: 'The ID of the stock movement.'
         required: true
         example: consequatur
         type: string

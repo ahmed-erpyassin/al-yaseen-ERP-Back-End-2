@@ -8,6 +8,11 @@ use Modules\Sales\app\Services\ReturnInvoiceService;
 use Modules\Sales\Http\Requests\ReturnInvoiceRequest;
 use Modules\Sales\Transformers\ReturnInvoiceResource;
 
+/**
+ * @group Sales Management / Return Invoices
+ *
+ * APIs for managing sales return invoices, including return processing, refunds, and inventory adjustments.
+ */
 class ReturnInvoiceController extends Controller
 {
     protected ReturnInvoiceService $returnInvoiceService;

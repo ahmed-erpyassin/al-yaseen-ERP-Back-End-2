@@ -157,8 +157,8 @@ class OutgoingShipmentService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = $request->user()->company_id ?? 101;
-                $userId = $request->user()->id;
+                $companyId = Auth::user()->company_id ?? 1;
+                $userId = Auth::id();
                 $validatedData = $request->validated();
 
                 // Generate book code and invoice number for outgoing shipments
@@ -173,7 +173,7 @@ class OutgoingShipmentService
                     'company_id' => $companyId,
                     'user_id' => $userId,
                     'created_by' => $userId,
-                    'status' => 'draft',
+                    'status' => $validatedData['status'] ?? 'draft',
 
                     // Auto-generated fields
                     'book_code' => $numberingData['book_code'],
@@ -185,11 +185,20 @@ class OutgoingShipmentService
                     'customer_id' => $validatedData['customer_id'],
                     'customer_email' => $customer ? $customer->email : $validatedData['customer_email'] ?? null,
 
+                    // Required fields with defaults
+                    'currency_id' => $validatedData['currency_id'],
+                    'branch_id' => $validatedData['branch_id'] ?? 1,
+                    'employee_id' => $validatedData['employee_id'] ?? 1,
+                    'journal_number' => $validatedData['journal_number'] ?? 1,
+                    'exchange_rate' => 1.0000,
+                    'total_foreign' => floatval($validatedData['total_local'] ?? 0),
+                    'total_local' => floatval($validatedData['total_local'] ?? 0),
+                    'total_amount' => floatval($validatedData['total_local'] ?? 0),
+
                     // Other fields from request
-                    'due_date' => $validatedData['due_date'] ?? null,
+                    'due_date' => $validatedData['due_date'] ?? Carbon::now()->addDays(30)->format('Y-m-d'),
                     'notes' => $validatedData['notes'] ?? null,
-                    'employee_id' => $validatedData['employee_id'] ?? null,
-                    'branch_id' => $validatedData['branch_id'] ?? null,
+                    'licensed_operator' => $validatedData['licensed_operator'] ?? null,
                 ];
 
                 // Create the shipment
@@ -248,8 +257,8 @@ class OutgoingShipmentService
                 }
 
                 $validatedData = $request->validated();
-                $userId = $request->user()->id;
-                $companyId = $request->user()->company_id ?? $shipment->company_id;
+                $userId = Auth::id();
+                $companyId = Auth::user()->company_id ?? $shipment->company_id;
 
                 // Get customer data for auto-population if customer changed
                 $customer = null;
@@ -401,10 +410,11 @@ class OutgoingShipmentService
 
                     // Deduct inventory again
                     $this->deductFromWarehouse(
-                        $shipment,
                         $item->item_id,
                         $item->warehouse_id,
-                        $item->quantity
+                        $item->quantity,
+                        $item->unit_id,
+                        $shipment
                     );
                 }
 
@@ -427,18 +437,23 @@ class OutgoingShipmentService
     /**
      * Validate inventory availability for restoring a shipment item
      */
-    private function validateInventoryForRestore($item)
+    private function validateInventoryForRestore($saleItem)
     {
-        $inventoryStock = InventoryStock::where('item_id', $item->item_id)
-            ->where('warehouse_id', $item->warehouse_id)
-            ->first();
+        // Find the item
+        $item = Item::find($saleItem->item_id);
 
-        if (!$inventoryStock) {
-            throw new \Exception("No inventory record found for item {$item->item_name} in warehouse");
+        if (!$item) {
+            throw new \Exception("Item {$saleItem->item_id} not found");
         }
 
-        if ($inventoryStock->available_quantity < $item->quantity) {
-            throw new \Exception("Insufficient inventory to restore shipment. Available: {$inventoryStock->available_quantity}, Required: {$item->quantity}");
+        // If stock tracking is disabled, no validation needed
+        if (!$item->stock_tracking) {
+            return;
+        }
+
+        // Check if sufficient quantity is available
+        if ($item->balance < $saleItem->quantity) {
+            throw new \Exception("Insufficient inventory to restore shipment. Available: {$item->balance}, Required: {$saleItem->quantity}");
         }
     }
 
@@ -546,6 +561,15 @@ class OutgoingShipmentService
                 'quantity' => $itemData['quantity'],
                 'warehouse_id' => $itemData['warehouse_id'],
                 'notes' => $itemData['notes'] ?? null,
+
+                // Financial fields
+                'description' => $itemData['description'] ?? null,
+                'unit_price' => $itemData['unit_price'] ?? 0,
+                'discount_rate' => $itemData['discount_rate'] ?? 0,
+                'tax_rate' => $itemData['tax_rate'] ?? 0,
+                'total_foreign' => $itemData['total_foreign'] ?? 0,
+                'total_local' => $itemData['total_local'] ?? 0,
+                'total' => $itemData['total'] ?? 0,
             ];
 
             $saleItem = SaleItem::create($saleItemData);
@@ -555,6 +579,7 @@ class OutgoingShipmentService
                 $itemData['item_id'],
                 $itemData['warehouse_id'],
                 $itemData['quantity'],
+                $itemData['unit_id'],
                 $shipment
             );
         }
@@ -563,28 +588,60 @@ class OutgoingShipmentService
     /**
      * Deduct quantity from warehouse inventory
      */
-    private function deductFromWarehouse($itemId, $warehouseId, $quantity, $shipment)
+    private function deductFromWarehouse($itemId, $warehouseId, $quantity, $unitId, $shipment)
     {
-        // Find or create inventory stock record
-        $inventoryStock = InventoryStock::where('inventory_item_id', $itemId)
-            ->where('warehouse_id', $warehouseId)
-            ->where('company_id', $shipment->company_id)
-            ->first();
+        // Find the item
+        $item = Item::find($itemId);
+        if (!$item) {
+            throw new \Exception("Item {$itemId} not found");
+        }
 
-        if (!$inventoryStock) {
-            throw new \Exception("No inventory stock found for item {$itemId} in warehouse {$warehouseId}");
+        // Handle null warehouse_id - use default warehouse or skip stock movement
+        if (!$warehouseId) {
+            // Try to get the first available warehouse for the company
+            $defaultWarehouse = Warehouse::where('company_id', $shipment->company_id)->first();
+            if ($defaultWarehouse) {
+                $warehouseId = $defaultWarehouse->id;
+            } else {
+                // If no warehouse found and stock tracking is enabled, throw error
+                if ($item->stock_tracking) {
+                    throw new \Exception("No warehouse specified and no default warehouse found for company");
+                }
+                // If stock tracking is disabled, skip inventory management
+                return;
+            }
+        }
+
+        // Check if item has stock tracking enabled
+        if (!$item->stock_tracking) {
+            // If stock tracking is disabled, just create the movement record
+            StockMovement::create([
+                'company_id' => $shipment->company_id,
+                'user_id' => $shipment->user_id,
+                'warehouse_id' => $warehouseId,
+                'document_id' => $shipment->id,
+                'item_id' => $itemId,
+                'unit_id' => $unitId,
+                'type' => 'sales',
+                'movement_type' => 'out',
+                'quantity' => $quantity,
+                'transaction_date' => now(),
+                'notes' => "Outgoing shipment: {$shipment->invoice_number}",
+                'created_by' => $shipment->user_id,
+            ]);
+            return;
         }
 
         // Check if sufficient quantity is available
-        if ($inventoryStock->available_quantity < $quantity) {
-            throw new \Exception("Insufficient stock. Available: {$inventoryStock->available_quantity}, Required: {$quantity}");
+        if ($item->balance < $quantity) {
+            throw new \Exception("Insufficient stock. Available: {$item->balance}, Required: {$quantity}");
         }
 
-        // Deduct quantity
-        $inventoryStock->quantity -= $quantity;
-        $inventoryStock->available_quantity -= $quantity;
-        $inventoryStock->updated_by = $shipment->user_id;
-        $inventoryStock->save();
+        // Deduct quantity from item balance
+        $item->balance -= $quantity;
+        $item->quantity -= $quantity;
+        $item->updated_by = $shipment->user_id;
+        $item->save();
 
         // Create stock movement record
         StockMovement::create([
@@ -593,6 +650,7 @@ class OutgoingShipmentService
             'warehouse_id' => $warehouseId,
             'document_id' => $shipment->id,
             'item_id' => $itemId,
+            'unit_id' => $unitId,
             'type' => 'sales',
             'movement_type' => 'out',
             'quantity' => $quantity,
@@ -607,31 +665,41 @@ class OutgoingShipmentService
      */
     private function restoreInventoryForShipment($shipment)
     {
-        foreach ($shipment->items as $item) {
-            if ($item->warehouse_id && $item->item_id) {
-                // Find inventory stock record
-                $inventoryStock = InventoryStock::where('inventory_item_id', $item->item_id)
-                    ->where('warehouse_id', $item->warehouse_id)
-                    ->where('company_id', $shipment->company_id)
-                    ->first();
+        foreach ($shipment->items as $saleItem) {
+            if ($saleItem->item_id) {
+                // Find the item
+                $item = Item::find($saleItem->item_id);
+                if ($item && $item->stock_tracking) {
+                    // Handle null warehouse_id
+                    $warehouseId = $saleItem->warehouse_id;
+                    if (!$warehouseId) {
+                        // Try to get the first available warehouse for the company
+                        $defaultWarehouse = Warehouse::where('company_id', $shipment->company_id)->first();
+                        if ($defaultWarehouse) {
+                            $warehouseId = $defaultWarehouse->id;
+                        } else {
+                            // Skip if no warehouse found
+                            continue;
+                        }
+                    }
 
-                if ($inventoryStock) {
-                    // Restore quantity
-                    $inventoryStock->quantity += $item->quantity;
-                    $inventoryStock->available_quantity += $item->quantity;
-                    $inventoryStock->updated_by = $shipment->user_id;
-                    $inventoryStock->save();
+                    // Restore quantity to item balance
+                    $item->balance += $saleItem->quantity;
+                    $item->quantity += $saleItem->quantity;
+                    $item->updated_by = $shipment->user_id;
+                    $item->save();
 
                     // Create reverse stock movement record
                     StockMovement::create([
                         'company_id' => $shipment->company_id,
                         'user_id' => $shipment->user_id,
-                        'warehouse_id' => $item->warehouse_id,
+                        'warehouse_id' => $warehouseId,
                         'document_id' => $shipment->id,
-                        'item_id' => $item->item_id,
+                        'item_id' => $saleItem->item_id,
+                        'unit_id' => $saleItem->unit_id,
                         'type' => 'sales',
                         'movement_type' => 'in',
-                        'quantity' => $item->quantity,
+                        'quantity' => $saleItem->quantity,
                         'transaction_date' => now(),
                         'notes' => "Restored from shipment: {$shipment->invoice_number}",
                         'created_by' => $shipment->user_id,
@@ -649,11 +717,11 @@ class OutgoingShipmentService
         $search = $request->get('search', '');
         $limit = $request->get('limit', 10);
 
-        return Customer::where('name', 'like', "%{$search}%")
+        return Customer::where('first_name', 'like', "%{$search}%")
             ->orWhere('email', 'like', "%{$search}%")
             ->orWhere('phone', 'like', "%{$search}%")
             ->limit($limit)
-            ->get(['id', 'name', 'email', 'phone']);
+            ->get(['id', 'first_name', 'email', 'phone']);
     }
 
     /**
@@ -678,10 +746,10 @@ class OutgoingShipmentService
     {
         try {
             return [
-                'customers' => Customer::select('id', 'name', 'email', 'phone')->get(),
+                'customers' => Customer::select('id', 'email', 'phone')->get(),
                 'items' => Item::with('unit')->select('id', 'item_number', 'name', 'unit_id')->get(),
-                'warehouses' => Warehouse::select('id', 'name', 'code')->get(),
-                'employees' => \Modules\Users\Models\Employee::select('id', 'name', 'employee_number')->get(),
+                'warehouses' => Warehouse::select('id', 'name')->get(),
+                'employees' => \Modules\HumanResources\Models\Employee::select('id',  'employee_number')->get(),
                 'currencies' => \Modules\FinancialAccounts\Models\Currency::select('id', 'name', 'code', 'symbol')->get(),
                 'units' => Unit::select('id', 'name', 'symbol')->get(),
                 'statuses' => [

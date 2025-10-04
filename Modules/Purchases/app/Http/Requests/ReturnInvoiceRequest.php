@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Purchases\Http\Requests;
+namespace Modules\Purchases\app\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,9 +12,10 @@ class ReturnInvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'branch_id' => 'nullable|integer',
             'currency_id' => 'nullable',
             'employee_id' => 'nullable',
-            'customer_id' => 'required',
+            'supplier_id' => 'required',
             'journal_id' => 'nullable',
             'journal_number' => 'required|integer',
             'cash_paid' => 'nullable|numeric|min:0',

@@ -5,9 +5,11 @@ namespace Modules\Purchases\app\Enums;
 interface PurchaseTypeEnum
 {
     const QUOTATION = 'quotation';
-    const OUTGOING_ORDER = 'outgoing_order';
-    const INCOMING_SHIPMENT = 'incoming_shipment';
+    const ORDER = 'order';
+    const OUTGOING_ORDER = 'order';
+    const INCOMING_SHIPMENT = 'shipment';
     const INVOICE = 'invoice';
-    const SERVICE = 'service';
+    const EXPENSE = 'expense';
     const RETURN_INVOICE = 'return_invoice';
+    const PURCHASE_REFERENCE_INVOICE = 'purchase_reference_invoice';
 }

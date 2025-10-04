@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Users\Models\User;
 use Modules\Companies\Models\Company;
+use Modules\Companies\Models\Branch;
+use Modules\Customers\Models\Customer;
+use Modules\Suppliers\Models\Supplier;
+use Modules\FinancialAccounts\Models\Currency;
+use Modules\Purchases\app\Enums\PurchaseTypeEnum;
+use Modules\FinancialAccounts\Models\TaxRate;
+use Modules\Billing\Models\Journal;
+use Illuminate\Support\Facades\DB;
 
 class Purchase extends Model
 {
@@ -25,10 +33,22 @@ class Purchase extends Model
         'employee_id',
         'supplier_id',
         'customer_id',
+        'journal_id',
+        'journal_number',
 
         // Quotation Information
         'quotation_number',
         'invoice_number',
+        'outgoing_order_number',
+        'expense_number',
+        'purchase_reference_invoice_number',
+        'ledger_code',
+        'affects_inventory',
+        'is_tax_applied_to_currency_rate',
+        'currency_rate_with_tax',
+        'ledger_invoice_count',
+        'journal_code',
+        'journal_invoice_count',
         'date',
         'time',
         'due_date',
@@ -41,14 +61,15 @@ class Purchase extends Model
 
         // Supplier Information
         'supplier_name',
+        'supplier_email',
         'licensed_operator',
 
         // Ledger System
-        'journal_id',
-        'journal_number',
         'ledger_code',
         'ledger_number',
         'ledger_invoice_count',
+        'journal_code',
+        'journal_invoice_count',
 
         // Type and Status
         'type',
@@ -87,6 +108,9 @@ class Purchase extends Model
         'date' => 'date',
         'time' => 'datetime:H:i:s',
         'due_date' => 'date',
+        'journal_number' => 'integer',
+        'journal_invoice_count' => 'integer',
+        'ledger_invoice_count' => 'integer',
         'cash_paid' => 'decimal:2',
         'checks_paid' => 'decimal:2',
         'allowed_discount' => 'decimal:2',
@@ -104,6 +128,8 @@ class Purchase extends Model
         'total_amount' => 'decimal:4',
         'grand_total' => 'decimal:2',
         'is_tax_applied_to_currency' => 'boolean',
+        'is_tax_applied_to_currency_rate' => 'boolean',
+        'affects_inventory' => 'boolean',
         'ledger_invoice_count' => 'integer',
     ];
 
@@ -111,10 +137,12 @@ class Purchase extends Model
     const TYPE_OPTIONS = [
         'quotation' => 'Quotation',
         'order' => 'Order',
+        'outgoing_order' => 'Outgoing Order',
         'shipment' => 'Shipment',
         'invoice' => 'Invoice',
         'expense' => 'Expense',
         'return_invoice' => 'Return Invoice',
+        'purchase_reference_invoice' => 'Purchase Reference Invoice',
     ];
 
     // Constants for status
@@ -125,6 +153,8 @@ class Purchase extends Model
         'invoiced' => 'Invoiced',
         'cancelled' => 'Cancelled',
     ];
+
+    const INVOICES_PER_JOURNAL = 50;
 
     /**
      * Get the user who created the purchase
@@ -147,7 +177,7 @@ class Purchase extends Model
      */
     public function branch(): BelongsTo
     {
-        return $this->belongsTo(\Modules\Companies\Models\Branch::class, 'branch_id');
+        return $this->belongsTo(Branch::class, 'branch_id');
     }
 
     /**
@@ -155,7 +185,7 @@ class Purchase extends Model
      */
     public function currency(): BelongsTo
     {
-        return $this->belongsTo(\Modules\FinancialAccounts\Models\Currency::class, 'currency_id');
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
 
     /**
@@ -163,15 +193,23 @@ class Purchase extends Model
      */
     public function supplier(): BelongsTo
     {
-        return $this->belongsTo(\Modules\Suppliers\Models\Supplier::class, 'supplier_id');
+        return $this->belongsTo(Supplier::class, 'supplier_id');
     }
 
     /**
-     * Get the customer for the purchase (for incoming quotations)
+     * Get the customer for the purchase (for outgoing orders and quotations)
      */
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(\Modules\Customers\Models\Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
+    }
+
+    /**
+     * Get the journal for this purchase
+     */
+    public function journal(): BelongsTo
+    {
+        return $this->belongsTo(Journal::class, 'journal_id');
     }
 
     /**
@@ -179,7 +217,7 @@ class Purchase extends Model
      */
     public function taxRate(): BelongsTo
     {
-        return $this->belongsTo(\Modules\FinancialAccounts\Models\TaxRate::class, 'tax_rate_id');
+        return $this->belongsTo(TaxRate::class, 'tax_rate_id');
     }
 
     /**
@@ -215,6 +253,26 @@ class Purchase extends Model
     }
 
     /**
+     * Generate the next sequential outgoing order number
+     */
+    public static function generateOutgoingOrderNumber(): string
+    {
+        $lastOrder = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastOrder) {
+            return 'OUT-0001';
+        }
+
+        // Extract number from last order number (assuming format OUT-XXXX)
+        $lastNumber = (int) substr($lastOrder->outgoing_order_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'OUT-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * Generate the next sequential quotation number
      */
     public static function generateQuotationNumber(): string
@@ -235,24 +293,85 @@ class Purchase extends Model
     }
 
     /**
+     * Generate the next sequential expense number
+     */
+    public static function generateExpenseNumber(): string
+    {
+        $lastExpense = self::where('type', 'expense')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastExpense || !$lastExpense->expense_number) {
+            return 'EXP-0001';
+        }
+
+        // Extract number from last expense number (assuming format EXP-XXXX)
+        $lastNumber = (int) substr($lastExpense->expense_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'EXP-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * Generate the next sequential invoice number
      */
     public static function generateInvoiceNumber(): string
     {
-        $lastPurchase = self::where('type', 'quotation')
-            ->whereNotNull('invoice_number')
+        $lastInvoice = self::whereNotNull('invoice_number')
             ->orderBy('id', 'desc')
             ->first();
 
-        if (!$lastPurchase || !$lastPurchase->invoice_number) {
+        if (!$lastInvoice || !$lastInvoice->invoice_number) {
             return 'INV-0001';
         }
 
         // Extract number from last invoice number (assuming format INV-XXXX)
-        $lastNumber = (int) substr($lastPurchase->invoice_number, -4);
+        $lastNumber = (int) substr($lastInvoice->invoice_number, -4);
         $nextNumber = $lastNumber + 1;
 
         return 'INV-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Generate purchase reference invoice number
+     */
+    public static function generatePurchaseReferenceInvoiceNumber(): string
+    {
+        $lastInvoice = self::where('type', 'purchase_reference_invoice')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastInvoice || !$lastInvoice->purchase_reference_invoice_number) {
+            return 'PRI-0001';
+        }
+
+        $lastNumber = (int) substr($lastInvoice->purchase_reference_invoice_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'PRI-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Generate journal code and invoice number for outgoing orders
+     */
+    public static function generateJournalAndInvoiceNumber($companyId): array
+    {
+        return DB::transaction(function () use ($companyId) {
+            // Get the current journal and invoice numbers
+            $currentJournal = self::getCurrentJournal($companyId);
+            $nextInvoiceNumber = self::getNextInvoiceNumber($companyId);
+
+            // Check if we need to create a new journal
+            if (self::shouldCreateNewJournal($companyId, $currentJournal)) {
+                $currentJournal = self::createNewJournal($companyId);
+            }
+
+            return [
+                'journal_code' => $currentJournal,
+                'invoice_number' => $nextInvoiceNumber,
+                'journal_number' => self::getJournalNumber($companyId)
+            ];
+        });
     }
 
     /**
@@ -260,31 +379,171 @@ class Purchase extends Model
      */
     public static function generateLedgerCode($companyId): array
     {
-        // Find the current active ledger
-        $currentLedger = self::where('company_id', $companyId)
-            ->where('type', 'quotation')
-            ->whereNotNull('ledger_code')
-            ->orderBy('ledger_number', 'desc')
-            ->first();
+        return DB::transaction(function () use ($companyId) {
+            // Get the last purchase reference invoice for this company
+            $lastInvoice = self::where('type', PurchaseTypeEnum::PURCHASE_REFERENCE_INVOICE)
+                ->where('company_id', $companyId)
+                ->orderBy('id', 'desc')
+                ->first();
 
-        if (!$currentLedger || $currentLedger->ledger_invoice_count >= 50) {
-            // Create new ledger
-            $newLedgerNumber = $currentLedger ? $currentLedger->ledger_number + 1 : 1;
-            $ledgerCode = 'LED-' . str_pad($newLedgerNumber, 3, '0', STR_PAD_LEFT);
+            // Generate ledger code
+            $ledgerCode = 'LED-001';
+            if ($lastInvoice) {
+                try {
+                    $lastLedgerCode = $lastInvoice->ledger_code ?? null;
+                    if ($lastLedgerCode) {
+                        $lastNumber = (int) substr($lastLedgerCode, -3);
+                        $nextNumber = $lastNumber + 1;
+                        $ledgerCode = 'LED-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+                    }
+                } catch (\Exception $e) {
+                    $ledgerCode = 'LED-001';
+                }
+            }
+
+            // Generate ledger number
+            $ledgerNumber = 1;
+            if ($lastInvoice) {
+                try {
+                    $lastLedgerNumber = $lastInvoice->ledger_number ?? 0;
+                    $ledgerNumber = $lastLedgerNumber + 1;
+                } catch (\Exception $e) {
+                    $ledgerNumber = 1;
+                }
+            }
 
             return [
                 'ledger_code' => $ledgerCode,
-                'ledger_number' => $newLedgerNumber,
-                'ledger_invoice_count' => 1
+                'invoice_number' => 1,
+                'ledger_number' => $ledgerNumber
             ];
-        } else {
-            // Use existing ledger and increment count
-            return [
-                'ledger_code' => $currentLedger->ledger_code,
-                'ledger_number' => $currentLedger->ledger_number,
-                'ledger_invoice_count' => $currentLedger->ledger_invoice_count + 1
-            ];
+        });
+    }
+
+    /**
+     * Get current journal for outgoing orders
+     */
+    private static function getCurrentJournal($companyId): string
+    {
+        $lastOrder = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
+            ->where('company_id', $companyId)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastOrder) {
+            return 'JOU-001';
         }
+
+        // Check if journal_code column exists and has a value
+        try {
+            $journalCode = $lastOrder->journal_code ?? null;
+            if (!$journalCode) {
+                return 'JOU-001';
+            }
+            return $journalCode;
+        } catch (\Exception $e) {
+            // Column doesn't exist, return default
+            return 'JOU-001';
+        }
+    }
+
+    /**
+     * Get next invoice number
+     */
+    private static function getNextInvoiceNumber($companyId): int
+    {
+        $lastOrder = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
+            ->where('company_id', $companyId)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        return $lastOrder ? ($lastOrder->journal_number + 1) : 1;
+    }
+
+    /**
+     * Check if we should create a new journal
+     */
+    private static function shouldCreateNewJournal($companyId, $currentJournal): bool
+    {
+        try {
+            $invoicesInCurrentJournal = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
+                ->where('company_id', $companyId)
+                ->where('journal_code', $currentJournal)
+                ->count();
+
+            return $invoicesInCurrentJournal >= self::INVOICES_PER_JOURNAL;
+        } catch (\Exception $e) {
+            // If journal_code column doesn't exist, return false to use default journal
+            return false;
+        }
+    }
+
+    /**
+     * Create new journal
+     */
+    private static function createNewJournal($companyId): string
+    {
+        $lastJournal = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
+            ->where('company_id', $companyId)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastJournal) {
+            return 'JOU-001';
+        }
+
+        try {
+            $journalCode = $lastJournal->journal_code ?? null;
+            if (!$journalCode) {
+                return 'JOU-001';
+            }
+
+            // Extract number from last journal code (assuming format JOU-XXX)
+            $lastNumber = (int) substr($journalCode, -3);
+            $nextNumber = $lastNumber + 1;
+
+            return 'JOU-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        } catch (\Exception $e) {
+            // If journal_code column doesn't exist, return default
+            return 'JOU-001';
+        }
+    }
+
+    /**
+     * Get journal number
+     */
+    private static function getJournalNumber($companyId): int
+    {
+        $lastOrder = self::where('type', PurchaseTypeEnum::OUTGOING_ORDER)
+            ->where('company_id', $companyId)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        return $lastOrder ? ($lastOrder->journal_number + 1) : 1;
+    }
+
+    /**
+     * Scope to get outgoing orders only
+     */
+    public function scopeOutgoingOrders($query)
+    {
+        return $query->where('type', PurchaseTypeEnum::OUTGOING_ORDER);
+    }
+
+    /**
+     * Scope to get quotations only
+     */
+    public function scopeQuotations($query)
+    {
+        return $query->where('type', 'quotation');
+    }
+
+    /**
+     * Scope for purchase reference invoices only
+     */
+    public function scopePurchaseReferenceInvoices($query)
+    {
+        return $query->where('type', 'purchase_reference_invoice');
     }
 
     /**
@@ -304,10 +563,18 @@ class Purchase extends Model
     }
 
     /**
-     * Scope to get quotations only
+     * Scope to get purchases by status
      */
-    public function scopeQuotations($query)
+    public function scopeByStatus($query, $status)
     {
-        return $query->where('type', 'quotation');
+        return $query->where('status', $status);
+    }
+
+    /**
+     * Scope to get expenses only
+     */
+    public function scopeExpenses($query)
+    {
+        return $query->where('type', 'expense');
     }
 }

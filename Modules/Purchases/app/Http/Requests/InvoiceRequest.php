@@ -11,7 +11,45 @@ class InvoiceRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'branch_id' => 'nullable|integer',
+            'currency_id' => 'nullable',
+            'employee_id' => 'nullable',
+            'customer_id' => 'nullable',
+            'supplier_id' => 'nullable|integer',
+            'journal_id' => 'nullable',
+            'journal_number' => 'required|integer',
+            'due_date' => 'nullable|date',
+            'supplier_email' => 'nullable|email',
+            'licensed_operator' => 'nullable|string',
+            'cash_paid' => 'nullable|numeric|min:0',
+            'checks_paid' => 'nullable|numeric|min:0',
+            'allowed_discount' => 'nullable|numeric|min:0',
+            'total_without_tax' => 'nullable|numeric|min:0',
+            'tax_percentage' => 'nullable|numeric|min:0',
+            'tax_amount' => 'nullable|numeric|min:0',
+            'total_amount' => 'nullable|numeric|min:0',
+            'remaining_balance' => 'nullable|numeric|min:0',
+            'exchange_rate' => 'required|numeric|min:0',
+            'total_foreign' => 'nullable|numeric|min:0',
+            'total_local' => 'nullable|numeric|min:0',
+            'is_tax_applied_to_currency' => 'nullable|boolean',
+            'discount_percentage' => 'nullable|numeric|min:0',
+            'discount_amount' => 'nullable|numeric|min:0',
+            'notes' => 'nullable|string',
+            'items' => 'required|array|min:1',
+            'items.*.item_id' => 'required|integer',
+            'items.*.account_id' => 'nullable|integer',
+            'items.*.description' => 'nullable|string',
+            'items.*.quantity' => 'required|numeric|min:0',
+            'items.*.unit_price' => 'required|numeric|min:0',
+            'items.*.discount_rate' => 'nullable|numeric|min:0',
+            'items.*.tax_rate' => 'nullable|numeric|min:0',
+            'items.*.total_foreign' => 'nullable|numeric|min:0',
+            'items.*.total_local' => 'nullable|numeric|min:0',
+            'items.*.total' => 'nullable|numeric|min:0',
+            'items.*.notes' => 'nullable|string',
+        ];
     }
 
     /**

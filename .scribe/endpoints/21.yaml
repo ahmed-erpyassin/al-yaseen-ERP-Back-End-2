@@ -1,0 +1,2211 @@
+name: 'Purchase Management / Incoming Offers'
+description: |-
+
+  APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-offers/list
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display a listing of the resource.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/list could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/purchase/incoming-offers/create
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Store a newly created resource in storage.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      employee_id:
+        name: employee_id
+        description: 'The <code>id</code> of an existing record in the employees table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_id:
+        name: supplier_id
+        description: 'The <code>id</code> of an existing record in the suppliers table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      quotation_number:
+        name: quotation_number
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      invoice_number:
+        name: invoice_number
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      date:
+        name: date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      time:
+        name: time
+        description: 'Must be a valid date in the format <code>H:i:s</code>.'
+        required: false
+        example: '13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      due_date:
+        name: due_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
+        required: false
+        example: '2106-10-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: 'The <code>id</code> of an existing record in the customers table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_number:
+        name: customer_number
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_email:
+        name: customer_email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: ablanda@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_mobile:
+        name: customer_mobile
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: wbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_name:
+        name: supplier_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: uydlsmsjuryvojcybzvrb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: yickznkygloigmkwxphlv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_id:
+        name: journal_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_number:
+        name: journal_number
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      ledger_code:
+        name: ledger_code
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      ledger_number:
+        name: ledger_number
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      ledger_invoice_count:
+        name: ledger_invoice_count
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      cash_paid:
+        name: cash_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      checks_paid:
+        name: checks_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allowed_discount:
+        name: allowed_discount
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_percentage:
+        name: discount_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 14
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_amount:
+        name: discount_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 55
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_without_tax:
+        name: total_without_tax
+        description: 'Must be at least 0.'
+        required: false
+        example: 19
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_percentage:
+        name: tax_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 20
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_amount:
+        name: tax_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_amount:
+        name: total_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      grand_total:
+        name: grand_total
+        description: 'Must be at least 0.'
+        required: false
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      remaining_balance:
+        name: remaining_balance
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Must be at least 0.'
+        required: true
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      currency_rate:
+        name: currency_rate
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      currency_rate_with_tax:
+        name: currency_rate_with_tax
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_rate_id:
+        name: tax_rate_id
+        description: 'The <code>id</code> of an existing record in the tax_rates table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      is_tax_applied_to_currency:
+        name: is_tax_applied_to_currency
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_foreign:
+        name: total_foreign
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_local:
+        name: total_local
+        description: 'Must be at least 0.'
+        required: false
+        example: 87
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      items:
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].serial_number':
+        name: 'items[].serial_number'
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_number':
+        name: 'items[].item_number'
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].item_name':
+        name: 'items[].item_name'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].unit_id':
+        name: 'items[].unit_id'
+        description: 'The <code>id</code> of an existing record in the units table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].unit_name':
+        name: 'items[].unit_name'
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].description':
+        name: 'items[].description'
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].quantity':
+        name: 'items[].quantity'
+        description: 'Must be at least 0.01.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].unit_price':
+        name: 'items[].unit_price'
+        description: 'Must be at least 0.'
+        required: true
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].discount_rate':
+        name: 'items[].discount_rate'
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 4
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].discount_percentage':
+        name: 'items[].discount_percentage'
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].discount_amount':
+        name: 'items[].discount_amount'
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].tax_rate':
+        name: 'items[].tax_rate'
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 6
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_foreign':
+        name: 'items[].total_foreign'
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_local':
+        name: 'items[].total_local'
+        description: 'Must be at least 0.'
+        required: false
+        example: 87
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total':
+        name: 'items[].total'
+        description: 'Must be at least 0.'
+        required: false
+        example: 76
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].notes':
+        name: 'items[].notes'
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      currency_id: consequatur
+      supplier_id: consequatur
+      quotation_number: mqeopfuudtdsufvyvddqa
+      invoice_number: mniihfqcoynlazghdtqtq
+      date: '2025-09-30T13:03:29'
+      time: '13:03:29'
+      due_date: '2106-10-30'
+      customer_number: mqeopfuudtdsufvyvddqa
+      customer_name: mniihfqcoynlazghdtqtq
+      customer_email: ablanda@example.org
+      customer_mobile: wbpilpmufinllwloa
+      supplier_name: uydlsmsjuryvojcybzvrb
+      licensed_operator: yickznkygloigmkwxphlv
+      journal_id: 17
+      journal_number: 17
+      ledger_code: mqeopfuudtdsufvyvddqa
+      ledger_number: 17
+      ledger_invoice_count: 17
+      cash_paid: 45
+      checks_paid: 56
+      allowed_discount: 16
+      discount_percentage: 14
+      discount_amount: 55
+      total_without_tax: 19
+      tax_percentage: 20
+      tax_amount: 70
+      total_amount: 12
+      grand_total: 66
+      remaining_balance: 13
+      exchange_rate: 65
+      currency_rate: 72
+      currency_rate_with_tax: 18
+      is_tax_applied_to_currency: true
+      total_foreign: 74
+      total_local: 87
+      notes: consequatur
+      items:
+        -
+          serial_number: 17
+          item_id: consequatur
+          item_number: mqeopfuudtdsufvyvddqa
+          item_name: mniihfqcoynlazghdtqtq
+          unit_name: xbajwbpilpmufinllwloa
+          description: 'Dolores dolorum amet iste laborum eius est dolor.'
+          quantity: 12
+          unit_price: 66
+          discount_rate: 4
+          discount_percentage: 18
+          discount_amount: 72
+          tax_rate: 6
+          total_foreign: 74
+          total_local: 87
+          total: 76
+          notes: consequatur
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/purchase/incoming-offers/details/{id}'
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Display the specified resource.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the detail.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/details/consequatur could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/purchase/incoming-offers/update/{id}'
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified resource in storage.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the update.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      employee_id:
+        name: employee_id
+        description: 'The <code>id</code> of an existing record in the employees table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_id:
+        name: supplier_id
+        description: 'The <code>id</code> of an existing record in the suppliers table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      quotation_number:
+        name: quotation_number
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      invoice_number:
+        name: invoice_number
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      date:
+        name: date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      time:
+        name: time
+        description: 'Must be a valid date in the format <code>H:i:s</code>.'
+        required: false
+        example: '13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      due_date:
+        name: due_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
+        required: false
+        example: '2106-10-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: 'The <code>id</code> of an existing record in the customers table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_number:
+        name: customer_number
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_email:
+        name: customer_email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: ablanda@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_mobile:
+        name: customer_mobile
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: wbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_name:
+        name: supplier_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: uydlsmsjuryvojcybzvrb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: yickznkygloigmkwxphlv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_id:
+        name: journal_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_number:
+        name: journal_number
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      ledger_code:
+        name: ledger_code
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      ledger_number:
+        name: ledger_number
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      ledger_invoice_count:
+        name: ledger_invoice_count
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      cash_paid:
+        name: cash_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      checks_paid:
+        name: checks_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allowed_discount:
+        name: allowed_discount
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_percentage:
+        name: discount_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 14
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_amount:
+        name: discount_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 55
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_without_tax:
+        name: total_without_tax
+        description: 'Must be at least 0.'
+        required: false
+        example: 19
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_percentage:
+        name: tax_percentage
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 20
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_amount:
+        name: tax_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_amount:
+        name: total_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      grand_total:
+        name: grand_total
+        description: 'Must be at least 0.'
+        required: false
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      remaining_balance:
+        name: remaining_balance
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Must be at least 0.'
+        required: true
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      currency_rate:
+        name: currency_rate
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      currency_rate_with_tax:
+        name: currency_rate_with_tax
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_rate_id:
+        name: tax_rate_id
+        description: 'The <code>id</code> of an existing record in the tax_rates table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      is_tax_applied_to_currency:
+        name: is_tax_applied_to_currency
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_foreign:
+        name: total_foreign
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_local:
+        name: total_local
+        description: 'Must be at least 0.'
+        required: false
+        example: 87
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      items:
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].serial_number':
+        name: 'items[].serial_number'
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: 'The <code>id</code> of an existing record in the items table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_number':
+        name: 'items[].item_number'
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].item_name':
+        name: 'items[].item_name'
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].unit_id':
+        name: 'items[].unit_id'
+        description: 'The <code>id</code> of an existing record in the units table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].unit_name':
+        name: 'items[].unit_name'
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].description':
+        name: 'items[].description'
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].quantity':
+        name: 'items[].quantity'
+        description: 'Must be at least 0.01.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].unit_price':
+        name: 'items[].unit_price'
+        description: 'Must be at least 0.'
+        required: true
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].discount_rate':
+        name: 'items[].discount_rate'
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 4
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].discount_percentage':
+        name: 'items[].discount_percentage'
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].discount_amount':
+        name: 'items[].discount_amount'
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].tax_rate':
+        name: 'items[].tax_rate'
+        description: 'Must be at least 0. Must not be greater than 100.'
+        required: false
+        example: 6
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_foreign':
+        name: 'items[].total_foreign'
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_local':
+        name: 'items[].total_local'
+        description: 'Must be at least 0.'
+        required: false
+        example: 87
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total':
+        name: 'items[].total'
+        description: 'Must be at least 0.'
+        required: false
+        example: 76
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].notes':
+        name: 'items[].notes'
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      currency_id: consequatur
+      supplier_id: consequatur
+      quotation_number: mqeopfuudtdsufvyvddqa
+      invoice_number: mniihfqcoynlazghdtqtq
+      date: '2025-09-30T13:03:29'
+      time: '13:03:29'
+      due_date: '2106-10-30'
+      customer_number: mqeopfuudtdsufvyvddqa
+      customer_name: mniihfqcoynlazghdtqtq
+      customer_email: ablanda@example.org
+      customer_mobile: wbpilpmufinllwloa
+      supplier_name: uydlsmsjuryvojcybzvrb
+      licensed_operator: yickznkygloigmkwxphlv
+      journal_id: 17
+      journal_number: 17
+      ledger_code: mqeopfuudtdsufvyvddqa
+      ledger_number: 17
+      ledger_invoice_count: 17
+      cash_paid: 45
+      checks_paid: 56
+      allowed_discount: 16
+      discount_percentage: 14
+      discount_amount: 55
+      total_without_tax: 19
+      tax_percentage: 20
+      tax_amount: 70
+      total_amount: 12
+      grand_total: 66
+      remaining_balance: 13
+      exchange_rate: 65
+      currency_rate: 72
+      currency_rate_with_tax: 18
+      is_tax_applied_to_currency: true
+      total_foreign: 74
+      total_local: 87
+      notes: consequatur
+      items:
+        -
+          serial_number: 17
+          item_id: consequatur
+          item_number: mqeopfuudtdsufvyvddqa
+          item_name: mniihfqcoynlazghdtqtq
+          unit_name: xbajwbpilpmufinllwloa
+          description: 'Dolores dolorum amet iste laborum eius est dolor.'
+          quantity: 12
+          unit_price: 66
+          discount_rate: 4
+          discount_percentage: 18
+          discount_amount: 72
+          tax_rate: 6
+          total_foreign: 74
+          total_local: 87
+          total: 76
+          notes: consequatur
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/purchase/incoming-offers/delete/{id}'
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Remove the specified resource from storage.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the delete.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-offers/search/advanced
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Advanced search for incoming quotations with multiple criteria'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      quotation_number:
+        name: quotation_number
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      quotation_number_from:
+        name: quotation_number_from
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: amniihfqcoynlazghdtqt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      quotation_number_to:
+        name: quotation_number_to
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: qxbajwbpilpmufinllwlo
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      invoice_number:
+        name: invoice_number
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: auydlsmsjuryvojcybzvr
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_name:
+        name: supplier_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: byickznkygloigmkwxphl
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_id:
+        name: supplier_id
+        description: 'The <code>id</code> of an existing record in the suppliers table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      date:
+        name: date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      date_from:
+        name: date_from
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      date_to:
+        name: date_to
+        description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
+        required: false
+        example: '2106-10-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      amount:
+        name: amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      amount_from:
+        name: amount_from
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      amount_to:
+        name: amount_to
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: opfuudtdsufvyvddqamni
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: false
+        example: approved
+        type: string
+        enumValues:
+          - draft
+          - approved
+          - sent
+          - invoiced
+          - cancelled
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: ihfqcoynlazghdtqtqxba
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: 'The <code>id</code> of an existing record in the customers table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      ledger_code:
+        name: ledger_code
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: jwbpilpmufinllwloauyd
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      ledger_number:
+        name: ledger_number
+        description: 'Must be at least 1.'
+        required: false
+        example: 41
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      due_date:
+        name: due_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      due_date_from:
+        name: due_date_from
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:29'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      due_date_to:
+        name: due_date_to
+        description: 'Must be a valid date. Must be a date after or equal to <code>due_date_from</code>.'
+        required: false
+        example: '2106-10-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_rate_id:
+        name: tax_rate_id
+        description: 'The <code>id</code> of an existing record in the tax_rates table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      search:
+        name: search
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      sort_by:
+        name: sort_by
+        description: ''
+        required: false
+        example: ledger_number
+        type: string
+        enumValues:
+          - id
+          - quotation_number
+          - invoice_number
+          - date
+          - time
+          - due_date
+          - customer_number
+          - customer_name
+          - customer_email
+          - customer_mobile
+          - supplier_name
+          - licensed_operator
+          - ledger_code
+          - ledger_number
+          - status
+          - cash_paid
+          - checks_paid
+          - allowed_discount
+          - discount_percentage
+          - discount_amount
+          - total_without_tax
+          - tax_percentage
+          - tax_amount
+          - grand_total
+          - remaining_balance
+          - exchange_rate
+          - currency_rate
+          - total_amount
+          - created_at
+          - updated_at
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      sort_order:
+        name: sort_order
+        description: ''
+        required: false
+        example: desc
+        type: string
+        enumValues:
+          - asc
+          - desc
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Must be at least 1. Must not be greater than 100.'
+        required: false
+        example: 13
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      paginate:
+        name: paginate
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      quotation_number: vmqeopfuudtdsufvyvddq
+      quotation_number_from: amniihfqcoynlazghdtqt
+      quotation_number_to: qxbajwbpilpmufinllwlo
+      invoice_number: auydlsmsjuryvojcybzvr
+      supplier_name: byickznkygloigmkwxphl
+      date: '2025-09-30T13:03:29'
+      date_from: '2025-09-30T13:03:29'
+      date_to: '2106-10-30'
+      amount: 45
+      amount_from: 56
+      amount_to: 16
+      licensed_operator: opfuudtdsufvyvddqamni
+      status: approved
+      customer_name: ihfqcoynlazghdtqtqxba
+      ledger_code: jwbpilpmufinllwloauyd
+      ledger_number: 41
+      due_date: '2025-09-30T13:03:29'
+      due_date_from: '2025-09-30T13:03:29'
+      due_date_to: '2106-10-30'
+      search: mqeopfuudtdsufvyvddqa
+      sort_by: ledger_number
+      sort_order: desc
+      per_page: 13
+      paginate: true
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/search/advanced could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-offers/form-data/get-form-data
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get form data for creating/editing incoming quotations'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/form-data/get-form-data could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-offers/form-data/get-search-form-data
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get search form data for advanced search'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/form-data/get-search-form-data could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-offers/form-data/get-sortable-fields
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get sortable fields for incoming quotations'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/form-data/get-sortable-fields could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-offers/search/items
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Search items for autocomplete'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/search/items could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-offers/search/customers
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Search customers for autocomplete'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/search/customers could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/purchase/incoming-offers/currency/rate
+    metadata:
+      groupName: 'Purchase Management / Incoming Offers'
+      groupDescription: |-
+
+        APIs for managing incoming purchase offers from suppliers, including offer evaluation and acceptance.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get live currency rate'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/purchase/incoming-offers/currency/rate could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []

@@ -32,6 +32,7 @@ class ServiceRequest extends FormRequest
 
             // Service items validation
             'items' => 'required|array|min:1',
+            'items.*.item_id' => 'required',
             'items.*.account_id' => 'required|exists:accounts,id',
             'items.*.account_number' => 'nullable|string|max:50',
             'items.*.account_name' => 'nullable|string|max:150',

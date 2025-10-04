@@ -1,21 +1,21 @@
-name: 'Inventory Management / Inventory Items'
+name: 'Customer Management / Customers'
 description: |-
 
-  APIs for managing inventory items, stock levels, and warehouse operations.
+  APIs for managing customers, including creation, updates, search, and customer relationship management.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/inventory-items/survey-all
+    uri: api/v1/customers/list
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
+      groupName: 'Customer Management / Customers'
       groupDescription: |-
 
-        APIs for managing inventory items, stock levels, and warehouse operations.
+        APIs for managing customers, including creation, updates, search, and customer relationship management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'List Inventory Items'
-      description: 'Retrieve a paginated list of inventory items with filtering and search capabilities.'
+      title: 'Display a listing of customers with advanced search and filtering.'
+      description: 'Supports pagination, sorting, and comprehensive search across multiple fields.'
       authenticated: true
       deprecated: false
       custom: []
@@ -25,121 +25,23 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters:
-      active:
-        name: active
-        description: 'Filter by active status.'
-        required: false
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      category_id:
-        name: category_id
-        description: 'Filter by category ID.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      supplier_id:
-        name: supplier_id
-        description: 'Filter by supplier ID.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      search:
-        name: search
-        description: 'Search across item names and descriptions.'
-        required: false
-        example: laptop
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      sort_by:
-        name: sort_by
-        description: 'Field to sort by.'
-        required: false
-        example: name
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      sort_direction:
-        name: sort_direction
-        description: 'Sort direction (asc/desc).'
-        required: false
-        example: asc
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      per_page:
-        name: per_page
-        description: 'Number of items per page (default: 15).'
-        required: false
-        example: 20
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanQueryParameters:
-      active: true
-      category_id: 1
-      supplier_id: 1
-      search: laptop
-      sort_by: name
-      sort_direction: asc
-      per_page: 20
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 200
+        status: 404
         content: |-
           {
-            "success": true,
-            "data": [
-              {
-                "id": 1,
-                "name": "Laptop Dell XPS 13",
-                "sku": "DELL-XPS-13",
-                "category": "Electronics",
-                "quantity": 50,
-                "unit_price": 1200.00,
-                "supplier": "Dell Inc.",
-                "active": true,
-                "created_at": "2024-01-01T00:00:00.000000Z"
-              }
-            ],
-            "message": "Inventory items retrieved successfully"
+              "message": "The route api/v1/customers/list could not be found."
           }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 500
-        content: |-
-          {
-            "success": false,
-            "message": "Error retrieving inventory items: Database connection failed"
-          }
-        headers: []
-        description: ''
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
         custom: []
     responseFields: []
     auth:
@@ -153,16 +55,16 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/inventory-items/register-inventory
+    uri: api/v1/customers/create
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
+      groupName: 'Customer Management / Customers'
       groupDescription: |-
 
-        APIs for managing inventory items, stock levels, and warehouse operations.
+        APIs for managing customers, including creation, updates, search, and customer relationship management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Store a newly created inventory item.'
-      description: ''
+      title: 'Store a newly created customer in storage.'
+      description: 'Creates a new customer with comprehensive validation and audit trail.'
       authenticated: true
       deprecated: false
       custom: []
@@ -175,18 +77,58 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      company_id:
-        name: company_id
-        description: 'The <code>id</code> of an existing record in the companies table.'
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
         required: true
-        example: consequatur
-        type: string
+        example: 17
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      item_number:
-        name: item_number
+      employee_id:
+        name: employee_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      country_id:
+        name: country_id
+        description: 'The <code>id</code> of an existing record in the countries table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      region_id:
+        name: region_id
+        description: 'The <code>id</code> of an existing record in the regions table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      city_id:
+        name: city_id
+        description: 'The <code>id</code> of an existing record in the cities table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      first_name:
+        name: first_name
         description: 'Must not be greater than 255 characters.'
         required: true
         example: mqeopfuudtdsufvyvddqa
@@ -195,18 +137,18 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      item_name_ar:
-        name: item_name_ar
+      second_name:
+        name: second_name
         description: 'Must not be greater than 255 characters.'
-        required: true
+        required: false
         example: mniihfqcoynlazghdtqtq
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      item_name_en:
-        name: item_name_en
+      contact_name:
+        name: contact_name
         description: 'Must not be greater than 255 characters.'
         required: false
         example: xbajwbpilpmufinllwloa
@@ -215,72 +157,72 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      barcode:
-        name: barcode
-        description: 'Must not be greater than 255 characters.'
+      email:
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: false
-        example: uydlsmsjuryvojcybzvrb
+        example: dwill@example.org
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      model:
-        name: model
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: yickznkygloigmkwxphlv
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit:
-        name: unit
+      phone:
+        name: phone
         description: 'Must not be greater than 50 characters.'
-        required: true
-        example: azjrcnfbaqywuxhgjjmzu
+        required: false
+        example: smsjuryvojcybzvrbyick
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      quantity:
-        name: quantity
-        description: 'Must be at least 0.'
+      mobile:
+        name: mobile
+        description: 'Must not be greater than 50 characters.'
         required: false
-        example: 82
-        type: number
+        example: znkygloigmkwxphlvazjr
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      unit_price:
-        name: unit_price
-        description: 'Must be at least 0.'
+      address_one:
+        name: address_one
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: 34
-        type: number
+        example: cnfbaqywuxhgjjmzuxjub
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      minimum_limit:
-        name: minimum_limit
-        description: 'Must be at least 0.'
+      address_two:
+        name: address_two
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: 71
-        type: number
+        example: qouzswiwxtrkimfcatbxs
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      reorder_limit:
-        name: reorder_limit
-        description: 'Must be at least 0.'
+      postal_code:
+        name: postal_code
+        description: 'Must not be greater than 20 characters.'
         required: false
-        example: 4
-        type: number
+        example: pzmrazsroyjpxmqes
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_number:
+        name: tax_number
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: edyghenqcopwvownkbaml
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -295,30 +237,36 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      active:
-        name: active
+      status:
+        name: status
         description: ''
-        required: false
-        example: false
-        type: boolean
-        enumValues: []
+        required: true
+        example: active
+        type: string
+        enumValues:
+          - active
+          - inactive
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      company_id: consequatur
-      item_number: mqeopfuudtdsufvyvddqa
-      item_name_ar: mniihfqcoynlazghdtqtq
-      item_name_en: xbajwbpilpmufinllwloa
-      barcode: uydlsmsjuryvojcybzvrb
-      model: yickznkygloigmkwxphlv
-      unit: azjrcnfbaqywuxhgjjmzu
-      quantity: 82
-      unit_price: 34
-      minimum_limit: 71
-      reorder_limit: 4
+      currency_id: 17
+      employee_id: 17
+      country_id: 17
+      region_id: 17
+      city_id: 17
+      first_name: mqeopfuudtdsufvyvddqa
+      second_name: mniihfqcoynlazghdtqtq
+      contact_name: xbajwbpilpmufinllwloa
+      email: dwill@example.org
+      phone: smsjuryvojcybzvrbyick
+      mobile: znkygloigmkwxphlvazjr
+      address_one: cnfbaqywuxhgjjmzuxjub
+      address_two: qouzswiwxtrkimfcatbxs
+      postal_code: pzmrazsroyjpxmqes
+      tax_number: edyghenqcopwvownkbaml
       notes: consequatur
-      active: false
+      status: active
     fileParameters: []
     responses: []
     responseFields: []
@@ -333,16 +281,16 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/inventory-items/examine-inventory/{id}'
+    uri: 'api/v1/customers/details/{id}'
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
+      groupName: 'Customer Management / Customers'
       groupDescription: |-
 
-        APIs for managing inventory items, stock levels, and warehouse operations.
+        APIs for managing customers, including creation, updates, search, and customer relationship management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified inventory item.'
-      description: ''
+      title: 'Display the specified customer with all related data.'
+      description: 'Returns customer details with relationships loaded for comprehensive view.'
       authenticated: true
       deprecated: false
       custom: []
@@ -353,7 +301,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the examine inventory.'
+        description: 'The ID of the detail.'
         required: true
         example: consequatur
         type: string
@@ -373,7 +321,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/inventory-items/examine-inventory/consequatur could not be found."
+              "message": "The route api/v1/customers/details/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -393,16 +341,16 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/inventory-items/modify-inventory/{id}'
+    uri: 'api/v1/customers/update/{id}'
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
+      groupName: 'Customer Management / Customers'
       groupDescription: |-
 
-        APIs for managing inventory items, stock levels, and warehouse operations.
+        APIs for managing customers, including creation, updates, search, and customer relationship management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified inventory item.'
-      description: ''
+      title: 'Update the specified customer in storage.'
+      description: 'Updates customer data with comprehensive validation and relationship handling.'
       authenticated: true
       deprecated: false
       custom: []
@@ -413,7 +361,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the modify inventory.'
+        description: 'The ID of the update.'
         required: true
         example: consequatur
         type: string
@@ -426,18 +374,58 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      company_id:
-        name: company_id
-        description: 'The <code>id</code> of an existing record in the companies table.'
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
         required: true
-        example: consequatur
-        type: string
+        example: 17
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      item_number:
-        name: item_number
+      employee_id:
+        name: employee_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      country_id:
+        name: country_id
+        description: 'The <code>id</code> of an existing record in the countries table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      region_id:
+        name: region_id
+        description: 'The <code>id</code> of an existing record in the regions table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      city_id:
+        name: city_id
+        description: 'The <code>id</code> of an existing record in the cities table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      first_name:
+        name: first_name
         description: 'Must not be greater than 255 characters.'
         required: true
         example: mqeopfuudtdsufvyvddqa
@@ -446,18 +434,18 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      item_name_ar:
-        name: item_name_ar
+      second_name:
+        name: second_name
         description: 'Must not be greater than 255 characters.'
-        required: true
+        required: false
         example: mniihfqcoynlazghdtqtq
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      item_name_en:
-        name: item_name_en
+      contact_name:
+        name: contact_name
         description: 'Must not be greater than 255 characters.'
         required: false
         example: xbajwbpilpmufinllwloa
@@ -466,72 +454,72 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      barcode:
-        name: barcode
-        description: 'Must not be greater than 255 characters.'
+      email:
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
         required: false
-        example: uydlsmsjuryvojcybzvrb
+        example: dwill@example.org
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      model:
-        name: model
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: yickznkygloigmkwxphlv
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      unit:
-        name: unit
+      phone:
+        name: phone
         description: 'Must not be greater than 50 characters.'
-        required: true
-        example: azjrcnfbaqywuxhgjjmzu
+        required: false
+        example: smsjuryvojcybzvrbyick
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      quantity:
-        name: quantity
-        description: 'Must be at least 0.'
+      mobile:
+        name: mobile
+        description: 'Must not be greater than 50 characters.'
         required: false
-        example: 82
-        type: number
+        example: znkygloigmkwxphlvazjr
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      unit_price:
-        name: unit_price
-        description: 'Must be at least 0.'
+      address_one:
+        name: address_one
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: 34
-        type: number
+        example: cnfbaqywuxhgjjmzuxjub
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      minimum_limit:
-        name: minimum_limit
-        description: 'Must be at least 0.'
+      address_two:
+        name: address_two
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: 71
-        type: number
+        example: qouzswiwxtrkimfcatbxs
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      reorder_limit:
-        name: reorder_limit
-        description: 'Must be at least 0.'
+      postal_code:
+        name: postal_code
+        description: 'Must not be greater than 20 characters.'
         required: false
-        example: 4
-        type: number
+        example: pzmrazsroyjpxmqes
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_number:
+        name: tax_number
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: edyghenqcopwvownkbaml
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -546,30 +534,273 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      active:
-        name: active
+      status:
+        name: status
         description: ''
-        required: false
-        example: true
-        type: boolean
-        enumValues: []
+        required: true
+        example: inactive
+        type: string
+        enumValues:
+          - active
+          - inactive
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      company_id: consequatur
-      item_number: mqeopfuudtdsufvyvddqa
-      item_name_ar: mniihfqcoynlazghdtqtq
-      item_name_en: xbajwbpilpmufinllwloa
-      barcode: uydlsmsjuryvojcybzvrb
-      model: yickznkygloigmkwxphlv
-      unit: azjrcnfbaqywuxhgjjmzu
-      quantity: 82
-      unit_price: 34
-      minimum_limit: 71
-      reorder_limit: 4
+      currency_id: 17
+      employee_id: 17
+      country_id: 17
+      region_id: 17
+      city_id: 17
+      first_name: mqeopfuudtdsufvyvddqa
+      second_name: mniihfqcoynlazghdtqtq
+      contact_name: xbajwbpilpmufinllwloa
+      email: dwill@example.org
+      phone: smsjuryvojcybzvrbyick
+      mobile: znkygloigmkwxphlvazjr
+      address_one: cnfbaqywuxhgjjmzuxjub
+      address_two: qouzswiwxtrkimfcatbxs
+      postal_code: pzmrazsroyjpxmqes
+      tax_number: edyghenqcopwvownkbaml
       notes: consequatur
-      active: true
+      status: inactive
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PATCH
+    uri: 'api/v1/customers/patch/{id}'
+    metadata:
+      groupName: 'Customer Management / Customers'
+      groupDescription: |-
+
+        APIs for managing customers, including creation, updates, search, and customer relationship management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update the specified customer in storage.'
+      description: 'Updates customer data with comprehensive validation and relationship handling.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the patch.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      employee_id:
+        name: employee_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      country_id:
+        name: country_id
+        description: 'The <code>id</code> of an existing record in the countries table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      region_id:
+        name: region_id
+        description: 'The <code>id</code> of an existing record in the regions table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      city_id:
+        name: city_id
+        description: 'The <code>id</code> of an existing record in the cities table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      first_name:
+        name: first_name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      second_name:
+        name: second_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      contact_name:
+        name: contact_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      email:
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: dwill@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      phone:
+        name: phone
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: smsjuryvojcybzvrbyick
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      mobile:
+        name: mobile
+        description: 'Must not be greater than 50 characters.'
+        required: false
+        example: znkygloigmkwxphlvazjr
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      address_one:
+        name: address_one
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: cnfbaqywuxhgjjmzuxjub
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      address_two:
+        name: address_two
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: qouzswiwxtrkimfcatbxs
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      postal_code:
+        name: postal_code
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: pzmrazsroyjpxmqes
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_number:
+        name: tax_number
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: edyghenqcopwvownkbaml
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: true
+        example: inactive
+        type: string
+        enumValues:
+          - active
+          - inactive
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      currency_id: 17
+      employee_id: 17
+      country_id: 17
+      region_id: 17
+      city_id: 17
+      first_name: mqeopfuudtdsufvyvddqa
+      second_name: mniihfqcoynlazghdtqtq
+      contact_name: xbajwbpilpmufinllwloa
+      email: dwill@example.org
+      phone: smsjuryvojcybzvrbyick
+      mobile: znkygloigmkwxphlvazjr
+      address_one: cnfbaqywuxhgjjmzuxjub
+      address_two: qouzswiwxtrkimfcatbxs
+      postal_code: pzmrazsroyjpxmqes
+      tax_number: edyghenqcopwvownkbaml
+      notes: consequatur
+      status: inactive
     fileParameters: []
     responses: []
     responseFields: []
@@ -584,16 +815,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/inventory-items/remove-inventory/{id}'
+    uri: 'api/v1/customers/delete/{id}'
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
+      groupName: 'Customer Management / Customers'
       groupDescription: |-
 
-        APIs for managing inventory items, stock levels, and warehouse operations.
+        APIs for managing customers, including creation, updates, search, and customer relationship management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified inventory item.'
-      description: ''
+      title: 'Remove the specified customer from storage (soft delete).'
+      description: 'Performs soft delete with audit trail tracking who deleted the customer.'
       authenticated: true
       deprecated: false
       custom: []
@@ -604,7 +835,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the remove inventory.'
+        description: 'The ID of the delete.'
         required: true
         example: consequatur
         type: string
@@ -620,251 +851,6 @@ endpoints:
     cleanBodyParameters: []
     fileParameters: []
     responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-items/first-inventory
-    metadata:
-      groupName: 'Inventory Management / Inventory Items'
-      groupDescription: |-
-
-        APIs for managing inventory items, stock levels, and warehouse operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '! Get first inventory item.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-items/first-inventory could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-items/last-inventory
-    metadata:
-      groupName: 'Inventory Management / Inventory Items'
-      groupDescription: |-
-
-        APIs for managing inventory items, stock levels, and warehouse operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '! Get last inventory item.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-items/last-inventory could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-items/low-stock-items
-    metadata:
-      groupName: 'Inventory Management / Inventory Items'
-      groupDescription: |-
-
-        APIs for managing inventory items, stock levels, and warehouse operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '! Get low stock items.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-items/low-stock-items could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-items/reorder-required-items
-    metadata:
-      groupName: 'Inventory Management / Inventory Items'
-      groupDescription: |-
-
-        APIs for managing inventory items, stock levels, and warehouse operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '! Get items that need reordering.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-items/reorder-required-items could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/inventory-items/deleted-inventory
-    metadata:
-      groupName: 'Inventory Management / Inventory Items'
-      groupDescription: |-
-
-        APIs for managing inventory items, stock levels, and warehouse operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get trashed (soft deleted) inventory items.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/inventory-items/deleted-inventory could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
     responseFields: []
     auth:
       - headers
@@ -877,16 +863,16 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/v1/inventory-items/{id}/restore-inventory'
+    uri: 'api/v1/customers/{id}/restore'
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
+      groupName: 'Customer Management / Customers'
       groupDescription: |-
 
-        APIs for managing inventory items, stock levels, and warehouse operations.
+        APIs for managing customers, including creation, updates, search, and customer relationship management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Restore a soft deleted inventory item.'
-      description: ''
+      title: 'Restore a soft-deleted customer.'
+      description: 'Restores a previously deleted customer and returns updated resource.'
       authenticated: true
       deprecated: false
       custom: []
@@ -897,7 +883,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the inventory item.'
+        description: 'The ID of the customer.'
         required: true
         example: consequatur
         type: string
@@ -925,16 +911,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/inventory-items/{id}/permanently-delete'
+    uri: api/v1/customers/bulk/delete
     metadata:
-      groupName: 'Inventory Management / Inventory Items'
+      groupName: 'Customer Management / Customers'
       groupDescription: |-
 
-        APIs for managing inventory items, stock levels, and warehouse operations.
+        APIs for managing customers, including creation, updates, search, and customer relationship management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Permanently delete an inventory item (force delete).'
-      description: ''
+      title: 'Bulk delete multiple customers.'
+      description: 'Performs soft delete on multiple customers with audit trail.'
       authenticated: true
       deprecated: false
       custom: []
@@ -942,19 +928,8 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inventory item.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

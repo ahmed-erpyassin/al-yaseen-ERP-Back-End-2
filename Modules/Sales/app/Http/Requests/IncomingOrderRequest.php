@@ -13,6 +13,7 @@ class IncomingOrderRequest extends FormRequest
     {
         return [
             // Basic Information
+            'company_id' => ['nullable', 'integer', 'exists:companies,id'],
             'branch_id' => 'required|integer|exists:branches,id',
             'currency_id' => 'required|integer|exists:currencies,id',
             'employee_id' => 'required|integer|exists:employees,id',

@@ -11,6 +11,9 @@ class SalesDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->call([
+            SaleSeeder::class,
+            SaleItemSeeder::class,
+        ]);
     }
 }

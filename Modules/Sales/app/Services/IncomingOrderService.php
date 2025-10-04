@@ -5,6 +5,7 @@ namespace Modules\Sales\app\Services;
 use App\Models\SalesInvoice;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -137,8 +138,9 @@ class IncomingOrderService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = $request->user()->company_id ?? $request->company_id;
-                $userId = $request->user()->id;
+                $user = Auth::user();
+                $companyId = $user->company_id ?? $request->company_id ?? 1;
+                $userId = $user->id;
 
                 $data = $request->validated();
 
@@ -208,7 +210,7 @@ class IncomingOrderService
                 }
 
                 $data = $request->validated();
-                $userId = $request->user()->id;
+                $userId = Auth::id();
 
                 // Update exchange rate if currency changed
                 if (!empty($data['currency_id']) && $data['currency_id'] != $order->currency_id) {
