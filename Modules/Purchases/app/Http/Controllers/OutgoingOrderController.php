@@ -263,11 +263,10 @@ class OutgoingOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         try {
-            $userId = $request->user()->id;
-            $this->outgoingOrderService->destroy($id, $userId);
+            $this->outgoingOrderService->destroy($id);
             return response()->json([
                 'success' => true,
                 'message' => 'Outgoing order deleted successfully.'

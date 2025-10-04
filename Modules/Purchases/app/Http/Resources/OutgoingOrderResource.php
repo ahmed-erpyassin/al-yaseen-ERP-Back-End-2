@@ -24,7 +24,7 @@ class OutgoingOrderResource extends JsonResource
             'date' => $this->date ? $this->date->format('Y-m-d') : null,
             'time' => $this->time ? $this->time->format('H:i:s') : null,
             'due_date' => $this->due_date ? $this->due_date->format('Y-m-d') : null,
-            
+
             // Customer information
             'customer_id' => $this->customer_id,
             'customer_number' => $this->customer_number,
@@ -32,7 +32,7 @@ class OutgoingOrderResource extends JsonResource
             'customer_email' => $this->customer_email,
             'customer_mobile' => $this->customer_mobile,
             'licensed_operator' => $this->licensed_operator,
-            
+
             // Customer relationship data
             'customer' => $this->whenLoaded('customer', function () {
                 return [
@@ -46,7 +46,7 @@ class OutgoingOrderResource extends JsonResource
                     'mobile' => $this->customer->mobile,
                 ];
             }),
-            
+
             // Currency information
             'currency_id' => $this->currency_id,
             'exchange_rate' => $this->exchange_rate,
@@ -58,7 +58,7 @@ class OutgoingOrderResource extends JsonResource
                     'symbol' => $this->currency->symbol,
                 ];
             }),
-            
+
             // Financial information
             'cash_paid' => $this->cash_paid,
             'checks_paid' => $this->checks_paid,
@@ -73,11 +73,11 @@ class OutgoingOrderResource extends JsonResource
             'remaining_balance' => $this->remaining_balance,
             'total_foreign' => $this->total_foreign,
             'total_local' => $this->total_local,
-            
+
             // Status and type
             'type' => $this->type,
             'status' => $this->status,
-            
+
             // Items
             'items' => $this->whenLoaded('items', function () {
                 return $this->items->map(function ($item) {
@@ -96,19 +96,17 @@ class OutgoingOrderResource extends JsonResource
                         'tax_rate' => $item->tax_rate,
                         'total' => $item->total,
                         'description' => $item->description,
-                        'item' => $item->whenLoaded('item', function () use ($item) {
-                            return [
-                                'id' => $item->item->id,
-                                'item_number' => $item->item->item_number,
-                                'name' => $item->item->name,
-                                'name_ar' => $item->item->name_ar,
-                                'first_selling_price' => $item->item->first_selling_price,
-                            ];
-                        }),
+                        'item' => $item->relationLoaded('item') && $item->item ? [
+                            'id' => $item->item->id,
+                            'item_number' => $item->item->item_number,
+                            'name' => $item->item->name,
+                            'name_ar' => $item->item->name_ar,
+                            'first_selling_price' => $item->item->first_selling_price,
+                        ] : null,
                     ];
                 });
             }),
-            
+
             // Additional information
             'notes' => $this->notes,
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),

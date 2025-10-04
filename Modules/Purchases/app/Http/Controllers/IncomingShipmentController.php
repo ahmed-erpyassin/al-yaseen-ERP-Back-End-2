@@ -74,12 +74,11 @@ class IncomingShipmentController extends Controller
     public function show($id)
     {
         try {
-            // For now, return a placeholder response until service method is implemented
+            $shipment = $this->incomingShipmentService->show($id);
             return response()->json([
-                'success' => false,
-                'error' => 'Show method not yet implemented in service.',
-                'message' => 'This endpoint will be available once the service method is implemented.'
-            ], 501);
+                'success' => true,
+                'data' => new IncomingShipmentResource($shipment)
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -97,15 +96,15 @@ class IncomingShipmentController extends Controller
      * @param int $id Shipment ID
      * @return JsonResponse Updated shipment resource or error response
      */
-    public function update(Request $request, $id)
+    public function update(IncomingShipmentRequest $request, $id)
     {
         try {
-            // For now, return a placeholder response until service method is implemented
+            $shipment = $this->incomingShipmentService->update($request, $id);
             return response()->json([
-                'success' => false,
-                'error' => 'Update method not yet implemented in service.',
-                'message' => 'This endpoint will be available once the service method is implemented.'
-            ], 501);
+                'success' => true,
+                'data' => new IncomingShipmentResource($shipment),
+                'message' => 'Incoming shipment updated successfully.'
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -125,12 +124,11 @@ class IncomingShipmentController extends Controller
     public function destroy($id)
     {
         try {
-            // For now, return a placeholder response until service method is implemented
+            $this->incomingShipmentService->destroy($id);
             return response()->json([
-                'success' => false,
-                'error' => 'Delete method not yet implemented in service.',
-                'message' => 'This endpoint will be available once the service method is implemented.'
-            ], 501);
+                'success' => true,
+                'message' => 'Incoming shipment deleted successfully.'
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

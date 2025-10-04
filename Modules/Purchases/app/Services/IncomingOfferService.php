@@ -4,6 +4,7 @@ namespace Modules\Purchases\app\Services;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Modules\Purchases\Models\Purchase;
@@ -17,7 +18,6 @@ class IncomingOfferService
     public function index(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $sortBy = $request->get('sort_by', 'created_at');
             $sortOrder = $request->get('sort_order', 'desc');
             $perPage = $request->get('per_page', 15);
@@ -51,7 +51,6 @@ class IncomingOfferService
                     'creator',
                     'updater'
                 ])
-                ->where('company_id', $companyId)
                 ->where('type', PurchaseTypeEnum::QUOTATION);
 
             // Apply basic search filters (for backward compatibility)
@@ -92,8 +91,17 @@ class IncomingOfferService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = $request->user()->company_id ?? 101;
-                $userId = $request->user()->id;
+                $companyId = $request->company_id;
+                $userId = Auth::id();
+
+                if (!$userId) {
+                    // Fallback to first user if no authenticated user (for testing/seeding)
+                    $firstUser = \Modules\Users\Models\User::first();
+                    if (!$firstUser) {
+                        throw new \Exception('No users found in the system');
+                    }
+                    $userId = $firstUser->id;
+                }
                 $validatedData = $request->validated();
 
                 // Generate sequential numbers
@@ -300,17 +308,15 @@ class IncomingOfferService
     public function getFormData(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
 
             return [
                 // Sequential numbers
                 'next_quotation_number' => Purchase::generateQuotationNumber(),
                 'next_invoice_number' => Purchase::generateInvoiceNumber(),
-                'next_ledger_info' => Purchase::generateLedgerCode($companyId),
+                'next_ledger_info' => Purchase::generateLedgerCode(1), // Use default company ID for ledger generation
 
                 // Dropdown data
-                'suppliers' => \Modules\Suppliers\Models\Supplier::forCompany($companyId)->active()
-                    ->select('id', 'supplier_number', 'supplier_name_ar', 'supplier_name_en')
+                'suppliers' => \Modules\Suppliers\Models\Supplier::select('id', 'supplier_number', 'supplier_name_ar', 'supplier_name_en')
                     ->get()
                     ->map(function ($supplier) {
                         return [
@@ -322,23 +328,21 @@ class IncomingOfferService
                         ];
                     }),
 
-                'customers' => \Modules\Customers\Models\Customer::forCompany($companyId)->active()
-                    ->select('id', 'customer_number', 'customer_name_ar', 'customer_name_en', 'email', 'mobile')
+                'customers' => \Modules\Customers\Models\Customer::select('id', 'customer_number', 'email', 'mobile')
                     ->get()
                     ->map(function ($customer) {
                         return [
                             'id' => $customer->id,
                             'customer_number' => $customer->customer_number,
-                            'customer_name_ar' => $customer->customer_name_ar,
-                            'customer_name_en' => $customer->customer_name_en,
+                          //  'customer_name_ar' => $customer->customer_name_ar,
+//'customer_name_en' => $customer->customer_name_en,
                             'email' => $customer->email,
                             'mobile' => $customer->mobile,
-                            'display_name' => $customer->customer_number . ' - ' . ($customer->customer_name_ar ?? $customer->customer_name_en)
+                           // 'display_name' => $customer->customer_number . ' - ' . ($customer->customer_name_ar ?? $customer->customer_name_en)
                         ];
                     }),
 
-                'currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
-                    ->select('id', 'code', 'name', 'symbol')
+                'currencies' => \Modules\FinancialAccounts\Models\Currency::select('id', 'code', 'name', 'symbol')
                     ->get()
                     ->map(function ($currency) {
                         return [
@@ -350,12 +354,10 @@ class IncomingOfferService
                         ];
                     }),
 
-                'tax_rates' => \Modules\FinancialAccounts\Models\TaxRate::where('company_id', $companyId)
-                    ->select('id', 'name', 'rate')
+                'tax_rates' => \Modules\FinancialAccounts\Models\TaxRate::select('id', 'name', 'rate')
                     ->get(),
 
-                'items' => \Modules\Inventory\Models\Item::forCompany($companyId)->active()
-                    ->select('id', 'item_number', 'name', 'name_ar', 'unit_id', 'first_sale_price')
+                'items' => \Modules\Inventory\Models\Item::select('id', 'item_number', 'name', 'name_ar', 'unit_id', 'first_sale_price')
                     ->with('unit:id,name')
                     ->get()
                     ->map(function ($item) {
@@ -371,10 +373,9 @@ class IncomingOfferService
                         ];
                     }),
 
-                'units' => \Modules\Inventory\Models\Unit::select('id', 'name', 'name_ar')->get(),
+                'units' => \Modules\Inventory\Models\Unit::select('id', 'name')->get(),
 
-                'branches' => \Modules\Companies\Models\Branch::where('company_id', $companyId)
-                    ->select('id', 'name', 'code')
+                'branches' => \Modules\Companies\Models\Branch::select('id', 'name', 'code')
                     ->get(),
             ];
 
@@ -404,9 +405,7 @@ class IncomingOfferService
                     'updater'
                 ]);
 
-            $companyId = $request->user()->company_id ?? 101;
-            $query->where('company_id', $companyId)
-                  ->where('type', PurchaseTypeEnum::QUOTATION);
+            $query->where('type', PurchaseTypeEnum::QUOTATION);
 
             // Quotation Number range search (from/to)
             if ($request->filled('quotation_number_from')) {
@@ -533,7 +532,16 @@ class IncomingOfferService
         try {
             return DB::transaction(function () use ($request, $id) {
                 $purchase = Purchase::findOrFail($id);
-                $userId = $request->user()->id;
+                $userId = Auth::id();
+
+                if (!$userId) {
+                    // Fallback to first user if no authenticated user (for testing/seeding)
+                    $firstUser = \Modules\Users\Models\User::first();
+                    if (!$firstUser) {
+                        throw new \Exception('No users found in the system');
+                    }
+                    $userId = $firstUser->id;
+                }
                 $validatedData = $request->validated();
 
                 // Update currency rate if currency changed
