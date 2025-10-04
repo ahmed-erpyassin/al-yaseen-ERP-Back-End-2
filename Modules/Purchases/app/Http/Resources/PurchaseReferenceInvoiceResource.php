@@ -56,7 +56,7 @@ class PurchaseReferenceInvoiceResource extends JsonResource
             'company' => $this->whenLoaded('company', function () {
                 return [
                     'id' => $this->company->id,
-                    'name' => $this->company->name,
+                    'title' => $this->company->title,
                 ];
             }),
             'branch' => $this->whenLoaded('branch', function () {
@@ -135,24 +135,19 @@ class PurchaseReferenceInvoiceResource extends JsonResource
                         'item_id' => $item->item_id,
                         'item_number' => $item->item_number,
                         'item_name' => $item->item_name,
-                        'item' => $item->whenLoaded('item', function () use ($item) {
-                            return [
-                                'id' => $item->item->id,
-                                'item_number' => $item->item->item_number,
-                                'item_name_ar' => $item->item->item_name_ar,
-                                'item_name_en' => $item->item->item_name_en,
-                                'first_selling_price' => $item->item->first_selling_price,
-                            ];
-                        }),
+                        'item' => $item->relationLoaded('item') ? [
+                            'id' => $item->item->id,
+                            'item_number' => $item->item->item_number,
+                            'item_name_ar' => $item->item->item_name_ar,
+                            'item_name_en' => $item->item->item_name_en,
+                            'first_selling_price' => $item->item->first_selling_price,
+                        ] : null,
                         'unit_id' => $item->unit_id,
                         'unit_name' => $item->unit_name,
-                        'unit' => $item->whenLoaded('unit', function () use ($item) {
-                            return [
-                                'id' => $item->unit->id,
-                                'unit_name_ar' => $item->unit->unit_name_ar,
-                                'unit_name_en' => $item->unit->unit_name_en,
-                            ];
-                        }),
+                        'unit' => $item->relationLoaded('unit') ? [
+                            'id' => $item->unit->id,
+                            'name' => $item->unit->name,
+                        ] : null,
                         'quantity' => (float) $item->quantity,
                         'unit_price' => (float) $item->unit_price,
                         'first_selling_price' => (float) $item->first_selling_price,
@@ -170,14 +165,16 @@ class PurchaseReferenceInvoiceResource extends JsonResource
             'creator' => $this->whenLoaded('creator', function () {
                 return [
                     'id' => $this->creator->id,
-                    'name' => $this->creator->name,
+                    'first_name' => $this->creator->first_name,
+                    'second_name' => $this->creator->second_name,
                     'email' => $this->creator->email,
                 ];
             }),
             'updater' => $this->whenLoaded('updater', function () {
                 return [
                     'id' => $this->updater->id,
-                    'name' => $this->updater->name,
+                    'first_name' => $this->updater->first_name,
+                    'second_name' => $this->updater->second_name,
                     'email' => $this->updater->email,
                 ];
             }),
