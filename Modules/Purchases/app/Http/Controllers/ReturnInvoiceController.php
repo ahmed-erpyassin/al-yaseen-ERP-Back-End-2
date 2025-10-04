@@ -4,9 +4,9 @@ namespace Modules\Purchases\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\Sales\app\Services\ReturnInvoiceService;
-use Modules\Sales\Http\Requests\ReturnInvoiceRequest;
-use Modules\Sales\Transformers\ReturnInvoiceResource;
+use Modules\Purchases\app\Services\ReturnInvoiceService;
+use Modules\Purchases\app\Http\Requests\ReturnInvoiceRequest;
+use Modules\Purchases\Transformers\ReturnInvoiceResource;
 
 /**
  * @group Purchase Management / Return Invoices
