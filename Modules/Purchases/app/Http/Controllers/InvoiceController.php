@@ -4,9 +4,9 @@ namespace Modules\Purchases\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Modules\Sales\app\Services\InvoiceService;
-use Modules\Sales\Http\Requests\InvoiceRequest;
-use Modules\Sales\Transformers\InvoiceResource;
+use Modules\Purchases\app\Services\InvoiceService;
+use Modules\Purchases\Http\Requests\InvoiceRequest;
+use Modules\Purchases\Transformers\InvoiceResource;
 
 /**
  * @group Purchase Management / Invoices
@@ -73,12 +73,11 @@ class InvoiceController extends Controller
     public function show($id)
     {
         try {
-            // For now, return a placeholder response until service method is implemented
+            $invoice = $this->invoiceService->show($id);
             return response()->json([
-                'success' => false,
-                'error' => 'Show method not yet implemented in service.',
-                'message' => 'This endpoint will be available once the service method is implemented.'
-            ], 501);
+                'success' => true,
+                'data' => new InvoiceResource($invoice)
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -96,15 +95,15 @@ class InvoiceController extends Controller
      * @param int $id Invoice ID
      * @return JsonResponse Updated invoice resource or error response
      */
-    public function update(Request $request, $id)
+    public function update(InvoiceRequest $request, $id)
     {
         try {
-            // For now, return a placeholder response until service method is implemented
+            $invoice = $this->invoiceService->update($request, $id);
             return response()->json([
-                'success' => false,
-                'error' => 'Update method not yet implemented in service.',
-                'message' => 'This endpoint will be available once the service method is implemented.'
-            ], 501);
+                'success' => true,
+                'data' => new InvoiceResource($invoice),
+                'message' => 'Invoice updated successfully.'
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -124,12 +123,11 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         try {
-            // For now, return a placeholder response until service method is implemented
+            $this->invoiceService->destroy($id);
             return response()->json([
-                'success' => false,
-                'error' => 'Delete method not yet implemented in service.',
-                'message' => 'This endpoint will be available once the service method is implemented.'
-            ], 501);
+                'success' => true,
+                'message' => 'Invoice deleted successfully.'
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
