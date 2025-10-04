@@ -18,22 +18,10 @@ class PurchaseItem extends Model
     protected $fillable = [
         'purchase_id',
         'serial_number',
+        'shipment_number',
         'item_id',
         'item_number',
         'item_name',
-        'account_id',
-        'account_number',
-        'account_name',
-        'serial_number',
-        'item_number',
-        'item_name',
-        'unit_id',
-        'unit_name',
-        'first_selling_price',
-        'affects_inventory',
-        'unit_id',
-        'unit_name',
-        'unit',
         'description',
         'quantity',
         'unit_price',
@@ -42,14 +30,17 @@ class PurchaseItem extends Model
         'discount_amount',
         'net_unit_price',
         'line_total_before_tax',
-        'total_without_tax',
         'tax_rate',
         'tax_amount',
         'line_total_after_tax',
+        'notes',
         'total_foreign',
         'total_local',
         'total',
-        'notes',
+        'unit_id',
+        'unit_name',
+        'warehouse_number',
+        'warehouse_id',
     ];
 
     protected $casts = [
@@ -176,8 +167,7 @@ class PurchaseItem extends Model
             $item->tax_amount = $item->calculateTaxAmount();
             $item->line_total_after_tax = $item->calculateLineTotalAfterTax();
 
-            // Set both new and legacy fields for backward compatibility
-            $item->total_without_tax = $item->calculateTotalWithoutTax();
+            // Set total field
             $item->total = $item->calculateTotal();
         });
     }

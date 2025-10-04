@@ -21,30 +21,30 @@ class ExpenseResource extends JsonResource
             'type' => $this->type,
             'status' => $this->status,
             'status_label' => Purchase::STATUS_OPTIONS[$this->status] ?? $this->status,
-            
+
             // Dates
             'date' => $this->date?->format('Y-m-d'),
             'time' => $this->time?->format('H:i:s'),
             'due_date' => $this->due_date?->format('Y-m-d'),
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
-            
+
             // Supplier Information
             'supplier_id' => $this->supplier_id,
             'supplier_name' => $this->supplier_name,
             'supplier_email' => $this->supplier_email,
             'licensed_operator' => $this->licensed_operator,
             'supplier' => $this->whenLoaded('supplier', function () {
-                return [
+                return $this->supplier ? [
                     'id' => $this->supplier->id,
                     'supplier_number' => $this->supplier->supplier_number,
                     'supplier_name_ar' => $this->supplier->supplier_name_ar,
                     'supplier_name_en' => $this->supplier->supplier_name_en,
                     'email' => $this->supplier->email,
                     'mobile' => $this->supplier->mobile,
-                ];
+                ] : null;
             }),
-            
+
             // Company and Branch
             'company_id' => $this->company_id,
             'branch_id' => $this->branch_id,
@@ -54,21 +54,21 @@ class ExpenseResource extends JsonResource
                     'name' => $this->company->name,
                 ];
             }),
-            
+
             // Currency Information
             'currency_id' => $this->currency_id,
             'exchange_rate' => (float) $this->exchange_rate,
             'currency_rate' => (float) $this->currency_rate,
             'currency_rate_with_tax' => (float) $this->currency_rate_with_tax,
             'currency' => $this->whenLoaded('currency', function () {
-                return [
+                return $this->currency ? [
                     'id' => $this->currency->id,
                     'code' => $this->currency->code,
                     'name' => $this->currency->name,
                     'symbol' => $this->currency->symbol,
-                ];
+                ] : null;
             }),
-            
+
             // Ledger System
             'ledger_code' => $this->ledger_code,
             'ledger_number' => $this->ledger_number,
@@ -76,24 +76,23 @@ class ExpenseResource extends JsonResource
             'journal_code' => $this->journal_code,
             'journal_invoice_count' => $this->journal_invoice_count,
             'invoice_number' => $this->invoice_number,
-            
+
             // Financial Information
             'discount_percentage' => (float) $this->discount_percentage,
             'discount_amount' => (float) $this->discount_amount,
             'total_without_tax' => (float) $this->total_without_tax,
             'tax_percentage' => (float) $this->tax_percentage,
             'tax_amount' => (float) $this->tax_amount,
-            'is_tax_inclusive' => (bool) $this->is_tax_inclusive,
             'is_tax_applied_to_currency' => (bool) $this->is_tax_applied_to_currency,
             'tax_rate_id' => $this->tax_rate_id,
             'total_foreign' => (float) $this->total_foreign,
             'total_local' => (float) $this->total_local,
             'total_amount' => (float) $this->total_amount,
             'grand_total' => (float) $this->grand_total,
-            
+
             // Additional Information
             'notes' => $this->notes,
-            
+
             // Items
             'items' => $this->whenLoaded('items', function () {
                 return $this->items->map(function ($item) {
@@ -107,18 +106,16 @@ class ExpenseResource extends JsonResource
                         'unit_price' => (float) $item->unit_price,
                         'total' => (float) $item->total,
                         'notes' => $item->notes,
-                        'account' => $item->whenLoaded('account', function () use ($item) {
-                            return [
-                                'id' => $item->account->id,
-                                'code' => $item->account->code,
-                                'name' => $item->account->name,
-                                'type' => $item->account->type,
-                            ];
-                        }),
+                        'account' => $item->relationLoaded('account') && $item->account ? [
+                            'id' => $item->account->id,
+                            'code' => $item->account->code,
+                            'name' => $item->account->name,
+                            'type' => $item->account->type,
+                        ] : null,
                     ];
                 });
             }),
-            
+
             // All Additional Fields from purchases table
             'user_id' => $this->user_id,
             'employee_id' => $this->employee_id,
@@ -138,11 +135,11 @@ class ExpenseResource extends JsonResource
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,
             'creator' => $this->whenLoaded('creator', function () {
-                return [
+                return $this->creator ? [
                     'id' => $this->creator->id,
                     'name' => $this->creator->name,
                     'email' => $this->creator->email,
-                ];
+                ] : null;
             }),
             'updater' => $this->whenLoaded('updater', function () {
                 return [
@@ -213,30 +210,9 @@ class ExpenseResource extends JsonResource
                 'updated_at' => $this->updated_at?->format('d/m/Y H:i'),
                 'deleted_at' => $this->deleted_at?->format('d/m/Y H:i'),
             ],
-            
-            // Audit Information
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'creator' => $this->whenLoaded('creator', function () {
-                return [
-                    'id' => $this->creator->id,
-                    'name' => $this->creator->name,
-                ];
-            }),
-            
-            // Formatted Display Values
-            'formatted' => [
-                'date' => $this->date?->format('d/m/Y'),
-                'time' => $this->time?->format('h:i A'),
-                'due_date' => $this->due_date?->format('d/m/Y'),
-                'total_amount' => number_format($this->total_amount, 2),
-                'grand_total' => number_format($this->grand_total, 2),
-                'exchange_rate' => number_format($this->exchange_rate, 4),
-                'status_badge' => $this->getStatusBadge(),
-            ],
         ];
     }
-    
+
     /**
      * Get status badge class for frontend
      */
@@ -249,7 +225,7 @@ class ExpenseResource extends JsonResource
             'invoiced' => ['class' => 'badge-success', 'text' => 'Invoiced'],
             'cancelled' => ['class' => 'badge-danger', 'text' => 'Cancelled'],
         ];
-        
+
         return $badges[$this->status] ?? ['class' => 'badge-secondary', 'text' => ucfirst($this->status)];
     }
 }
