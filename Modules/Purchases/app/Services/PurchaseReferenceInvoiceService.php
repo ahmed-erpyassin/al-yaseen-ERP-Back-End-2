@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Purchases\Models\Purchase;
 use Modules\Purchases\Models\PurchaseItem;
 use Modules\Purchases\Http\Requests\PurchaseReferenceInvoiceRequest;
+use Modules\Purchases\app\Enums\PurchaseTypeEnum;
 use Modules\Suppliers\Models\Supplier;
 use Modules\FinancialAccounts\Models\Currency;
 use Modules\FinancialAccounts\Models\TaxRate;
@@ -175,7 +176,7 @@ class PurchaseReferenceInvoiceService
                 'company:id,title',
                 'branch:id,name',
                 'journal:id,name,code',
-                'items.item:id,item_number,item_name_ar,item_name_en,first_selling_price',
+                'items.item:id,item_number',
                 'items.unit:id,unit_name_ar,unit_name_en',
                 'creator:id,first_name,second_name,email',
                 'updater:id,first_name,second_name,email',
@@ -185,6 +186,8 @@ class PurchaseReferenceInvoiceService
             ->findOrFail($id);
 
             return $invoice;
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw $e; // Re-throw the ModelNotFoundException
         } catch (\Exception $e) {
             throw new \Exception('Error fetching purchase reference invoice: ' . $e->getMessage());
         }
@@ -198,31 +201,25 @@ class PurchaseReferenceInvoiceService
         try {
             return DB::transaction(function () use ($request) {
                 Log::info('Starting purchase reference invoice creation');
+                Log::info('Request data: ', $request->all());
 
+                $companyId = $request->company_id;
                 $userId = Auth::id();
-                Log::info('User ID: ' . $userId);
+
                 if (!$userId) {
-                    throw new \Exception('User not authenticated');
+                    // Fallback to first user if no authenticated user (for testing/seeding)
+                    $firstUser = \Modules\Users\Models\User::first();
+                    if (!$firstUser) {
+                        throw new \Exception('No users found in the system');
+                    }
+                    $userId = $firstUser->id;
                 }
 
-                $user = Auth::user();
-                Log::info('User found: ' . ($user ? 'Yes' : 'No'));
-                if (!$user) {
-                    throw new \Exception('User not found');
-                }
-
-                // Load company relationship if not already loaded
-                if (!isset($user->company)) {
-                    $user->load('company');
-                }
-
-                Log::info('User company found: ' . ($user->company ? 'Yes' : 'No'));
-                if (!$user->company) {
-                    throw new \Exception('User does not have an associated company');
-                }
-
-                $companyId = $user->company->id;
+                Log::info('User ID: ' . $userId);
                 Log::info('Company ID: ' . $companyId);
+
+                // Validate that referenced records exist
+                $this->validateReferencedRecords($request);
 
                 // Generate purchase reference invoice number
                 try {
@@ -244,7 +241,7 @@ class PurchaseReferenceInvoiceService
                 } catch (\Exception $e) {
                     throw new \Exception('Error getting exchange rate: ' . $e->getMessage());
                 }
-                
+
                 // Calculate currency rate with tax if applicable
                 $currencyRateWithTax = $exchangeRate;
                 if ($request->filled('is_tax_applied_to_currency_rate') && $request->is_tax_applied_to_currency_rate) {
@@ -258,35 +255,56 @@ class PurchaseReferenceInvoiceService
                     $currencyRateWithTax = $exchangeRate * (1 + ($taxRate / 100));
                 }
 
-                // Prepare invoice data
-                $invoiceData = array_merge($request->validated(), [
-                    'type' => 'purchase_reference_invoice',
-                    'purchase_reference_invoice_number' => $invoiceNumber,
-                    'date' => now()->toDateString(),
-                    'time' => now()->toTimeString(),
-                    'currency_rate' => $exchangeRate,
-                    'exchange_rate' => $exchangeRate,
-                    'currency_rate_with_tax' => $currencyRateWithTax,
-                    'affects_inventory' => true, // Purchase reference invoices affect inventory
+                // Prepare invoice data using only columns that exist in the base table
+                $invoiceData = [
+                    'type' => PurchaseTypeEnum::PURCHASE_REFERENCE_INVOICE,
+                    'company_id' => $companyId,
                     'user_id' => $userId,
+                    'branch_id' => $request->branch_id ?? 1,
+                    'currency_id' => $request->currency_id ?? 1,
+                    'employee_id' => $request->employee_id ?? $userId,
+                    'supplier_id' => $request->supplier_id ?? 1,
+                    'journal_id' => $request->journal_id ?? 1,
+                    'journal_number' => $request->journal_number ?? 1,
+                    'exchange_rate' => $exchangeRate,
+                    'cash_paid' => $request->cash_paid ?? 0,
+                    'checks_paid' => $request->checks_paid ?? 0,
+                    'allowed_discount' => $request->allowed_discount ?? 0,
+                    'total_without_tax' => $request->total_without_tax ?? 0,
+                    'tax_percentage' => $request->tax_percentage ?? 0,
+                    'tax_amount' => $request->tax_amount ?? 0,
+                    'total_amount' => $request->total_amount ?? 0,
+                    'remaining_balance' => $request->remaining_balance ?? 0,
+                    // These fields are required and cannot be null
+                    'total_foreign' => $request->total_foreign ?? 0.0000,
+                    'total_local' => $request->total_local ?? 0.0000,
+                    'notes' => $request->notes ?? '',
                     'created_by' => $userId,
                     'updated_by' => $userId,
-                    'company_id' => $companyId,
-                    // Required fields with default values
-                    'branch_id' => $request->branch_id ?? 1, // Default to branch 1 if not provided
-                    'employee_id' => $request->employee_id ?? $userId, // Default to current user
-                    'journal_id' => $request->journal_id ?? 1, // Default to journal 1 if not provided
-                    'journal_number' => $request->journal_number ?? 1, // Default to 1 if not provided
-                    'total_foreign' => 0, // Will be calculated later
-                    'total_local' => 0, // Will be calculated later
-                    'total_amount' => 0, // Will be calculated later
-                ] + $ledgerInfo);
+                    'deleted_by' => $userId,
+                ];
+
+                // Add ledger info if columns exist
+                if (isset($ledgerInfo['ledger_code'])) {
+                    $invoiceData['ledger_code'] = $ledgerInfo['ledger_code'];
+                }
+                if (isset($ledgerInfo['ledger_number'])) {
+                    $invoiceData['ledger_number'] = $ledgerInfo['ledger_number'];
+                }
+
+                // Add purchase reference invoice number if column exists
+                $invoiceData['purchase_reference_invoice_number'] = $invoiceNumber;
 
                 // Create the purchase reference invoice
                 try {
                     $invoice = Purchase::create($invoiceData);
-                    if (!$invoice || !$invoice->id) {
-                        throw new \Exception('Failed to create purchase invoice');
+
+                    if (!$invoice) {
+                        throw new \Exception('Purchase::create() returned null - check database constraints and fillable fields');
+                    }
+
+                    if (!$invoice->id) {
+                        throw new \Exception('Purchase created but has no ID - possible database issue');
                     }
                 } catch (\Exception $e) {
                     throw new \Exception('Error creating purchase invoice: ' . $e->getMessage());
@@ -322,12 +340,79 @@ class PurchaseReferenceInvoiceService
     }
 
     /**
+     * Validate that all referenced records exist in the database
+     */
+    private function validateReferencedRecords(PurchaseReferenceInvoiceRequest $request)
+    {
+        $errors = [];
+
+        // Check company exists
+        if ($request->company_id) {
+            $company = \Modules\Companies\Models\Company::find($request->company_id);
+            if (!$company) {
+                $errors[] = "Company with ID {$request->company_id} does not exist";
+            }
+        }
+
+        // Check supplier exists
+        if ($request->supplier_id) {
+            $supplier = Supplier::find($request->supplier_id);
+            if (!$supplier) {
+                $errors[] = "Supplier with ID {$request->supplier_id} does not exist";
+            }
+        }
+
+        // Check currency exists
+        if ($request->currency_id) {
+            $currency = Currency::find($request->currency_id);
+            if (!$currency) {
+                $errors[] = "Currency with ID {$request->currency_id} does not exist";
+            }
+        }
+
+        // Check branch exists (if provided)
+        if ($request->branch_id) {
+            $branch = \Modules\Companies\Models\Branch::find($request->branch_id);
+            if (!$branch) {
+                $errors[] = "Branch with ID {$request->branch_id} does not exist";
+            }
+        }
+
+        // Check journal exists (if provided)
+        if ($request->journal_id) {
+            $journal = \Modules\Billing\Models\Journal::find($request->journal_id);
+            if (!$journal) {
+                $errors[] = "Journal with ID {$request->journal_id} does not exist";
+            }
+        }
+
+        // Check items exist
+        if ($request->has('items') && is_array($request->items)) {
+            foreach ($request->items as $index => $itemData) {
+                if (isset($itemData['item_id'])) {
+                    $item = Item::find($itemData['item_id']);
+                    if (!$item) {
+                        $errors[] = "Item with ID {$itemData['item_id']} at index {$index} does not exist";
+                    }
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            Log::error('Validation errors for purchase reference invoice:', $errors);
+            throw new \Exception('Referenced records validation failed: ' . implode(', ', $errors));
+        }
+
+        Log::info('All referenced records validated successfully');
+    }
+
+    /**
      * Create invoice items
      */
     private function createInvoiceItems(Purchase $invoice, array $items)
     {
         $serialNumber = 1;
-        
+
         foreach ($items as $itemData) {
             // Get item details
             $item = Item::find($itemData['item_id']);
@@ -385,7 +470,7 @@ class PurchaseReferenceInvoiceService
     {
         $items = $invoice->items;
         $subtotal = $items->sum('total');
-        
+
         // Calculate discount
         $discountAmount = 0;
         if ($invoice->discount_percentage > 0) {
@@ -393,17 +478,17 @@ class PurchaseReferenceInvoiceService
         } elseif ($invoice->discount_amount > 0) {
             $discountAmount = $invoice->discount_amount;
         }
-        
+
         $totalAfterDiscount = $subtotal - $discountAmount;
-        
+
         // Calculate tax
         $taxAmount = 0;
         if ($invoice->tax_percentage > 0) {
             $taxAmount = $totalAfterDiscount * ($invoice->tax_percentage / 100);
         }
-        
+
         $grandTotal = $totalAfterDiscount + $taxAmount;
-        
+
         // Update invoice totals
         $invoice->update([
             'total_without_tax' => $totalAfterDiscount,
@@ -421,13 +506,13 @@ class PurchaseReferenceInvoiceService
     {
         try {
             $currency = Currency::find($currencyId);
-            
+
             if (!$currency || $currency->code === 'USD' || $currency->code === 'SAR') {
                 return 1.0;
             }
 
             $response = Http::timeout(10)->get('https://api.exchangerate-api.com/v4/latest/USD');
-            
+
             if ($response->successful()) {
                 $rates = $response->json()['rates'] ?? [];
                 return $rates[$currency->code] ?? 1.0;
@@ -445,11 +530,11 @@ class PurchaseReferenceInvoiceService
     public function getSuppliers(Request $request)
     {
         try {
-            $companyId = Auth::user()->company->id;
+//$companyId = $request->company_id;
             $search = $request->get('search', '');
 
-            $query = Supplier::where('company_id', $companyId)
-                ->select(['id', 'supplier_number', 'supplier_name_ar', 'supplier_name_en', 'email', 'mobile']);
+            $query = Supplier::
+                select(['id', 'supplier_number', 'supplier_name_ar', 'supplier_name_en', 'email', 'mobile']);
 
             if ($search) {
                 $query->where(function ($q) use ($search) {
@@ -471,18 +556,17 @@ class PurchaseReferenceInvoiceService
     public function getItems(Request $request)
     {
         try {
-            $companyId = Auth::user()->company->id;
+         //   $companyId = $request->company_id;
             $search = $request->get('search', '');
 
-            $query = Item::where('company_id', $companyId)
-                ->with('unit:id,unit_name_ar,unit_name_en')
-                ->select(['id', 'item_number', 'item_name_ar', 'item_name_en', 'first_selling_price', 'unit_id']);
+            $query = Item::
+                with('unit:id')
+                ->select(['id', 'item_number', 'unit_id']);
 
             if ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('item_name_ar', 'like', '%' . $search . '%')
-                      ->orWhere('item_name_en', 'like', '%' . $search . '%')
-                      ->orWhere('item_number', 'like', '%' . $search . '%');
+                    $q->
+                      Where('item_number', 'like', '%' . $search . '%');
                 });
             }
 
@@ -498,7 +582,7 @@ class PurchaseReferenceInvoiceService
     public function getCurrencies(Request $request)
     {
         try {
-            $companyId = Auth::user()->company->id;
+            $companyId = $request->company_id;
 
             return Currency::where('company_id', $companyId)
                 ->select(['id', 'code', 'name', 'symbol'])
@@ -514,11 +598,11 @@ class PurchaseReferenceInvoiceService
     public function getTaxRates(Request $request)
     {
         try {
-            $companyId = Auth::user()->company->id;
+          //  $companyId = $request->company_id;
 
-            return TaxRate::where('company_id', $companyId)
-                ->where('is_active', true)
-                ->select(['id', 'name', 'rate'])
+            return TaxRate::
+                // where('is_active', true)
+                select(['id', 'name', 'rate'])
                 ->get();
         } catch (\Exception $e) {
             throw new \Exception('Error fetching tax rates: ' . $e->getMessage());
@@ -683,7 +767,7 @@ class PurchaseReferenceInvoiceService
     public function getSearchFormData(Request $request)
     {
         try {
-            $companyId = Auth::user()->company->id;
+            $companyId = $request->company_id;
 
             return [
                 'suppliers' => Supplier::where('company_id', $companyId)

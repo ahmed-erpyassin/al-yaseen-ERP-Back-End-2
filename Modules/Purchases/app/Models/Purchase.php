@@ -379,31 +379,45 @@ class Purchase extends Model
      */
     public static function generateLedgerCode($companyId): array
     {
-        // Find the current active ledger
-        $currentLedger = self::where('company_id', $companyId)
-            ->where('type', 'quotation')
-            ->whereNotNull('ledger_code')
-            ->orderBy('ledger_number', 'desc')
-            ->first();
+        return DB::transaction(function () use ($companyId) {
+            // Get the last purchase reference invoice for this company
+            $lastInvoice = self::where('type', PurchaseTypeEnum::PURCHASE_REFERENCE_INVOICE)
+                ->where('company_id', $companyId)
+                ->orderBy('id', 'desc')
+                ->first();
 
-        if (!$currentLedger || $currentLedger->ledger_invoice_count >= 50) {
-            // Create new ledger
-            $newLedgerNumber = $currentLedger ? $currentLedger->ledger_number + 1 : 1;
-            $ledgerCode = 'LED-' . str_pad($newLedgerNumber, 3, '0', STR_PAD_LEFT);
+            // Generate ledger code
+            $ledgerCode = 'LED-001';
+            if ($lastInvoice) {
+                try {
+                    $lastLedgerCode = $lastInvoice->ledger_code ?? null;
+                    if ($lastLedgerCode) {
+                        $lastNumber = (int) substr($lastLedgerCode, -3);
+                        $nextNumber = $lastNumber + 1;
+                        $ledgerCode = 'LED-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+                    }
+                } catch (\Exception $e) {
+                    $ledgerCode = 'LED-001';
+                }
+            }
+
+            // Generate ledger number
+            $ledgerNumber = 1;
+            if ($lastInvoice) {
+                try {
+                    $lastLedgerNumber = $lastInvoice->ledger_number ?? 0;
+                    $ledgerNumber = $lastLedgerNumber + 1;
+                } catch (\Exception $e) {
+                    $ledgerNumber = 1;
+                }
+            }
 
             return [
                 'ledger_code' => $ledgerCode,
-                'ledger_number' => $newLedgerNumber,
-                'ledger_invoice_count' => 1
+                'invoice_number' => 1,
+                'ledger_number' => $ledgerNumber
             ];
-        } else {
-            // Use existing ledger and increment count
-            return [
-                'ledger_code' => $currentLedger->ledger_code,
-                'ledger_number' => $currentLedger->ledger_number,
-                'ledger_invoice_count' => $currentLedger->ledger_invoice_count + 1
-            ];
-        }
+        });
     }
 
     /**

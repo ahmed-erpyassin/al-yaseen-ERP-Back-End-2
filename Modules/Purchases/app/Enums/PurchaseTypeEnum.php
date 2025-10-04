@@ -11,4 +11,5 @@ interface PurchaseTypeEnum
     const INVOICE = 'invoice';
     const EXPENSE = 'expense';
     const RETURN_INVOICE = 'return_invoice';
+    const PURCHASE_REFERENCE_INVOICE = 'purchase_reference_invoice';
 }

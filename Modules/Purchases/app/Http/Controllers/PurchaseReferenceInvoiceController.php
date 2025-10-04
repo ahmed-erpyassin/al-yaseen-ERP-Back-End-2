@@ -57,13 +57,37 @@ class PurchaseReferenceInvoiceController extends Controller
     public function store(PurchaseReferenceInvoiceRequest $request): JsonResponse
     {
         try {
+            \Log::info('Purchase Reference Invoice Store Request:', [
+                'request_data' => $request->all(),
+                'user_id' => auth()->id(),
+                'headers' => $request->headers->all()
+            ]);
+
             $invoice = $this->invoiceService->store($request);
             return response()->json([
                 'success' => true,
                 'message' => 'Purchase reference invoice created successfully.',
                 'data' => new PurchaseReferenceInvoiceResource($invoice)
             ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed for purchase reference invoice:', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => 'Validation failed.',
+                'message' => 'The given data was invalid.',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
+            \Log::error('Error creating purchase reference invoice:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'error' => 'An error occurred while creating purchase reference invoice.',
@@ -79,10 +103,25 @@ class PurchaseReferenceInvoiceController extends Controller
     {
         try {
             $invoice = $this->invoiceService->show($id);
+
+            if (!$invoice) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Purchase reference invoice not found.',
+                    'message' => 'The requested purchase reference invoice does not exist.'
+                ], 404);
+            }
+
             return response()->json([
                 'success' => true,
                 'data' => new PurchaseReferenceInvoiceResource($invoice)
             ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Purchase reference invoice not found.',
+                'message' => 'The requested purchase reference invoice does not exist.'
+            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -345,6 +384,68 @@ class PurchaseReferenceInvoiceController extends Controller
                 'success' => false,
                 'error' => 'An error occurred while fetching sortable fields.',
                 'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Debug endpoint to test purchase reference invoice creation without form request validation
+     */
+    public function debugStore(Request $request): JsonResponse
+    {
+        try {
+            \Log::info('Debug Store Request:', [
+                'request_data' => $request->all(),
+                'user_id' => auth()->id(),
+                'content_type' => $request->header('Content-Type')
+            ]);
+
+            // Manual validation to see what's failing
+            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'company_id' => 'required|exists:companies,id',
+                'supplier_id' => 'required|exists:suppliers,id',
+                'currency_id' => 'required|exists:currencies,id',
+                'branch_id' => 'nullable|exists:branches,id',
+                'journal_id' => 'nullable|exists:journals,id',
+                'due_date' => 'required|date',
+                'items' => 'required|array|min:1',
+                'items.*.item_id' => 'required|exists:items,id',
+                'items.*.quantity' => 'required|numeric|min:0.01',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Manual validation failed.',
+                    'errors' => $validator->errors(),
+                    'request_data' => $request->all()
+                ], 422);
+            }
+
+            // Create a mock form request
+            $formRequest = new PurchaseReferenceInvoiceRequest();
+            $formRequest->replace($request->all());
+
+            $invoice = $this->invoiceService->store($formRequest);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Purchase reference invoice created successfully via debug endpoint.',
+                'data' => new PurchaseReferenceInvoiceResource($invoice)
+            ], 201);
+
+        } catch (\Exception $e) {
+            \Log::error('Debug Store Error:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => 'Debug store failed.',
+                'message' => $e->getMessage(),
+                'request_data' => $request->all()
             ], 500);
         }
     }

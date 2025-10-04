@@ -100,6 +100,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1/purchase')->group(function () {
         // CRUD operations
         Route::get('/list', [PurchaseReferenceInvoiceController::class, 'index'])->name('purchase-reference-invoices.index');
         Route::post('/create', [PurchaseReferenceInvoiceController::class, 'store'])->name('purchase-reference-invoices.store');
+        Route::post('/debug-create', [PurchaseReferenceInvoiceController::class, 'debugStore'])->name('purchase-reference-invoices.debug-store');
         Route::get('/details/{id}', [PurchaseReferenceInvoiceController::class, 'show'])->name('purchase-reference-invoices.show');
         Route::put('/update/{id}', [PurchaseReferenceInvoiceController::class, 'update'])->name('purchase-reference-invoices.update');
         Route::delete('/delete/{id}', [PurchaseReferenceInvoiceController::class, 'destroy'])->name('purchase-reference-invoices.destroy');

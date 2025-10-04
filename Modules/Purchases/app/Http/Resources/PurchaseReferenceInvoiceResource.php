@@ -15,6 +15,14 @@ class PurchaseReferenceInvoiceResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // Check if resource data is null
+        if (!$this->resource) {
+            return [
+                'error' => 'Resource data is null',
+                'message' => 'The purchase reference invoice data could not be loaded.'
+            ];
+        }
+
         return [
             // Basic Information
             'id' => $this->id,
@@ -23,21 +31,21 @@ class PurchaseReferenceInvoiceResource extends JsonResource
             'invoice_number' => $this->invoice_number,
             'status' => $this->status,
             'status_label' => Purchase::STATUS_OPTIONS[$this->status] ?? $this->status,
-            
+
             // Dates
             'date' => $this->date?->format('Y-m-d'),
             'time' => $this->time?->format('H:i:s'),
             'due_date' => $this->due_date?->format('Y-m-d'),
             'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
-            
+
             // Supplier Information
             'supplier_id' => $this->supplier_id,
             'supplier_name' => $this->supplier_name,
             'supplier_email' => $this->supplier_email,
             'licensed_operator' => $this->licensed_operator,
             'supplier' => $this->whenLoaded('supplier', function () {
-                return [
+                return $this->supplier ? [
                     'id' => $this->supplier->id,
                     'supplier_number' => $this->supplier->supplier_number,
                     'supplier_name_ar' => $this->supplier->supplier_name_ar,
@@ -47,39 +55,39 @@ class PurchaseReferenceInvoiceResource extends JsonResource
                     'phone' => $this->supplier->phone,
                     'address_one' => $this->supplier->address_one,
                     'tax_number' => $this->supplier->tax_number,
-                ];
+                ] : null;
             }),
-            
+
             // Company and Branch
             'company_id' => $this->company_id,
             'branch_id' => $this->branch_id,
             'company' => $this->whenLoaded('company', function () {
-                return [
+                return $this->company ? [
                     'id' => $this->company->id,
                     'title' => $this->company->title,
-                ];
+                ] : null;
             }),
             'branch' => $this->whenLoaded('branch', function () {
-                return [
+                return $this->branch ? [
                     'id' => $this->branch->id,
                     'name' => $this->branch->name,
-                ];
+                ] : null;
             }),
-            
+
             // Currency Information
             'currency_id' => $this->currency_id,
             'exchange_rate' => (float) $this->exchange_rate,
             'currency_rate' => (float) $this->currency_rate,
             'currency_rate_with_tax' => (float) $this->currency_rate_with_tax,
             'currency' => $this->whenLoaded('currency', function () {
-                return [
+                return $this->currency ? [
                     'id' => $this->currency->id,
                     'code' => $this->currency->code,
                     'name' => $this->currency->name,
                     'symbol' => $this->currency->symbol,
-                ];
+                ] : null;
             }),
-            
+
             // Ledger System
             'ledger_code' => $this->ledger_code,
             'ledger_number' => $this->ledger_number,
@@ -87,7 +95,7 @@ class PurchaseReferenceInvoiceResource extends JsonResource
             'journal_code' => $this->journal_code,
             'journal_number' => $this->journal_number,
             'journal_invoice_count' => $this->journal_invoice_count,
-            
+
             // Tax Information
             'tax_rate_id' => $this->tax_rate_id,
             'tax_percentage' => (float) $this->tax_percentage,
@@ -96,13 +104,13 @@ class PurchaseReferenceInvoiceResource extends JsonResource
             'is_tax_applied_to_currency' => (bool) $this->is_tax_applied_to_currency,
             'is_tax_applied_to_currency_rate' => (bool) $this->is_tax_applied_to_currency_rate,
             'tax_rate' => $this->whenLoaded('taxRate', function () {
-                return [
+                return $this->taxRate ? [
                     'id' => $this->taxRate->id,
                     'name' => $this->taxRate->name,
                     'rate' => $this->taxRate->rate,
-                ];
+                ] : null;
             }),
-            
+
             // Financial Information
             'cash_paid' => (float) $this->cash_paid,
             'checks_paid' => (float) $this->checks_paid,
@@ -115,17 +123,17 @@ class PurchaseReferenceInvoiceResource extends JsonResource
             'total_amount' => (float) $this->total_amount,
             'grand_total' => (float) $this->grand_total,
             'remaining_balance' => (float) $this->remaining_balance,
-            
+
             // Inventory Impact
             'affects_inventory' => (bool) $this->affects_inventory,
-            
+
             // Additional Information
             'notes' => $this->notes,
             'user_id' => $this->user_id,
             'employee_id' => $this->employee_id,
             'customer_id' => $this->customer_id,
             'journal_id' => $this->journal_id,
-            
+
             // Items with detailed information
             'items' => $this->whenLoaded('items', function () {
                 return $this->items->map(function ($item) {
@@ -135,7 +143,7 @@ class PurchaseReferenceInvoiceResource extends JsonResource
                         'item_id' => $item->item_id,
                         'item_number' => $item->item_number,
                         'item_name' => $item->item_name,
-                        'item' => $item->relationLoaded('item') ? [
+                        'item' => ($item->relationLoaded('item') && $item->item) ? [
                             'id' => $item->item->id,
                             'item_number' => $item->item->item_number,
                             'item_name_ar' => $item->item->item_name_ar,
@@ -144,7 +152,7 @@ class PurchaseReferenceInvoiceResource extends JsonResource
                         ] : null,
                         'unit_id' => $item->unit_id,
                         'unit_name' => $item->unit_name,
-                        'unit' => $item->relationLoaded('unit') ? [
+                        'unit' => ($item->relationLoaded('unit') && $item->unit) ? [
                             'id' => $item->unit->id,
                             'name' => $item->unit->name,
                         ] : null,
@@ -157,37 +165,37 @@ class PurchaseReferenceInvoiceResource extends JsonResource
                     ];
                 });
             }),
-            
+
             // Audit Information
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,
             'creator' => $this->whenLoaded('creator', function () {
-                return [
+                return $this->creator ? [
                     'id' => $this->creator->id,
                     'first_name' => $this->creator->first_name,
                     'second_name' => $this->creator->second_name,
                     'email' => $this->creator->email,
-                ];
+                ] : null;
             }),
             'updater' => $this->whenLoaded('updater', function () {
-                return [
+                return $this->updater ? [
                     'id' => $this->updater->id,
                     'first_name' => $this->updater->first_name,
                     'second_name' => $this->updater->second_name,
                     'email' => $this->updater->email,
-                ];
+                ] : null;
             }),
-            
+
             // Journal Information
             'journal' => $this->whenLoaded('journal', function () {
-                return [
+                return $this->journal ? [
                     'id' => $this->journal->id,
                     'name' => $this->journal->name,
                     'code' => $this->journal->code,
-                ];
+                ] : null;
             }),
-            
+
             // Statistics
             'items_count' => $this->whenLoaded('items', function () {
                 return $this->items->count();
@@ -195,7 +203,7 @@ class PurchaseReferenceInvoiceResource extends JsonResource
             'total_quantity' => $this->whenLoaded('items', function () {
                 return $this->items->sum('quantity');
             }),
-            
+
             // Formatted values for frontend
             'formatted' => [
                 'date' => $this->date?->format('d/m/Y'),

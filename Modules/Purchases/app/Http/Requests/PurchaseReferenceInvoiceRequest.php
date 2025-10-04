@@ -13,6 +13,7 @@ class PurchaseReferenceInvoiceRequest extends FormRequest
     {
         return [
             // Basic Information
+            'company_id' => 'required|exists:companies,id',
             'supplier_id' => 'required|exists:suppliers,id',
             'currency_id' => 'required|exists:currencies,id',
             'branch_id' => 'nullable|exists:branches,id',
@@ -20,14 +21,14 @@ class PurchaseReferenceInvoiceRequest extends FormRequest
             'customer_id' => 'nullable|exists:customers,id',
             'journal_id' => 'nullable|exists:journals,id',
             'journal_number' => 'nullable|integer',
-            
+
             // Dates
-            'due_date' => 'required|date|after_or_equal:today',
-            
+            'due_date' => 'required|date|after_or_equal:today|before:2100-01-01',
+
             // Supplier Information
             'supplier_email' => 'nullable|email',
             'licensed_operator' => 'nullable|string|max:255',
-            
+
             // Financial Information - Original Fields
             'cash_paid' => 'nullable|numeric|min:0',
             'checks_paid' => 'nullable|numeric|min:0',
@@ -40,7 +41,7 @@ class PurchaseReferenceInvoiceRequest extends FormRequest
             'exchange_rate' => 'nullable|numeric|min:0',
             'total_foreign' => 'nullable|numeric|min:0',
             'total_local' => 'nullable|numeric|min:0',
-            
+
             // Financial Information - New Fields
             'tax_rate_id' => 'nullable|exists:tax_rates,id',
             'is_tax_inclusive' => 'nullable|boolean',
@@ -48,10 +49,10 @@ class PurchaseReferenceInvoiceRequest extends FormRequest
             'is_tax_applied_to_currency_rate' => 'nullable|boolean',
             'discount_percentage' => 'nullable|numeric|min:0|max:100',
             'discount_amount' => 'nullable|numeric|min:0',
-            
+
             // Notes
             'notes' => 'nullable|string|max:1000',
-            
+
             // Items - Purchase Reference Invoice Data
             'items' => 'required|array|min:1',
             'items.*.item_id' => 'required|exists:items,id',
@@ -72,7 +73,9 @@ class PurchaseReferenceInvoiceRequest extends FormRequest
             'currency_id.required' => 'Currency is required.',
             'currency_id.exists' => 'Selected currency does not exist.',
             'due_date.required' => 'Due date is required.',
+            'due_date.date' => 'Due date must be a valid date.',
             'due_date.after_or_equal' => 'Due date must be today or later.',
+            'due_date.before' => 'Due date must be before year 2100.',
             'items.required' => 'At least one item is required.',
             'items.min' => 'At least one item is required.',
             'items.*.item_id.required' => 'Item is required for each line.',
@@ -108,5 +111,31 @@ class PurchaseReferenceInvoiceRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        \Log::error('Purchase Reference Invoice Validation Failed:', [
+            'errors' => $validator->errors()->toArray(),
+            'request_data' => $this->all(),
+            'user_id' => auth()->id()
+        ]);
+
+        parent::failedValidation($validator);
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation()
+    {
+        \Log::info('Purchase Reference Invoice Request Preparation:', [
+            'original_data' => $this->all(),
+            'user_id' => auth()->id(),
+            'content_type' => $this->header('Content-Type')
+        ]);
     }
 }
