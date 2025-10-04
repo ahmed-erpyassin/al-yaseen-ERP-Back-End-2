@@ -312,6 +312,26 @@ class Purchase extends Model
     }
 
     /**
+     * Generate the next sequential invoice number
+     */
+    public static function generateInvoiceNumber(): string
+    {
+        $lastInvoice = self::whereNotNull('invoice_number')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastInvoice || !$lastInvoice->invoice_number) {
+            return 'INV-0001';
+        }
+
+        // Extract number from last invoice number (assuming format INV-XXXX)
+        $lastNumber = (int) substr($lastInvoice->invoice_number, -4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'INV-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
      * Generate purchase reference invoice number
      */
     public static function generatePurchaseReferenceInvoiceNumber(): string
