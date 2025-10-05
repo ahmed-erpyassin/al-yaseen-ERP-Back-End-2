@@ -221,7 +221,7 @@ endpoints:
         name: inventory_valuation_method
         description: ''
         required: true
-        example: third_purchase_price
+        example: first_purchase_price
         type: string
         enumValues:
           - natural_division
@@ -236,7 +236,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: active
+        example: inactive
         type: string
         enumValues:
           - active
@@ -269,8 +269,8 @@ endpoints:
       purchase_account_id: 17
       branch_id: 17
       department_warehouse_id: 17
-      inventory_valuation_method: third_purchase_price
-      status: active
+      inventory_valuation_method: first_purchase_price
+      status: inactive
     fileParameters: []
     responses: []
     responseFields: []
@@ -502,7 +502,7 @@ endpoints:
         name: inventory_valuation_method
         description: ''
         required: true
-        example: second_purchase_price
+        example: first_purchase_price
         type: string
         enumValues:
           - natural_division
@@ -536,7 +536,7 @@ endpoints:
       phone_number: atbxspzmrazsroyjpxmqe
       purchase_account: sedyghenqcopwvownkbam
       sale_account: lnfngefbeilfzsyuxoezb
-      inventory_valuation_method: second_purchase_price
+      inventory_valuation_method: first_purchase_price
       status: inactive
     fileParameters: []
     responses: []
@@ -715,7 +715,7 @@ endpoints:
         name: sort_direction
         description: ''
         required: false
-        example: desc
+        example: asc
         type: string
         enumValues:
           - asc
@@ -728,7 +728,7 @@ endpoints:
       value: consequatur
       per_page: 13
       sort_by: consequatur
-      sort_direction: desc
+      sort_direction: asc
     fileParameters: []
     responses:
       -

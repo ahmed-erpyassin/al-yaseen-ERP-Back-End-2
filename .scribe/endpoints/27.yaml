@@ -77,6 +77,16 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      branch_id:
+        name: branch_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
       currency_id:
         name: currency_id
         description: ''
@@ -97,8 +107,8 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      customer_id:
-        name: customer_id
+      supplier_id:
+        name: supplier_id
         description: ''
         required: true
         example: consequatur
@@ -349,7 +359,8 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
-      customer_id: consequatur
+      branch_id: 17
+      supplier_id: consequatur
       journal_number: 17
       cash_paid: 45
       checks_paid: 56
@@ -481,6 +492,16 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      branch_id:
+        name: branch_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
       currency_id:
         name: currency_id
         description: ''
@@ -501,8 +522,8 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
-      customer_id:
-        name: customer_id
+      supplier_id:
+        name: supplier_id
         description: ''
         required: true
         example: consequatur
@@ -753,7 +774,8 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
-      customer_id: consequatur
+      branch_id: 17
+      supplier_id: consequatur
       journal_number: 17
       cash_paid: 45
       checks_paid: 56

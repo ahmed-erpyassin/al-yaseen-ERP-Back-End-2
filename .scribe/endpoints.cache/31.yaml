@@ -103,7 +103,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after <code>today</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -186,6 +186,16 @@ endpoints:
         example:
           - []
         type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: ''
+        required: true
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -293,13 +303,14 @@ endpoints:
     cleanBodyParameters:
       customer_id: consequatur
       customer_email: carolyne.luettgen@example.org
-      due_date: '2106-10-30'
+      due_date: '2106-11-03'
       licensed_operator: mqeopfuudtdsufvyvddqa
       notes: mniihfqcoynlazghdtqtq
       is_tax_inclusive: true
       tax_percentage: 23
       items:
         -
+          item_id: consequatur
           account_id: consequatur
           account_number: mqeopfuudtdsufvyvddqa
           account_name: mniihfqcoynlazghdtqtq
@@ -439,7 +450,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after <code>today</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -499,7 +510,7 @@ endpoints:
         name: is_tax_inclusive
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -522,6 +533,16 @@ endpoints:
         example:
           - []
         type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: ''
+        required: true
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -600,7 +621,7 @@ endpoints:
         name: 'items[].apply_tax'
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -629,20 +650,21 @@ endpoints:
     cleanBodyParameters:
       customer_id: consequatur
       customer_email: carolyne.luettgen@example.org
-      due_date: '2106-10-30'
+      due_date: '2106-11-03'
       licensed_operator: mqeopfuudtdsufvyvddqa
       notes: mniihfqcoynlazghdtqtq
-      is_tax_inclusive: true
+      is_tax_inclusive: false
       tax_percentage: 23
       items:
         -
+          item_id: consequatur
           account_id: consequatur
           account_number: mqeopfuudtdsufvyvddqa
           account_name: mniihfqcoynlazghdtqtq
           unit_name: xbajwbpilpmufinllwloa
           quantity: 72
           unit_price: 87
-          apply_tax: true
+          apply_tax: false
           notes: dlsmsjuryvojcybzvrbyi
     fileParameters: []
     responses: []
@@ -1095,7 +1117,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after <code>today</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1155,7 +1177,7 @@ endpoints:
         name: is_tax_inclusive
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1178,6 +1200,16 @@ endpoints:
         example:
           - []
         type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: ''
+        required: true
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -1256,7 +1288,7 @@ endpoints:
         name: 'items[].apply_tax'
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1285,20 +1317,21 @@ endpoints:
     cleanBodyParameters:
       customer_id: consequatur
       customer_email: carolyne.luettgen@example.org
-      due_date: '2106-10-30'
+      due_date: '2106-11-03'
       licensed_operator: mqeopfuudtdsufvyvddqa
       notes: mniihfqcoynlazghdtqtq
-      is_tax_inclusive: false
+      is_tax_inclusive: true
       tax_percentage: 23
       items:
         -
+          item_id: consequatur
           account_id: consequatur
           account_number: mqeopfuudtdsufvyvddqa
           account_name: mniihfqcoynlazghdtqtq
           unit_name: xbajwbpilpmufinllwloa
           quantity: 72
           unit_price: 87
-          apply_tax: false
+          apply_tax: true
           notes: dlsmsjuryvojcybzvrbyi
     fileParameters: []
     responses: []
@@ -1431,7 +1464,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after <code>today</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1491,7 +1524,7 @@ endpoints:
         name: is_tax_inclusive
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1514,6 +1547,16 @@ endpoints:
         example:
           - []
         type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: ''
+        required: true
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -1621,13 +1664,14 @@ endpoints:
     cleanBodyParameters:
       customer_id: consequatur
       customer_email: carolyne.luettgen@example.org
-      due_date: '2106-10-30'
+      due_date: '2106-11-03'
       licensed_operator: mqeopfuudtdsufvyvddqa
       notes: mniihfqcoynlazghdtqtq
-      is_tax_inclusive: true
+      is_tax_inclusive: false
       tax_percentage: 23
       items:
         -
+          item_id: consequatur
           account_id: consequatur
           account_number: mqeopfuudtdsufvyvddqa
           account_name: mniihfqcoynlazghdtqtq

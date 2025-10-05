@@ -77,6 +77,16 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
       supplier_id:
         name: supplier_id
         description: 'The <code>id</code> of an existing record in the suppliers table.'
@@ -149,9 +159,9 @@ endpoints:
         custom: []
       due_date:
         name: due_date
-        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
+        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>. Must be a date before <code>2100-01-01</code>.'
         required: true
-        example: '2106-10-30'
+        example: '2080-04-11'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -311,7 +321,7 @@ endpoints:
         name: is_tax_applied_to_currency
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -321,7 +331,7 @@ endpoints:
         name: is_tax_applied_to_currency_rate
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -409,10 +419,11 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
+      company_id: consequatur
       supplier_id: consequatur
       currency_id: consequatur
       journal_number: 17
-      due_date: '2106-10-30'
+      due_date: '2080-04-11'
       supplier_email: carolyne.luettgen@example.org
       licensed_operator: fuudtdsufvyvddqamniih
       cash_paid: 18
@@ -427,8 +438,8 @@ endpoints:
       total_foreign: 21
       total_local: 26
       is_tax_inclusive: false
-      is_tax_applied_to_currency: true
-      is_tax_applied_to_currency_rate: true
+      is_tax_applied_to_currency: false
+      is_tax_applied_to_currency_rate: false
       discount_percentage: 4
       discount_amount: 68
       notes: qtqxbajwbpilpmufinllw
@@ -438,6 +449,43 @@ endpoints:
           quantity: 45
           unit_price: 56
           notes: eopfuudtdsufvyvddqamn
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/purchase/purchase-reference-invoices/debug-create
+    metadata:
+      groupName: 'Purchase Management / Reference Invoices'
+      groupDescription: |-
+
+        APIs for managing purchase reference invoices, including invoice referencing, tracking, and reconciliation.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Debug endpoint to test purchase reference invoice creation without form request validation'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []
@@ -545,6 +593,16 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
       supplier_id:
         name: supplier_id
         description: 'The <code>id</code> of an existing record in the suppliers table.'
@@ -617,9 +675,9 @@ endpoints:
         custom: []
       due_date:
         name: due_date
-        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
+        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>. Must be a date before <code>2100-01-01</code>.'
         required: true
-        example: '2106-10-30'
+        example: '2080-04-11'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -789,7 +847,7 @@ endpoints:
         name: is_tax_applied_to_currency_rate
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -877,10 +935,11 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
+      company_id: consequatur
       supplier_id: consequatur
       currency_id: consequatur
       journal_number: 17
-      due_date: '2106-10-30'
+      due_date: '2080-04-11'
       supplier_email: carolyne.luettgen@example.org
       licensed_operator: fuudtdsufvyvddqamniih
       cash_paid: 18
@@ -896,7 +955,7 @@ endpoints:
       total_local: 26
       is_tax_inclusive: false
       is_tax_applied_to_currency: true
-      is_tax_applied_to_currency_rate: true
+      is_tax_applied_to_currency_rate: false
       discount_percentage: 4
       discount_amount: 68
       notes: qtqxbajwbpilpmufinllw

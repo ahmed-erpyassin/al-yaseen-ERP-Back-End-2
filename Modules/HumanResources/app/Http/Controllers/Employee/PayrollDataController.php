@@ -14,6 +14,11 @@ use Modules\HumanResources\app\Services\Employee\PayrollDataService;
 use Modules\HumanResources\Http\Requests\Employee\PayrollDataRequest;
 use Modules\HumanResources\Transformers\Employee\PayrollDataResource;
 
+/**
+ * @group Employee/Payroll Data Management
+ *
+ * APIs for managing detailed payroll data entries including deductions, bonuses, overtime, and other salary components.
+ */
 class PayrollDataController extends Controller
 {
     protected PayrollDataService $service;

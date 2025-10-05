@@ -317,7 +317,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: raw_material
+        example: product
         type: string
         enumValues:
           - product
@@ -541,7 +541,7 @@ endpoints:
         name: sale_prices_include_vat
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -596,7 +596,7 @@ endpoints:
         name: expiry_date
         description: 'Must be a valid date. Must be a date after <code>today</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -656,7 +656,7 @@ endpoints:
         name: active
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -682,7 +682,7 @@ endpoints:
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       description_ar: consequatur
       model: mqeopfuudtdsufvyvddqa
-      type: raw_material
+      type: product
       quantity: 45
       balance: 11613.31890586
       minimum_limit: 50
@@ -704,18 +704,18 @@ endpoints:
       sale_discount_rate: 3
       maximum_sale_discount_rate: 17
       minimum_allowed_sale_price: 1
-      sale_prices_include_vat: true
+      sale_prices_include_vat: false
       item_subject_to_vat: false
       notes: consequatur
       barcode: mqeopfuudtdsufvyvddqa
       barcode_type: ITF
-      expiry_date: '2106-10-30'
+      expiry_date: '2106-11-03'
       image: mqeopfuudtdsufvyvddqa
       color: mniihfqcoynlazghdtqtq
       item_type: xbajwbpilpmufinllwloa
       custom_item_type: uydlsmsjuryvojcybzvrb
       custom_item_type_ar: yickznkygloigmkwxphlv
-      active: false
+      active: true
       stock_tracking: true
     fileParameters: []
     responses: []
@@ -918,7 +918,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: service
+        example: material
         type: string
         enumValues:
           - product
@@ -1102,7 +1102,7 @@ endpoints:
         name: sale_prices_include_vat
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1142,7 +1142,7 @@ endpoints:
         name: barcode_type
         description: ''
         required: false
-        example: C39
+        example: ITF
         type: string
         enumValues:
           - C128
@@ -1157,7 +1157,7 @@ endpoints:
         name: expiry_date
         description: 'Must be a valid date. Must be a date after <code>today</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1221,7 +1221,7 @@ endpoints:
       name: uydlsmsjuryvojcybzvrb
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       model: dtdsufvyvddqamniihfqc
-      type: service
+      type: material
       quantity: 51
       balance: 11613.31890586
       minimum_limit: 50
@@ -1239,12 +1239,12 @@ endpoints:
       sale_discount_rate: 21
       maximum_sale_discount_rate: 24
       minimum_allowed_sale_price: 76
-      sale_prices_include_vat: false
+      sale_prices_include_vat: true
       item_subject_to_vat: false
       notes: consequatur
       barcode: mqeopfuudtdsufvyvddqa
-      barcode_type: C39
-      expiry_date: '2106-10-30'
+      barcode_type: ITF
+      expiry_date: '2106-11-03'
       image: mqeopfuudtdsufvyvddqa
       color: mniihfqcoynlazghdtqtq
       item_type: xbajwbpilpmufinllwloa
@@ -1869,7 +1869,7 @@ endpoints:
         name: barcode_type
         description: ''
         required: true
-        example: C128
+        example: ITF
         type: string
         enumValues:
           - C128
@@ -1882,7 +1882,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       barcode: consequatur
-      barcode_type: C128
+      barcode_type: ITF
     fileParameters: []
     responses: []
     responseFields: []
@@ -2109,7 +2109,7 @@ endpoints:
         name: date_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:27'
+        example: '2025-10-05T09:46:11'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2119,7 +2119,7 @@ endpoints:
         name: date_to
         description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2129,7 +2129,7 @@ endpoints:
         name: transaction_type
         description: ''
         required: false
-        example: sales
+        example: purchases
         type: string
         enumValues:
           - sales
@@ -2153,7 +2153,7 @@ endpoints:
         name: sort_by
         description: ''
         required: false
-        example: amount
+        example: date
         type: string
         enumValues:
           - date
@@ -2167,7 +2167,7 @@ endpoints:
         name: sort_direction
         description: ''
         required: false
-        example: desc
+        example: asc
         type: string
         enumValues:
           - asc
@@ -2176,12 +2176,12 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
-      date_from: '2025-09-30T13:03:27'
-      date_to: '2106-10-30'
-      transaction_type: sales
+      date_from: '2025-10-05T09:46:11'
+      date_to: '2106-11-03'
+      transaction_type: purchases
       per_page: 13
-      sort_by: amount
-      sort_direction: desc
+      sort_by: date
+      sort_direction: asc
     fileParameters: []
     responses:
       -
@@ -2245,7 +2245,7 @@ endpoints:
         name: date_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:27'
+        example: '2025-10-05T09:46:11'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2255,7 +2255,7 @@ endpoints:
         name: date_to
         description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2265,7 +2265,7 @@ endpoints:
         name: transaction_type
         description: ''
         required: false
-        example: stock_movements
+        example: sales
         type: string
         enumValues:
           - sales
@@ -2279,7 +2279,7 @@ endpoints:
         name: export_type
         description: ''
         required: false
-        example: transactions
+        example: multi_sheet
         type: string
         enumValues:
           - transactions
@@ -2292,7 +2292,7 @@ endpoints:
         name: format
         description: ''
         required: false
-        example: pdf
+        example: csv
         type: string
         enumValues:
           - xlsx
@@ -2302,11 +2302,11 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
-      date_from: '2025-09-30T13:03:27'
-      date_to: '2106-10-30'
-      transaction_type: stock_movements
-      export_type: transactions
-      format: pdf
+      date_from: '2025-10-05T09:46:11'
+      date_to: '2106-11-03'
+      transaction_type: sales
+      export_type: multi_sheet
+      format: csv
     fileParameters: []
     responses:
       -

@@ -303,7 +303,7 @@ endpoints:
         name: resource_type
         description: ''
         required: true
-        example: consultant
+        example: contractor
         type: string
         enumValues:
           - supplier
@@ -440,7 +440,7 @@ endpoints:
       project_id: consequatur
       supplier_id: consequatur
       role: mqeopfuudtdsufvyvddqa
-      resource_type: consultant
+      resource_type: contractor
       supplier_number: mniihfqcoynlazghdtqtq
       supplier_name: xbajwbpilpmufinllwloa
       project_number: uydlsmsjuryvojcybzvrb
@@ -591,7 +591,7 @@ endpoints:
         name: resource_type
         description: ''
         required: false
-        example: internal
+        example: consultant
         type: string
         enumValues:
           - supplier
@@ -675,7 +675,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: active
+        example: inactive
         type: string
         enumValues:
           - active
@@ -696,7 +696,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       role: vmqeopfuudtdsufvyvddq
-      resource_type: internal
+      resource_type: consultant
       supplier_number: amniihfqcoynlazghdtqt
       supplier_name: qxbajwbpilpmufinllwlo
       project_number: auydlsmsjuryvojcybzvr
@@ -704,7 +704,7 @@ endpoints:
       allocation_percentage: 22
       allocation_value: 0
       notes: zjrcnfbaqywuxhgjjmzux
-      status: active
+      status: inactive
       allocation: jubqouzswiwxtrkimfcat
     fileParameters: []
     responses: []

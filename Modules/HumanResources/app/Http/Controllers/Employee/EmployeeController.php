@@ -11,6 +11,11 @@ use Modules\HumanResources\app\Services\Employee\EmployeeService;
 use Modules\HumanResources\Http\Requests\Employee\EmployeeRequest;
 use Modules\HumanResources\Transformers\Employee\EmployeeResource;
 
+/**
+ * @group Employee/Employee Management
+ *
+ * APIs for managing employees within the Human Resources module, including creation, updates, search, filtering, and employee relationship management.
+ */
 class EmployeeController extends Controller
 {
     protected EmployeeService $service;
@@ -21,7 +26,74 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Display a listing of the employees with advanced search and filtering.
+     * List Employees
+     *
+     * Retrieve a paginated list of employees with comprehensive filtering and search options.
+     *
+     * @queryParam search string Search across employee names and details. Example: John Doe
+     * @queryParam employee_name string Search by employee name. Example: John
+     * @queryParam department_id integer Filter by department ID. Example: 1
+     * @queryParam currency_id integer Filter by currency ID. Example: 1
+     * @queryParam employee_number_from integer Filter by employee number range (from). Example: 1
+     * @queryParam employee_number_to integer Filter by employee number range (to). Example: 100
+     * @queryParam balance_from decimal Filter by balance range (from). Example: 1000.00
+     * @queryParam balance_to decimal Filter by balance range (to). Example: 5000.00
+     * @queryParam hire_date_from string Filter by hire date range (from) (YYYY-MM-DD). Example: 2025-01-01
+     * @queryParam hire_date_to string Filter by hire date range (to) (YYYY-MM-DD). Example: 2025-12-31
+     * @queryParam status string Filter by employee status. Example: active
+     * @queryParam sort_by string Sort by field (employee_number, name, hire_date, etc.). Example: name
+     * @queryParam sort_direction string Sort direction (asc, desc). Example: asc
+     * @queryParam per_page integer Number of items per page (default: 15). Example: 20
+     * @queryParam company_id integer Filter by company ID. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "employee_number": "EMP001",
+     *       "name": "John Doe",
+     *       "email": "john.doe@example.com",
+     *       "phone": "+1234567890",
+     *       "hire_date": "2025-01-15",
+     *       "department": {
+     *         "id": 1,
+     *         "name": "IT Department"
+     *       },
+     *       "job_title": {
+     *         "id": 1,
+     *         "name": "Software Developer"
+     *       },
+     *       "salary": 5000.00,
+     *       "currency": {
+     *         "id": 1,
+     *         "name": "USD",
+     *         "symbol": "$"
+     *       },
+     *       "status": "active",
+     *       "balance": 2500.00,
+     *       "created_at": "2025-10-05T10:00:00.000000Z"
+     *     }
+     *   ],
+     *   "pagination": {
+     *     "current_page": 1,
+     *     "last_page": 5,
+     *     "per_page": 15,
+     *     "total": 75,
+     *     "from": 1,
+     *     "to": 15
+     *   },
+     *   "filters": {
+     *     "search": "John",
+     *     "department_id": 1,
+     *     "status": "active"
+     *   }
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Error retrieving employees: Database connection failed"
+     * }
      */
     public function index(Request $request): JsonResponse
     {
@@ -63,7 +135,72 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Store a newly created employee in storage.
+     * Create New Employee
+     *
+     * Create a new employee with automatic number generation and comprehensive data validation.
+     *
+     * @bodyParam company_id integer required The company ID. Example: 1
+     * @bodyParam department_id integer required The department ID. Example: 1
+     * @bodyParam job_title_id integer required The job title ID. Example: 1
+     * @bodyParam currency_id integer required The currency ID. Example: 1
+     * @bodyParam name string required The employee full name. Example: John Doe
+     * @bodyParam employee_number string optional The employee number (auto-generated if not provided). Example: EMP001
+     * @bodyParam email string required The employee email address. Example: john.doe@example.com
+     * @bodyParam phone string optional The employee phone number. Example: +1234567890
+     * @bodyParam hire_date string required The hire date (YYYY-MM-DD). Example: 2025-01-15
+     * @bodyParam salary decimal required The employee salary. Example: 5000.00
+     * @bodyParam address string optional The employee address. Example: 123 Main St, City
+     * @bodyParam national_id string optional The national ID number. Example: 123456789
+     * @bodyParam passport_number string optional The passport number. Example: A12345678
+     * @bodyParam birth_date string optional The birth date (YYYY-MM-DD). Example: 1990-05-15
+     * @bodyParam gender string optional The gender (male, female). Example: male
+     * @bodyParam marital_status string optional The marital status. Example: single
+     * @bodyParam emergency_contact_name string optional Emergency contact name. Example: Jane Doe
+     * @bodyParam emergency_contact_phone string optional Emergency contact phone. Example: +1234567891
+     * @bodyParam status string required The employee status. Example: active
+     * @bodyParam notes string optional Additional notes. Example: Experienced developer
+     *
+     * @response 201 {
+     *   "success": true,
+     *   "data": {
+     *     "id": 1,
+     *     "employee_number": "EMP001",
+     *     "name": "John Doe",
+     *     "email": "john.doe@example.com",
+     *     "phone": "+1234567890",
+     *     "hire_date": "2025-01-15",
+     *     "salary": 5000.00,
+     *     "address": "123 Main St, City",
+     *     "national_id": "123456789",
+     *     "birth_date": "1990-05-15",
+     *     "gender": "male",
+     *     "status": "active",
+     *     "department": {
+     *       "id": 1,
+     *       "name": "IT Department"
+     *     },
+     *     "job_title": {
+     *       "id": 1,
+     *       "name": "Software Developer"
+     *     },
+     *     "currency": {
+     *       "id": 1,
+     *       "name": "USD",
+     *       "symbol": "$"
+     *     },
+     *     "created_at": "2025-10-05T10:00:00.000000Z"
+     *   },
+     *   "message": "Employee created successfully."
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "name": ["The name field is required."],
+     *     "email": ["The email field is required."],
+     *     "hire_date": ["The hire date field is required."]
+     *   }
+     * }
      */
     public function store(EmployeeRequest $request): JsonResponse
     {
@@ -84,7 +221,59 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Display the specified employee.
+     * Show Employee Details
+     *
+     * Display detailed information for a specific employee including all relationships.
+     *
+     * @urlParam employee integer required The ID of the employee. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "id": 1,
+     *     "employee_number": "EMP001",
+     *     "name": "John Doe",
+     *     "email": "john.doe@example.com",
+     *     "phone": "+1234567890",
+     *     "hire_date": "2025-01-15",
+     *     "salary": 5000.00,
+     *     "address": "123 Main St, City",
+     *     "national_id": "123456789",
+     *     "passport_number": "A12345678",
+     *     "birth_date": "1990-05-15",
+     *     "gender": "male",
+     *     "marital_status": "single",
+     *     "emergency_contact_name": "Jane Doe",
+     *     "emergency_contact_phone": "+1234567891",
+     *     "status": "active",
+     *     "balance": 2500.00,
+     *     "notes": "Experienced developer",
+     *     "department": {
+     *       "id": 1,
+     *       "name": "IT Department",
+     *       "manager": "Manager Name"
+     *     },
+     *     "job_title": {
+     *       "id": 1,
+     *       "name": "Software Developer",
+     *       "description": "Develops software applications"
+     *     },
+     *     "currency": {
+     *       "id": 1,
+     *       "name": "USD",
+     *       "symbol": "$",
+     *       "rate": 1.0
+     *     },
+     *     "created_at": "2025-10-05T10:00:00.000000Z",
+     *     "updated_at": "2025-10-05T10:00:00.000000Z"
+     *   },
+     *   "message": "Employee retrieved successfully."
+     * }
+     *
+     * @response 404 {
+     *   "success": false,
+     *   "message": "Employee not found"
+     * }
      */
     public function show(Employee $employee): JsonResponse
     {
@@ -223,14 +412,30 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Get next employee number
+     * Generate Next Employee Number
+     *
+     * Generate the next sequential employee number for a specific company, used for auto-numbering new employees.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "employee_number": "EMP005"
+     *   },
+     *   "message": "Next employee number generated successfully."
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "error": "An error occurred while generating employee number.",
+     *   "message": "Database connection failed"
+     * }
      */
     public function getNextEmployeeNumber(): JsonResponse
     {
         try {
             $companyId = Auth::user()->company->id;
             $nextNumber = Employee::generateEmployeeNumber($companyId);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => [

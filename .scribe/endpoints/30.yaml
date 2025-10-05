@@ -117,11 +117,21 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
       due_date:
         name: due_date
         description: 'Must be a valid date. Must be a date after <code>today</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -141,7 +151,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: draft
+        example: delivered
         type: string
         enumValues:
           - draft
@@ -185,10 +195,10 @@ endpoints:
         custom: []
       'items[].item_id':
         name: 'items[].item_id'
-        description: ''
+        description: 'The <code>id</code> of an existing record in the items table.'
         required: true
-        example: 17
-        type: integer
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -235,7 +245,7 @@ endpoints:
         custom: []
       'items[].quantity':
         name: 'items[].quantity'
-        description: 'Must be at least 0.'
+        description: 'Must be at least 0.01.'
         required: true
         example: 45
         type: number
@@ -336,13 +346,14 @@ endpoints:
     cleanBodyParameters:
       customer_id: consequatur
       customer_email: carolyne.luettgen@example.org
-      due_date: '2106-10-30'
+      currency_id: consequatur
+      due_date: '2106-11-03'
       notes: consequatur
-      status: draft
+      status: delivered
       licensed_operator: mqeopfuudtdsufvyvddqa
       items:
         -
-          item_id: 17
+          item_id: consequatur
           item_number: mqeopfuudtdsufvyvddqa
           item_name: mniihfqcoynlazghdtqtq
           unit_id: consequatur
@@ -505,11 +516,21 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
       due_date:
         name: due_date
         description: 'Must be a valid date. Must be a date after <code>today</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -529,7 +550,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: delivered
+        example: shipped
         type: string
         enumValues:
           - draft
@@ -573,10 +594,10 @@ endpoints:
         custom: []
       'items[].item_id':
         name: 'items[].item_id'
-        description: ''
+        description: 'The <code>id</code> of an existing record in the items table.'
         required: true
-        example: 17
-        type: integer
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -623,7 +644,7 @@ endpoints:
         custom: []
       'items[].quantity':
         name: 'items[].quantity'
-        description: 'Must be at least 0.'
+        description: 'Must be at least 0.01.'
         required: true
         example: 45
         type: number
@@ -724,13 +745,14 @@ endpoints:
     cleanBodyParameters:
       customer_id: consequatur
       customer_email: carolyne.luettgen@example.org
-      due_date: '2106-10-30'
+      currency_id: consequatur
+      due_date: '2106-11-03'
       notes: consequatur
-      status: delivered
+      status: shipped
       licensed_operator: mqeopfuudtdsufvyvddqa
       items:
         -
-          item_id: 17
+          item_id: consequatur
           item_number: mqeopfuudtdsufvyvddqa
           item_name: mniihfqcoynlazghdtqtq
           unit_id: consequatur

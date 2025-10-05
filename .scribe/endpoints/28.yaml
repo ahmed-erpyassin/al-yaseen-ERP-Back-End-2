@@ -6,6 +6,55 @@ endpoints:
   -
     httpMethods:
       - GET
+    uri: api/v1/sales-management/outgoing-offers/form-data
+    metadata:
+      groupName: 'Sales Management / Outgoing Offers'
+      groupDescription: |-
+
+        APIs for managing outgoing sales offers, including offer creation, tracking, and conversion to orders.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get form data for creating outgoing offers'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/sales-management/outgoing-offers/form-data could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
     uri: api/v1/sales-management/outgoing-offers/list-all
     metadata:
       groupName: 'Sales Management / Outgoing Offers'
@@ -161,7 +210,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:30'
+        example: '2025-10-05T09:46:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -171,7 +220,7 @@ endpoints:
         name: time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '13:03:30'
+        example: '09:46:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -181,7 +230,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: true
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -467,9 +516,9 @@ endpoints:
       code: mqeopfuudtdsufvyvddqa
       journal_number: 45
       invoice_number: niihfqcoynlazghdtqtqx
-      date: '2025-09-30T13:03:30'
-      time: '13:03:30'
-      due_date: '2106-10-30'
+      date: '2025-10-05T09:46:15'
+      time: '09:46:15'
+      due_date: '2106-11-03'
       email: carolyne.luettgen@example.org
       licensed_operator: fuudtdsufvyvddqamniih
       cash_paid: 6
@@ -689,7 +738,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:30'
+        example: '2025-10-05T09:46:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -699,7 +748,7 @@ endpoints:
         name: time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '13:03:30'
+        example: '09:46:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -709,7 +758,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: true
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -995,9 +1044,9 @@ endpoints:
       code: mqeopfuudtdsufvyvddqa
       journal_number: 45
       invoice_number: niihfqcoynlazghdtqtqx
-      date: '2025-09-30T13:03:30'
-      time: '13:03:30'
-      due_date: '2106-10-30'
+      date: '2025-10-05T09:46:15'
+      time: '09:46:15'
+      due_date: '2106-11-03'
       email: carolyne.luettgen@example.org
       licensed_operator: fuudtdsufvyvddqamniih
       cash_paid: 6

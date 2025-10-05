@@ -159,6 +159,16 @@ paths:
             schema:
               type: object
               properties:
+                company_id:
+                  type: integer
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: 17
+                  nullable: false
+                branch_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
                 currency_id:
                   type: integer
                   description: 'The <code>id</code> of an existing record in the currencies table.'
@@ -248,6 +258,7 @@ paths:
                     - active
                     - inactive
               required:
+                - company_id
                 - currency_id
                 - first_name
                 - status
@@ -277,240 +288,6 @@ paths:
         in: path
         name: id
         description: 'The ID of the detail.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  '/api/v1/customers/update/{id}':
-    put:
-      summary: 'Update the specified customer in storage.'
-      operationId: updateTheSpecifiedCustomerInStorage
-      description: 'Updates customer data with comprehensive validation and relationship handling.'
-      parameters: []
-      responses: {  }
-      tags:
-        - 'Customer Management / Customers'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                currency_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the currencies table.'
-                  example: 17
-                  nullable: false
-                employee_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the users table.'
-                  example: 17
-                  nullable: true
-                country_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the countries table.'
-                  example: 17
-                  nullable: true
-                region_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the regions table.'
-                  example: 17
-                  nullable: true
-                city_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the cities table.'
-                  example: 17
-                  nullable: true
-                first_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: false
-                second_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mniihfqcoynlazghdtqtq
-                  nullable: true
-                contact_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: xbajwbpilpmufinllwloa
-                  nullable: true
-                email:
-                  type: string
-                  description: 'Must be a valid email address. Must not be greater than 255 characters.'
-                  example: dwill@example.org
-                  nullable: true
-                phone:
-                  type: string
-                  description: 'Must not be greater than 50 characters.'
-                  example: smsjuryvojcybzvrbyick
-                  nullable: true
-                mobile:
-                  type: string
-                  description: 'Must not be greater than 50 characters.'
-                  example: znkygloigmkwxphlvazjr
-                  nullable: true
-                address_one:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: cnfbaqywuxhgjjmzuxjub
-                  nullable: true
-                address_two:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: qouzswiwxtrkimfcatbxs
-                  nullable: true
-                postal_code:
-                  type: string
-                  description: 'Must not be greater than 20 characters.'
-                  example: pzmrazsroyjpxmqes
-                  nullable: true
-                tax_number:
-                  type: string
-                  description: 'Must not be greater than 100 characters.'
-                  example: edyghenqcopwvownkbaml
-                  nullable: true
-                notes:
-                  type: string
-                  description: ''
-                  example: consequatur
-                  nullable: true
-                status:
-                  type: string
-                  description: ''
-                  example: inactive
-                  nullable: false
-                  enum:
-                    - active
-                    - inactive
-              required:
-                - currency_id
-                - first_name
-                - status
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the update.'
-        example: consequatur
-        required: true
-        schema:
-          type: string
-  '/api/v1/customers/patch/{id}':
-    patch:
-      summary: 'Update the specified customer in storage.'
-      operationId: updateTheSpecifiedCustomerInStorage
-      description: 'Updates customer data with comprehensive validation and relationship handling.'
-      parameters: []
-      responses: {  }
-      tags:
-        - 'Customer Management / Customers'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                currency_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the currencies table.'
-                  example: 17
-                  nullable: false
-                employee_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the users table.'
-                  example: 17
-                  nullable: true
-                country_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the countries table.'
-                  example: 17
-                  nullable: true
-                region_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the regions table.'
-                  example: 17
-                  nullable: true
-                city_id:
-                  type: integer
-                  description: 'The <code>id</code> of an existing record in the cities table.'
-                  example: 17
-                  nullable: true
-                first_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mqeopfuudtdsufvyvddqa
-                  nullable: false
-                second_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: mniihfqcoynlazghdtqtq
-                  nullable: true
-                contact_name:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: xbajwbpilpmufinllwloa
-                  nullable: true
-                email:
-                  type: string
-                  description: 'Must be a valid email address. Must not be greater than 255 characters.'
-                  example: dwill@example.org
-                  nullable: true
-                phone:
-                  type: string
-                  description: 'Must not be greater than 50 characters.'
-                  example: smsjuryvojcybzvrbyick
-                  nullable: true
-                mobile:
-                  type: string
-                  description: 'Must not be greater than 50 characters.'
-                  example: znkygloigmkwxphlvazjr
-                  nullable: true
-                address_one:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: cnfbaqywuxhgjjmzuxjub
-                  nullable: true
-                address_two:
-                  type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: qouzswiwxtrkimfcatbxs
-                  nullable: true
-                postal_code:
-                  type: string
-                  description: 'Must not be greater than 20 characters.'
-                  example: pzmrazsroyjpxmqes
-                  nullable: true
-                tax_number:
-                  type: string
-                  description: 'Must not be greater than 100 characters.'
-                  example: edyghenqcopwvownkbaml
-                  nullable: true
-                notes:
-                  type: string
-                  description: ''
-                  example: consequatur
-                  nullable: true
-                status:
-                  type: string
-                  description: ''
-                  example: inactive
-                  nullable: false
-                  enum:
-                    - active
-                    - inactive
-              required:
-                - currency_id
-                - first_name
-                - status
-    parameters:
-      -
-        in: path
-        name: id
-        description: 'The ID of the patch.'
         example: consequatur
         required: true
         schema:
@@ -1262,7 +1039,7 @@ paths:
                 format:
                   type: string
                   description: ''
-                  example: png
+                  example: svg
                   nullable: true
                   enum:
                     - png
@@ -1394,7 +1171,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
               required:
                 - department_number
@@ -2144,7 +1921,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: inventory_count
+                  example: inbound
                   nullable: false
                   enum:
                     - outbound
@@ -2155,12 +1932,12 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:27'
+                  example: '2025-10-05T09:46:11'
                   nullable: true
                 movement_time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:27'
+                  example: '09:46:11'
                   nullable: true
                 vendor_id:
                   type: integer
@@ -2235,7 +2012,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: confirmed
+                  example: cancelled
                   nullable: true
                   enum:
                     - draft
@@ -2292,7 +2069,7 @@ paths:
                       expiry_date:
                         type: string
                         description: 'Must be a valid date.'
-                        example: '2025-09-30T13:03:27'
+                        example: '2025-10-05T09:46:11'
                         nullable: true
                       serial_number:
                         type: string
@@ -2375,7 +2152,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: outbound
+                  example: manufacturing
                   nullable: false
                   enum:
                     - outbound
@@ -2386,12 +2163,12 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:27'
+                  example: '2025-10-05T09:46:11'
                   nullable: true
                 movement_time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:27'
+                  example: '09:46:11'
                   nullable: true
                 vendor_id:
                   type: integer
@@ -2528,7 +2305,7 @@ paths:
                       expiry_date:
                         type: string
                         description: 'Must be a valid date.'
-                        example: '2025-09-30T13:03:27'
+                        example: '2025-10-05T09:46:11'
                         nullable: true
                       serial_number:
                         type: string
@@ -3008,7 +2785,7 @@ paths:
                 is_active:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
               required:
                 - name
@@ -3120,12 +2897,12 @@ paths:
                 is_default:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 unit_type:
                   type: string
                   description: ''
-                  example: second
+                  example: third
                   nullable: false
                   enum:
                     - balance
@@ -3139,7 +2916,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: piece
+                  example: carton
                   nullable: false
                   enum:
                     - piece
@@ -3170,7 +2947,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: carton
+                  example: kilo
                   nullable: true
                   enum:
                     - piece
@@ -3282,7 +3059,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: inactive
+                  example: active
                   nullable: false
                   enum:
                     - active
@@ -3363,12 +3140,12 @@ paths:
                 is_default:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
                 unit_type:
                   type: string
                   description: ''
-                  example: third
+                  example: second
                   nullable: false
                   enum:
                     - balance
@@ -3413,7 +3190,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: kilo
+                  example: ton
                   nullable: true
                   enum:
                     - piece
@@ -3449,7 +3226,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: piece
+                  example: ton
                   nullable: true
                   enum:
                     - piece
@@ -3525,7 +3302,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: false
                   enum:
                     - active
@@ -4112,7 +3889,7 @@ paths:
                 type:
                   type: string
                   description: ''
-                  example: raw_material
+                  example: product
                   nullable: false
                   enum:
                     - product
@@ -4227,7 +4004,7 @@ paths:
                 sale_prices_include_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 item_subject_to_vat:
                   type: boolean
@@ -4258,7 +4035,7 @@ paths:
                 expiry_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 image:
                   type: string
@@ -4288,7 +4065,7 @@ paths:
                 active:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
                 stock_tracking:
                   type: boolean
@@ -4395,7 +4172,7 @@ paths:
                 type:
                   type: string
                   description: ''
-                  example: service
+                  example: material
                   nullable: false
                   enum:
                     - product
@@ -4490,7 +4267,7 @@ paths:
                 sale_prices_include_vat:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: false
                 item_subject_to_vat:
                   type: boolean
@@ -4510,7 +4287,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: C39
+                  example: ITF
                   nullable: true
                   enum:
                     - C128
@@ -4521,7 +4298,7 @@ paths:
                 expiry_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 image:
                   type: string
@@ -4835,7 +4612,7 @@ paths:
                 barcode_type:
                   type: string
                   description: ''
-                  example: C128
+                  example: ITF
                   nullable: false
                   enum:
                     - C128
@@ -4965,17 +4742,17 @@ paths:
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:27'
+                  example: '2025-10-05T09:46:11'
                   nullable: true
                 date_to:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 transaction_type:
                   type: string
                   description: ''
-                  example: sales
+                  example: purchases
                   nullable: true
                   enum:
                     - sales
@@ -4990,7 +4767,7 @@ paths:
                 sort_by:
                   type: string
                   description: ''
-                  example: amount
+                  example: date
                   nullable: true
                   enum:
                     - date
@@ -5000,7 +4777,7 @@ paths:
                 sort_direction:
                   type: string
                   description: ''
-                  example: desc
+                  example: asc
                   nullable: true
                   enum:
                     - asc
@@ -5045,17 +4822,17 @@ paths:
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:27'
+                  example: '2025-10-05T09:46:11'
                   nullable: true
                 date_to:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 transaction_type:
                   type: string
                   description: ''
-                  example: stock_movements
+                  example: sales
                   nullable: true
                   enum:
                     - sales
@@ -5065,7 +4842,7 @@ paths:
                 export_type:
                   type: string
                   description: ''
-                  example: transactions
+                  example: multi_sheet
                   nullable: true
                   enum:
                     - transactions
@@ -5074,7 +4851,7 @@ paths:
                 format:
                   type: string
                   description: ''
-                  example: pdf
+                  example: csv
                   nullable: true
                   enum:
                     - xlsx
@@ -5359,7 +5136,7 @@ paths:
                 selected_purchase_price_type:
                   type: string
                   description: ''
-                  example: third
+                  example: first
                   nullable: true
                   enum:
                     - first
@@ -5373,7 +5150,7 @@ paths:
                 requires_inspection:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 status:
                   type: string
@@ -5388,7 +5165,7 @@ paths:
                 is_active:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 batch_size:
                   type: number
@@ -5428,12 +5205,12 @@ paths:
                 effective_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:28'
+                  example: '2025-10-05T09:46:12'
                   nullable: true
                 effective_to:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>effective_from</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 company_id:
                   type: string
@@ -5847,7 +5624,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: transfer
+                  example: adjustment
                   nullable: false
                   enum:
                     - in
@@ -5887,7 +5664,7 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:26'
+                  example: '2025-10-05T09:46:10'
                   nullable: true
               required:
                 - inventory_item_id
@@ -5963,7 +5740,7 @@ paths:
                 movement_type:
                   type: string
                   description: ''
-                  example: out
+                  example: transfer
                   nullable: false
                   enum:
                     - in
@@ -6003,7 +5780,7 @@ paths:
                 movement_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:26'
+                  example: '2025-10-05T09:46:10'
                   nullable: true
               required:
                 - inventory_item_id
@@ -6250,7 +6027,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: kilo
+                  example: carton
                   nullable: false
                   enum:
                     - piece
@@ -6286,7 +6063,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: ton
+                  example: piece
                   nullable: true
                   enum:
                     - piece
@@ -6368,7 +6145,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: false
                   enum:
                     - active
@@ -6457,7 +6234,7 @@ paths:
                 balance_unit:
                   type: string
                   description: ''
-                  example: kilo
+                  example: liter
                   nullable: false
                   enum:
                     - piece
@@ -6493,7 +6270,7 @@ paths:
                 second_unit:
                   type: string
                   description: ''
-                  example: ton
+                  example: kilo
                   nullable: true
                   enum:
                     - piece
@@ -6529,7 +6306,7 @@ paths:
                 third_unit:
                   type: string
                   description: ''
-                  example: carton
+                  example: ton
                   nullable: true
                   enum:
                     - piece
@@ -6575,7 +6352,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: false
                   enum:
                     - active
@@ -6947,7 +6724,7 @@ paths:
                 inventory_valuation_method:
                   type: string
                   description: ''
-                  example: third_purchase_price
+                  example: first_purchase_price
                   nullable: false
                   enum:
                     - natural_division
@@ -6958,7 +6735,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: false
                   enum:
                     - active
@@ -7083,7 +6860,7 @@ paths:
                 inventory_valuation_method:
                   type: string
                   description: ''
-                  example: second_purchase_price
+                  example: first_purchase_price
                   nullable: false
                   enum:
                     - natural_division
@@ -7202,7 +6979,7 @@ paths:
                 sort_direction:
                   type: string
                   description: ''
-                  example: desc
+                  example: asc
                   nullable: true
                   enum:
                     - asc
@@ -7379,7 +7156,7 @@ paths:
                 document_category:
                   type: string
                   description: ''
-                  example: other
+                  example: contract
                   nullable: true
                   enum:
                     - contract
@@ -7392,7 +7169,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: archived
+                  example: deleted
                   nullable: true
                   enum:
                     - active
@@ -7401,7 +7178,7 @@ paths:
                 upload_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:13'
                   nullable: true
                 version:
                   type: string
@@ -7863,7 +7640,7 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:13'
                   nullable: false
                 description:
                   type: string
@@ -7987,7 +7764,7 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:13'
                   nullable: false
                 description:
                   type: string
@@ -8354,7 +8131,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 status:
                   type: string
@@ -8378,7 +8155,7 @@ paths:
                 end_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 progress:
                   type: number
@@ -8469,12 +8246,12 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:28'
+                  example: '2025-10-05T09:46:12'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: completed
+                  example: not_started
                   nullable: false
                   enum:
                     - not_started
@@ -8493,7 +8270,7 @@ paths:
                 end_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 progress:
                   type: number
@@ -9180,7 +8957,7 @@ paths:
                 include_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 project_number:
                   type: string
@@ -9370,7 +9147,7 @@ paths:
                 include_vat:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: false
                 project_number:
                   type: string
@@ -9405,17 +9182,17 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:28'
+                  example: '2025-10-05T09:46:12'
                   nullable: false
                 end_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>start_date</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: draft
+                  example: cancelled
                   nullable: false
                   enum:
                     - draft
@@ -10112,7 +9889,7 @@ paths:
                 resource_type:
                   type: string
                   description: ''
-                  example: consultant
+                  example: contractor
                   nullable: false
                   enum:
                     - supplier
@@ -10252,7 +10029,7 @@ paths:
                 resource_type:
                   type: string
                   description: ''
-                  example: internal
+                  example: consultant
                   nullable: false
                   enum:
                     - supplier
@@ -10297,7 +10074,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: active
+                  example: inactive
                   nullable: true
                   enum:
                     - active
@@ -10711,7 +10488,7 @@ paths:
                 impact:
                   type: string
                   description: ''
-                  example: low
+                  example: medium
                   nullable: false
                   enum:
                     - low
@@ -10720,7 +10497,7 @@ paths:
                 probability:
                   type: string
                   description: ''
-                  example: medium
+                  example: high
                   nullable: false
                   enum:
                     - low
@@ -10734,7 +10511,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: open
+                  example: mitigated
                   nullable: false
                   enum:
                     - open
@@ -10824,7 +10601,7 @@ paths:
                 probability:
                   type: string
                   description: ''
-                  example: high
+                  example: low
                   nullable: false
                   enum:
                     - low
@@ -10838,7 +10615,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: closed
+                  example: mitigated
                   nullable: false
                   enum:
                     - open
@@ -11300,12 +11077,12 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: in_progress
+                  example: done
                   nullable: false
                   enum:
                     - to_do
@@ -11335,7 +11112,7 @@ paths:
                 priority:
                   type: string
                   description: ''
-                  example: medium
+                  example: low
                   nullable: true
                   enum:
                     - low
@@ -11345,7 +11122,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date. Must be a date before or equal to <code>due_date</code>.'
-                  example: '2020-01-26'
+                  example: '2020-01-31'
                   nullable: true
                 estimated_hours:
                   type: integer
@@ -11455,12 +11232,12 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:28'
+                  example: '2025-10-05T09:46:12'
                   nullable: false
                 status:
                   type: string
                   description: ''
-                  example: blocked
+                  example: in_progress
                   nullable: false
                   enum:
                     - to_do
@@ -11490,7 +11267,7 @@ paths:
                 priority:
                   type: string
                   description: ''
-                  example: urgent
+                  example: high
                   nullable: false
                   enum:
                     - low
@@ -11500,7 +11277,7 @@ paths:
                 start_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:28'
+                  example: '2025-10-05T09:46:12'
                   nullable: false
                 estimated_hours:
                   type: integer
@@ -11921,7 +11698,7 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 supplier_email:
                   type: string
@@ -11996,12 +11773,12 @@ paths:
                 is_tax_inclusive:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 is_tax_applied_to_currency:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 discount_percentage:
                   type: number
@@ -12174,7 +11951,7 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 supplier_email:
                   type: string
@@ -12647,17 +12424,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:14'
                   nullable: true
                 time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:29'
+                  example: '09:46:14'
                   nullable: true
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 customer_id:
                   type: string
@@ -12797,7 +12574,7 @@ paths:
                 is_tax_applied_to_currency:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 total_foreign:
                   type: number
@@ -12995,17 +12772,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:14'
                   nullable: true
                 time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:29'
+                  example: '09:46:14'
                   nullable: true
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 customer_id:
                   type: string
@@ -13145,7 +12922,7 @@ paths:
                 is_tax_applied_to_currency:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 total_foreign:
                   type: number
@@ -13352,17 +13129,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:14'
                   nullable: true
                 date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:14'
                   nullable: true
                 date_to:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 amount:
                   type: number
@@ -13423,17 +13200,17 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:14'
                   nullable: true
                 due_date_from:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:14'
                   nullable: true
                 due_date_to:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>due_date_from</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 branch_id:
                   type: string
@@ -13453,7 +13230,7 @@ paths:
                 sort_by:
                   type: string
                   description: ''
-                  example: ledger_number
+                  example: created_at
                   nullable: true
                   enum:
                     - id
@@ -13489,7 +13266,7 @@ paths:
                 sort_order:
                   type: string
                   description: ''
-                  example: desc
+                  example: asc
                   nullable: true
                   enum:
                     - asc
@@ -13667,6 +13444,11 @@ paths:
             schema:
               type: object
               properties:
+                branch_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
                 currency_id:
                   type: string
                   description: ''
@@ -13682,6 +13464,11 @@ paths:
                   description: ''
                   example: consequatur
                   nullable: false
+                supplier_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
                 journal_id:
                   type: string
                   description: ''
@@ -13692,6 +13479,21 @@ paths:
                   description: ''
                   example: 17
                   nullable: false
+                due_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-10-05T09:46:14'
+                  nullable: true
+                supplier_email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: carolyne.luettgen@example.org
+                  nullable: true
+                licensed_operator:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
                 cash_paid:
                   type: number
                   description: 'Must be at least 0.'
@@ -13747,6 +13549,21 @@ paths:
                   description: 'Must be at least 0.'
                   example: 13
                   nullable: true
+                is_tax_applied_to_currency:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: true
+                discount_percentage:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 65
+                  nullable: true
+                discount_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 72
+                  nullable: true
                 notes:
                   type: string
                   description: ''
@@ -13765,6 +13582,11 @@ paths:
                         description: ''
                         example: 17
                         nullable: false
+                      account_id:
+                        type: integer
+                        description: ''
+                        example: 17
+                        nullable: true
                       description:
                         type: string
                         description: ''
@@ -13804,6 +13626,11 @@ paths:
                         type: number
                         description: 'Must be at least 0.'
                         example: 74
+                        nullable: true
+                      notes:
+                        type: string
+                        description: ''
+                        example: consequatur
                         nullable: true
                     required:
                       - item_id
@@ -13853,6 +13680,210 @@ paths:
       responses: {  }
       tags:
         - 'Purchase Management / Incoming Shipments'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branch_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                currency_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                employee_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                customer_id:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: false
+                supplier_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                journal_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                journal_number:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: false
+                due_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-10-05T09:46:14'
+                  nullable: true
+                supplier_email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: carolyne.luettgen@example.org
+                  nullable: true
+                licensed_operator:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                cash_paid:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 45
+                  nullable: true
+                checks_paid:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 56
+                  nullable: true
+                allowed_discount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 16
+                  nullable: true
+                total_without_tax:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 50
+                  nullable: true
+                tax_percentage:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 55
+                  nullable: true
+                tax_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 19
+                  nullable: true
+                total_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 70
+                  nullable: true
+                remaining_balance:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 70
+                  nullable: true
+                exchange_rate:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 12
+                  nullable: false
+                total_foreign:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 66
+                  nullable: true
+                total_local:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 13
+                  nullable: true
+                is_tax_applied_to_currency:
+                  type: boolean
+                  description: ''
+                  example: true
+                  nullable: true
+                discount_percentage:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 65
+                  nullable: true
+                discount_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 72
+                  nullable: true
+                notes:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                items:
+                  type: array
+                  description: 'Must have at least 1 items.'
+                  example:
+                    - []
+                  items:
+                    type: object
+                    properties:
+                      item_id:
+                        type: integer
+                        description: ''
+                        example: 17
+                        nullable: false
+                      account_id:
+                        type: integer
+                        description: ''
+                        example: 17
+                        nullable: true
+                      description:
+                        type: string
+                        description: ''
+                        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+                        nullable: true
+                      quantity:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 12
+                        nullable: false
+                      unit_price:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 66
+                        nullable: false
+                      discount_rate:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 13
+                        nullable: true
+                      tax_rate:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 65
+                        nullable: true
+                      total_foreign:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 72
+                        nullable: true
+                      total_local:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 18
+                        nullable: true
+                      total:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 74
+                        nullable: true
+                      notes:
+                        type: string
+                        description: ''
+                        example: consequatur
+                        nullable: true
+                    required:
+                      - item_id
+                      - quantity
+                      - unit_price
+              required:
+                - customer_id
+                - journal_number
+                - exchange_rate
+                - items
     parameters:
       -
         in: path
@@ -13917,70 +13948,130 @@ paths:
             schema:
               type: object
               properties:
-                due_date:
+                branch_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                currency_id:
                   type: string
-                  description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
-                  nullable: false
+                  description: ''
+                  example: null
+                  nullable: true
+                employee_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
                 customer_id:
                   type: string
-                  description: 'The <code>id</code> of an existing record in the customers table.'
-                  example: consequatur
-                  nullable: false
-                customer_email:
+                  description: ''
+                  example: null
+                  nullable: true
+                supplier_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                journal_id:
                   type: string
-                  description: 'Must be a valid email address. Must not be greater than 150 characters.'
+                  description: ''
+                  example: null
+                  nullable: true
+                journal_number:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: false
+                due_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-10-05T09:46:14'
+                  nullable: true
+                supplier_email:
+                  type: string
+                  description: 'Must be a valid email address.'
                   example: carolyne.luettgen@example.org
                   nullable: true
                 licensed_operator:
                   type: string
-                  description: 'Must not be greater than 255 characters.'
-                  example: fuudtdsufvyvddqamniih
-                  nullable: true
-                currency_id:
-                  type: string
-                  description: 'The <code>id</code> of an existing record in the currencies table.'
-                  example: consequatur
-                  nullable: false
-                exchange_rate:
-                  type: number
-                  description: 'Must be at least 0.'
-                  example: 45
-                  nullable: false
-                is_tax_inclusive:
-                  type: boolean
                   description: ''
-                  example: false
-                  nullable: false
-                notes:
-                  type: string
-                  description: 'Must not be greater than 1000 characters.'
-                  example: qeopfuudtdsufvyvddqam
+                  example: consequatur
                   nullable: true
                 cash_paid:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 46
+                  example: 45
                   nullable: true
                 checks_paid:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 28
+                  example: 56
                   nullable: true
                 allowed_discount:
                   type: number
                   description: 'Must be at least 0.'
-                  example: 30
+                  example: 16
                   nullable: true
-                discount_percentage:
+                total_without_tax:
                   type: number
-                  description: 'Must be at least 0. Must not be greater than 100.'
-                  example: 8
+                  description: 'Must be at least 0.'
+                  example: 50
                   nullable: true
                 tax_percentage:
                   type: number
-                  description: 'Must be at least 0. Must not be greater than 100.'
-                  example: 6
+                  description: 'Must be at least 0.'
+                  example: 55
+                  nullable: true
+                tax_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 19
+                  nullable: true
+                total_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 70
+                  nullable: true
+                remaining_balance:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 70
+                  nullable: true
+                exchange_rate:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 12
+                  nullable: false
+                total_foreign:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 66
+                  nullable: true
+                total_local:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 13
+                  nullable: true
+                is_tax_applied_to_currency:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: true
+                discount_percentage:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 65
+                  nullable: true
+                discount_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 72
+                  nullable: true
+                notes:
+                  type: string
+                  description: ''
+                  example: consequatur
                   nullable: true
                 items:
                   type: array
@@ -13991,49 +14082,66 @@ paths:
                     type: object
                     properties:
                       item_id:
-                        type: string
-                        description: 'The <code>id</code> of an existing record in the items table.'
-                        example: consequatur
+                        type: integer
+                        description: ''
+                        example: 17
                         nullable: false
-                      unit_id:
+                      account_id:
+                        type: integer
+                        description: ''
+                        example: 17
+                        nullable: true
+                      description:
                         type: string
-                        description: 'The <code>id</code> of an existing record in the units table.'
-                        example: consequatur
-                        nullable: false
+                        description: ''
+                        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+                        nullable: true
                       quantity:
                         type: number
-                        description: 'Must be at least 0.01.'
-                        example: 45
+                        description: 'Must be at least 0.'
+                        example: 12
                         nullable: false
                       unit_price:
                         type: number
                         description: 'Must be at least 0.'
-                        example: 56
+                        example: 66
                         nullable: false
                       discount_rate:
                         type: number
-                        description: 'Must be at least 0. Must not be greater than 100.'
-                        example: 5
+                        description: 'Must be at least 0.'
+                        example: 13
                         nullable: true
                       tax_rate:
                         type: number
-                        description: 'Must be at least 0. Must not be greater than 100.'
-                        example: 14
+                        description: 'Must be at least 0.'
+                        example: 65
                         nullable: true
-                      description:
+                      total_foreign:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 72
+                        nullable: true
+                      total_local:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 18
+                        nullable: true
+                      total:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 74
+                        nullable: true
+                      notes:
                         type: string
-                        description: 'Must not be greater than 500 characters.'
-                        example: 'Eius est dolor dolores minus voluptatem quisquam.'
+                        description: ''
+                        example: consequatur
                         nullable: true
                     required:
                       - item_id
-                      - unit_id
                       - quantity
                       - unit_price
               required:
-                - due_date
-                - customer_id
-                - currency_id
+                - journal_number
                 - exchange_rate
                 - items
   '/api/v1/purchase/invoices/details/{id}':
@@ -14075,6 +14183,209 @@ paths:
       responses: {  }
       tags:
         - 'Purchase Management / Invoices'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                branch_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                currency_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                employee_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                customer_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                supplier_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
+                journal_id:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                journal_number:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: false
+                due_date:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2025-10-05T09:46:14'
+                  nullable: true
+                supplier_email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: carolyne.luettgen@example.org
+                  nullable: true
+                licensed_operator:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                cash_paid:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 45
+                  nullable: true
+                checks_paid:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 56
+                  nullable: true
+                allowed_discount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 16
+                  nullable: true
+                total_without_tax:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 50
+                  nullable: true
+                tax_percentage:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 55
+                  nullable: true
+                tax_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 19
+                  nullable: true
+                total_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 70
+                  nullable: true
+                remaining_balance:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 70
+                  nullable: true
+                exchange_rate:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 12
+                  nullable: false
+                total_foreign:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 66
+                  nullable: true
+                total_local:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 13
+                  nullable: true
+                is_tax_applied_to_currency:
+                  type: boolean
+                  description: ''
+                  example: false
+                  nullable: true
+                discount_percentage:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 65
+                  nullable: true
+                discount_amount:
+                  type: number
+                  description: 'Must be at least 0.'
+                  example: 72
+                  nullable: true
+                notes:
+                  type: string
+                  description: ''
+                  example: consequatur
+                  nullable: true
+                items:
+                  type: array
+                  description: 'Must have at least 1 items.'
+                  example:
+                    - []
+                  items:
+                    type: object
+                    properties:
+                      item_id:
+                        type: integer
+                        description: ''
+                        example: 17
+                        nullable: false
+                      account_id:
+                        type: integer
+                        description: ''
+                        example: 17
+                        nullable: true
+                      description:
+                        type: string
+                        description: ''
+                        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+                        nullable: true
+                      quantity:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 12
+                        nullable: false
+                      unit_price:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 66
+                        nullable: false
+                      discount_rate:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 13
+                        nullable: true
+                      tax_rate:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 65
+                        nullable: true
+                      total_foreign:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 72
+                        nullable: true
+                      total_local:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 18
+                        nullable: true
+                      total:
+                        type: number
+                        description: 'Must be at least 0.'
+                        example: 74
+                        nullable: true
+                      notes:
+                        type: string
+                        description: ''
+                        example: consequatur
+                        nullable: true
+                    required:
+                      - item_id
+                      - quantity
+                      - unit_price
+              required:
+                - journal_number
+                - exchange_rate
+                - items
     parameters:
       -
         in: path
@@ -14187,17 +14498,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:14'
                   nullable: true
                 time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:29'
+                  example: '09:46:14'
                   nullable: true
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 exchange_rate:
                   type: number
@@ -14453,17 +14764,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:29'
+                  example: '2025-10-05T09:46:14'
                   nullable: true
                 time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:29'
+                  example: '09:46:14'
                   nullable: true
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 exchange_rate:
                   type: number
@@ -14896,6 +15207,11 @@ paths:
             schema:
               type: object
               properties:
+                company_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: consequatur
+                  nullable: false
                 supplier_id:
                   type: string
                   description: 'The <code>id</code> of an existing record in the suppliers table.'
@@ -14933,8 +15249,8 @@ paths:
                   nullable: true
                 due_date:
                   type: string
-                  description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  description: 'Must be a valid date. Must be a date after or equal to <code>today</code>. Must be a date before <code>2100-01-01</code>.'
+                  example: '2080-04-11'
                   nullable: false
                 supplier_email:
                   type: string
@@ -15014,12 +15330,12 @@ paths:
                 is_tax_applied_to_currency:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 is_tax_applied_to_currency_rate:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 discount_percentage:
                   type: number
@@ -15068,10 +15384,20 @@ paths:
                       - item_id
                       - quantity
               required:
+                - company_id
                 - supplier_id
                 - currency_id
                 - due_date
                 - items
+  /api/v1/purchase/purchase-reference-invoices/debug-create:
+    post:
+      summary: 'Debug endpoint to test purchase reference invoice creation without form request validation'
+      operationId: debugEndpointToTestPurchaseReferenceInvoiceCreationWithoutFormRequestValidation
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Purchase Management / Reference Invoices'
   '/api/v1/purchase/purchase-reference-invoices/details/{id}':
     get:
       summary: 'Display the specified purchase reference invoice'
@@ -15118,6 +15444,11 @@ paths:
             schema:
               type: object
               properties:
+                company_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: consequatur
+                  nullable: false
                 supplier_id:
                   type: string
                   description: 'The <code>id</code> of an existing record in the suppliers table.'
@@ -15155,8 +15486,8 @@ paths:
                   nullable: true
                 due_date:
                   type: string
-                  description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  description: 'Must be a valid date. Must be a date after or equal to <code>today</code>. Must be a date before <code>2100-01-01</code>.'
+                  example: '2080-04-11'
                   nullable: false
                 supplier_email:
                   type: string
@@ -15241,7 +15572,7 @@ paths:
                 is_tax_applied_to_currency_rate:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 discount_percentage:
                   type: number
@@ -15290,6 +15621,7 @@ paths:
                       - item_id
                       - quantity
               required:
+                - company_id
                 - supplier_id
                 - currency_id
                 - due_date
@@ -15565,6 +15897,11 @@ paths:
             schema:
               type: object
               properties:
+                branch_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
                 currency_id:
                   type: string
                   description: ''
@@ -15575,7 +15912,7 @@ paths:
                   description: ''
                   example: null
                   nullable: true
-                customer_id:
+                supplier_id:
                   type: string
                   description: ''
                   example: consequatur
@@ -15708,7 +16045,7 @@ paths:
                       - quantity
                       - unit_price
               required:
-                - customer_id
+                - supplier_id
                 - journal_number
                 - exchange_rate
                 - items
@@ -15758,6 +16095,11 @@ paths:
             schema:
               type: object
               properties:
+                branch_id:
+                  type: integer
+                  description: ''
+                  example: 17
+                  nullable: true
                 currency_id:
                   type: string
                   description: ''
@@ -15768,7 +16110,7 @@ paths:
                   description: ''
                   example: null
                   nullable: true
-                customer_id:
+                supplier_id:
                   type: string
                   description: ''
                   example: consequatur
@@ -15901,7 +16243,7 @@ paths:
                       - quantity
                       - unit_price
               required:
-                - customer_id
+                - supplier_id
                 - journal_number
                 - exchange_rate
                 - items
@@ -16809,55 +17151,6 @@ paths:
                     example: 'Error searching items: Database error'
       tags:
         - 'Sales Management / Helpers'
-  /api/v1/sales-management/helpers/licensed-operators:
-    get:
-      summary: 'Get licensed operators for dropdown'
-      operationId: getLicensedOperatorsForDropdown
-      description: 'Retrieve a list of unique licensed operators from the customers database for dropdown selection.'
-      parameters: []
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: true
-                  data:
-                    - 'Operator A'
-                    - 'Operator B'
-                    - 'Operator C'
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  data:
-                    type: array
-                    example:
-                      - 'Operator A'
-                      - 'Operator B'
-                      - 'Operator C'
-                    items:
-                      type: string
-        500:
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: object
-                example:
-                  success: false
-                  message: 'Error fetching licensed operators: Database error'
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  message:
-                    type: string
-                    example: 'Error fetching licensed operators: Database error'
-      tags:
-        - 'Sales Management / Helpers'
   '/api/v1/sales-management/helpers/customer-details/{customerId}':
     get:
       summary: 'Get customer details by ID'
@@ -17254,6 +17547,11 @@ paths:
             schema:
               type: object
               properties:
+                company_id:
+                  type: integer
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: 17
+                  nullable: true
                 branch_id:
                   type: integer
                   description: 'The <code>id</code> of an existing record in the branches table.'
@@ -17297,17 +17595,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:30'
+                  example: '2025-10-05T09:46:15'
                   nullable: true
                 time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:30'
+                  example: '09:46:15'
                   nullable: true
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 customer_email:
                   type: string
@@ -17526,6 +17824,11 @@ paths:
             schema:
               type: object
               properties:
+                company_id:
+                  type: integer
+                  description: 'The <code>id</code> of an existing record in the companies table.'
+                  example: 17
+                  nullable: true
                 branch_id:
                   type: integer
                   description: 'The <code>id</code> of an existing record in the branches table.'
@@ -17569,17 +17872,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:30'
+                  example: '2025-10-05T09:46:15'
                   nullable: true
                 time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:30'
+                  example: '09:46:15'
                   nullable: true
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 customer_email:
                   type: string
@@ -17654,7 +17957,7 @@ paths:
                 is_tax_inclusive:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: true
                 notes:
                   type: string
@@ -17902,6 +18205,27 @@ paths:
                     example: 'The route api/v1/sales-management/incoming-orders/external/get-live-exchange-rate could not be found.'
       tags:
         - 'Sales Management / Incoming Orders'
+  /api/v1/sales-management/outgoing-offers/form-data:
+    get:
+      summary: 'Get form data for creating outgoing offers'
+      operationId: getFormDataForCreatingOutgoingOffers
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'The route api/v1/sales-management/outgoing-offers/form-data could not be found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'The route api/v1/sales-management/outgoing-offers/form-data could not be found.'
+      tags:
+        - 'Sales Management / Outgoing Offers'
   /api/v1/sales-management/outgoing-offers/list-all:
     get:
       summary: 'Display a listing of the resource.'
@@ -17982,17 +18306,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:30'
+                  example: '2025-10-05T09:46:15'
                   nullable: true
                 time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:30'
+                  example: '09:46:15'
                   nullable: true
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 email:
                   type: string
@@ -18232,17 +18556,17 @@ paths:
                 date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:30'
+                  example: '2025-10-05T09:46:15'
                   nullable: true
                 time:
                   type: string
                   description: 'Must be a valid date in the format <code>H:i:s</code>.'
-                  example: '13:03:30'
+                  example: '09:46:15'
                   nullable: true
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: false
                 email:
                   type: string
@@ -18531,10 +18855,15 @@ paths:
                   description: 'The <code>id</code> of an existing record in the branches table.'
                   example: null
                   nullable: true
+                currency_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the currencies table.'
+                  example: consequatur
+                  nullable: false
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 notes:
                   type: string
@@ -18544,7 +18873,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: draft
+                  example: delivered
                   nullable: true
                   enum:
                     - draft
@@ -18566,9 +18895,9 @@ paths:
                     type: object
                     properties:
                       item_id:
-                        type: integer
-                        description: ''
-                        example: 17
+                        type: string
+                        description: 'The <code>id</code> of an existing record in the items table.'
+                        example: consequatur
                         nullable: false
                       item_number:
                         type: string
@@ -18592,7 +18921,7 @@ paths:
                         nullable: true
                       quantity:
                         type: number
-                        description: 'Must be at least 0.'
+                        description: 'Must be at least 0.01.'
                         example: 45
                         nullable: false
                       warehouse_id:
@@ -18653,6 +18982,7 @@ paths:
                   nullable: true
               required:
                 - customer_id
+                - currency_id
                 - items
   '/api/v1/sales-management/outgoing-shipments/show-details/{id}':
     get:
@@ -18720,10 +19050,15 @@ paths:
                   description: 'The <code>id</code> of an existing record in the branches table.'
                   example: null
                   nullable: true
+                currency_id:
+                  type: string
+                  description: 'The <code>id</code> of an existing record in the currencies table.'
+                  example: consequatur
+                  nullable: false
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 notes:
                   type: string
@@ -18733,7 +19068,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: delivered
+                  example: shipped
                   nullable: true
                   enum:
                     - draft
@@ -18755,9 +19090,9 @@ paths:
                     type: object
                     properties:
                       item_id:
-                        type: integer
-                        description: ''
-                        example: 17
+                        type: string
+                        description: 'The <code>id</code> of an existing record in the items table.'
+                        example: consequatur
                         nullable: false
                       item_number:
                         type: string
@@ -18781,7 +19116,7 @@ paths:
                         nullable: true
                       quantity:
                         type: number
-                        description: 'Must be at least 0.'
+                        description: 'Must be at least 0.01.'
                         example: 45
                         nullable: false
                       warehouse_id:
@@ -18842,6 +19177,7 @@ paths:
                   nullable: true
               required:
                 - customer_id
+                - currency_id
                 - items
     parameters:
       -
@@ -19723,7 +20059,7 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 licensed_operator:
                   type: string
@@ -19768,6 +20104,11 @@ paths:
                   items:
                     type: object
                     properties:
+                      item_id:
+                        type: string
+                        description: ''
+                        example: consequatur
+                        nullable: false
                       account_id:
                         type: string
                         description: 'The <code>id</code> of an existing record in the accounts table.'
@@ -19819,6 +20160,7 @@ paths:
                         example: dlsmsjuryvojcybzvrbyi
                         nullable: true
                     required:
+                      - item_id
                       - account_id
                       - quantity
                       - unit_price
@@ -19884,7 +20226,7 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 licensed_operator:
                   type: string
@@ -19914,7 +20256,7 @@ paths:
                 is_tax_inclusive:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 tax_percentage:
                   type: number
@@ -19929,6 +20271,11 @@ paths:
                   items:
                     type: object
                     properties:
+                      item_id:
+                        type: string
+                        description: ''
+                        example: consequatur
+                        nullable: false
                       account_id:
                         type: string
                         description: 'The <code>id</code> of an existing record in the accounts table.'
@@ -19967,7 +20314,7 @@ paths:
                       apply_tax:
                         type: boolean
                         description: ''
-                        example: true
+                        example: false
                         nullable: true
                       tax_rate_id:
                         type: string
@@ -19980,6 +20327,7 @@ paths:
                         example: dlsmsjuryvojcybzvrbyi
                         nullable: true
                     required:
+                      - item_id
                       - account_id
                       - quantity
                       - unit_price
@@ -20189,7 +20537,7 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 licensed_operator:
                   type: string
@@ -20219,7 +20567,7 @@ paths:
                 is_tax_inclusive:
                   type: boolean
                   description: ''
-                  example: false
+                  example: true
                   nullable: true
                 tax_percentage:
                   type: number
@@ -20234,6 +20582,11 @@ paths:
                   items:
                     type: object
                     properties:
+                      item_id:
+                        type: string
+                        description: ''
+                        example: consequatur
+                        nullable: false
                       account_id:
                         type: string
                         description: 'The <code>id</code> of an existing record in the accounts table.'
@@ -20272,7 +20625,7 @@ paths:
                       apply_tax:
                         type: boolean
                         description: ''
-                        example: false
+                        example: true
                         nullable: true
                       tax_rate_id:
                         type: string
@@ -20285,6 +20638,7 @@ paths:
                         example: dlsmsjuryvojcybzvrbyi
                         nullable: true
                     required:
+                      - item_id
                       - account_id
                       - quantity
                       - unit_price
@@ -20350,7 +20704,7 @@ paths:
                 due_date:
                   type: string
                   description: 'Must be a valid date. Must be a date after <code>today</code>.'
-                  example: '2106-10-30'
+                  example: '2106-11-03'
                   nullable: true
                 licensed_operator:
                   type: string
@@ -20380,7 +20734,7 @@ paths:
                 is_tax_inclusive:
                   type: boolean
                   description: ''
-                  example: true
+                  example: false
                   nullable: true
                 tax_percentage:
                   type: number
@@ -20395,6 +20749,11 @@ paths:
                   items:
                     type: object
                     properties:
+                      item_id:
+                        type: string
+                        description: ''
+                        example: consequatur
+                        nullable: false
                       account_id:
                         type: string
                         description: 'The <code>id</code> of an existing record in the accounts table.'
@@ -20446,6 +20805,7 @@ paths:
                         example: dlsmsjuryvojcybzvrbyi
                         nullable: true
                     required:
+                      - item_id
                       - account_id
                       - quantity
                       - unit_price
@@ -20953,12 +21313,12 @@ paths:
                 last_transaction_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:31'
+                  example: '2025-10-05T09:46:16'
                   nullable: true
                 classification:
                   type: string
                   description: ''
-                  example: medium
+                  example: major
                   nullable: false
                   enum:
                     - major
@@ -20992,7 +21352,7 @@ paths:
                 status:
                   type: string
                   description: ''
-                  example: inactive
+                  example: active
                   nullable: false
                   enum:
                     - active
@@ -21244,12 +21604,12 @@ paths:
                 last_transaction_date:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2025-09-30T13:03:31'
+                  example: '2025-10-05T09:46:16'
                   nullable: true
                 classification:
                   type: string
                   description: ''
-                  example: medium
+                  example: major
                   nullable: false
                   enum:
                     - major

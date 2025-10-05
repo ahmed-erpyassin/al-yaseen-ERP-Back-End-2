@@ -121,7 +121,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: transfer
+        example: adjustment
         type: string
         enumValues:
           - in
@@ -195,7 +195,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:26'
+        example: '2025-10-05T09:46:10'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -204,14 +204,14 @@ endpoints:
     cleanBodyParameters:
       inventory_item_id: consequatur
       warehouse_id: consequatur
-      movement_type: transfer
+      movement_type: adjustment
       reference_type: mqeopfuudtdsufvyvddqa
       reference_id: 17
       quantity: 45
       unit_cost: 56
       total_cost: 16
       notes: consequatur
-      movement_date: '2025-09-30T13:03:26'
+      movement_date: '2025-10-05T09:46:10'
     fileParameters: []
     responses: []
     responseFields: []
@@ -363,7 +363,7 @@ endpoints:
         name: movement_type
         description: ''
         required: true
-        example: out
+        example: transfer
         type: string
         enumValues:
           - in
@@ -437,7 +437,7 @@ endpoints:
         name: movement_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:26'
+        example: '2025-10-05T09:46:10'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -446,14 +446,14 @@ endpoints:
     cleanBodyParameters:
       inventory_item_id: consequatur
       warehouse_id: consequatur
-      movement_type: out
+      movement_type: transfer
       reference_type: mqeopfuudtdsufvyvddqa
       reference_id: 17
       quantity: 45
       unit_cost: 56
       total_cost: 16
       notes: consequatur
-      movement_date: '2025-09-30T13:03:26'
+      movement_date: '2025-10-05T09:46:10'
     fileParameters: []
     responses: []
     responseFields: []

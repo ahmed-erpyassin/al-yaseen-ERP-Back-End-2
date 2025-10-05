@@ -173,7 +173,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -183,7 +183,7 @@ endpoints:
         name: time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '13:03:29'
+        example: '09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -193,7 +193,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -507,9 +507,9 @@ endpoints:
       customer_email: ablanda@example.org
       customer_mobile: wbpilpmufinllwloa
       licensed_operator: uydlsmsjuryvojcybzvrb
-      date: '2025-09-30T13:03:29'
-      time: '13:03:29'
-      due_date: '2106-10-30'
+      date: '2025-10-05T09:46:14'
+      time: '09:46:14'
+      due_date: '2106-11-03'
       exchange_rate: 45
       cash_paid: 56
       checks_paid: 16
@@ -742,7 +742,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -752,7 +752,7 @@ endpoints:
         name: time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '13:03:29'
+        example: '09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -762,7 +762,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1076,9 +1076,9 @@ endpoints:
       customer_email: ablanda@example.org
       customer_mobile: wbpilpmufinllwloa
       licensed_operator: uydlsmsjuryvojcybzvrb
-      date: '2025-09-30T13:03:29'
-      time: '13:03:29'
-      due_date: '2106-10-30'
+      date: '2025-10-05T09:46:14'
+      time: '09:46:14'
+      due_date: '2106-11-03'
       exchange_rate: 45
       cash_paid: 56
       checks_paid: 16

@@ -455,7 +455,7 @@ endpoints:
         name: last_transaction_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:31'
+        example: '2025-10-05T09:46:16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -465,7 +465,7 @@ endpoints:
         name: classification
         description: ''
         required: true
-        example: medium
+        example: major
         type: string
         enumValues:
           - major
@@ -528,7 +528,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: inactive
+        example: active
         type: string
         enumValues:
           - active
@@ -571,11 +571,11 @@ endpoints:
       credit_limit: 1
       payment_terms: 3
       balance: 11613.31890586
-      last_transaction_date: '2025-09-30T13:03:31'
-      classification: medium
+      last_transaction_date: '2025-10-05T09:46:16'
+      classification: major
       custom_classification: opfuudtdsufvyvddqamni
       notes: ihfqcoynlazghdtqtqxba
-      status: inactive
+      status: active
       active: true
     fileParameters: []
     responses: []
@@ -1060,7 +1060,7 @@ endpoints:
         name: last_transaction_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:31'
+        example: '2025-10-05T09:46:16'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1070,7 +1070,7 @@ endpoints:
         name: classification
         description: ''
         required: true
-        example: medium
+        example: major
         type: string
         enumValues:
           - major
@@ -1176,8 +1176,8 @@ endpoints:
       credit_limit: 1
       payment_terms: 3
       balance: 11613.31890586
-      last_transaction_date: '2025-09-30T13:03:31'
-      classification: medium
+      last_transaction_date: '2025-10-05T09:46:16'
+      classification: major
       custom_classification: opfuudtdsufvyvddqamni
       notes: ihfqcoynlazghdtqtqxba
       status: active

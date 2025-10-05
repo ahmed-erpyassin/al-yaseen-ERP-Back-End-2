@@ -143,7 +143,7 @@ endpoints:
         name: document_category
         description: ''
         required: false
-        example: other
+        example: contract
         type: string
         enumValues:
           - contract
@@ -160,7 +160,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: archived
+        example: deleted
         type: string
         enumValues:
           - active
@@ -173,7 +173,7 @@ endpoints:
         name: upload_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:13'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -225,9 +225,9 @@ endpoints:
       project_number: mniihfqcoynlazghdtqtq
       project_name: xbajwbpilpmufinllwloa
       description: 'A qui ducimus nihil laudantium nihil autem omnis.'
-      document_category: other
-      status: archived
-      upload_date: '2025-09-30T13:03:29'
+      document_category: contract
+      status: deleted
+      upload_date: '2025-10-05T09:46:13'
       version: ryvojcybzvrbyickz
     fileParameters:
       file: null
