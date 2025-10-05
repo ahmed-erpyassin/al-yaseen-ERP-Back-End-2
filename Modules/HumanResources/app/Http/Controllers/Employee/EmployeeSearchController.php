@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 use Modules\HumanResources\app\Services\Employee\EmployeeService;
 use Modules\HumanResources\Transformers\Employee\EmployeeResource;
 
+/**
+ * @group Employee/Employee Search
+ *
+ * APIs for advanced employee search functionality, including quick search, statistics, and export capabilities.
+ */
 class EmployeeSearchController extends Controller
 {
     protected EmployeeService $service;
@@ -25,7 +30,7 @@ class EmployeeSearchController extends Controller
     {
         try {
             $formData = $this->service->getFormData();
-            
+
             // Add additional search-specific data
             $searchData = [
                 'departments' => $formData['departments'],
@@ -50,7 +55,7 @@ class EmployeeSearchController extends Controller
                     ['value' => 'desc', 'label' => 'Descending'],
                 ]
             ];
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $searchData,
@@ -66,7 +71,41 @@ class EmployeeSearchController extends Controller
     }
 
     /**
-     * Quick search employees by name or employee number
+     * Quick Search Employees
+     *
+     * Perform a quick search for employees by name or employee number for autocomplete functionality.
+     *
+     * @bodyParam query string required The search query (name or employee number). Example: John
+     * @bodyParam limit integer optional Maximum number of results to return (default: 10, max: 50). Example: 15
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "employee_number": "EMP001",
+     *       "name": "John Doe",
+     *       "email": "john.doe@example.com",
+     *       "department": {
+     *         "id": 1,
+     *         "name": "IT Department"
+     *       },
+     *       "job_title": {
+     *         "id": 1,
+     *         "name": "Software Developer"
+     *       },
+     *       "status": "active"
+     *     }
+     *   ],
+     *   "message": "Quick search completed successfully."
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "query": ["The query field is required."]
+     *   }
+     * }
      */
     public function quickSearch(Request $request): JsonResponse
     {
@@ -116,7 +155,7 @@ class EmployeeSearchController extends Controller
     {
         try {
             $companyId = Auth::user()->company->id;
-            
+
             $stats = [
                 'total_employees' => \Modules\HumanResources\Models\Employee::forCompany($companyId)->count(),
                 'active_employees' => \Modules\HumanResources\Models\Employee::forCompany($companyId)->whereNull('deleted_at')->count(),
@@ -162,15 +201,15 @@ class EmployeeSearchController extends Controller
 
             // Get employees based on search criteria
             $employees = $this->service->list($request);
-            
+
             // Default fields to export
             $defaultFields = [
-                'employee_number', 'full_name', 'email', 'phone1', 
+                'employee_number', 'full_name', 'email', 'phone1',
                 'department', 'job_title', 'hire_date', 'salary', 'balance'
             ];
-            
+
             $fieldsToExport = $request->get('fields', $defaultFields);
-            
+
             // For now, return the data that would be exported
             // In a real implementation, you would generate the actual file
             return response()->json([

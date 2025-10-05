@@ -77,29 +77,89 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      due_date:
-        name: due_date
-        description: 'Must be a valid date. Must be a date after <code>today</code>.'
-        required: true
-        example: '2106-10-30'
+      branch_id:
+        name: branch_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      currency_id:
+        name: currency_id
+        description: ''
+        required: false
+        example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
+        custom: []
+      employee_id:
+        name: employee_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
         custom: []
       customer_id:
         name: customer_id
-        description: 'The <code>id</code> of an existing record in the customers table.'
-        required: true
-        example: consequatur
+        description: ''
+        required: false
+        example: null
         type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_id:
+        name: supplier_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_id:
+        name: journal_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_number:
+        name: journal_number
+        description: ''
+        required: true
+        example: 17
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      customer_email:
-        name: customer_email
-        description: 'Must be a valid email address. Must not be greater than 150 characters.'
+      due_date:
+        name: due_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-10-05T09:46:14'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_email:
+        name: supplier_email
+        description: 'Must be a valid email address.'
         required: false
         example: carolyne.luettgen@example.org
         type: string
@@ -109,49 +169,9 @@ endpoints:
         custom: []
       licensed_operator:
         name: licensed_operator
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: fuudtdsufvyvddqamniih
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      currency_id:
-        name: currency_id
-        description: 'The <code>id</code> of an existing record in the currencies table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      exchange_rate:
-        name: exchange_rate
-        description: 'Must be at least 0.'
-        required: true
-        example: 45
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      is_tax_inclusive:
-        name: is_tax_inclusive
         description: ''
         required: false
-        example: false
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      notes:
-        name: notes
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: qeopfuudtdsufvyvddqam
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -161,7 +181,7 @@ endpoints:
         name: cash_paid
         description: 'Must be at least 0.'
         required: false
-        example: 46
+        example: 45
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -171,7 +191,7 @@ endpoints:
         name: checks_paid
         description: 'Must be at least 0.'
         required: false
-        example: 28
+        example: 56
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -181,17 +201,17 @@ endpoints:
         name: allowed_discount
         description: 'Must be at least 0.'
         required: false
-        example: 30
+        example: 16
         type: number
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      discount_percentage:
-        name: discount_percentage
-        description: 'Must be at least 0. Must not be greater than 100.'
+      total_without_tax:
+        name: total_without_tax
+        description: 'Must be at least 0.'
         required: false
-        example: 8
+        example: 50
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -199,10 +219,110 @@ endpoints:
         custom: []
       tax_percentage:
         name: tax_percentage
-        description: 'Must be at least 0. Must not be greater than 100.'
+        description: 'Must be at least 0.'
         required: false
-        example: 6
+        example: 55
         type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_amount:
+        name: tax_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 19
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_amount:
+        name: total_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      remaining_balance:
+        name: remaining_balance
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Must be at least 0.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      total_foreign:
+        name: total_foreign
+        description: 'Must be at least 0.'
+        required: false
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_local:
+        name: total_local
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      is_tax_applied_to_currency:
+        name: is_tax_applied_to_currency
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_percentage:
+        name: discount_percentage
+        description: 'Must be at least 0.'
+        required: false
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_amount:
+        name: discount_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
@@ -220,29 +340,39 @@ endpoints:
         custom: []
       'items[].item_id':
         name: 'items[].item_id'
-        description: 'The <code>id</code> of an existing record in the items table.'
+        description: ''
         required: true
-        example: consequatur
-        type: string
+        example: 17
+        type: integer
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      'items[].unit_id':
-        name: 'items[].unit_id'
-        description: 'The <code>id</code> of an existing record in the units table.'
-        required: true
-        example: consequatur
+      'items[].account_id':
+        name: 'items[].account_id'
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].description':
+        name: 'items[].description'
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
       'items[].quantity':
         name: 'items[].quantity'
-        description: 'Must be at least 0.01.'
+        description: 'Must be at least 0.'
         required: true
-        example: 45
+        example: 12
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -252,7 +382,7 @@ endpoints:
         name: 'items[].unit_price'
         description: 'Must be at least 0.'
         required: true
-        example: 56
+        example: 66
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -260,9 +390,9 @@ endpoints:
         custom: []
       'items[].discount_rate':
         name: 'items[].discount_rate'
-        description: 'Must be at least 0. Must not be greater than 100.'
+        description: 'Must be at least 0.'
         required: false
-        example: 5
+        example: 13
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -270,47 +400,89 @@ endpoints:
         custom: []
       'items[].tax_rate':
         name: 'items[].tax_rate'
-        description: 'Must be at least 0. Must not be greater than 100.'
+        description: 'Must be at least 0.'
         required: false
-        example: 14
+        example: 65
         type: number
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      'items[].description':
-        name: 'items[].description'
-        description: 'Must not be greater than 500 characters.'
+      'items[].total_foreign':
+        name: 'items[].total_foreign'
+        description: 'Must be at least 0.'
         required: false
-        example: 'Eius est dolor dolores minus voluptatem quisquam.'
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_local':
+        name: 'items[].total_local'
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total':
+        name: 'items[].total'
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].notes':
+        name: 'items[].notes'
+        description: ''
+        required: false
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
     cleanBodyParameters:
-      due_date: '2106-10-30'
-      customer_id: consequatur
-      customer_email: carolyne.luettgen@example.org
-      licensed_operator: fuudtdsufvyvddqamniih
-      currency_id: consequatur
-      exchange_rate: 45
-      is_tax_inclusive: false
-      notes: qeopfuudtdsufvyvddqam
-      cash_paid: 46
-      checks_paid: 28
-      allowed_discount: 30
-      discount_percentage: 8
-      tax_percentage: 6
+      branch_id: 17
+      supplier_id: 17
+      journal_number: 17
+      due_date: '2025-10-05T09:46:14'
+      supplier_email: carolyne.luettgen@example.org
+      licensed_operator: consequatur
+      cash_paid: 45
+      checks_paid: 56
+      allowed_discount: 16
+      total_without_tax: 50
+      tax_percentage: 55
+      tax_amount: 19
+      total_amount: 70
+      remaining_balance: 70
+      exchange_rate: 12
+      total_foreign: 66
+      total_local: 13
+      is_tax_applied_to_currency: false
+      discount_percentage: 65
+      discount_amount: 72
+      notes: consequatur
       items:
         -
-          item_id: consequatur
-          unit_id: consequatur
-          quantity: 45
-          unit_price: 56
-          discount_rate: 5
-          tax_rate: 14
-          description: 'Eius est dolor dolores minus voluptatem quisquam.'
+          item_id: 17
+          account_id: 17
+          description: 'Dolores dolorum amet iste laborum eius est dolor.'
+          quantity: 12
+          unit_price: 66
+          discount_rate: 13
+          tax_rate: 65
+          total_foreign: 72
+          total_local: 18
+          total: 74
+          notes: consequatur
     fileParameters: []
     responses: []
     responseFields: []
@@ -417,8 +589,413 @@ endpoints:
       id: consequatur
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    bodyParameters:
+      branch_id:
+        name: branch_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      currency_id:
+        name: currency_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      employee_id:
+        name: employee_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_id:
+        name: customer_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_id:
+        name: supplier_id
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_id:
+        name: journal_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      journal_number:
+        name: journal_number
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      due_date:
+        name: due_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-10-05T09:46:14'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      supplier_email:
+        name: supplier_email
+        description: 'Must be a valid email address.'
+        required: false
+        example: carolyne.luettgen@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      cash_paid:
+        name: cash_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      checks_paid:
+        name: checks_paid
+        description: 'Must be at least 0.'
+        required: false
+        example: 56
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      allowed_discount:
+        name: allowed_discount
+        description: 'Must be at least 0.'
+        required: false
+        example: 16
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_without_tax:
+        name: total_without_tax
+        description: 'Must be at least 0.'
+        required: false
+        example: 50
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_percentage:
+        name: tax_percentage
+        description: 'Must be at least 0.'
+        required: false
+        example: 55
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      tax_amount:
+        name: tax_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 19
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_amount:
+        name: total_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      remaining_balance:
+        name: remaining_balance
+        description: 'Must be at least 0.'
+        required: false
+        example: 70
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      exchange_rate:
+        name: exchange_rate
+        description: 'Must be at least 0.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      total_foreign:
+        name: total_foreign
+        description: 'Must be at least 0.'
+        required: false
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      total_local:
+        name: total_local
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      is_tax_applied_to_currency:
+        name: is_tax_applied_to_currency
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_percentage:
+        name: discount_percentage
+        description: 'Must be at least 0.'
+        required: false
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      discount_amount:
+        name: discount_amount
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      items:
+        name: items
+        description: 'Must have at least 1 items.'
+        required: true
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].item_id':
+        name: 'items[].item_id'
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].account_id':
+        name: 'items[].account_id'
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].description':
+        name: 'items[].description'
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].quantity':
+        name: 'items[].quantity'
+        description: 'Must be at least 0.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].unit_price':
+        name: 'items[].unit_price'
+        description: 'Must be at least 0.'
+        required: true
+        example: 66
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      'items[].discount_rate':
+        name: 'items[].discount_rate'
+        description: 'Must be at least 0.'
+        required: false
+        example: 13
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].tax_rate':
+        name: 'items[].tax_rate'
+        description: 'Must be at least 0.'
+        required: false
+        example: 65
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_foreign':
+        name: 'items[].total_foreign'
+        description: 'Must be at least 0.'
+        required: false
+        example: 72
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total_local':
+        name: 'items[].total_local'
+        description: 'Must be at least 0.'
+        required: false
+        example: 18
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].total':
+        name: 'items[].total'
+        description: 'Must be at least 0.'
+        required: false
+        example: 74
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      'items[].notes':
+        name: 'items[].notes'
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      branch_id: 17
+      supplier_id: 17
+      journal_number: 17
+      due_date: '2025-10-05T09:46:14'
+      supplier_email: carolyne.luettgen@example.org
+      licensed_operator: consequatur
+      cash_paid: 45
+      checks_paid: 56
+      allowed_discount: 16
+      total_without_tax: 50
+      tax_percentage: 55
+      tax_amount: 19
+      total_amount: 70
+      remaining_balance: 70
+      exchange_rate: 12
+      total_foreign: 66
+      total_local: 13
+      is_tax_applied_to_currency: false
+      discount_percentage: 65
+      discount_amount: 72
+      notes: consequatur
+      items:
+        -
+          item_id: 17
+          account_id: 17
+          description: 'Dolores dolorum amet iste laborum eius est dolor.'
+          quantity: 12
+          unit_price: 66
+          discount_rate: 13
+          tax_rate: 65
+          total_foreign: 72
+          total_local: 18
+          total: 74
+          notes: consequatur
     fileParameters: []
     responses: []
     responseFields: []

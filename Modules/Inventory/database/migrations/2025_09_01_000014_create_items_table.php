@@ -68,7 +68,7 @@ return new class extends Migration
             $table->text('notes')->nullable(); // ملاحظات
 
             // Barcode Information (معلومات الباركود)
-            $table->string('barcode')->unique()->nullable(); // الباركود
+            $table->string('barcode')->nullable(); // الباركود
             $table->string('barcode_type')->nullable(); // نوع الباركود (EAN13, EAN8, UPC, CODE128, etc.)
 
             // Product Information (معلومات المنتج)

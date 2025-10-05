@@ -111,7 +111,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: true
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -121,7 +121,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: in_progress
+        example: done
         type: string
         enumValues:
           - to_do
@@ -175,7 +175,7 @@ endpoints:
         name: priority
         description: ''
         required: false
-        example: medium
+        example: low
         type: string
         enumValues:
           - low
@@ -189,7 +189,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date. Must be a date before or equal to <code>due_date</code>.'
         required: false
-        example: '2020-01-26'
+        example: '2020-01-31'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -270,13 +270,13 @@ endpoints:
       project_id: consequatur
       task_name: mqeopfuudtdsufvyvddqa
       assigned_to: consequatur
-      due_date: '2106-10-30'
-      status: in_progress
+      due_date: '2106-11-03'
+      status: done
       title: mqeopfuudtdsufvyvddqa
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       notes: consequatur
-      priority: medium
-      start_date: '2020-01-26'
+      priority: low
+      start_date: '2020-01-31'
       estimated_hours: 13
       actual_hours: 16
       progress: 5
@@ -423,7 +423,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:28'
+        example: '2025-10-05T09:46:12'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -433,7 +433,7 @@ endpoints:
         name: status
         description: ''
         required: false
-        example: blocked
+        example: in_progress
         type: string
         enumValues:
           - to_do
@@ -487,7 +487,7 @@ endpoints:
         name: priority
         description: ''
         required: false
-        example: urgent
+        example: high
         type: string
         enumValues:
           - low
@@ -501,7 +501,7 @@ endpoints:
         name: start_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:28'
+        example: '2025-10-05T09:46:12'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -550,13 +550,13 @@ endpoints:
         custom: []
     cleanBodyParameters:
       task_name: vmqeopfuudtdsufvyvddq
-      due_date: '2025-09-30T13:03:28'
-      status: blocked
+      due_date: '2025-10-05T09:46:12'
+      status: in_progress
       title: amniihfqcoynlazghdtqt
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
       notes: consequatur
-      priority: urgent
-      start_date: '2025-09-30T13:03:28'
+      priority: high
+      start_date: '2025-10-05T09:46:12'
       estimated_hours: 13
       actual_hours: 16
       progress: 5

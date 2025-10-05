@@ -83,15 +83,15 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            // ✅ Indexes for Performance
-            $table->index(['manufactured_formula_id', 'item_id']);
-            $table->index(['company_id', 'item_id']);
-            $table->index(['warehouse_id', 'item_id']);
-            $table->index(['is_available', 'is_sufficient']);
-            $table->index(['availability_status']);
-            $table->index(['is_critical']);
-            $table->index(['sequence_order']);
-            $table->unique(['manufactured_formula_id', 'item_id']); // Prevent duplicate items in same formula
+            // ✅ Indexes for Performance (with shorter names)
+            $table->index(['manufactured_formula_id', 'item_id'], 'mfg_formula_raw_mat_formula_item_idx');
+            $table->index(['company_id', 'item_id'], 'mfg_formula_raw_mat_company_item_idx');
+            $table->index(['warehouse_id', 'item_id'], 'mfg_formula_raw_mat_warehouse_item_idx');
+            $table->index(['is_available', 'is_sufficient'], 'mfg_formula_raw_mat_availability_idx');
+            $table->index(['availability_status'], 'mfg_formula_raw_mat_status_idx');
+            $table->index(['is_critical'], 'mfg_formula_raw_mat_critical_idx');
+            $table->index(['sequence_order'], 'mfg_formula_raw_mat_sequence_idx');
+            $table->unique(['manufactured_formula_id', 'item_id'], 'mfg_formula_raw_mat_unique'); // Prevent duplicate items in same formula
         });
     }
 

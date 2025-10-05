@@ -36,9 +36,30 @@ class DerpartmentResource extends JsonResource
             'actual_start_date'   => $this->actual_start_date,
             'actual_end_date'     => $this->actual_end_date,
             'budget_id'           => $this->budget_id,
+            'notes'               => $this->notes,
             'created_by'          => $this->created_by,
             'updated_by'          => $this->updated_by,
-            'deleted_by'          => $this->deleted_by
+            'deleted_by'          => $this->deleted_by,
+            'created_at'          => $this->created_at,
+            'updated_at'          => $this->updated_at,
+
+            // Relationships
+            'company'             => $this->whenLoaded('company'),
+            'user'                => $this->whenLoaded('user'),
+            'branch'              => $this->whenLoaded('branch'),
+            'fiscal_year'         => $this->whenLoaded('fiscalYear'),
+            'manager'             => $this->whenLoaded('manager'),
+            'parent_department'   => $this->whenLoaded('parent'),
+            'budget'              => $this->whenLoaded('budget'),
+            'funder'              => $this->whenLoaded('funder'),
+            'creator'             => $this->whenLoaded('creator'),
+            'updater'             => $this->whenLoaded('updater'),
+            'deleter'             => $this->whenLoaded('deleter'),
+
+            // Reverse relationships
+            'employees'           => $this->whenLoaded('employees'),
+            'job_titles'          => $this->whenLoaded('jobTitles'),
+            'child_departments'   => $this->whenLoaded('childDepartments'),
         ];
     }
 }

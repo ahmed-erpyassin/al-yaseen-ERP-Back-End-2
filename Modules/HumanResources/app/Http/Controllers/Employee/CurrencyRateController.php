@@ -9,10 +9,56 @@ use Modules\FinancialAccounts\Models\Currency;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * @group Employee/Currency Rate Management
+ *
+ * APIs for managing currency exchange rates for employee salary calculations and financial operations.
+ */
 class CurrencyRateController extends Controller
 {
     /**
-     * Get live currency rate for a specific currency
+     * Get Live Currency Rate
+     *
+     * Retrieve the current live exchange rate for a specific currency from external API sources.
+     *
+     * @bodyParam currency_id integer required The currency ID to get the rate for. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "currency_id": 1,
+     *     "currency_code": "USD",
+     *     "rate": 1.2500,
+     *     "is_base_currency": false,
+     *     "last_updated": "2025-10-05 12:00:00"
+     *   },
+     *   "message": "Live currency rate retrieved successfully."
+     * }
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "currency_id": 2,
+     *     "currency_code": "SAR",
+     *     "rate": 1.0000,
+     *     "is_base_currency": true,
+     *     "last_updated": "2025-10-05 12:00:00"
+     *   },
+     *   "message": "Base currency rate retrieved successfully."
+     * }
+     *
+     * @response 404 {
+     *   "success": false,
+     *   "error": "Currency not found.",
+     *   "message": "The specified currency does not exist."
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "currency_id": ["The currency id field is required."]
+     *   }
+     * }
      */
     public function getLiveRate(Request $request): JsonResponse
     {
@@ -22,7 +68,7 @@ class CurrencyRateController extends Controller
             ]);
 
             $currency = Currency::find($request->currency_id);
-            
+
             if (!$currency) {
                 return response()->json([
                     'success' => false,
@@ -48,7 +94,7 @@ class CurrencyRateController extends Controller
 
             // Get live rate
             $liveRate = $this->fetchLiveRate($currency);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -128,7 +174,7 @@ class CurrencyRateController extends Controller
         try {
             // Cache key for this currency
             $cacheKey = "live_rate_{$currency->code}";
-            
+
             // Check if we have a cached rate (cache for 5 minutes)
             $cachedRate = Cache::get($cacheKey);
             if ($cachedRate !== null) {
@@ -137,14 +183,14 @@ class CurrencyRateController extends Controller
 
             // Try to fetch from external API (example with exchangerate-api.com)
             $liveRate = $this->fetchFromExternalAPI($currency);
-            
+
             if ($liveRate !== null) {
                 // Cache the rate for 5 minutes
                 Cache::put($cacheKey, $liveRate, 300);
-                
+
                 // Update the currency record with the new rate
                 $currency->update(['exchange_rate' => $liveRate]);
-                
+
                 return $liveRate;
             }
 
@@ -171,10 +217,10 @@ class CurrencyRateController extends Controller
             }
 
             $response = Http::timeout(10)->get("https://api.exchangerate-api.com/v4/latest/{$baseCurrency->code}");
-            
+
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 if (isset($data['rates'][$currency->code])) {
                     return (float) $data['rates'][$currency->code];
                 }
@@ -201,7 +247,7 @@ class CurrencyRateController extends Controller
             ]);
 
             $currency = Currency::find($request->currency_id);
-            
+
             if ($currency->is_base_currency) {
                 return response()->json([
                     'success' => false,

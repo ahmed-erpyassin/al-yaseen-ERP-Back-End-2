@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('currency_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('employee_id')->nullable()->constrained()->nullOnDelete();
+            $table->unsignedBigInteger('employee_id')->nullable();
 
             $table->string('name');
             $table->enum('type', ['sales', 'purchase']);

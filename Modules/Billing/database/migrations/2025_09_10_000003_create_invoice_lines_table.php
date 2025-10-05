@@ -19,13 +19,13 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('cost_center_id')->nullable()->constrained('cost_centers')->nullOnDelete();
-            $table->foreignId('project_id')->nullable()->constrained('projects')->nullOnDelete();
+            $table->unsignedBigInteger('project_id')->nullable();
             $table->foreignId('invoice_id')->constrained('invoices')->cascadeOnDelete();
 
-            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
+            $table->unsignedBigInteger('item_id');
             $table->string('description')->nullable();
             $table->decimal('quantity', 15, 2);
-            $table->foreignId('unit_id')->constrained('units')->cascadeOnDelete();
+            $table->unsignedBigInteger('unit_id');
             $table->decimal('unit_price', 15, 2);
             $table->decimal('discount', 15, 2)->default(0);
 

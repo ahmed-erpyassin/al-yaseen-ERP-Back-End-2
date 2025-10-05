@@ -12,6 +12,11 @@ use Modules\HumanResources\app\Services\Employee\PayrollService;
 use Modules\HumanResources\Http\Requests\Employee\PayrollRecordRequest;
 use Modules\HumanResources\Transformers\Employee\PayrollRecordResource;
 
+/**
+ * @group Employee/Payroll Management
+ *
+ * APIs for managing employee payroll records, salary calculations, deductions, bonuses, and payroll processing.
+ */
 class PayrollController extends Controller
 {
     protected PayrollService $service;
@@ -22,7 +27,52 @@ class PayrollController extends Controller
     }
 
     /**
-     * Display a listing of payroll records
+     * List Payroll Records
+     *
+     * Retrieve a paginated list of payroll records with filtering options for employees, departments, and date ranges.
+     *
+     * @queryParam employee_id integer Filter by employee ID. Example: 1
+     * @queryParam department_id integer Filter by department ID. Example: 1
+     * @queryParam pay_period_start string Filter by pay period start date (YYYY-MM-DD). Example: 2025-01-01
+     * @queryParam pay_period_end string Filter by pay period end date (YYYY-MM-DD). Example: 2025-01-31
+     * @queryParam status string Filter by payroll status (draft, approved, paid). Example: approved
+     * @queryParam sort_by string Sort by field (pay_period_start, gross_salary, net_salary). Example: pay_period_start
+     * @queryParam sort_direction string Sort direction (asc, desc). Example: desc
+     * @queryParam per_page integer Number of items per page (default: 15). Example: 20
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "employee_id": 1,
+     *       "pay_period_start": "2025-01-01",
+     *       "pay_period_end": "2025-01-31",
+     *       "gross_salary": 5000.00,
+     *       "deductions": 500.00,
+     *       "bonuses": 200.00,
+     *       "net_salary": 4700.00,
+     *       "status": "approved",
+     *       "employee": {
+     *         "id": 1,
+     *         "name": "John Doe",
+     *         "employee_number": "EMP001",
+     *         "department": {
+     *           "id": 1,
+     *           "name": "IT Department"
+     *         }
+     *       },
+     *       "created_at": "2025-10-05T10:00:00.000000Z"
+     *     }
+     *   ],
+     *   "message": "Payroll records retrieved successfully."
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "error": "Failed to retrieve payroll records.",
+     *   "message": "Database connection failed"
+     * }
      */
     public function index(Request $request): JsonResponse
     {

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Al-Yaseen ERP API Documentation",
-        "_postman_id": "870eb9af-e31d-4c20-bc03-2e3186fbf7f4",
+        "_postman_id": "e3dfaa47-1b8c-4f5b-ba6b-72b1541164b7",
         "description": "API documentation for Al-Yaseen ERP system including Project Management, Inventory Management, Customer Management, Supplier Management, Sales Management, and Purchase Management modules.",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -86,7 +86,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"currency_id\":17,\"employee_id\":17,\"country_id\":17,\"region_id\":17,\"city_id\":17,\"first_name\":\"mqeopfuudtdsufvyvddqa\",\"second_name\":\"mniihfqcoynlazghdtqtq\",\"contact_name\":\"xbajwbpilpmufinllwloa\",\"email\":\"dwill@example.org\",\"phone\":\"smsjuryvojcybzvrbyick\",\"mobile\":\"znkygloigmkwxphlvazjr\",\"address_one\":\"cnfbaqywuxhgjjmzuxjub\",\"address_two\":\"qouzswiwxtrkimfcatbxs\",\"postal_code\":\"pzmrazsroyjpxmqes\",\"tax_number\":\"edyghenqcopwvownkbaml\",\"notes\":\"consequatur\",\"status\":\"active\"}"
+                            "raw": "{\"company_id\":17,\"currency_id\":17,\"employee_id\":17,\"country_id\":17,\"region_id\":17,\"city_id\":17,\"first_name\":\"mqeopfuudtdsufvyvddqa\",\"second_name\":\"mniihfqcoynlazghdtqtq\",\"contact_name\":\"xbajwbpilpmufinllwloa\",\"email\":\"dwill@example.org\",\"phone\":\"smsjuryvojcybzvrbyick\",\"mobile\":\"znkygloigmkwxphlvazjr\",\"address_one\":\"cnfbaqywuxhgjjmzuxjub\",\"address_two\":\"qouzswiwxtrkimfcatbxs\",\"postal_code\":\"pzmrazsroyjpxmqes\",\"tax_number\":\"edyghenqcopwvownkbaml\",\"notes\":\"consequatur\",\"status\":\"active\"}"
                         },
                         "description": "Creates a new customer with comprehensive validation and audit trail."
                     },
@@ -144,78 +144,6 @@
                             "name": ""
                         }
                     ]
-                },
-                {
-                    "name": "Update the specified customer in storage.",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/customers\/update\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/customers\/update\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "consequatur",
-                                    "description": "The ID of the update."
-                                }
-                            ]
-                        },
-                        "method": "PUT",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"currency_id\":17,\"employee_id\":17,\"country_id\":17,\"region_id\":17,\"city_id\":17,\"first_name\":\"mqeopfuudtdsufvyvddqa\",\"second_name\":\"mniihfqcoynlazghdtqtq\",\"contact_name\":\"xbajwbpilpmufinllwloa\",\"email\":\"dwill@example.org\",\"phone\":\"smsjuryvojcybzvrbyick\",\"mobile\":\"znkygloigmkwxphlvazjr\",\"address_one\":\"cnfbaqywuxhgjjmzuxjub\",\"address_two\":\"qouzswiwxtrkimfcatbxs\",\"postal_code\":\"pzmrazsroyjpxmqes\",\"tax_number\":\"edyghenqcopwvownkbaml\",\"notes\":\"consequatur\",\"status\":\"inactive\"}"
-                        },
-                        "description": "Updates customer data with comprehensive validation and relationship handling."
-                    },
-                    "response": []
-                },
-                {
-                    "name": "Update the specified customer in storage.",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/customers\/patch\/:id",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/customers\/patch\/:id",
-                            "variable": [
-                                {
-                                    "id": "id",
-                                    "key": "id",
-                                    "value": "consequatur",
-                                    "description": "The ID of the patch."
-                                }
-                            ]
-                        },
-                        "method": "PATCH",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\"currency_id\":17,\"employee_id\":17,\"country_id\":17,\"region_id\":17,\"city_id\":17,\"first_name\":\"mqeopfuudtdsufvyvddqa\",\"second_name\":\"mniihfqcoynlazghdtqtq\",\"contact_name\":\"xbajwbpilpmufinllwloa\",\"email\":\"dwill@example.org\",\"phone\":\"smsjuryvojcybzvrbyick\",\"mobile\":\"znkygloigmkwxphlvazjr\",\"address_one\":\"cnfbaqywuxhgjjmzuxjub\",\"address_two\":\"qouzswiwxtrkimfcatbxs\",\"postal_code\":\"pzmrazsroyjpxmqes\",\"tax_number\":\"edyghenqcopwvownkbaml\",\"notes\":\"consequatur\",\"status\":\"inactive\"}"
-                        },
-                        "description": "Updates customer data with comprehensive validation and relationship handling."
-                    },
-                    "response": []
                 },
                 {
                     "name": "Remove the specified customer from storage (soft delete).",
@@ -1321,7 +1249,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"barcode\":\"consequatur\",\"barcode_type_id\":\"consequatur\",\"width\":5,\"height\":16,\"format\":\"png\",\"color\":\"consequatur\"}"
+                            "raw": "{\"barcode\":\"consequatur\",\"barcode_type_id\":\"consequatur\",\"width\":5,\"height\":16,\"format\":\"svg\",\"color\":\"consequatur\"}"
                         },
                         "description": ""
                     },
@@ -1428,7 +1356,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"department_number\":\"vmqeopfuudtdsufvyvddq\",\"department_name_ar\":\"amniihfqcoynlazghdtqt\",\"department_name_en\":\"qxbajwbpilpmufinllwlo\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"manager_name\":\"dtdsufvyvddqamniihfqc\",\"manager_phone\":\"oynlazghdtqtqxbajwbpi\",\"manager_email\":\"jaunita.schamberger@example.com\",\"active\":false}"
+                            "raw": "{\"department_number\":\"vmqeopfuudtdsufvyvddq\",\"department_name_ar\":\"amniihfqcoynlazghdtqt\",\"department_name_en\":\"qxbajwbpilpmufinllwlo\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"manager_name\":\"dtdsufvyvddqamniihfqc\",\"manager_phone\":\"oynlazghdtqtqxbajwbpi\",\"manager_email\":\"jaunita.schamberger@example.com\",\"active\":true}"
                         },
                         "description": ""
                     },
@@ -2247,7 +2175,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"inventory_count\",\"movement_date\":\"2025-09-30T13:03:27\",\"movement_time\":\"13:03:27\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"confirmed\",\"movement_data\":[{\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-30T13:03:27\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\"}]}"
+                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"inbound\",\"movement_date\":\"2025-10-05T09:46:11\",\"movement_time\":\"09:46:11\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"cancelled\",\"movement_data\":[{\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-10-05T09:46:11\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\"}]}"
                         },
                         "description": ""
                     },
@@ -2336,7 +2264,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"outbound\",\"movement_date\":\"2025-09-30T13:03:27\",\"movement_time\":\"13:03:27\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"draft\",\"movement_data\":[{\"id\":17,\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-09-30T13:03:27\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\",\"_delete\":false}]}"
+                            "raw": "{\"movement_number\":\"vmqeopfuudtdsufvyvddq\",\"movement_type\":\"manufacturing\",\"movement_date\":\"2025-10-05T09:46:11\",\"movement_time\":\"09:46:11\",\"vendor_id\":17,\"customer_id\":17,\"vendor_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"movement_description\":\"xbajwbpilpmufinllwloa\",\"inbound_invoice_id\":17,\"outbound_invoice_id\":17,\"inbound_invoice_number\":\"mqeopfuudtdsufvyvddqa\",\"outbound_invoice_number\":\"mniihfqcoynlazghdtqtq\",\"user_number\":\"xbajwbpilpmufinllwloa\",\"shipment_number\":\"uydlsmsjuryvojcybzvrb\",\"invoice_number\":\"yickznkygloigmkwxphlv\",\"reference\":\"azjrcnfbaqywuxhgjjmzu\",\"warehouse_id\":17,\"status\":\"draft\",\"movement_data\":[{\"id\":17,\"item_id\":17,\"unit_id\":17,\"quantity\":45,\"unit_cost\":56,\"unit_price\":16,\"inventory_count\":50,\"notes\":\"pfuudtdsufvyvddqamnii\",\"batch_number\":\"hfqcoynlazghdtqtqxbaj\",\"expiry_date\":\"2025-10-05T09:46:11\",\"serial_number\":\"wbpilpmufinllwloauydl\",\"location_code\":\"smsjuryvojcybzvrbyick\",\"shelf_number\":\"znkygloigmkwxphlvazjr\",\"bin_number\":\"cnfbaqywuxhgjjmzuxjub\",\"_delete\":false}]}"
                         },
                         "description": ""
                     },
@@ -2998,7 +2926,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"name_ar\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"is_active\":false}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"name_ar\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"is_active\":true}"
                         },
                         "description": ""
                     },
@@ -3155,7 +3083,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"second\",\"quantity_factor\":56,\"balance_unit\":\"piece\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"carton\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"carton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"inactive\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":false,\"unit_type\":\"third\",\"quantity_factor\":56,\"balance_unit\":\"carton\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"kilo\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"carton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"active\"}"
                         },
                         "description": ""
                     },
@@ -3244,7 +3172,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":false,\"unit_type\":\"third\",\"quantity_factor\":56,\"balance_unit\":\"ton\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"kilo\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"piece\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"active\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"conversion_rate\":45,\"is_default\":true,\"unit_type\":\"second\",\"quantity_factor\":56,\"balance_unit\":\"ton\",\"custom_balance_unit\":\"eopfuudtdsufvyvddqamn\",\"length\":28,\"width\":30,\"height\":25,\"second_unit\":\"ton\",\"custom_second_unit\":\"fqcoynlazghdtqtqxbajw\",\"second_unit_contains\":\"bpilpmufinllwloauydls\",\"custom_second_unit_contains\":\"msjuryvojcybzvrbyickz\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"ton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"contains\":\"mniihfqcoynlazghdtqtq\",\"custom_contains\":\"xbajwbpilpmufinllwloa\",\"unit_content\":\"consequatur\",\"unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"unit_purchase_price\":45,\"unit_sale_price\":46,\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -3870,7 +3798,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"name_ar\":\"yickznkygloigmkwxphlv\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"model\":\"mqeopfuudtdsufvyvddqa\",\"type\":\"raw_material\",\"quantity\":45,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"cost_price\":70,\"purchase_price\":12,\"first_purchase_price\":66,\"second_purchase_price\":13,\"third_purchase_price\":65,\"purchase_discount_rate\":20,\"purchase_prices_include_vat\":true,\"sale_price\":18,\"minimum_sale_price\":74,\"first_sale_price\":87,\"second_sale_price\":76,\"third_sale_price\":10,\"sale_discount_rate\":3,\"maximum_sale_discount_rate\":17,\"minimum_allowed_sale_price\":1,\"sale_prices_include_vat\":true,\"item_subject_to_vat\":false,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"ITF\",\"expiry_date\":\"2106-10-30\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"custom_item_type\":\"uydlsmsjuryvojcybzvrb\",\"custom_item_type_ar\":\"yickznkygloigmkwxphlv\",\"active\":false,\"stock_tracking\":true}"
+                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"name_ar\":\"yickznkygloigmkwxphlv\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"description_ar\":\"consequatur\",\"model\":\"mqeopfuudtdsufvyvddqa\",\"type\":\"product\",\"quantity\":45,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"cost_price\":70,\"purchase_price\":12,\"first_purchase_price\":66,\"second_purchase_price\":13,\"third_purchase_price\":65,\"purchase_discount_rate\":20,\"purchase_prices_include_vat\":true,\"sale_price\":18,\"minimum_sale_price\":74,\"first_sale_price\":87,\"second_sale_price\":76,\"third_sale_price\":10,\"sale_discount_rate\":3,\"maximum_sale_discount_rate\":17,\"minimum_allowed_sale_price\":1,\"sale_prices_include_vat\":false,\"item_subject_to_vat\":false,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"ITF\",\"expiry_date\":\"2106-11-03\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"custom_item_type\":\"uydlsmsjuryvojcybzvrb\",\"custom_item_type_ar\":\"yickznkygloigmkwxphlv\",\"active\":true,\"stock_tracking\":true}"
                         },
                         "description": ""
                     },
@@ -3959,7 +3887,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"model\":\"dtdsufvyvddqamniihfqc\",\"type\":\"service\",\"quantity\":51,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"first_purchase_price\":70,\"second_purchase_price\":12,\"third_purchase_price\":66,\"purchase_discount_rate\":4,\"purchase_prices_include_vat\":true,\"first_sale_price\":65,\"second_sale_price\":72,\"third_sale_price\":18,\"sale_discount_rate\":21,\"maximum_sale_discount_rate\":24,\"minimum_allowed_sale_price\":76,\"sale_prices_include_vat\":false,\"item_subject_to_vat\":false,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"C39\",\"expiry_date\":\"2106-10-30\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"active\":false,\"stock_tracking\":false}"
+                            "raw": "{\"unit_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"code\":\"mniihfqcoynlazghdtqtq\",\"catalog_number\":\"xbajwbpilpmufinllwloa\",\"name\":\"uydlsmsjuryvojcybzvrb\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"model\":\"dtdsufvyvddqamniihfqc\",\"type\":\"material\",\"quantity\":51,\"balance\":11613.31890586,\"minimum_limit\":50,\"maximum_limit\":55,\"reorder_limit\":19,\"max_reorder_limit\":70,\"first_purchase_price\":70,\"second_purchase_price\":12,\"third_purchase_price\":66,\"purchase_discount_rate\":4,\"purchase_prices_include_vat\":true,\"first_sale_price\":65,\"second_sale_price\":72,\"third_sale_price\":18,\"sale_discount_rate\":21,\"maximum_sale_discount_rate\":24,\"minimum_allowed_sale_price\":76,\"sale_prices_include_vat\":true,\"item_subject_to_vat\":false,\"notes\":\"consequatur\",\"barcode\":\"mqeopfuudtdsufvyvddqa\",\"barcode_type\":\"ITF\",\"expiry_date\":\"2106-11-03\",\"image\":\"mqeopfuudtdsufvyvddqa\",\"color\":\"mniihfqcoynlazghdtqtq\",\"item_type\":\"xbajwbpilpmufinllwloa\",\"active\":false,\"stock_tracking\":false}"
                         },
                         "description": ""
                     },
@@ -4436,7 +4364,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"barcode\":\"consequatur\",\"barcode_type\":\"C128\"}"
+                            "raw": "{\"barcode\":\"consequatur\",\"barcode_type\":\"ITF\"}"
                         },
                         "description": ""
                     },
@@ -4544,7 +4472,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"date_from\":\"2025-09-30T13:03:27\",\"date_to\":\"2106-10-30\",\"transaction_type\":\"sales\",\"per_page\":13,\"sort_by\":\"amount\",\"sort_direction\":\"desc\"}"
+                            "raw": "{\"date_from\":\"2025-10-05T09:46:11\",\"date_to\":\"2106-11-03\",\"transaction_type\":\"purchases\",\"per_page\":13,\"sort_by\":\"date\",\"sort_direction\":\"asc\"}"
                         },
                         "description": ""
                     },
@@ -4600,7 +4528,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"date_from\":\"2025-09-30T13:03:27\",\"date_to\":\"2106-10-30\",\"transaction_type\":\"stock_movements\",\"export_type\":\"transactions\",\"format\":\"pdf\"}"
+                            "raw": "{\"date_from\":\"2025-10-05T09:46:11\",\"date_to\":\"2106-11-03\",\"transaction_type\":\"sales\",\"export_type\":\"multi_sheet\",\"format\":\"csv\"}"
                         },
                         "description": ""
                     },
@@ -5051,7 +4979,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"item_id\":\"consequatur\",\"consumed_quantity\":45,\"produced_quantity\":56,\"labor_cost\":16,\"operating_cost\":50,\"waste_cost\":55,\"formula_name\":\"fuudtdsufvyvddqamniih\",\"formula_description\":\"fqcoynlazghdtqtqxbajw\",\"formula_number\":\"bpilpmufinllwloauydls\",\"selected_purchase_price_type\":\"third\",\"quality_requirements\":\"msjuryvojcybzvrbyickz\",\"requires_inspection\":true,\"status\":\"draft\",\"is_active\":true,\"batch_size\":48,\"production_time_minutes\":36,\"preparation_time_minutes\":87,\"production_notes\":\"gloigmkwxphlvazjrcnfb\",\"preparation_notes\":\"aqywuxhgjjmzuxjubqouz\",\"usage_instructions\":\"swiwxtrkimfcatbxspzmr\",\"tolerance_percentage\":1,\"effective_from\":\"2025-09-30T13:03:28\",\"effective_to\":\"2106-10-30\"}"
+                            "raw": "{\"item_id\":\"consequatur\",\"consumed_quantity\":45,\"produced_quantity\":56,\"labor_cost\":16,\"operating_cost\":50,\"waste_cost\":55,\"formula_name\":\"fuudtdsufvyvddqamniih\",\"formula_description\":\"fqcoynlazghdtqtqxbajw\",\"formula_number\":\"bpilpmufinllwloauydls\",\"selected_purchase_price_type\":\"first\",\"quality_requirements\":\"msjuryvojcybzvrbyickz\",\"requires_inspection\":false,\"status\":\"draft\",\"is_active\":false,\"batch_size\":48,\"production_time_minutes\":36,\"preparation_time_minutes\":87,\"production_notes\":\"gloigmkwxphlvazjrcnfb\",\"preparation_notes\":\"aqywuxhgjjmzuxjubqouz\",\"usage_instructions\":\"swiwxtrkimfcatbxspzmr\",\"tolerance_percentage\":1,\"effective_from\":\"2025-10-05T09:46:12\",\"effective_to\":\"2106-11-03\"}"
                         },
                         "description": ""
                     },
@@ -5815,7 +5743,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"transfer\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-09-30T13:03:26\"}"
+                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"adjustment\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-10-05T09:46:10\"}"
                         },
                         "description": ""
                     },
@@ -5904,7 +5832,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"out\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-09-30T13:03:26\"}"
+                            "raw": "{\"inventory_item_id\":\"consequatur\",\"warehouse_id\":\"consequatur\",\"movement_type\":\"transfer\",\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":17,\"quantity\":45,\"unit_cost\":56,\"total_cost\":16,\"notes\":\"consequatur\",\"movement_date\":\"2025-10-05T09:46:10\"}"
                         },
                         "description": "Update an existing stock movement with new data."
                     },
@@ -6278,7 +6206,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"kilo\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"ton\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"liter\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"active\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"carton\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"piece\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"liter\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -6367,7 +6295,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"kilo\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"ton\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"carton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"active\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"symbol\":\"qxbajwbpi\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"decimal_places\":1,\"balance_unit\":\"liter\",\"custom_balance_unit\":\"tdsufvyvddqamniihfqco\",\"length\":85,\"width\":45,\"height\":40,\"quantity_factor\":1,\"second_unit\":\"kilo\",\"custom_second_unit\":\"zghdtqtqxbajwbpilpmuf\",\"second_unit_contains\":\"inllwloauydlsmsjuryvo\",\"custom_second_unit_contains\":\"jcybzvrbyickznkygloig\",\"second_unit_content\":\"consequatur\",\"second_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"third_unit\":\"ton\",\"custom_third_unit\":\"mniihfqcoynlazghdtqtq\",\"third_unit_contains\":\"xbajwbpilpmufinllwloa\",\"custom_third_unit_contains\":\"uydlsmsjuryvojcybzvrb\",\"third_unit_content\":\"consequatur\",\"third_unit_item_number\":\"mqeopfuudtdsufvyvddqa\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -6950,7 +6878,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"warehouse_number\":\"vmqeopfuudtdsufvyvddq\",\"name\":\"amniihfqcoynlazghdtqt\",\"description\":\"Necessitatibus architecto aut consequatur debitis et id.\",\"address\":\"ilpmufinllwloauydlsms\",\"warehouse_keeper_employee_number\":\"juryvojcybzvrbyickznk\",\"warehouse_keeper_employee_name\":\"ygloigmkwxphlvazjrcnf\",\"warehouse_keeper_id\":17,\"mobile\":\"mqeopfuudtdsufvyv\",\"fax_number\":\"ddqamniihfqcoynla\",\"phone_number\":\"zghdtqtqxbajwbpil\",\"sales_account_id\":17,\"purchase_account_id\":17,\"branch_id\":17,\"department_warehouse_id\":17,\"inventory_valuation_method\":\"third_purchase_price\",\"status\":\"active\"}"
+                            "raw": "{\"warehouse_number\":\"vmqeopfuudtdsufvyvddq\",\"name\":\"amniihfqcoynlazghdtqt\",\"description\":\"Necessitatibus architecto aut consequatur debitis et id.\",\"address\":\"ilpmufinllwloauydlsms\",\"warehouse_keeper_employee_number\":\"juryvojcybzvrbyickznk\",\"warehouse_keeper_employee_name\":\"ygloigmkwxphlvazjrcnf\",\"warehouse_keeper_id\":17,\"mobile\":\"mqeopfuudtdsufvyv\",\"fax_number\":\"ddqamniihfqcoynla\",\"phone_number\":\"zghdtqtqxbajwbpil\",\"sales_account_id\":17,\"purchase_account_id\":17,\"branch_id\":17,\"department_warehouse_id\":17,\"inventory_valuation_method\":\"first_purchase_price\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -7039,7 +6967,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"location\":\"qxbajwbpilpmufinllwlo\",\"warehouse_keeper_employee_number\":\"auydlsmsjuryvojcybzvr\",\"warehouse_keeper_name\":\"byickznkygloigmkwxphl\",\"mobile\":\"vazjrcnfbaqywuxhgjjmz\",\"fax_number\":\"uxjubqouzswiwxtrkimfc\",\"phone_number\":\"atbxspzmrazsroyjpxmqe\",\"purchase_account\":\"sedyghenqcopwvownkbam\",\"sale_account\":\"lnfngefbeilfzsyuxoezb\",\"inventory_valuation_method\":\"second_purchase_price\",\"status\":\"inactive\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"code\":\"amniihfqcoynlazghdtqt\",\"location\":\"qxbajwbpilpmufinllwlo\",\"warehouse_keeper_employee_number\":\"auydlsmsjuryvojcybzvr\",\"warehouse_keeper_name\":\"byickznkygloigmkwxphl\",\"mobile\":\"vazjrcnfbaqywuxhgjjmz\",\"fax_number\":\"uxjubqouzswiwxtrkimfc\",\"phone_number\":\"atbxspzmrazsroyjpxmqe\",\"purchase_account\":\"sedyghenqcopwvownkbam\",\"sale_account\":\"lnfngefbeilfzsyuxoezb\",\"inventory_valuation_method\":\"first_purchase_price\",\"status\":\"inactive\"}"
                         },
                         "description": ""
                     },
@@ -7145,7 +7073,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"field\":\"consequatur\",\"value\":\"consequatur\",\"per_page\":13,\"sort_by\":\"consequatur\",\"sort_direction\":\"desc\"}"
+                            "raw": "{\"field\":\"consequatur\",\"value\":\"consequatur\",\"per_page\":13,\"sort_by\":\"consequatur\",\"sort_direction\":\"asc\"}"
                         },
                         "description": ""
                     },
@@ -7478,19 +7406,19 @@
                                 },
                                 {
                                     "key": "document_category",
-                                    "value": "other",
+                                    "value": "contract",
                                     "type": "text",
                                     "description": ""
                                 },
                                 {
                                     "key": "status",
-                                    "value": "archived",
+                                    "value": "deleted",
                                     "type": "text",
                                     "description": ""
                                 },
                                 {
                                     "key": "upload_date",
-                                    "value": "2025-09-30T13:03:29",
+                                    "value": "2025-10-05T09:46:13",
                                     "type": "text",
                                     "description": "Must be a valid date."
                                 },
@@ -8318,7 +8246,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"exchange_rate\":13,\"reference_type\":\"qeopfuudtdsufvyvddqam\",\"reference_id\":\"niihfqcoynlazghdtqtqx\",\"amount\":2,\"date\":\"2025-09-30T13:03:29\",\"description\":\"Consequatur debitis et id.\"}"
+                            "raw": "{\"project_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"exchange_rate\":13,\"reference_type\":\"qeopfuudtdsufvyvddqam\",\"reference_id\":\"niihfqcoynlazghdtqtqx\",\"amount\":2,\"date\":\"2025-10-05T09:46:13\",\"description\":\"Consequatur debitis et id.\"}"
                         },
                         "description": ""
                     },
@@ -8407,7 +8335,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"exchange_rate\":21,\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":\"mniihfqcoynlazghdtqtq\",\"amount\":23,\"date\":\"2025-09-30T13:03:29\",\"description\":\"Aut consequatur debitis et.\"}"
+                            "raw": "{\"exchange_rate\":21,\"reference_type\":\"mqeopfuudtdsufvyvddqa\",\"reference_id\":\"mniihfqcoynlazghdtqtq\",\"amount\":23,\"date\":\"2025-10-05T09:46:13\",\"description\":\"Aut consequatur debitis et.\"}"
                         },
                         "description": ""
                     },
@@ -9070,7 +8998,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"name\":\"mqeopfuudtdsufvyvddqa\",\"start_date\":\"2106-10-30\",\"status\":\"not_started\",\"milestone_number\":45,\"description\":\"Amet iste laborum eius est dolor dolores.\",\"end_date\":\"2106-10-30\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
+                            "raw": "{\"project_id\":\"consequatur\",\"name\":\"mqeopfuudtdsufvyvddqa\",\"start_date\":\"2106-11-03\",\"status\":\"not_started\",\"milestone_number\":45,\"description\":\"Amet iste laborum eius est dolor dolores.\",\"end_date\":\"2106-11-03\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
                         },
                         "description": ""
                     },
@@ -9159,7 +9087,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"start_date\":\"2025-09-30T13:03:28\",\"status\":\"completed\",\"milestone_number\":2,\"description\":\"Molestias ipsam sit veniam sed fuga aspernatur.\",\"end_date\":\"2106-10-30\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
+                            "raw": "{\"name\":\"vmqeopfuudtdsufvyvddq\",\"start_date\":\"2025-10-05T09:46:12\",\"status\":\"not_started\",\"milestone_number\":2,\"description\":\"Molestias ipsam sit veniam sed fuga aspernatur.\",\"end_date\":\"2106-11-03\",\"progress\":13,\"notes\":\"qeopfuudtdsufvyvddqam\"}"
                         },
                         "description": ""
                     },
@@ -9825,7 +9753,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"company_id\":\"consequatur\",\"branch_id\":\"consequatur\",\"fiscal_year_id\":\"consequatur\",\"cost_center_id\":\"consequatur\",\"customer_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"currency_price\":45,\"include_vat\":true,\"project_number\":\"PRJ-001\",\"name\":\"niihfqcoynlazghdtqtqx\",\"description\":\"Complete website redesign and development\",\"project_value\":12,\"manager_id\":\"consequatur\",\"project_manager_name\":\"John Doe\",\"start_date\":\"2024-01-01\",\"end_date\":\"2024-06-30\",\"status\":\"active\",\"country_id\":\"consequatur\",\"notes\":\"consequatur\",\"customer_name\":\"ABC Company\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"project_name\":\"Website Development\",\"budget\":\"50000.00\"}"
+                            "raw": "{\"company_id\":\"consequatur\",\"branch_id\":\"consequatur\",\"fiscal_year_id\":\"consequatur\",\"cost_center_id\":\"consequatur\",\"customer_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"currency_price\":45,\"include_vat\":false,\"project_number\":\"PRJ-001\",\"name\":\"niihfqcoynlazghdtqtqx\",\"description\":\"Complete website redesign and development\",\"project_value\":12,\"manager_id\":\"consequatur\",\"project_manager_name\":\"John Doe\",\"start_date\":\"2024-01-01\",\"end_date\":\"2024-06-30\",\"status\":\"active\",\"country_id\":\"consequatur\",\"notes\":\"consequatur\",\"customer_name\":\"ABC Company\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"project_name\":\"Website Development\",\"budget\":\"50000.00\"}"
                         },
                         "description": "Create a new project with the provided details."
                     },
@@ -9933,7 +9861,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"currency_price\":73,\"include_vat\":true,\"project_number\":\"mqeopfuudtdsufvyvddqa\",\"name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"project_value\":12,\"project_manager_name\":\"tdsufvyvddqamniihfqco\",\"start_date\":\"2025-09-30T13:03:28\",\"end_date\":\"2106-10-30\",\"status\":\"draft\",\"notes\":\"consequatur\",\"customer_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"budget\":87,\"actual_cost\":13,\"progress\":12}"
+                            "raw": "{\"currency_price\":73,\"include_vat\":false,\"project_number\":\"mqeopfuudtdsufvyvddqa\",\"name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"project_value\":12,\"project_manager_name\":\"tdsufvyvddqamniihfqco\",\"start_date\":\"2025-10-05T09:46:12\",\"end_date\":\"2106-11-03\",\"status\":\"cancelled\",\"notes\":\"consequatur\",\"customer_name\":\"mqeopfuudtdsufvyvddqa\",\"customer_email\":\"eloisa.harber@example.com\",\"customer_phone\":\"fqcoynlazghdtqtqx\",\"licensed_operator\":\"bajwbpilpmufinllwloau\",\"budget\":87,\"actual_cost\":13,\"progress\":12}"
                         },
                         "description": ""
                     },
@@ -10773,7 +10701,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"role\":\"mqeopfuudtdsufvyvddqa\",\"resource_type\":\"consultant\",\"supplier_number\":\"mniihfqcoynlazghdtqtq\",\"supplier_name\":\"xbajwbpilpmufinllwloa\",\"project_number\":\"uydlsmsjuryvojcybzvrb\",\"project_name\":\"yickznkygloigmkwxphlv\",\"allocation_percentage\":1,\"allocation_value\":87,\"notes\":\"jrcnfbaqywuxhgjjmzuxj\",\"status\":\"completed\",\"allocation\":\"ubqouzswiwxtrkimfcatb\"}"
+                            "raw": "{\"project_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"role\":\"mqeopfuudtdsufvyvddqa\",\"resource_type\":\"contractor\",\"supplier_number\":\"mniihfqcoynlazghdtqtq\",\"supplier_name\":\"xbajwbpilpmufinllwloa\",\"project_number\":\"uydlsmsjuryvojcybzvrb\",\"project_name\":\"yickznkygloigmkwxphlv\",\"allocation_percentage\":1,\"allocation_value\":87,\"notes\":\"jrcnfbaqywuxhgjjmzuxj\",\"status\":\"completed\",\"allocation\":\"ubqouzswiwxtrkimfcatb\"}"
                         },
                         "description": ""
                     },
@@ -10862,7 +10790,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"role\":\"vmqeopfuudtdsufvyvddq\",\"resource_type\":\"internal\",\"supplier_number\":\"amniihfqcoynlazghdtqt\",\"supplier_name\":\"qxbajwbpilpmufinllwlo\",\"project_number\":\"auydlsmsjuryvojcybzvr\",\"project_name\":\"byickznkygloigmkwxphl\",\"allocation_percentage\":22,\"allocation_value\":0,\"notes\":\"zjrcnfbaqywuxhgjjmzux\",\"status\":\"active\",\"allocation\":\"jubqouzswiwxtrkimfcat\"}"
+                            "raw": "{\"role\":\"vmqeopfuudtdsufvyvddq\",\"resource_type\":\"consultant\",\"supplier_number\":\"amniihfqcoynlazghdtqt\",\"supplier_name\":\"qxbajwbpilpmufinllwlo\",\"project_number\":\"auydlsmsjuryvojcybzvr\",\"project_name\":\"byickznkygloigmkwxphl\",\"allocation_percentage\":22,\"allocation_value\":0,\"notes\":\"zjrcnfbaqywuxhgjjmzux\",\"status\":\"inactive\",\"allocation\":\"jubqouzswiwxtrkimfcat\"}"
                         },
                         "description": ""
                     },
@@ -11651,7 +11579,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"low\",\"probability\":\"medium\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"open\",\"assigned_to\":17}"
+                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"medium\",\"probability\":\"high\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"mitigated\",\"assigned_to\":17}"
                         },
                         "description": ""
                     },
@@ -11740,7 +11668,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"medium\",\"probability\":\"high\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"closed\",\"assigned_to\":17}"
+                            "raw": "{\"project_id\":17,\"title\":\"mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury\",\"description\":\"Natus ex dicta hic inventore asperiores illum est.\",\"impact\":\"medium\",\"probability\":\"low\",\"mitigation_plan\":\"byickznkygloigmkwxphl\",\"status\":\"mitigated\",\"assigned_to\":17}"
                         },
                         "description": ""
                     },
@@ -12585,7 +12513,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"project_id\":\"consequatur\",\"task_name\":\"mqeopfuudtdsufvyvddqa\",\"assigned_to\":\"consequatur\",\"due_date\":\"2106-10-30\",\"status\":\"in_progress\",\"title\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"medium\",\"start_date\":\"2020-01-26\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
+                            "raw": "{\"project_id\":\"consequatur\",\"task_name\":\"mqeopfuudtdsufvyvddqa\",\"assigned_to\":\"consequatur\",\"due_date\":\"2106-11-03\",\"status\":\"done\",\"title\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"low\",\"start_date\":\"2020-01-31\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
                         },
                         "description": ""
                     },
@@ -12674,7 +12602,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"task_name\":\"vmqeopfuudtdsufvyvddq\",\"due_date\":\"2025-09-30T13:03:28\",\"status\":\"blocked\",\"title\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"urgent\",\"start_date\":\"2025-09-30T13:03:28\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
+                            "raw": "{\"task_name\":\"vmqeopfuudtdsufvyvddq\",\"due_date\":\"2025-10-05T09:46:12\",\"status\":\"in_progress\",\"title\":\"amniihfqcoynlazghdtqt\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"notes\":\"consequatur\",\"priority\":\"high\",\"start_date\":\"2025-10-05T09:46:12\",\"estimated_hours\":13,\"actual_hours\":16,\"progress\":5,\"records\":[\"opfuudtdsufvyvddqamni\"]}"
                         },
                         "description": ""
                     },
@@ -13388,7 +13316,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"supplier_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"journal_number\":17,\"due_date\":\"2106-10-30\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":18,\"checks_paid\":57,\"allowed_discount\":8,\"total_without_tax\":51,\"tax_percentage\":24,\"tax_amount\":45,\"total_amount\":40,\"remaining_balance\":1,\"exchange_rate\":89,\"total_foreign\":21,\"total_local\":26,\"is_tax_inclusive\":true,\"is_tax_applied_to_currency\":true,\"discount_percentage\":4,\"discount_amount\":68,\"notes\":\"qtqxbajwbpilpmufinllw\",\"items\":[{\"item_id\":17,\"account_id\":\"consequatur\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74,\"notes\":\"yvddqamniihfqcoynlazg\"}]}"
+                            "raw": "{\"supplier_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"journal_number\":17,\"due_date\":\"2106-11-03\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":18,\"checks_paid\":57,\"allowed_discount\":8,\"total_without_tax\":51,\"tax_percentage\":24,\"tax_amount\":45,\"total_amount\":40,\"remaining_balance\":1,\"exchange_rate\":89,\"total_foreign\":21,\"total_local\":26,\"is_tax_inclusive\":false,\"is_tax_applied_to_currency\":false,\"discount_percentage\":4,\"discount_amount\":68,\"notes\":\"qtqxbajwbpilpmufinllw\",\"items\":[{\"item_id\":17,\"account_id\":\"consequatur\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74,\"notes\":\"yvddqamniihfqcoynlazg\"}]}"
                         },
                         "description": ""
                     },
@@ -13477,7 +13405,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"supplier_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"journal_number\":17,\"due_date\":\"2106-10-30\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":18,\"checks_paid\":57,\"allowed_discount\":8,\"total_without_tax\":51,\"tax_percentage\":24,\"tax_amount\":45,\"total_amount\":40,\"remaining_balance\":1,\"exchange_rate\":89,\"total_foreign\":21,\"total_local\":26,\"is_tax_inclusive\":false,\"is_tax_applied_to_currency\":true,\"discount_percentage\":4,\"discount_amount\":68,\"notes\":\"qtqxbajwbpilpmufinllw\",\"items\":[{\"item_id\":17,\"account_id\":\"consequatur\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74,\"notes\":\"yvddqamniihfqcoynlazg\"}]}"
+                            "raw": "{\"supplier_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"journal_number\":17,\"due_date\":\"2106-11-03\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":18,\"checks_paid\":57,\"allowed_discount\":8,\"total_without_tax\":51,\"tax_percentage\":24,\"tax_amount\":45,\"total_amount\":40,\"remaining_balance\":1,\"exchange_rate\":89,\"total_foreign\":21,\"total_local\":26,\"is_tax_inclusive\":false,\"is_tax_applied_to_currency\":true,\"discount_percentage\":4,\"discount_amount\":68,\"notes\":\"qtqxbajwbpilpmufinllw\",\"items\":[{\"item_id\":17,\"account_id\":\"consequatur\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74,\"notes\":\"yvddqamniihfqcoynlazg\"}]}"
                         },
                         "description": ""
                     },
@@ -14027,7 +13955,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"currency_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"quotation_number\":\"mqeopfuudtdsufvyvddqa\",\"invoice_number\":\"mniihfqcoynlazghdtqtq\",\"date\":\"2025-09-30T13:03:29\",\"time\":\"13:03:29\",\"due_date\":\"2106-10-30\",\"customer_number\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"customer_email\":\"ablanda@example.org\",\"customer_mobile\":\"wbpilpmufinllwloa\",\"supplier_name\":\"uydlsmsjuryvojcybzvrb\",\"licensed_operator\":\"yickznkygloigmkwxphlv\",\"journal_id\":17,\"journal_number\":17,\"ledger_code\":\"mqeopfuudtdsufvyvddqa\",\"ledger_number\":17,\"ledger_invoice_count\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"discount_percentage\":14,\"discount_amount\":55,\"total_without_tax\":19,\"tax_percentage\":20,\"tax_amount\":70,\"total_amount\":12,\"grand_total\":66,\"remaining_balance\":13,\"exchange_rate\":65,\"currency_rate\":72,\"currency_rate_with_tax\":18,\"is_tax_applied_to_currency\":true,\"total_foreign\":74,\"total_local\":87,\"notes\":\"consequatur\",\"items\":[{\"serial_number\":17,\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":4,\"discount_percentage\":18,\"discount_amount\":72,\"tax_rate\":6,\"total_foreign\":74,\"total_local\":87,\"total\":76,\"notes\":\"consequatur\"}]}"
+                            "raw": "{\"currency_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"quotation_number\":\"mqeopfuudtdsufvyvddqa\",\"invoice_number\":\"mniihfqcoynlazghdtqtq\",\"date\":\"2025-10-05T09:46:14\",\"time\":\"09:46:14\",\"due_date\":\"2106-11-03\",\"customer_number\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"customer_email\":\"ablanda@example.org\",\"customer_mobile\":\"wbpilpmufinllwloa\",\"supplier_name\":\"uydlsmsjuryvojcybzvrb\",\"licensed_operator\":\"yickznkygloigmkwxphlv\",\"journal_id\":17,\"journal_number\":17,\"ledger_code\":\"mqeopfuudtdsufvyvddqa\",\"ledger_number\":17,\"ledger_invoice_count\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"discount_percentage\":14,\"discount_amount\":55,\"total_without_tax\":19,\"tax_percentage\":20,\"tax_amount\":70,\"total_amount\":12,\"grand_total\":66,\"remaining_balance\":13,\"exchange_rate\":65,\"currency_rate\":72,\"currency_rate_with_tax\":18,\"is_tax_applied_to_currency\":false,\"total_foreign\":74,\"total_local\":87,\"notes\":\"consequatur\",\"items\":[{\"serial_number\":17,\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":4,\"discount_percentage\":18,\"discount_amount\":72,\"tax_rate\":6,\"total_foreign\":74,\"total_local\":87,\"total\":76,\"notes\":\"consequatur\"}]}"
                         },
                         "description": ""
                     },
@@ -14116,7 +14044,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"currency_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"quotation_number\":\"mqeopfuudtdsufvyvddqa\",\"invoice_number\":\"mniihfqcoynlazghdtqtq\",\"date\":\"2025-09-30T13:03:29\",\"time\":\"13:03:29\",\"due_date\":\"2106-10-30\",\"customer_number\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"customer_email\":\"ablanda@example.org\",\"customer_mobile\":\"wbpilpmufinllwloa\",\"supplier_name\":\"uydlsmsjuryvojcybzvrb\",\"licensed_operator\":\"yickznkygloigmkwxphlv\",\"journal_id\":17,\"journal_number\":17,\"ledger_code\":\"mqeopfuudtdsufvyvddqa\",\"ledger_number\":17,\"ledger_invoice_count\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"discount_percentage\":14,\"discount_amount\":55,\"total_without_tax\":19,\"tax_percentage\":20,\"tax_amount\":70,\"total_amount\":12,\"grand_total\":66,\"remaining_balance\":13,\"exchange_rate\":65,\"currency_rate\":72,\"currency_rate_with_tax\":18,\"is_tax_applied_to_currency\":true,\"total_foreign\":74,\"total_local\":87,\"notes\":\"consequatur\",\"items\":[{\"serial_number\":17,\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":4,\"discount_percentage\":18,\"discount_amount\":72,\"tax_rate\":6,\"total_foreign\":74,\"total_local\":87,\"total\":76,\"notes\":\"consequatur\"}]}"
+                            "raw": "{\"currency_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"quotation_number\":\"mqeopfuudtdsufvyvddqa\",\"invoice_number\":\"mniihfqcoynlazghdtqtq\",\"date\":\"2025-10-05T09:46:14\",\"time\":\"09:46:14\",\"due_date\":\"2106-11-03\",\"customer_number\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"customer_email\":\"ablanda@example.org\",\"customer_mobile\":\"wbpilpmufinllwloa\",\"supplier_name\":\"uydlsmsjuryvojcybzvrb\",\"licensed_operator\":\"yickznkygloigmkwxphlv\",\"journal_id\":17,\"journal_number\":17,\"ledger_code\":\"mqeopfuudtdsufvyvddqa\",\"ledger_number\":17,\"ledger_invoice_count\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"discount_percentage\":14,\"discount_amount\":55,\"total_without_tax\":19,\"tax_percentage\":20,\"tax_amount\":70,\"total_amount\":12,\"grand_total\":66,\"remaining_balance\":13,\"exchange_rate\":65,\"currency_rate\":72,\"currency_rate_with_tax\":18,\"is_tax_applied_to_currency\":false,\"total_foreign\":74,\"total_local\":87,\"notes\":\"consequatur\",\"items\":[{\"serial_number\":17,\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":4,\"discount_percentage\":18,\"discount_amount\":72,\"tax_rate\":6,\"total_foreign\":74,\"total_local\":87,\"total\":76,\"notes\":\"consequatur\"}]}"
                         },
                         "description": ""
                     },
@@ -14177,7 +14105,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"quotation_number\":\"vmqeopfuudtdsufvyvddq\",\"quotation_number_from\":\"amniihfqcoynlazghdtqt\",\"quotation_number_to\":\"qxbajwbpilpmufinllwlo\",\"invoice_number\":\"auydlsmsjuryvojcybzvr\",\"supplier_name\":\"byickznkygloigmkwxphl\",\"date\":\"2025-09-30T13:03:29\",\"date_from\":\"2025-09-30T13:03:29\",\"date_to\":\"2106-10-30\",\"amount\":45,\"amount_from\":56,\"amount_to\":16,\"licensed_operator\":\"opfuudtdsufvyvddqamni\",\"status\":\"approved\",\"customer_name\":\"ihfqcoynlazghdtqtqxba\",\"ledger_code\":\"jwbpilpmufinllwloauyd\",\"ledger_number\":41,\"due_date\":\"2025-09-30T13:03:29\",\"due_date_from\":\"2025-09-30T13:03:29\",\"due_date_to\":\"2106-10-30\",\"search\":\"mqeopfuudtdsufvyvddqa\",\"sort_by\":\"ledger_number\",\"sort_order\":\"desc\",\"per_page\":13,\"paginate\":true}"
+                            "raw": "{\"quotation_number\":\"vmqeopfuudtdsufvyvddq\",\"quotation_number_from\":\"amniihfqcoynlazghdtqt\",\"quotation_number_to\":\"qxbajwbpilpmufinllwlo\",\"invoice_number\":\"auydlsmsjuryvojcybzvr\",\"supplier_name\":\"byickznkygloigmkwxphl\",\"date\":\"2025-10-05T09:46:14\",\"date_from\":\"2025-10-05T09:46:14\",\"date_to\":\"2106-11-03\",\"amount\":45,\"amount_from\":56,\"amount_to\":16,\"licensed_operator\":\"opfuudtdsufvyvddqamni\",\"status\":\"approved\",\"customer_name\":\"ihfqcoynlazghdtqtqxba\",\"ledger_code\":\"jwbpilpmufinllwloauyd\",\"ledger_number\":41,\"due_date\":\"2025-10-05T09:46:14\",\"due_date_from\":\"2025-10-05T09:46:14\",\"due_date_to\":\"2106-11-03\",\"search\":\"mqeopfuudtdsufvyvddqa\",\"sort_by\":\"created_at\",\"sort_order\":\"asc\",\"per_page\":13,\"paginate\":true}"
                         },
                         "description": ""
                     },
@@ -14546,7 +14474,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"journal_number\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74}]}"
+                            "raw": "{\"branch_id\":17,\"customer_id\":\"consequatur\",\"supplier_id\":17,\"journal_number\":17,\"due_date\":\"2025-10-05T09:46:14\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"consequatur\",\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"is_tax_applied_to_currency\":false,\"discount_percentage\":65,\"discount_amount\":72,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"account_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74,\"notes\":\"consequatur\"}]}"
                         },
                         "description": ""
                     },
@@ -14633,7 +14561,10 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"branch_id\":17,\"customer_id\":\"consequatur\",\"supplier_id\":17,\"journal_number\":17,\"due_date\":\"2025-10-05T09:46:14\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"consequatur\",\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"is_tax_applied_to_currency\":true,\"discount_percentage\":65,\"discount_amount\":72,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"account_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74,\"notes\":\"consequatur\"}]}"
+                        },
                         "description": "Updates shipment data with comprehensive validation and relationship handling."
                     },
                     "response": []
@@ -14744,7 +14675,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"due_date\":\"2106-10-30\",\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"currency_id\":\"consequatur\",\"exchange_rate\":45,\"is_tax_inclusive\":false,\"notes\":\"qeopfuudtdsufvyvddqam\",\"cash_paid\":46,\"checks_paid\":28,\"allowed_discount\":30,\"discount_percentage\":8,\"tax_percentage\":6,\"items\":[{\"item_id\":\"consequatur\",\"unit_id\":\"consequatur\",\"quantity\":45,\"unit_price\":56,\"discount_rate\":5,\"tax_rate\":14,\"description\":\"Eius est dolor dolores minus voluptatem quisquam.\"}]}"
+                            "raw": "{\"branch_id\":17,\"supplier_id\":17,\"journal_number\":17,\"due_date\":\"2025-10-05T09:46:14\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"consequatur\",\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"is_tax_applied_to_currency\":false,\"discount_percentage\":65,\"discount_amount\":72,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"account_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74,\"notes\":\"consequatur\"}]}"
                         },
                         "description": ""
                     },
@@ -14831,7 +14762,10 @@
                                 "value": "application\/json"
                             }
                         ],
-                        "body": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"branch_id\":17,\"supplier_id\":17,\"journal_number\":17,\"due_date\":\"2025-10-05T09:46:14\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"consequatur\",\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"is_tax_applied_to_currency\":false,\"discount_percentage\":65,\"discount_amount\":72,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"account_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74,\"notes\":\"consequatur\"}]}"
+                        },
                         "description": "Updates invoice data with comprehensive validation and relationship handling."
                     },
                     "response": []
@@ -14942,7 +14876,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"customer_number\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"customer_email\":\"ablanda@example.org\",\"customer_mobile\":\"wbpilpmufinllwloa\",\"licensed_operator\":\"uydlsmsjuryvojcybzvrb\",\"date\":\"2025-09-30T13:03:29\",\"time\":\"13:03:29\",\"due_date\":\"2106-10-30\",\"exchange_rate\":45,\"cash_paid\":56,\"checks_paid\":16,\"allowed_discount\":50,\"discount_percentage\":16,\"discount_amount\":19,\"total_without_tax\":70,\"tax_percentage\":20,\"tax_amount\":12,\"is_tax_inclusive\":false,\"total_amount\":66,\"remaining_balance\":13,\"total_foreign\":65,\"total_local\":72,\"notes\":\"fvyvddqamniihfqcoynla\",\"items\":[{\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"discount_percentage\":4,\"discount_amount\":40,\"tax_rate\":18,\"description\":\"Nihil autem omnis cum molestiae vel.\",\"total_without_tax\":51,\"total_foreign\":32,\"total_local\":7,\"total\":86}]}"
+                            "raw": "{\"customer_id\":\"consequatur\",\"customer_number\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"customer_email\":\"ablanda@example.org\",\"customer_mobile\":\"wbpilpmufinllwloa\",\"licensed_operator\":\"uydlsmsjuryvojcybzvrb\",\"date\":\"2025-10-05T09:46:14\",\"time\":\"09:46:14\",\"due_date\":\"2106-11-03\",\"exchange_rate\":45,\"cash_paid\":56,\"checks_paid\":16,\"allowed_discount\":50,\"discount_percentage\":16,\"discount_amount\":19,\"total_without_tax\":70,\"tax_percentage\":20,\"tax_amount\":12,\"is_tax_inclusive\":false,\"total_amount\":66,\"remaining_balance\":13,\"total_foreign\":65,\"total_local\":72,\"notes\":\"fvyvddqamniihfqcoynla\",\"items\":[{\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"discount_percentage\":4,\"discount_amount\":40,\"tax_rate\":18,\"description\":\"Nihil autem omnis cum molestiae vel.\",\"total_without_tax\":51,\"total_foreign\":32,\"total_local\":7,\"total\":86}]}"
                         },
                         "description": ""
                     },
@@ -15031,7 +14965,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"customer_number\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"customer_email\":\"ablanda@example.org\",\"customer_mobile\":\"wbpilpmufinllwloa\",\"licensed_operator\":\"uydlsmsjuryvojcybzvrb\",\"date\":\"2025-09-30T13:03:29\",\"time\":\"13:03:29\",\"due_date\":\"2106-10-30\",\"exchange_rate\":45,\"cash_paid\":56,\"checks_paid\":16,\"allowed_discount\":50,\"discount_percentage\":16,\"discount_amount\":19,\"total_without_tax\":70,\"tax_percentage\":20,\"tax_amount\":12,\"is_tax_inclusive\":true,\"total_amount\":66,\"remaining_balance\":13,\"total_foreign\":65,\"total_local\":72,\"notes\":\"fvyvddqamniihfqcoynla\",\"items\":[{\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"discount_percentage\":4,\"discount_amount\":40,\"tax_rate\":18,\"description\":\"Nihil autem omnis cum molestiae vel.\",\"total_without_tax\":51,\"total_foreign\":32,\"total_local\":7,\"total\":86}]}"
+                            "raw": "{\"customer_id\":\"consequatur\",\"customer_number\":\"mqeopfuudtdsufvyvddqa\",\"customer_name\":\"mniihfqcoynlazghdtqtq\",\"customer_email\":\"ablanda@example.org\",\"customer_mobile\":\"wbpilpmufinllwloa\",\"licensed_operator\":\"uydlsmsjuryvojcybzvrb\",\"date\":\"2025-10-05T09:46:14\",\"time\":\"09:46:14\",\"due_date\":\"2106-11-03\",\"exchange_rate\":45,\"cash_paid\":56,\"checks_paid\":16,\"allowed_discount\":50,\"discount_percentage\":16,\"discount_amount\":19,\"total_without_tax\":70,\"tax_percentage\":20,\"tax_amount\":12,\"is_tax_inclusive\":true,\"total_amount\":66,\"remaining_balance\":13,\"total_foreign\":65,\"total_local\":72,\"notes\":\"fvyvddqamniihfqcoynla\",\"items\":[{\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"discount_percentage\":4,\"discount_amount\":40,\"tax_rate\":18,\"description\":\"Nihil autem omnis cum molestiae vel.\",\"total_without_tax\":51,\"total_foreign\":32,\"total_local\":7,\"total\":86}]}"
                         },
                         "description": ""
                     },
@@ -15581,8 +15515,33 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"supplier_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"journal_number\":17,\"due_date\":\"2106-10-30\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":18,\"checks_paid\":57,\"allowed_discount\":8,\"total_without_tax\":51,\"tax_percentage\":24,\"tax_amount\":45,\"total_amount\":40,\"remaining_balance\":1,\"exchange_rate\":89,\"total_foreign\":21,\"total_local\":26,\"is_tax_inclusive\":false,\"is_tax_applied_to_currency\":true,\"is_tax_applied_to_currency_rate\":true,\"discount_percentage\":4,\"discount_amount\":68,\"notes\":\"qtqxbajwbpilpmufinllw\",\"items\":[{\"item_id\":\"consequatur\",\"quantity\":45,\"unit_price\":56,\"notes\":\"eopfuudtdsufvyvddqamn\"}]}"
+                            "raw": "{\"company_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"journal_number\":17,\"due_date\":\"2080-04-11\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":18,\"checks_paid\":57,\"allowed_discount\":8,\"total_without_tax\":51,\"tax_percentage\":24,\"tax_amount\":45,\"total_amount\":40,\"remaining_balance\":1,\"exchange_rate\":89,\"total_foreign\":21,\"total_local\":26,\"is_tax_inclusive\":false,\"is_tax_applied_to_currency\":false,\"is_tax_applied_to_currency_rate\":false,\"discount_percentage\":4,\"discount_amount\":68,\"notes\":\"qtqxbajwbpilpmufinllw\",\"items\":[{\"item_id\":\"consequatur\",\"quantity\":45,\"unit_price\":56,\"notes\":\"eopfuudtdsufvyvddqamn\"}]}"
                         },
+                        "description": ""
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Debug endpoint to test purchase reference invoice creation without form request validation",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/purchase\/purchase-reference-invoices\/debug-create",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/purchase\/purchase-reference-invoices\/debug-create"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
                         "description": ""
                     },
                     "response": []
@@ -15670,7 +15629,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"supplier_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"journal_number\":17,\"due_date\":\"2106-10-30\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":18,\"checks_paid\":57,\"allowed_discount\":8,\"total_without_tax\":51,\"tax_percentage\":24,\"tax_amount\":45,\"total_amount\":40,\"remaining_balance\":1,\"exchange_rate\":89,\"total_foreign\":21,\"total_local\":26,\"is_tax_inclusive\":false,\"is_tax_applied_to_currency\":true,\"is_tax_applied_to_currency_rate\":true,\"discount_percentage\":4,\"discount_amount\":68,\"notes\":\"qtqxbajwbpilpmufinllw\",\"items\":[{\"item_id\":\"consequatur\",\"quantity\":45,\"unit_price\":56,\"notes\":\"eopfuudtdsufvyvddqamn\"}]}"
+                            "raw": "{\"company_id\":\"consequatur\",\"supplier_id\":\"consequatur\",\"currency_id\":\"consequatur\",\"journal_number\":17,\"due_date\":\"2080-04-11\",\"supplier_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":18,\"checks_paid\":57,\"allowed_discount\":8,\"total_without_tax\":51,\"tax_percentage\":24,\"tax_amount\":45,\"total_amount\":40,\"remaining_balance\":1,\"exchange_rate\":89,\"total_foreign\":21,\"total_local\":26,\"is_tax_inclusive\":false,\"is_tax_applied_to_currency\":true,\"is_tax_applied_to_currency_rate\":false,\"discount_percentage\":4,\"discount_amount\":68,\"notes\":\"qtqxbajwbpilpmufinllw\",\"items\":[{\"item_id\":\"consequatur\",\"quantity\":45,\"unit_price\":56,\"notes\":\"eopfuudtdsufvyvddqamn\"}]}"
                         },
                         "description": ""
                     },
@@ -16220,7 +16179,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"journal_number\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74}]}"
+                            "raw": "{\"branch_id\":17,\"supplier_id\":\"consequatur\",\"journal_number\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74}]}"
                         },
                         "description": ""
                     },
@@ -16309,7 +16268,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"journal_number\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74}]}"
+                            "raw": "{\"branch_id\":17,\"supplier_id\":\"consequatur\",\"journal_number\":17,\"cash_paid\":45,\"checks_paid\":56,\"allowed_discount\":16,\"total_without_tax\":50,\"tax_percentage\":55,\"tax_amount\":19,\"total_amount\":70,\"remaining_balance\":70,\"exchange_rate\":12,\"total_foreign\":66,\"total_local\":13,\"notes\":\"consequatur\",\"items\":[{\"item_id\":17,\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"quantity\":12,\"unit_price\":66,\"discount_rate\":13,\"tax_rate\":65,\"total_foreign\":72,\"total_local\":18,\"total\":74}]}"
                         },
                         "description": ""
                     },
@@ -16797,44 +16756,6 @@
                     ]
                 },
                 {
-                    "name": "Get licensed operators for dropdown",
-                    "request": {
-                        "url": {
-                            "host": "{{baseUrl}}",
-                            "path": "api\/v1\/sales-management\/helpers\/licensed-operators",
-                            "query": [],
-                            "raw": "{{baseUrl}}\/api\/v1\/sales-management\/helpers\/licensed-operators"
-                        },
-                        "method": "GET",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application\/json"
-                            },
-                            {
-                                "key": "Accept",
-                                "value": "application\/json"
-                            }
-                        ],
-                        "body": null,
-                        "description": "Retrieve a list of unique licensed operators from the customers database for dropdown selection."
-                    },
-                    "response": [
-                        {
-                            "header": [],
-                            "code": 200,
-                            "body": "{\n  \"success\": true,\n  \"data\": [\n    \"Operator A\",\n    \"Operator B\",\n    \"Operator C\"\n  ]\n}",
-                            "name": ""
-                        },
-                        {
-                            "header": [],
-                            "code": 500,
-                            "body": "{\n  \"success\": false,\n  \"message\": \"Error fetching licensed operators: Database error\"\n}",
-                            "name": ""
-                        }
-                    ]
-                },
-                {
                     "name": "Get customer details by ID",
                     "request": {
                         "url": {
@@ -17070,7 +16991,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"branch_id\":17,\"currency_id\":17,\"employee_id\":17,\"customer_id\":17,\"journal_id\":17,\"journal_number\":45,\"book_code\":\"qeopfuudtdsufvyvddqam\",\"invoice_number\":\"niihfqcoynlazghdtqtqx\",\"date\":\"2025-09-30T13:03:30\",\"time\":\"13:03:30\",\"due_date\":\"2106-10-30\",\"customer_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":6,\"checks_paid\":16,\"allowed_discount\":3,\"discount_percentage\":15,\"total_without_tax\":24,\"tax_percentage\":13,\"tax_amount\":12,\"total_amount\":1,\"remaining_balance\":25,\"exchange_rate\":6,\"total_foreign\":8,\"total_local\":4,\"is_tax_inclusive\":true,\"notes\":\"tqtqxbajwbpilpmufinll\",\"items\":[{\"item_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"description\":\"A qui ducimus nihil laudantium nihil autem omnis.\",\"quantity\":17,\"unit_price\":24,\"discount_rate\":21,\"discount_percentage\":15,\"discount_amount\":9,\"tax_rate\":3,\"total_foreign\":24,\"total_local\":2,\"total\":25}]}"
+                            "raw": "{\"company_id\":17,\"branch_id\":17,\"currency_id\":17,\"employee_id\":17,\"customer_id\":17,\"journal_id\":17,\"journal_number\":45,\"book_code\":\"qeopfuudtdsufvyvddqam\",\"invoice_number\":\"niihfqcoynlazghdtqtqx\",\"date\":\"2025-10-05T09:46:15\",\"time\":\"09:46:15\",\"due_date\":\"2106-11-03\",\"customer_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":6,\"checks_paid\":16,\"allowed_discount\":3,\"discount_percentage\":15,\"total_without_tax\":24,\"tax_percentage\":13,\"tax_amount\":12,\"total_amount\":1,\"remaining_balance\":25,\"exchange_rate\":6,\"total_foreign\":8,\"total_local\":4,\"is_tax_inclusive\":true,\"notes\":\"tqtqxbajwbpilpmufinll\",\"items\":[{\"item_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"description\":\"A qui ducimus nihil laudantium nihil autem omnis.\",\"quantity\":17,\"unit_price\":24,\"discount_rate\":21,\"discount_percentage\":15,\"discount_amount\":9,\"tax_rate\":3,\"total_foreign\":24,\"total_local\":2,\"total\":25}]}"
                         },
                         "description": ""
                     },
@@ -17159,7 +17080,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"branch_id\":17,\"currency_id\":17,\"employee_id\":17,\"customer_id\":17,\"journal_id\":17,\"journal_number\":45,\"book_code\":\"qeopfuudtdsufvyvddqam\",\"invoice_number\":\"niihfqcoynlazghdtqtqx\",\"date\":\"2025-09-30T13:03:30\",\"time\":\"13:03:30\",\"due_date\":\"2106-10-30\",\"customer_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":6,\"checks_paid\":16,\"allowed_discount\":3,\"discount_percentage\":15,\"total_without_tax\":24,\"tax_percentage\":13,\"tax_amount\":12,\"total_amount\":1,\"remaining_balance\":25,\"exchange_rate\":6,\"total_foreign\":8,\"total_local\":4,\"is_tax_inclusive\":false,\"notes\":\"tqtqxbajwbpilpmufinll\",\"items\":[{\"item_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"description\":\"A qui ducimus nihil laudantium nihil autem omnis.\",\"quantity\":17,\"unit_price\":24,\"discount_rate\":21,\"discount_percentage\":15,\"discount_amount\":9,\"tax_rate\":3,\"total_foreign\":24,\"total_local\":2,\"total\":25}]}"
+                            "raw": "{\"company_id\":17,\"branch_id\":17,\"currency_id\":17,\"employee_id\":17,\"customer_id\":17,\"journal_id\":17,\"journal_number\":45,\"book_code\":\"qeopfuudtdsufvyvddqam\",\"invoice_number\":\"niihfqcoynlazghdtqtqx\",\"date\":\"2025-10-05T09:46:15\",\"time\":\"09:46:15\",\"due_date\":\"2106-11-03\",\"customer_email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":6,\"checks_paid\":16,\"allowed_discount\":3,\"discount_percentage\":15,\"total_without_tax\":24,\"tax_percentage\":13,\"tax_amount\":12,\"total_amount\":1,\"remaining_balance\":25,\"exchange_rate\":6,\"total_foreign\":8,\"total_local\":4,\"is_tax_inclusive\":true,\"notes\":\"tqtqxbajwbpilpmufinll\",\"items\":[{\"item_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"description\":\"A qui ducimus nihil laudantium nihil autem omnis.\",\"quantity\":17,\"unit_price\":24,\"discount_rate\":21,\"discount_percentage\":15,\"discount_amount\":9,\"tax_rate\":3,\"total_foreign\":24,\"total_local\":2,\"total\":25}]}"
                         },
                         "description": ""
                     },
@@ -17463,6 +17384,51 @@
             "description": "\nAPIs for managing outgoing sales offers, including offer creation, tracking, and conversion to orders.",
             "item": [
                 {
+                    "name": "Get form data for creating outgoing offers",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/v1\/sales-management\/outgoing-offers\/form-data",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/v1\/sales-management\/outgoing-offers\/form-data"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": ""
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 404,
+                            "body": "{\n    \"message\": \"The route api\/v1\/sales-management\/outgoing-offers\/form-data could not be found.\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
                     "name": "Display a listing of the resource.",
                     "request": {
                         "url": {
@@ -17529,7 +17495,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"branch_id\":17,\"currency_id\":17,\"employee_id\":17,\"customer_id\":17,\"journal_id\":17,\"code\":\"mqeopfuudtdsufvyvddqa\",\"journal_number\":45,\"invoice_number\":\"niihfqcoynlazghdtqtqx\",\"date\":\"2025-09-30T13:03:30\",\"time\":\"13:03:30\",\"due_date\":\"2106-10-30\",\"email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":6,\"checks_paid\":16,\"allowed_discount\":3,\"total_without_tax\":15,\"tax_percentage\":24,\"tax_amount\":13,\"total_amount\":12,\"remaining_balance\":1,\"exchange_rate\":25,\"total_foreign\":6,\"total_local\":8,\"notes\":\"dtqtqxbajwbpilpmufinl\",\"items\":[{\"item_id\":17,\"unit_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Architecto aut consequatur debitis et id nisi qui.\",\"quantity\":16,\"unit_price\":12,\"discount_rate\":20,\"tax_rate\":6,\"total_foreign\":8,\"total_local\":14,\"total\":11}]}"
+                            "raw": "{\"branch_id\":17,\"currency_id\":17,\"employee_id\":17,\"customer_id\":17,\"journal_id\":17,\"code\":\"mqeopfuudtdsufvyvddqa\",\"journal_number\":45,\"invoice_number\":\"niihfqcoynlazghdtqtqx\",\"date\":\"2025-10-05T09:46:15\",\"time\":\"09:46:15\",\"due_date\":\"2106-11-03\",\"email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":6,\"checks_paid\":16,\"allowed_discount\":3,\"total_without_tax\":15,\"tax_percentage\":24,\"tax_amount\":13,\"total_amount\":12,\"remaining_balance\":1,\"exchange_rate\":25,\"total_foreign\":6,\"total_local\":8,\"notes\":\"dtqtqxbajwbpilpmufinl\",\"items\":[{\"item_id\":17,\"unit_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Architecto aut consequatur debitis et id nisi qui.\",\"quantity\":16,\"unit_price\":12,\"discount_rate\":20,\"tax_rate\":6,\"total_foreign\":8,\"total_local\":14,\"total\":11}]}"
                         },
                         "description": ""
                     },
@@ -17618,7 +17584,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"branch_id\":17,\"currency_id\":17,\"employee_id\":17,\"customer_id\":17,\"journal_id\":17,\"code\":\"mqeopfuudtdsufvyvddqa\",\"journal_number\":45,\"invoice_number\":\"niihfqcoynlazghdtqtqx\",\"date\":\"2025-09-30T13:03:30\",\"time\":\"13:03:30\",\"due_date\":\"2106-10-30\",\"email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":6,\"checks_paid\":16,\"allowed_discount\":3,\"total_without_tax\":15,\"tax_percentage\":24,\"tax_amount\":13,\"total_amount\":12,\"remaining_balance\":1,\"exchange_rate\":25,\"total_foreign\":6,\"total_local\":8,\"notes\":\"dtqtqxbajwbpilpmufinl\",\"items\":[{\"item_id\":17,\"unit_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Architecto aut consequatur debitis et id nisi qui.\",\"quantity\":16,\"unit_price\":12,\"discount_rate\":20,\"tax_rate\":6,\"total_foreign\":8,\"total_local\":14,\"total\":11}]}"
+                            "raw": "{\"branch_id\":17,\"currency_id\":17,\"employee_id\":17,\"customer_id\":17,\"journal_id\":17,\"code\":\"mqeopfuudtdsufvyvddqa\",\"journal_number\":45,\"invoice_number\":\"niihfqcoynlazghdtqtqx\",\"date\":\"2025-10-05T09:46:15\",\"time\":\"09:46:15\",\"due_date\":\"2106-11-03\",\"email\":\"carolyne.luettgen@example.org\",\"licensed_operator\":\"fuudtdsufvyvddqamniih\",\"cash_paid\":6,\"checks_paid\":16,\"allowed_discount\":3,\"total_without_tax\":15,\"tax_percentage\":24,\"tax_amount\":13,\"total_amount\":12,\"remaining_balance\":1,\"exchange_rate\":25,\"total_foreign\":6,\"total_local\":8,\"notes\":\"dtqtqxbajwbpilpmufinl\",\"items\":[{\"item_id\":17,\"unit_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"description\":\"Architecto aut consequatur debitis et id nisi qui.\",\"quantity\":16,\"unit_price\":12,\"discount_rate\":20,\"tax_rate\":6,\"total_foreign\":8,\"total_local\":14,\"total\":11}]}"
                         },
                         "description": ""
                     },
@@ -17829,7 +17795,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-10-30\",\"notes\":\"consequatur\",\"status\":\"draft\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"items\":[{\"item_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_id\":\"consequatur\",\"unit_name\":\"mqeopfuudtdsufvyvddqa\",\"quantity\":45,\"warehouse_id\":\"consequatur\",\"notes\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"unit_price\":12,\"discount_rate\":66,\"tax_rate\":13,\"total_foreign\":65,\"total_local\":72,\"total\":18}],\"total_local\":73}"
+                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"currency_id\":\"consequatur\",\"due_date\":\"2106-11-03\",\"notes\":\"consequatur\",\"status\":\"delivered\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"items\":[{\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_id\":\"consequatur\",\"unit_name\":\"mqeopfuudtdsufvyvddqa\",\"quantity\":45,\"warehouse_id\":\"consequatur\",\"notes\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"unit_price\":12,\"discount_rate\":66,\"tax_rate\":13,\"total_foreign\":65,\"total_local\":72,\"total\":18}],\"total_local\":73}"
                         },
                         "description": ""
                     },
@@ -17918,7 +17884,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-10-30\",\"notes\":\"consequatur\",\"status\":\"delivered\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"items\":[{\"item_id\":17,\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_id\":\"consequatur\",\"unit_name\":\"mqeopfuudtdsufvyvddqa\",\"quantity\":45,\"warehouse_id\":\"consequatur\",\"notes\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"unit_price\":12,\"discount_rate\":66,\"tax_rate\":13,\"total_foreign\":65,\"total_local\":72,\"total\":18}],\"total_local\":73}"
+                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"currency_id\":\"consequatur\",\"due_date\":\"2106-11-03\",\"notes\":\"consequatur\",\"status\":\"shipped\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"items\":[{\"item_id\":\"consequatur\",\"item_number\":\"mqeopfuudtdsufvyvddqa\",\"item_name\":\"mniihfqcoynlazghdtqtq\",\"unit_id\":\"consequatur\",\"unit_name\":\"mqeopfuudtdsufvyvddqa\",\"quantity\":45,\"warehouse_id\":\"consequatur\",\"notes\":\"mqeopfuudtdsufvyvddqa\",\"description\":\"Dolores dolorum amet iste laborum eius est dolor.\",\"unit_price\":12,\"discount_rate\":66,\"tax_rate\":13,\"total_foreign\":65,\"total_local\":72,\"total\":18}],\"total_local\":73}"
                         },
                         "description": ""
                     },
@@ -19058,7 +19024,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-10-30\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"notes\":\"mniihfqcoynlazghdtqtq\",\"is_tax_inclusive\":true,\"tax_percentage\":23,\"items\":[{\"account_id\":\"consequatur\",\"account_number\":\"mqeopfuudtdsufvyvddqa\",\"account_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"apply_tax\":true,\"notes\":\"dlsmsjuryvojcybzvrbyi\"}]}"
+                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-11-03\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"notes\":\"mniihfqcoynlazghdtqtq\",\"is_tax_inclusive\":true,\"tax_percentage\":23,\"items\":[{\"item_id\":\"consequatur\",\"account_id\":\"consequatur\",\"account_number\":\"mqeopfuudtdsufvyvddqa\",\"account_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"apply_tax\":true,\"notes\":\"dlsmsjuryvojcybzvrbyi\"}]}"
                         },
                         "description": ""
                     },
@@ -19147,7 +19113,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-10-30\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"notes\":\"mniihfqcoynlazghdtqtq\",\"is_tax_inclusive\":true,\"tax_percentage\":23,\"items\":[{\"account_id\":\"consequatur\",\"account_number\":\"mqeopfuudtdsufvyvddqa\",\"account_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"apply_tax\":true,\"notes\":\"dlsmsjuryvojcybzvrbyi\"}]}"
+                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-11-03\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"notes\":\"mniihfqcoynlazghdtqtq\",\"is_tax_inclusive\":false,\"tax_percentage\":23,\"items\":[{\"item_id\":\"consequatur\",\"account_id\":\"consequatur\",\"account_number\":\"mqeopfuudtdsufvyvddqa\",\"account_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"apply_tax\":false,\"notes\":\"dlsmsjuryvojcybzvrbyi\"}]}"
                         },
                         "description": ""
                     },
@@ -19523,7 +19489,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-10-30\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"notes\":\"mniihfqcoynlazghdtqtq\",\"is_tax_inclusive\":false,\"tax_percentage\":23,\"items\":[{\"account_id\":\"consequatur\",\"account_number\":\"mqeopfuudtdsufvyvddqa\",\"account_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"apply_tax\":false,\"notes\":\"dlsmsjuryvojcybzvrbyi\"}]}"
+                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-11-03\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"notes\":\"mniihfqcoynlazghdtqtq\",\"is_tax_inclusive\":true,\"tax_percentage\":23,\"items\":[{\"item_id\":\"consequatur\",\"account_id\":\"consequatur\",\"account_number\":\"mqeopfuudtdsufvyvddqa\",\"account_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"apply_tax\":true,\"notes\":\"dlsmsjuryvojcybzvrbyi\"}]}"
                         },
                         "description": ""
                     },
@@ -19612,7 +19578,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-10-30\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"notes\":\"mniihfqcoynlazghdtqtq\",\"is_tax_inclusive\":true,\"tax_percentage\":23,\"items\":[{\"account_id\":\"consequatur\",\"account_number\":\"mqeopfuudtdsufvyvddqa\",\"account_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"apply_tax\":false,\"notes\":\"dlsmsjuryvojcybzvrbyi\"}]}"
+                            "raw": "{\"customer_id\":\"consequatur\",\"customer_email\":\"carolyne.luettgen@example.org\",\"due_date\":\"2106-11-03\",\"licensed_operator\":\"mqeopfuudtdsufvyvddqa\",\"notes\":\"mniihfqcoynlazghdtqtq\",\"is_tax_inclusive\":false,\"tax_percentage\":23,\"items\":[{\"item_id\":\"consequatur\",\"account_id\":\"consequatur\",\"account_number\":\"mqeopfuudtdsufvyvddqa\",\"account_name\":\"mniihfqcoynlazghdtqtq\",\"unit_name\":\"xbajwbpilpmufinllwloa\",\"quantity\":72,\"unit_price\":87,\"apply_tax\":false,\"notes\":\"dlsmsjuryvojcybzvrbyi\"}]}"
                         },
                         "description": ""
                     },
@@ -20240,7 +20206,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"supplier_type\":\"individual\",\"supplier_number\":\"vmqeopfuudtdsufvyvddq\",\"supplier_name_ar\":\"amniihfqcoynlazghdtqt\",\"supplier_name_en\":\"qxbajwbpilpmufinllwlo\",\"supplier_code\":\"auydlsmsjuryvojcybzvr\",\"contact_person\":\"byickznkygloigmkwxphl\",\"first_name\":\"vazjrcnfbaqywuxhgjjmz\",\"second_name\":\"uxjubqouzswiwxtrkimfc\",\"contact_name\":\"atbxspzmrazsroyjpxmqe\",\"email\":\"chandler93@example.com\",\"phone\":\"henqcopwvownkbamlnfng\",\"mobile\":\"efbeilfzsyuxoezbdtabp\",\"website\":\"tcyyerevrljcbwkthjnes\",\"address_one\":\"cwsestcouxpqsydkigioy\",\"address_two\":\"oyprjkfdjsneawgaavuiw\",\"address\":\"lezlcraoooxrrjhbduowt\",\"postal_code\":\"baqrrtgxiuvujtzci\",\"licensed_operator\":\"rplnfqsaymxpayeblqozc\",\"code_number\":\"kazplqjijwkuzgpjfumff\",\"tax_number\":\"smqnmbekhsobzoqisjmbi\",\"commercial_register\":\"uqxdnvttnwpjqkxxmutyz\",\"credit_limit\":1,\"payment_terms\":3,\"balance\":11613.31890586,\"last_transaction_date\":\"2025-09-30T13:03:31\",\"classification\":\"medium\",\"custom_classification\":\"opfuudtdsufvyvddqamni\",\"notes\":\"ihfqcoynlazghdtqtqxba\",\"status\":\"inactive\",\"active\":true}"
+                            "raw": "{\"supplier_type\":\"individual\",\"supplier_number\":\"vmqeopfuudtdsufvyvddq\",\"supplier_name_ar\":\"amniihfqcoynlazghdtqt\",\"supplier_name_en\":\"qxbajwbpilpmufinllwlo\",\"supplier_code\":\"auydlsmsjuryvojcybzvr\",\"contact_person\":\"byickznkygloigmkwxphl\",\"first_name\":\"vazjrcnfbaqywuxhgjjmz\",\"second_name\":\"uxjubqouzswiwxtrkimfc\",\"contact_name\":\"atbxspzmrazsroyjpxmqe\",\"email\":\"chandler93@example.com\",\"phone\":\"henqcopwvownkbamlnfng\",\"mobile\":\"efbeilfzsyuxoezbdtabp\",\"website\":\"tcyyerevrljcbwkthjnes\",\"address_one\":\"cwsestcouxpqsydkigioy\",\"address_two\":\"oyprjkfdjsneawgaavuiw\",\"address\":\"lezlcraoooxrrjhbduowt\",\"postal_code\":\"baqrrtgxiuvujtzci\",\"licensed_operator\":\"rplnfqsaymxpayeblqozc\",\"code_number\":\"kazplqjijwkuzgpjfumff\",\"tax_number\":\"smqnmbekhsobzoqisjmbi\",\"commercial_register\":\"uqxdnvttnwpjqkxxmutyz\",\"credit_limit\":1,\"payment_terms\":3,\"balance\":11613.31890586,\"last_transaction_date\":\"2025-10-05T09:46:16\",\"classification\":\"major\",\"custom_classification\":\"opfuudtdsufvyvddqamni\",\"notes\":\"ihfqcoynlazghdtqtqxba\",\"status\":\"active\",\"active\":true}"
                         },
                         "description": "Creates a new supplier with comprehensive validation and audit trail."
                     },
@@ -20329,7 +20295,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"supplier_type\":\"business\",\"supplier_number\":\"vmqeopfuudtdsufvyvddq\",\"supplier_name_ar\":\"amniihfqcoynlazghdtqt\",\"supplier_name_en\":\"qxbajwbpilpmufinllwlo\",\"supplier_code\":\"auydlsmsjuryvojcybzvr\",\"contact_person\":\"byickznkygloigmkwxphl\",\"first_name\":\"vazjrcnfbaqywuxhgjjmz\",\"second_name\":\"uxjubqouzswiwxtrkimfc\",\"contact_name\":\"atbxspzmrazsroyjpxmqe\",\"email\":\"chandler93@example.com\",\"phone\":\"henqcopwvownkbamlnfng\",\"mobile\":\"efbeilfzsyuxoezbdtabp\",\"website\":\"tcyyerevrljcbwkthjnes\",\"address_one\":\"cwsestcouxpqsydkigioy\",\"address_two\":\"oyprjkfdjsneawgaavuiw\",\"address\":\"lezlcraoooxrrjhbduowt\",\"postal_code\":\"baqrrtgxiuvujtzci\",\"licensed_operator\":\"rplnfqsaymxpayeblqozc\",\"code_number\":\"kazplqjijwkuzgpjfumff\",\"tax_number\":\"smqnmbekhsobzoqisjmbi\",\"commercial_register\":\"uqxdnvttnwpjqkxxmutyz\",\"credit_limit\":1,\"payment_terms\":3,\"balance\":11613.31890586,\"last_transaction_date\":\"2025-09-30T13:03:31\",\"classification\":\"medium\",\"custom_classification\":\"opfuudtdsufvyvddqamni\",\"notes\":\"ihfqcoynlazghdtqtqxba\",\"status\":\"active\",\"active\":true}"
+                            "raw": "{\"supplier_type\":\"business\",\"supplier_number\":\"vmqeopfuudtdsufvyvddq\",\"supplier_name_ar\":\"amniihfqcoynlazghdtqt\",\"supplier_name_en\":\"qxbajwbpilpmufinllwlo\",\"supplier_code\":\"auydlsmsjuryvojcybzvr\",\"contact_person\":\"byickznkygloigmkwxphl\",\"first_name\":\"vazjrcnfbaqywuxhgjjmz\",\"second_name\":\"uxjubqouzswiwxtrkimfc\",\"contact_name\":\"atbxspzmrazsroyjpxmqe\",\"email\":\"chandler93@example.com\",\"phone\":\"henqcopwvownkbamlnfng\",\"mobile\":\"efbeilfzsyuxoezbdtabp\",\"website\":\"tcyyerevrljcbwkthjnes\",\"address_one\":\"cwsestcouxpqsydkigioy\",\"address_two\":\"oyprjkfdjsneawgaavuiw\",\"address\":\"lezlcraoooxrrjhbduowt\",\"postal_code\":\"baqrrtgxiuvujtzci\",\"licensed_operator\":\"rplnfqsaymxpayeblqozc\",\"code_number\":\"kazplqjijwkuzgpjfumff\",\"tax_number\":\"smqnmbekhsobzoqisjmbi\",\"commercial_register\":\"uqxdnvttnwpjqkxxmutyz\",\"credit_limit\":1,\"payment_terms\":3,\"balance\":11613.31890586,\"last_transaction_date\":\"2025-10-05T09:46:16\",\"classification\":\"major\",\"custom_classification\":\"opfuudtdsufvyvddqamni\",\"notes\":\"ihfqcoynlazghdtqtqxba\",\"status\":\"active\",\"active\":true}"
                         },
                         "description": "Updates supplier data with comprehensive validation and relationship handling."
                     },

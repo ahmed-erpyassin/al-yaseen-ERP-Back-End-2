@@ -160,7 +160,7 @@ endpoints:
         name: impact
         description: ''
         required: true
-        example: low
+        example: medium
         type: string
         enumValues:
           - low
@@ -173,7 +173,7 @@ endpoints:
         name: probability
         description: ''
         required: true
-        example: medium
+        example: high
         type: string
         enumValues:
           - low
@@ -196,7 +196,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: open
+        example: mitigated
         type: string
         enumValues:
           - open
@@ -219,10 +219,10 @@ endpoints:
       project_id: 17
       title: mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury
       description: 'Natus ex dicta hic inventore asperiores illum est.'
-      impact: low
-      probability: medium
+      impact: medium
+      probability: high
       mitigation_plan: byickznkygloigmkwxphl
-      status: open
+      status: mitigated
       assigned_to: 17
     fileParameters: []
     responses: []
@@ -378,7 +378,7 @@ endpoints:
         name: probability
         description: ''
         required: true
-        example: high
+        example: low
         type: string
         enumValues:
           - low
@@ -401,7 +401,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: closed
+        example: mitigated
         type: string
         enumValues:
           - open
@@ -425,9 +425,9 @@ endpoints:
       title: mqeopfuudtdsufvyvddqamniihfqcoynlazghdtqtqxbajwbpilpmufinllwloauydlsmsjury
       description: 'Natus ex dicta hic inventore asperiores illum est.'
       impact: medium
-      probability: high
+      probability: low
       mitigation_plan: byickznkygloigmkwxphl
-      status: closed
+      status: mitigated
       assigned_to: 17
     fileParameters: []
     responses: []

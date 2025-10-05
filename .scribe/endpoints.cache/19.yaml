@@ -143,7 +143,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: true
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:13'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -226,7 +226,7 @@ endpoints:
       reference_type: qeopfuudtdsufvyvddqam
       reference_id: niihfqcoynlazghdtqtqx
       amount: 2
-      date: '2025-09-30T13:03:29'
+      date: '2025-10-05T09:46:13'
       description: 'Consequatur debitis et id.'
     fileParameters: []
     responses: []
@@ -399,7 +399,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:13'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -430,7 +430,7 @@ endpoints:
       reference_type: mqeopfuudtdsufvyvddqa
       reference_id: mniihfqcoynlazghdtqtq
       amount: 23
-      date: '2025-09-30T13:03:29'
+      date: '2025-10-05T09:46:13'
       description: 'Aut consequatur debitis et.'
     fileParameters: []
     responses: []

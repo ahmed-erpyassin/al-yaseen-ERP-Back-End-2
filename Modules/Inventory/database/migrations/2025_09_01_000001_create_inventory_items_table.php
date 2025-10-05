@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('model')->nullable(); // موديل
             $table->string('unit'); // الوحدة
 
-            // Category and Supplier Relations
-            $table->foreignId('category_id')->nullable()->constrained('item_categories')->nullOnDelete(); // التصنيف
-            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->nullOnDelete(); // المورد
+            // Category and Supplier Relations (skip foreign keys for now)
+            $table->unsignedBigInteger('category_id')->nullable(); // التصنيف
+            $table->unsignedBigInteger('supplier_id')->nullable(); // المورد
 
             // Quantities and Limits
             $table->decimal('quantity', 12, 2)->default(0); // الكمية

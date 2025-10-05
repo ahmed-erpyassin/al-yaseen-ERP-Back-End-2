@@ -141,7 +141,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -151,7 +151,7 @@ endpoints:
         name: time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '13:03:29'
+        example: '09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -161,7 +161,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -441,7 +441,7 @@ endpoints:
         name: is_tax_applied_to_currency
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -663,9 +663,9 @@ endpoints:
       supplier_id: consequatur
       quotation_number: mqeopfuudtdsufvyvddqa
       invoice_number: mniihfqcoynlazghdtqtq
-      date: '2025-09-30T13:03:29'
-      time: '13:03:29'
-      due_date: '2106-10-30'
+      date: '2025-10-05T09:46:14'
+      time: '09:46:14'
+      due_date: '2106-11-03'
       customer_number: mqeopfuudtdsufvyvddqa
       customer_name: mniihfqcoynlazghdtqtq
       customer_email: ablanda@example.org
@@ -691,7 +691,7 @@ endpoints:
       exchange_rate: 65
       currency_rate: 72
       currency_rate_with_tax: 18
-      is_tax_applied_to_currency: true
+      is_tax_applied_to_currency: false
       total_foreign: 74
       total_local: 87
       notes: consequatur
@@ -884,7 +884,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -894,7 +894,7 @@ endpoints:
         name: time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '13:03:29'
+        example: '09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -904,7 +904,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>date</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1184,7 +1184,7 @@ endpoints:
         name: is_tax_applied_to_currency
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1406,9 +1406,9 @@ endpoints:
       supplier_id: consequatur
       quotation_number: mqeopfuudtdsufvyvddqa
       invoice_number: mniihfqcoynlazghdtqtq
-      date: '2025-09-30T13:03:29'
-      time: '13:03:29'
-      due_date: '2106-10-30'
+      date: '2025-10-05T09:46:14'
+      time: '09:46:14'
+      due_date: '2106-11-03'
       customer_number: mqeopfuudtdsufvyvddqa
       customer_name: mniihfqcoynlazghdtqtq
       customer_email: ablanda@example.org
@@ -1434,7 +1434,7 @@ endpoints:
       exchange_rate: 65
       currency_rate: 72
       currency_rate_with_tax: 18
-      is_tax_applied_to_currency: true
+      is_tax_applied_to_currency: false
       total_foreign: 74
       total_local: 87
       notes: consequatur
@@ -1604,7 +1604,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1614,7 +1614,7 @@ endpoints:
         name: date_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1624,7 +1624,7 @@ endpoints:
         name: date_to
         description: 'Must be a valid date. Must be a date after or equal to <code>date_from</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1739,7 +1739,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1749,7 +1749,7 @@ endpoints:
         name: due_date_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:29'
+        example: '2025-10-05T09:46:14'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1759,7 +1759,7 @@ endpoints:
         name: due_date_to
         description: 'Must be a valid date. Must be a date after or equal to <code>due_date_from</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -1799,7 +1799,7 @@ endpoints:
         name: sort_by
         description: ''
         required: false
-        example: ledger_number
+        example: created_at
         type: string
         enumValues:
           - id
@@ -1839,7 +1839,7 @@ endpoints:
         name: sort_order
         description: ''
         required: false
-        example: desc
+        example: asc
         type: string
         enumValues:
           - asc
@@ -1873,9 +1873,9 @@ endpoints:
       quotation_number_to: qxbajwbpilpmufinllwlo
       invoice_number: auydlsmsjuryvojcybzvr
       supplier_name: byickznkygloigmkwxphl
-      date: '2025-09-30T13:03:29'
-      date_from: '2025-09-30T13:03:29'
-      date_to: '2106-10-30'
+      date: '2025-10-05T09:46:14'
+      date_from: '2025-10-05T09:46:14'
+      date_to: '2106-11-03'
       amount: 45
       amount_from: 56
       amount_to: 16
@@ -1884,12 +1884,12 @@ endpoints:
       customer_name: ihfqcoynlazghdtqtqxba
       ledger_code: jwbpilpmufinllwloauyd
       ledger_number: 41
-      due_date: '2025-09-30T13:03:29'
-      due_date_from: '2025-09-30T13:03:29'
-      due_date_to: '2106-10-30'
+      due_date: '2025-10-05T09:46:14'
+      due_date_from: '2025-10-05T09:46:14'
+      due_date_to: '2106-11-03'
       search: mqeopfuudtdsufvyvddqa
-      sort_by: ledger_number
-      sort_order: desc
+      sort_by: created_at
+      sort_order: asc
       per_page: 13
       paginate: true
     fileParameters: []

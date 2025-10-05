@@ -34,8 +34,6 @@ return new class extends Migration
 
             // Indexes
             $table->index(['company_id', 'project_id']);
-            $table->index(['document_category']);
-            $table->index(['upload_date']);
         });
     }
 

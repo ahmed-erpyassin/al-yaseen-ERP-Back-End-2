@@ -77,6 +77,16 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
       branch_id:
         name: branch_id
         description: 'The <code>id</code> of an existing record in the branches table.'
@@ -161,7 +171,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:30'
+        example: '2025-10-05T09:46:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -171,7 +181,7 @@ endpoints:
         name: time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '13:03:30'
+        example: '09:46:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -181,7 +191,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: true
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -499,6 +509,7 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
+      company_id: 17
       branch_id: 17
       currency_id: 17
       employee_id: 17
@@ -507,9 +518,9 @@ endpoints:
       journal_number: 45
       book_code: qeopfuudtdsufvyvddqam
       invoice_number: niihfqcoynlazghdtqtqx
-      date: '2025-09-30T13:03:30'
-      time: '13:03:30'
-      due_date: '2106-10-30'
+      date: '2025-10-05T09:46:15'
+      time: '09:46:15'
+      due_date: '2106-11-03'
       customer_email: carolyne.luettgen@example.org
       licensed_operator: fuudtdsufvyvddqamniih
       cash_paid: 6
@@ -649,6 +660,16 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
       branch_id:
         name: branch_id
         description: 'The <code>id</code> of an existing record in the branches table.'
@@ -733,7 +754,7 @@ endpoints:
         name: date
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:30'
+        example: '2025-10-05T09:46:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -743,7 +764,7 @@ endpoints:
         name: time
         description: 'Must be a valid date in the format <code>H:i:s</code>.'
         required: false
-        example: '13:03:30'
+        example: '09:46:15'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -753,7 +774,7 @@ endpoints:
         name: due_date
         description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: true
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -903,7 +924,7 @@ endpoints:
         name: is_tax_inclusive
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1071,6 +1092,7 @@ endpoints:
         nullable: true
         custom: []
     cleanBodyParameters:
+      company_id: 17
       branch_id: 17
       currency_id: 17
       employee_id: 17
@@ -1079,9 +1101,9 @@ endpoints:
       journal_number: 45
       book_code: qeopfuudtdsufvyvddqam
       invoice_number: niihfqcoynlazghdtqtqx
-      date: '2025-09-30T13:03:30'
-      time: '13:03:30'
-      due_date: '2106-10-30'
+      date: '2025-10-05T09:46:15'
+      time: '09:46:15'
+      due_date: '2106-11-03'
       customer_email: carolyne.luettgen@example.org
       licensed_operator: fuudtdsufvyvddqamniih
       cash_paid: 6
@@ -1096,7 +1118,7 @@ endpoints:
       exchange_rate: 6
       total_foreign: 8
       total_local: 4
-      is_tax_inclusive: false
+      is_tax_inclusive: true
       notes: tqtqxbajwbpilpmufinll
       items:
         -

@@ -24,8 +24,8 @@ return new class extends Migration
             $table->text('description')->nullable(); // الوصف (Description)
             $table->json('warehouse_data')->nullable(); // بيانات المخزن (Warehouse Data)
 
-            // Warehouse Keeper Information (FK to employees table)
-            $table->foreignId('warehouse_keeper_id')->nullable()->constrained('employees')->nullOnDelete(); // أمين المخزن (Employee ID)
+            // Warehouse Keeper Information (skip foreign key for now)
+            $table->unsignedBigInteger('warehouse_keeper_id')->nullable(); // أمين المخزن (Employee ID)
             $table->string('warehouse_keeper_employee_number')->nullable(); // رقم الموظف أمين المخزن (Warehouse Keeper Employee Number)
             $table->string('warehouse_keeper_employee_name')->nullable(); // اسم الموظف أمين المخزن (Warehouse Keeper Employee Name)
 

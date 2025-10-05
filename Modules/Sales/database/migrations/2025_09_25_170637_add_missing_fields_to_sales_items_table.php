@@ -15,7 +15,7 @@ return new class extends Migration
             // Check if columns exist before adding them
             if (!Schema::hasColumn('sales_items', 'unit_id')) {
                 $table->unsignedBigInteger('unit_id')->nullable()->after('item_id');
-                $table->foreign('unit_id')->references('id')->on('units')->onDelete('set null');
+                // Foreign key will be added later after units table is created
             }
 
             if (!Schema::hasColumn('sales_items', 'item_number')) {
@@ -36,7 +36,6 @@ return new class extends Migration
         Schema::table('sales_items', function (Blueprint $table) {
             // Drop columns if they exist
             if (Schema::hasColumn('sales_items', 'unit_id')) {
-                $table->dropForeign(['unit_id']);
                 $table->dropColumn('unit_id');
             }
 

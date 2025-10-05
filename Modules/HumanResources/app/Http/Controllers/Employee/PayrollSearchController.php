@@ -10,10 +10,50 @@ use Modules\HumanResources\Models\Employee;
 use Modules\FinancialAccounts\Models\Account;
 use Modules\FinancialAccounts\Models\Currency;
 
+/**
+ * @group Employee/Payroll Search
+ *
+ * APIs for searching and filtering employees, accounts, and currencies specifically for payroll operations.
+ */
 class PayrollSearchController extends Controller
 {
     /**
-     * Search employees for payroll
+     * Search Employees for Payroll
+     *
+     * Search and filter employees specifically for payroll processing operations.
+     *
+     * @bodyParam company_id integer required The company ID to search within. Example: 1
+     * @bodyParam search string optional Search query for employee name or number. Example: John
+     * @bodyParam limit integer optional Maximum number of results (default: 20, max: 100). Example: 50
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "employee_number": "EMP001",
+     *       "full_name": "John Doe",
+     *       "department": {
+     *         "id": 1,
+     *         "name": "IT Department"
+     *       },
+     *       "job_title": {
+     *         "id": 1,
+     *         "name": "Software Developer"
+     *       },
+     *       "salary": 5000.00,
+     *       "status": "active"
+     *     }
+     *   ],
+     *   "message": "Employees retrieved successfully."
+     * }
+     *
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "company_id": ["The company id field is required."]
+     *   }
+     * }
      */
     public function searchEmployees(Request $request): JsonResponse
     {

@@ -16,16 +16,16 @@ class DepartmentRequest extends FormRequest
             'user_id'              => 'required|integer|exists:users,id',
             'branch_id'            => 'required|integer|exists:branches,id',
             'fiscal_year_id'       => 'required|integer|exists:fiscal_years,id',
-            'name'                 => 'nullable|string|max:255',
-            'number'               => 'required|integer',
+            'name'                 => 'required|string|max:255',
+            'number'               => 'nullable|integer',
             'manager_id'           => 'required|integer|exists:users,id',
-            'address'              => 'required|string',
+            'address'              => 'nullable|string',
             'work_phone'           => 'nullable|string|max:25',
             'home_phone'           => 'nullable|string|max:25',
             'fax'                  => 'nullable|string|max:50',
             'statement'            => 'nullable|string|max:150',
             'statement_en'         => 'nullable|string|max:150',
-            'parent_id'            => 'nullable|integer|exists:projects,id',
+            'parent_id'            => 'nullable|integer|exists:departments,id',
             'funder_id'            => 'nullable|integer|exists:funders,id',
             'project_status'       => 'required|in:not_started,inprogress,completed,paused,canceled',
             'status'               => 'required|in:active,inactive',
@@ -34,6 +34,7 @@ class DepartmentRequest extends FormRequest
             'actual_start_date'    => 'nullable|date',
             'actual_end_date'      => 'nullable|date',
             'budget_id'            => 'nullable|integer|exists:budgets,id',
+            'notes'                => 'nullable|string',
         ];
     }
 

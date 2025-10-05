@@ -186,7 +186,7 @@ endpoints:
         name: selected_purchase_price_type
         description: ''
         required: false
-        example: third
+        example: first
         type: string
         enumValues:
           - first
@@ -209,7 +209,7 @@ endpoints:
         name: requires_inspection
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -233,7 +233,7 @@ endpoints:
         name: is_active
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -313,7 +313,7 @@ endpoints:
         name: effective_from
         description: 'Must be a valid date.'
         required: false
-        example: '2025-09-30T13:03:28'
+        example: '2025-10-05T09:46:12'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -323,7 +323,7 @@ endpoints:
         name: effective_to
         description: 'Must be a valid date. Must be a date after <code>effective_from</code>.'
         required: false
-        example: '2106-10-30'
+        example: '2106-11-03'
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -369,11 +369,11 @@ endpoints:
       formula_name: fuudtdsufvyvddqamniih
       formula_description: fqcoynlazghdtqtqxbajw
       formula_number: bpilpmufinllwloauydls
-      selected_purchase_price_type: third
+      selected_purchase_price_type: first
       quality_requirements: msjuryvojcybzvrbyickz
-      requires_inspection: true
+      requires_inspection: false
       status: draft
-      is_active: true
+      is_active: false
       batch_size: 48
       production_time_minutes: 36
       preparation_time_minutes: 87
@@ -381,8 +381,8 @@ endpoints:
       preparation_notes: aqywuxhgjjmzuxjubqouz
       usage_instructions: swiwxtrkimfcatbxspzmr
       tolerance_percentage: 1
-      effective_from: '2025-09-30T13:03:28'
-      effective_to: '2106-10-30'
+      effective_from: '2025-10-05T09:46:12'
+      effective_to: '2106-11-03'
     fileParameters: []
     responses: []
     responseFields: []
