@@ -168,6 +168,17 @@ class Employee extends Model
         return $query->where('is_sales', true);
     }
 
+    // Payroll relationships
+    public function payrollRecords()
+    {
+        return $this->hasMany(\Modules\HumanResources\Models\PayrollRecord::class);
+    }
+
+    public function payrollData()
+    {
+        return $this->hasMany(\Modules\HumanResources\Models\PayrollData::class);
+    }
+
     // Helper methods
     public function getFullNameAttribute()
     {
@@ -192,6 +203,15 @@ class Employee extends Model
         }
 
         return 'employee';
+    }
+
+    public function getMaritalStatusAttribute()
+    {
+        // Calculate marital status based on wives_count
+        if ($this->wives_count > 0) {
+            return 'married';
+        }
+        return 'single';
     }
 
     /**
