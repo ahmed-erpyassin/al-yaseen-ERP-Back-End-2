@@ -3,13 +3,20 @@
 namespace Modules\Customers\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Customers\app\Services\CustomerService;
 use Modules\Customers\Http\Requests\CustomerRequest;
 use Modules\Customers\Transformers\CustomerResource;
 
+/**
+ * @group Customer Management / Customers
+ *
+ * APIs for managing customers, including creation, updates, search, and customer relationship management.
+ */
 class CustomerController extends Controller
 {
     protected $customerService;
@@ -19,11 +26,19 @@ class CustomerController extends Controller
         $this->customerService = $customerService;
     }
 
-    public function store(CustomerRequest $request)
+    /**
+     * Store a newly created customer in storage.
+     * Creates a new customer with comprehensive validation and audit trail.
+     *
+     * @param CustomerRequest $request Validated customer data
+     * @return CustomerResource|JsonResponse Customer resource or error response
+     */
+    public function store(CustomerRequest $request): CustomerResource|JsonResponse
     {
         try {
             DB::beginTransaction();
-            $customer = $this->customerService->createCustomer($request->validated(), $request->user());
+            $user = Auth::user();
+            $customer = $this->customerService->createCustomer($request->validated(), $user);
             DB::commit();
             return new CustomerResource($customer);
         } catch (\Exception $e) {
@@ -35,10 +50,17 @@ class CustomerController extends Controller
         }
     }
 
-    public function index(Request $request)
+    /**
+     * Display a listing of customers with advanced search and filtering.
+     * Supports pagination, sorting, and comprehensive search across multiple fields.
+     *
+     * @return AnonymousResourceCollection|JsonResponse Collection of customers or error response
+     */
+    public function index(): AnonymousResourceCollection|JsonResponse
     {
         try {
-            $customers = $this->customerService->getCustomers($request->user());
+            $user = Auth::user();
+            $customers = $this->customerService->getCustomers($user);
             return CustomerResource::collection($customers);
         } catch (\Exception $e) {
             return response()->json([
@@ -48,7 +70,14 @@ class CustomerController extends Controller
         }
     }
 
-    public function show($id)
+    /**
+     * Display the specified customer with all related data.
+     * Returns customer details with relationships loaded for comprehensive view.
+     *
+     * @param int $id Customer ID
+     * @return CustomerResource|JsonResponse Customer resource or error response
+     */
+    public function show($id): CustomerResource|JsonResponse
     {
         try {
             $customer = $this->customerService->getCustomerById($id);
@@ -61,7 +90,16 @@ class CustomerController extends Controller
         }
     }
 
-    public function update(CustomerRequest $request, $id)
+    /**
+     * Update the specified customer in storage.
+     * Updates customer data with comprehensive validation and relationship handling.
+     *
+     * @param CustomerRequest $request Validated customer data
+     * @param int $id Customer ID
+     * @return CustomerResource|JsonResponse Updated customer resource or error response
+     */
+    /*
+    public function update(CustomerRequest $request, $id): CustomerResource|JsonResponse
     {
         try {
             $customer = $this->customerService->updateCustomer($id, $request->validated());
@@ -73,8 +111,15 @@ class CustomerController extends Controller
             ], 500);
         }
     }
-
-    public function destroy($id)
+*/
+    /**
+     * Remove the specified customer from storage (soft delete).
+     * Performs soft delete with audit trail tracking who deleted the customer.
+     *
+     * @param int $id Customer ID
+     * @return JsonResponse Success message or error response
+     */
+    public function destroy($id): JsonResponse
     {
         try {
             $user = Auth::user();
@@ -88,10 +133,18 @@ class CustomerController extends Controller
         }
     }
 
-    public function restore($id)
+    /**
+     * Restore a soft-deleted customer.
+     * Restores a previously deleted customer and returns updated resource.
+     *
+     * @param int $id Customer ID
+     * @return CustomerResource|JsonResponse Restored customer resource or error response
+     */
+    public function restore($id): CustomerResource|JsonResponse
     {
         try {
-            $customer = $this->customerService->restoreCustomer($id);
+            $this->customerService->restoreCustomer($id);
+            $customer = $this->customerService->getCustomerById($id);
             return new CustomerResource($customer);
         } catch (\Exception $e) {
             return response()->json([
@@ -101,7 +154,14 @@ class CustomerController extends Controller
         }
     }
 
-    public function bulkDelete(Request $request)
+    /**
+     * Bulk delete multiple customers.
+     * Performs soft delete on multiple customers with audit trail.
+     *
+     * @param Request $request Request containing array of customer IDs
+     * @return JsonResponse Success message or error response
+     */
+    public function bulkDelete(Request $request): JsonResponse
     {
         try {
             $user = Auth::user();

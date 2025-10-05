@@ -17,6 +17,9 @@ use Modules\Inventory\Models\Item;
 use Modules\Inventory\Models\Unit;
 use Modules\FinancialAccounts\Models\Currency;
 use Modules\FinancialAccounts\Models\TaxRate;
+use Modules\Companies\Models\Branch;
+use Modules\Companies\Models\Company;
+use Modules\HumanResources\Models\Employee;
 
 use Carbon\Carbon;
 
@@ -189,16 +192,12 @@ class ReturnInvoiceService
     public function getSearchFormData(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
-
             return [
-                'customers' => Customer::where('company_id', $companyId)
-                    ->select('id', 'customer_number', 'name', 'email')
-                    ->orderBy('name')
+                'customers' => Customer::select('id', 'customer_number', 'first_name', 'email')
+                    ->orderBy('first_name')
                     ->get(),
 
                 'currencies' => Currency::select('id', 'name', 'code', 'symbol')
-                    ->where('is_active', true)
                     ->orderBy('name')
                     ->get(),
 
@@ -224,8 +223,7 @@ class ReturnInvoiceService
                     ['value' => 'custom', 'label' => 'Custom Range']
                 ],
 
-                'licensed_operators' => Sale::where('company_id', $companyId)
-                    ->where('type', SalesTypeEnum::RETURN_INVOICE)
+                'licensed_operators' => Sale::where('type', SalesTypeEnum::RETURN_INVOICE)
                     ->whereNotNull('licensed_operator')
                     ->distinct()
                     ->pluck('licensed_operator')
@@ -245,8 +243,8 @@ class ReturnInvoiceService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = $request->user()->company_id ?? 101;
-                $userId = $request->user()->id;
+                $companyId = Auth::user()->company_id ?? Company::first()?->id ?? 1;
+                $userId = Auth::id();
                 $validatedData = $request->validated();
 
                 // Generate ledger and invoice number for return invoices
@@ -256,10 +254,15 @@ class ReturnInvoiceService
                 $customer = Customer::find($validatedData['customer_id']);
 
                 // Get live exchange rate if currency is provided
-                $exchangeRate = 1;
+                $exchangeRate = $validatedData['exchange_rate'] ?? 1;
                 if (isset($validatedData['currency_id'])) {
                     $exchangeRate = $this->getLiveExchangeRate($validatedData['currency_id']);
                 }
+
+                // Get required foreign key IDs with fallbacks
+                $branchId = $validatedData['branch_id'] ?? Branch::first()?->id ?? 1;
+                $currencyId = $validatedData['currency_id'] ?? Currency::first()?->id ?? 1;
+                $employeeId = $validatedData['employee_id'] ?? Employee::first()?->id ?? 1;
 
                 // Prepare return invoice data
                 $returnInvoiceData = [
@@ -273,6 +276,7 @@ class ReturnInvoiceService
                     'ledger_number' => $numberingData['ledger_number'],
                     'ledger_invoice_count' => $numberingData['ledger_invoice_count'],
                     'invoice_number' => $numberingData['invoice_number'],
+                    'journal_number' => $validatedData['journal_number'] ?? 1,
                     'date' => Carbon::now()->toDateString(),
                     'time' => Carbon::now()->toTimeString(),
 
@@ -283,19 +287,33 @@ class ReturnInvoiceService
                     'customer_email' => $validatedData['customer_email'] ?? ($customer ? $customer->email : null),
 
                     // Currency and exchange rate
-                    'currency_id' => $validatedData['currency_id'] ?? null,
                     'exchange_rate' => $exchangeRate,
 
+                    // Required foreign key fields with fallbacks
+                    'branch_id' => $branchId,
+                    'currency_id' => $currencyId,
+                    'employee_id' => $employeeId,
+
                     // Other fields from request
-                    'due_date' => $validatedData['due_date'] ?? null,
+                    'due_date' => $validatedData['due_date'] ?? Carbon::now()->addDays(30)->toDateString(),
                     'licensed_operator' => $validatedData['licensed_operator'] ?? null,
                     'notes' => $validatedData['notes'] ?? null,
-                    'employee_id' => $validatedData['employee_id'] ?? null,
-                    'branch_id' => $validatedData['branch_id'] ?? null,
 
                     // Tax settings
                     'is_tax_inclusive' => $validatedData['is_tax_inclusive'] ?? false,
                     'tax_percentage' => $validatedData['tax_percentage'] ?? 0,
+
+                    // Required financial fields with defaults
+                    'total_foreign' => 0.0000,
+                    'total_local' => 0.0000,
+                    'total_amount' => 0.0000,
+                    'cash_paid' => 0.00,
+                    'checks_paid' => 0.00,
+                    'allowed_discount' => 0.00,
+                    'total_without_tax' => 0.00,
+                    'tax_amount' => 0.00,
+                    'remaining_balance' => 0.00,
+                    'created_by' => $userId,
                 ];
 
                 // Create the return invoice
@@ -535,8 +553,8 @@ class ReturnInvoiceService
                 }
 
                 $validatedData = $request->validated();
-                $userId = $request->user()->id;
-                $companyId = $request->user()->company_id ?? $returnInvoice->company_id;
+                $userId = Auth::id();
+                $companyId = Auth::user()->company_id ?? $returnInvoice->company_id;
 
                 // Get customer data for auto-population if customer changed
                 $customer = null;
@@ -690,21 +708,19 @@ class ReturnInvoiceService
     public function searchCustomers(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $search = $request->get('search', '');
 
-            $query = Customer::where('company_id', $companyId)
-                ->select('id', 'customer_number', 'name', 'email', 'phone');
+            $query = Customer::select('id', 'customer_number', 'first_name', 'email', 'phone');
 
             if ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%')
+                    $q->where('first_name', 'like', '%' . $search . '%')
                       ->orWhere('customer_number', 'like', '%' . $search . '%')
                       ->orWhere('email', 'like', '%' . $search . '%');
                 });
             }
 
-            return $query->orderBy('name')->limit(50)->get();
+            return $query->orderBy('first_name')->limit(50)->get();
 
         } catch (\Exception $e) {
             throw new \Exception('Error searching customers: ' . $e->getMessage());
@@ -717,16 +733,14 @@ class ReturnInvoiceService
     public function getCustomerByNumber(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $customerNumber = $request->get('customer_number');
 
             if (!$customerNumber) {
                 throw new \Exception('Customer number is required');
             }
 
-            $customer = Customer::where('company_id', $companyId)
-                ->where('customer_number', $customerNumber)
-                ->select('id', 'customer_number', 'name', 'email', 'phone')
+            $customer = Customer::where('customer_number', $customerNumber)
+                ->select('id', 'customer_number', 'first_name', 'email', 'phone')
                 ->first();
 
             if (!$customer) {
@@ -746,16 +760,14 @@ class ReturnInvoiceService
     public function getCustomerByName(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $customerName = $request->get('customer_name');
 
             if (!$customerName) {
                 throw new \Exception('Customer name is required');
             }
 
-            $customer = Customer::where('company_id', $companyId)
-                ->where('name', $customerName)
-                ->select('id', 'customer_number', 'name', 'email', 'phone')
+            $customer = Customer::where('first_name', $customerName)
+                ->select('id', 'customer_number', 'first_name', 'email', 'phone')
                 ->first();
 
             if (!$customer) {
@@ -775,11 +787,9 @@ class ReturnInvoiceService
     public function searchItems(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $search = $request->get('search', '');
 
-            $query = Item::where('company_id', $companyId)
-                ->where('active', true)
+            $query = Item::where('active', true)
                 ->select('id', 'item_number', 'name', 'first_sale_price', 'unit_id');
 
             if ($search) {
@@ -805,15 +815,13 @@ class ReturnInvoiceService
     public function getItemByNumber(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $itemNumber = $request->get('item_number');
 
             if (!$itemNumber) {
                 throw new \Exception('Item number is required');
             }
 
-            $item = Item::where('company_id', $companyId)
-                ->where('item_number', $itemNumber)
+            $item = Item::where('item_number', $itemNumber)
                 ->where('active', true)
                 ->with('unit:id,name,symbol')
                 ->select('id', 'item_number', 'name', 'first_sale_price', 'unit_id')
@@ -836,15 +844,13 @@ class ReturnInvoiceService
     public function getItemByName(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
             $itemName = $request->get('item_name');
 
             if (!$itemName) {
                 throw new \Exception('Item name is required');
             }
 
-            $item = Item::where('company_id', $companyId)
-                ->where('name', $itemName)
+            $item = Item::where('name', $itemName)
                 ->where('active', true)
                 ->with('unit:id,name,symbol')
                 ->select('id', 'item_number', 'name', 'first_sale_price', 'unit_id')
@@ -867,21 +873,16 @@ class ReturnInvoiceService
     public function getFormData(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
-
             return [
-                'customers' => Customer::where('company_id', $companyId)
-                    ->select('id', 'customer_number', 'name', 'email')
-                    ->orderBy('name')
+                'customers' => Customer::select('id', 'customer_number', 'first_name', 'email')
+                    ->orderBy('first_name')
                     ->get(),
 
                 'currencies' => Currency::select('id', 'name', 'code', 'symbol')
-                    ->where('is_active', true)
                     ->orderBy('name')
                     ->get(),
 
-                'items' => Item::where('company_id', $companyId)
-                    ->where('active', true)
+                'items' => Item::where('active', true)
                     ->with('unit:id,name,symbol')
                     ->select('id', 'item_number', 'name', 'first_sale_price', 'unit_id')
                     ->orderBy('name')
@@ -891,13 +892,11 @@ class ReturnInvoiceService
                     ->orderBy('name')
                     ->get(),
 
-                'tax_rates' => TaxRate::where('company_id', $companyId)
-                    ->select('id', 'name', 'code', 'rate', 'type')
+                'tax_rates' => TaxRate::select('id', 'name', 'code', 'rate', 'type')
                     ->orderBy('name')
                     ->get(),
 
-                'licensed_operators' => Sale::where('company_id', $companyId)
-                    ->whereNotNull('licensed_operator')
+                'licensed_operators' => Sale::whereNotNull('licensed_operator')
                     ->distinct()
                     ->pluck('licensed_operator')
                     ->filter()

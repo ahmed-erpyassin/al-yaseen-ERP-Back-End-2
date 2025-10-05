@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('journal_id');
             $table->integer('journal_number');
-            $table->enum('type', ['quotation', 'order', 'shipment', 'invoice', 'expense', 'return_invoice']);
+            $table->enum('type', ['quotation', 'order', 'outgoing_order', 'shipment', 'invoice', 'expense', 'return_invoice']);
             $table->enum('status', ['draft', 'approved', 'sent', 'invoiced', 'cancelled'])->default('draft');
             $table->decimal('cash_paid', 15, 2)->default(0);
             $table->decimal('checks_paid', 15, 2)->default(0);

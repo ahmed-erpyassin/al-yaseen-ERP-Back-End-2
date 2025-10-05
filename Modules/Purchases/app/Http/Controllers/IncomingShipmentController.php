@@ -8,6 +8,11 @@ use Modules\Purchases\app\Services\IncomingShipmentService;
 use Modules\Purchases\Http\Requests\IncomingShipmentRequest;
 use Modules\Purchases\Transformers\IncomingShipmentResource;
 
+/**
+ * @group Purchase Management / Incoming Shipments
+ *
+ * APIs for managing incoming shipments from suppliers, including receipt, inspection, and inventory updates.
+ */
 class IncomingShipmentController extends Controller
 {
 
@@ -31,7 +36,11 @@ class IncomingShipmentController extends Controller
                 'data' => IncomingShipmentResource::collection($offers)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching incoming shipments.',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -47,33 +56,85 @@ class IncomingShipmentController extends Controller
                 'data' => new IncomingShipmentResource($shipment)
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred while fetching outgoing offers.'], 500);
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while creating incoming shipment.',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
     /**
-     * Show the specified resource.
+     * Display the specified incoming shipment with all related data.
+     * Returns shipment details with relationships loaded for comprehensive view.
+     *
+     * @param int $id Shipment ID
+     * @return JsonResponse Shipment resource or error response
      */
     public function show($id)
     {
-        return view('sales::show');
+        try {
+            $shipment = $this->incomingShipmentService->show($id);
+            return response()->json([
+                'success' => true,
+                'data' => new IncomingShipmentResource($shipment)
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while fetching shipment details.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update the specified incoming shipment in storage.
+     * Updates shipment data with comprehensive validation and relationship handling.
+     *
+     * @param Request $request Request data
+     * @param int $id Shipment ID
+     * @return JsonResponse Updated shipment resource or error response
      */
-    public function edit($id)
+    public function update(IncomingShipmentRequest $request, $id)
     {
-        return view('sales::edit');
+        try {
+            $shipment = $this->incomingShipmentService->update($request, $id);
+            return response()->json([
+                'success' => true,
+                'data' => new IncomingShipmentResource($shipment),
+                'message' => 'Incoming shipment updated successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while updating shipment.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Remove the specified incoming shipment from storage (soft delete).
+     * Performs soft delete with audit trail tracking who deleted the shipment.
+     *
+     * @param int $id Shipment ID
+     * @return JsonResponse Success message or error response
      */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+        try {
+            $this->incomingShipmentService->destroy($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Incoming shipment deleted successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while deleting shipment.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

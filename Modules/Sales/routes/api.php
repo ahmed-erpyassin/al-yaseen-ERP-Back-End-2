@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 // Commented out unused controllers (not implemented yet)
 // use Modules\Sales\Http\Controllers\InvoiceController;
 use Modules\Sales\Http\Controllers\ReturnInvoiceController;
-// use Modules\Sales\Http\Controllers\SalesHelperController;
+use Modules\Sales\Http\Controllers\SalesHelperController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +25,10 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
     // OUTGOING OFFERS MANAGEMENT
     // ========================================
     Route::prefix('outgoing-offers')->name('sales-management.outgoing-offers.')->group(function () {
+
+        // Form data endpoint
+        Route::get('/form-data', [OutgoingOfferController::class, 'getFormData'])
+            ->name('form-data');
 
         // Basic CRUD operations
         Route::get('/list-all', [OutgoingOfferController::class, 'index'])
@@ -291,28 +295,40 @@ Route::middleware(['auth:sanctum'])->prefix('v1/sales-management')->group(functi
     });
 
     // ========================================
-    // HELPER ENDPOINTS (COMMENTED OUT - CONTROLLER NOT IMPLEMENTED YET)
+    // HELPER ENDPOINTS
     // ========================================
-    /*
     // Helper endpoints for dropdowns and data fetching
     Route::prefix('helpers')->group(function () {
-        Route::get('/customers', [SalesHelperController::class, 'getCustomers']);
-        Route::get('/currencies', [SalesHelperController::class, 'getCurrencies']);
-        Route::get('/items', [SalesHelperController::class, 'getItems']);
-        Route::get('/units', [SalesHelperController::class, 'getUnits']);
-        Route::get('/tax-rates', [SalesHelperController::class, 'getTaxRates']);
-        Route::get('/company-vat-rate', [SalesHelperController::class, 'getCompanyVatRate']);
-        Route::get('/currency-rate/{currencyId}', [SalesHelperController::class, 'getCurrencyRate']);
-        Route::get('/item-details/{itemId}', [SalesHelperController::class, 'getItemDetails']);
+        Route::get('/customers', [SalesHelperController::class, 'getCustomers'])
+            ->name('helpers.customers');
+        Route::get('/currencies', [SalesHelperController::class, 'getCurrencies'])
+            ->name('helpers.currencies');
+        Route::get('/items', [SalesHelperController::class, 'getItems'])
+            ->name('helpers.items');
+        Route::get('/units', [SalesHelperController::class, 'getUnits'])
+            ->name('helpers.units');
+        Route::get('/tax-rates', [SalesHelperController::class, 'getTaxRates'])
+            ->name('helpers.tax-rates');
+        Route::get('/company-vat-rate', [SalesHelperController::class, 'getCompanyVatRate'])
+            ->name('helpers.company-vat-rate');
+        Route::get('/currency-rate/{currencyId}', [SalesHelperController::class, 'getCurrencyRate'])
+            ->name('helpers.currency-rate');
+        Route::get('/item-details/{itemId}', [SalesHelperController::class, 'getItemDetails'])
+            ->name('helpers.item-details');
 
-        // New invoice-specific helper endpoints
-        Route::get('/search-customers-invoice', [SalesHelperController::class, 'searchCustomersForInvoice']);
-        Route::get('/search-items-invoice', [SalesHelperController::class, 'searchItemsForInvoice']);
-        Route::get('/licensed-operators', [SalesHelperController::class, 'getLicensedOperators']);
-        Route::get('/customer-details/{customerId}', [SalesHelperController::class, 'getCustomerDetails']);
-        Route::get('/item-details-invoice/{itemId}', [SalesHelperController::class, 'getItemDetailsForInvoice']);
-        Route::get('/live-currency-rate/{currencyId}', [SalesHelperController::class, 'getLiveCurrencyRateWithTax']);
+        // Invoice-specific helper endpoints
+        Route::get('/search-customers-invoice', [SalesHelperController::class, 'searchCustomersForInvoice'])
+            ->name('helpers.search-customers-invoice');
+        Route::get('/search-items-invoice', [SalesHelperController::class, 'searchItemsForInvoice'])
+            ->name('helpers.search-items-invoice');
+        Route::get('/licensed-operators', [SalesHelperController::class, 'getLicensedOperators'])
+            ->name('helpers.licensed-operators');
+        Route::get('/customer-details/{customerId}', [SalesHelperController::class, 'getCustomerDetails'])
+            ->name('helpers.customer-details');
+        Route::get('/item-details-invoice/{itemId}', [SalesHelperController::class, 'getItemDetailsForInvoice'])
+            ->name('helpers.item-details-invoice');
+        Route::get('/live-currency-rate/{currencyId}', [SalesHelperController::class, 'getLiveCurrencyRateWithTax'])
+            ->name('helpers.live-currency-rate');
     });
-    */
 
 });

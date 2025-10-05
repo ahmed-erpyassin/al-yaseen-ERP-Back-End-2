@@ -12,11 +12,11 @@ class OutgoingOfferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'branch_id'             => 'required|integer|exists:branches,id',
-            'currency_id'           => 'required|integer|exists:currencies,id',
+            'branch_id'             => 'required|integer|exists:branches,id,company_id,' . ($this->user()->company_id ?? 1),
+            'currency_id'           => 'required|integer|exists:currencies,id,company_id,' . ($this->user()->company_id ?? 1),
             'employee_id'           => 'nullable|integer|exists:employees,id',
-            'customer_id'           => 'required|integer|exists:customers,id',
-            'journal_id'            => 'nullable|integer|exists:journals,id',
+            'customer_id'           => 'required|integer|exists:customers,id,company_id,' . ($this->user()->company_id ?? 1),
+            'journal_id'            => 'nullable|integer|exists:journals,id,company_id,' . ($this->user()->company_id ?? 1),
 
             // Auto-generated fields (optional in request)
             'code'                  => 'nullable|string|max:255', // Book code (auto-generated)
@@ -42,8 +42,8 @@ class OutgoingOfferRequest extends FormRequest
             'total_local'           => 'nullable|numeric|min:0|max:999999999.9999',
             'notes'                 => 'nullable|string|max:1000',
             'items'                 => 'required|array|min:1',
-            'items.*.item_id'       => 'required|integer|exists:items,id',
-            'items.*.unit_id'       => 'nullable|integer|exists:units,id',
+            'items.*.item_id'       => 'required|integer|exists:items,id,company_id,' . ($this->user()->company_id ?? 1),
+            'items.*.unit_id'       => 'nullable|integer|exists:units,id,company_id,' . ($this->user()->company_id ?? 1),
             'items.*.item_number'   => 'nullable|string|max:255', // Auto-populated from item
             'items.*.item_name'     => 'nullable|string|max:255', // Auto-populated from item
             'items.*.description'   => 'nullable|string|max:500',

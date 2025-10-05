@@ -22,14 +22,23 @@ class FinancialAccountsCoreSeeder extends Seeder
         $eur = Currency::where('code', 'EUR')->first();
         $ils = Currency::where('code', 'ILS')->first();
 
-        $rates = [
-            ['currency_id' => $eur->id, 'rate' => 0.93],
-            ['currency_id' => $ils->id, 'rate' => 3.75],
-            ['currency_id' => $usd->id, 'rate' => 1.00],
-        ];
+        // Only create exchange rates for currencies that exist
+        $rates = [];
+        if ($usd) {
+            $rates[] = ['currency_id' => $usd->id, 'rate' => 1.00];
+        }
+        if ($eur) {
+            $rates[] = ['currency_id' => $eur->id, 'rate' => 0.93];
+        }
+        if ($ils) {
+            $rates[] = ['currency_id' => $ils->id, 'rate' => 3.75];
+        }
 
         foreach ($rates as $r) {
-            ExchangeRate::create([
+            ExchangeRate::firstOrCreate([
+                'currency_id' => $r['currency_id'],
+                'rate_date' => Carbon::today(),
+            ], [
                 'company_id' => 1,
                 'user_id' => 1,
                 'branch_id' => null,
@@ -55,7 +64,7 @@ class FinancialAccountsCoreSeeder extends Seeder
                     'company_id' => 1,
                     'user_id' => 1,
                     'fiscal_year_id' => 1,
-                    'currency_id' => $usd->id,
+                    'currency_id' => $usd ? $usd->id : null,
                 ])
             );
         }
@@ -79,7 +88,7 @@ class FinancialAccountsCoreSeeder extends Seeder
                     'company_id' => 1,
                     'user_id' => 1,
                     'fiscal_year_id' => 1,
-                    'currency_id' => $usd->id,
+                    'currency_id' => $usd?->id,
                 ])
             );
         }

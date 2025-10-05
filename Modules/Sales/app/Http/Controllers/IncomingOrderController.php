@@ -9,6 +9,11 @@ use Modules\Sales\app\Services\IncomingOrderService;
 use Modules\Sales\Http\Requests\IncomingOrderRequest;
 use Modules\Sales\Transformers\IncomingOrderResource;
 
+/**
+ * @group Sales Management / Incoming Orders
+ *
+ * APIs for managing incoming sales orders, including order processing, tracking, and fulfillment.
+ */
 class IncomingOrderController extends Controller
 {
 
@@ -83,15 +88,12 @@ class IncomingOrderController extends Controller
     {
         try {
             $user = Auth::user();
-            $companyId = $user->company_id ?? request()->company_id;
 
             $data = [
                 'currencies' => \Modules\FinancialAccounts\Models\Currency::select('id', 'name', 'code', 'symbol')
-                    ->where('company_id', $companyId)
                     ->get(),
 
                 'employees' => \Modules\HumanResources\Models\Employee::select('id', 'employee_number', 'first_name', 'second_name')
-                    ->where('company_id', $companyId)
                     ->get()
                     ->map(function ($employee) {
                         return [
@@ -103,11 +105,9 @@ class IncomingOrderController extends Controller
                     }),
 
                 'branches' => \Modules\Companies\Models\Branch::select('id', 'name', 'code')
-                    ->where('company_id', $companyId)
                     ->get(),
 
                 'customers' => \Modules\Customers\Models\Customer::select('id', 'customer_number', 'company_name', 'first_name', 'second_name', 'email')
-                    ->where('company_id', $companyId)
                     ->get()
                     ->map(function ($customer) {
                         return [
@@ -121,7 +121,6 @@ class IncomingOrderController extends Controller
                     }),
 
                 'items' => \Modules\Inventory\Models\Item::select('id', 'item_number', 'name', 'first_sale_price', 'unit_id')
-                    ->where('company_id', $companyId)
                     ->where('active', true)
                     ->with('unit:id,name')
                     ->get()
@@ -137,13 +136,12 @@ class IncomingOrderController extends Controller
                     }),
 
                 'tax_rates' => \Modules\FinancialAccounts\Models\TaxRate::select('id', 'name', 'rate')
-                    ->where('company_id', $companyId)
                     ->get(),
 
-                'company_vat_rate' => \Modules\Companies\Models\Company::find($companyId)->vat_rate ?? 0,
+                'company_vat_rate' => $user->company ? $user->company->vat_rate : 0,
 
-                'next_book_code' => \Modules\Sales\Models\Sale::generateBookCode($companyId),
-                'next_invoice_number' => \Modules\Sales\Models\Sale::generateInvoiceNumber($companyId),
+                'next_book_code' => \Modules\Sales\Models\Sale::generateBookCode(),
+                'next_invoice_number' => \Modules\Sales\Models\Sale::generateInvoiceNumber(),
             ];
 
             return response()->json([
@@ -188,10 +186,8 @@ class IncomingOrderController extends Controller
     {
         try {
             $search = $request->get('search', '');
-            $companyId = $request->user()->company_id ?? $request->company_id;
 
             $customers = \Modules\Customers\Models\Customer::select('id', 'customer_number', 'company_name', 'first_name', 'second_name', 'email')
-                ->where('company_id', $companyId)
                 ->where(function ($query) use ($search) {
                     $query->where('customer_number', 'like', '%' . $search . '%')
                           ->orWhere('company_name', 'like', '%' . $search . '%')
@@ -231,10 +227,8 @@ class IncomingOrderController extends Controller
     {
         try {
             $search = $request->get('search', '');
-            $companyId = $request->user()->company_id ?? $request->company_id;
 
             $items = \Modules\Inventory\Models\Item::select('id', 'item_number', 'name', 'first_sale_price', 'unit_id')
-                ->where('company_id', $companyId)
                 ->where('active', true)
                 ->where(function ($query) use ($search) {
                     $query->where('item_number', 'like', '%' . $search . '%')
@@ -274,31 +268,68 @@ class IncomingOrderController extends Controller
     {
         try {
             $currencyId = $request->get('currency_id');
-            $currency = \Modules\FinancialAccounts\Models\Currency::find($currencyId);
+
+            // Get current user's company
+            $user = Auth::user();
+            $companyId = $user->company_id ?? 1; // Default to company 1 if not set
+
+            // Validate currency_id parameter
+            if (!$currencyId) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Currency ID is required.',
+                    'available_currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
+                        ->select('id', 'code', 'name')->get()
+                ], 400);
+            }
+
+            // Find currency within the user's company
+            $currency = \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
+                ->where('id', $currencyId)
+                ->first();
 
             if (!$currency) {
                 return response()->json([
                     'success' => false,
-                    'error' => 'Currency not found.'
+                    'error' => 'Currency not found.',
+                    'available_currencies' => \Modules\FinancialAccounts\Models\Currency::where('company_id', $companyId)
+                        ->select('id', 'code', 'name')->get()
                 ], 404);
             }
 
             // Get live rate from external API
-            $response = \Illuminate\Support\Facades\Http::timeout(10)
-                ->get("https://api.exchangerate-api.com/v4/latest/USD");
-
             $rate = 1; // Default rate
-            if ($response->successful()) {
-                $rates = $response->json()['rates'] ?? [];
-                $rate = $rates[$currency->code] ?? 1;
+            $apiError = null;
+
+            try {
+                $response = \Illuminate\Support\Facades\Http::timeout(10)
+                    ->get("https://api.exchangerate-api.com/v4/latest/USD");
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $rates = $data['rates'] ?? [];
+
+                    if (isset($rates[$currency->code])) {
+                        $rate = $rates[$currency->code];
+                    } else {
+                        $apiError = "Currency code '{$currency->code}' not found in exchange rate API";
+                    }
+                } else {
+                    $apiError = "Exchange rate API returned error: " . $response->status();
+                }
+            } catch (\Exception $e) {
+                $apiError = "Failed to fetch exchange rate: " . $e->getMessage();
             }
 
             return response()->json([
                 'success' => true,
                 'data' => [
+                    'currency_id' => $currency->id,
                     'currency_code' => $currency->code,
                     'currency_name' => $currency->name,
-                    'exchange_rate' => $rate
+                    'exchange_rate' => $rate,
+                    'is_default_rate' => $rate === 1,
+                    'api_error' => $apiError
                 ]
             ], 200);
         } catch (\Exception $e) {
@@ -381,16 +412,11 @@ class IncomingOrderController extends Controller
     public function getSearchFormData()
     {
         try {
-            $user = Auth::user();
-            $companyId = $user->company_id ?? request()->company_id;
-
             $data = [
                 'currencies' => \Modules\FinancialAccounts\Models\Currency::select('id', 'name', 'code', 'symbol')
-                    ->where('company_id', $companyId)
                     ->get(),
 
                 'customers' => \Modules\Customers\Models\Customer::select('id', 'customer_number', 'company_name', 'first_name', 'second_name')
-                    ->where('company_id', $companyId)
                     ->get()
                     ->map(function ($customer) {
                         return [

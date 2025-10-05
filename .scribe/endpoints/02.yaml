@@ -1,21 +1,21 @@
-name: 'Inventory Management / Warehouses'
+name: 'Inventory Management / Inventory Items'
 description: |-
 
-  APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+  APIs for managing inventory items, stock levels, and warehouse operations.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/warehouses/scan-all
+    uri: api/v1/inventory-items/survey-all
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of warehouses.'
-      description: ''
+      title: 'List Inventory Items'
+      description: 'Retrieve a paginated list of inventory items with filtering and search capabilities.'
       authenticated: true
       deprecated: false
       custom: []
@@ -25,23 +25,121 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      active:
+        name: active
+        description: 'Filter by active status.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      category_id:
+        name: category_id
+        description: 'Filter by category ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      supplier_id:
+        name: supplier_id
+        description: 'Filter by supplier ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      search:
+        name: search
+        description: 'Search across item names and descriptions.'
+        required: false
+        example: laptop
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      sort_by:
+        name: sort_by
+        description: 'Field to sort by.'
+        required: false
+        example: name
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      sort_direction:
+        name: sort_direction
+        description: 'Sort direction (asc/desc).'
+        required: false
+        example: asc
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Number of items per page (default: 15).'
+        required: false
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      active: true
+      category_id: 1
+      supplier_id: 1
+      search: laptop
+      sort_by: name
+      sort_direction: asc
+      per_page: 20
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 404
+        status: 200
         content: |-
           {
-              "message": "The route api/v1/warehouses/scan-all could not be found."
+            "success": true,
+            "data": [
+              {
+                "id": 1,
+                "name": "Laptop Dell XPS 13",
+                "sku": "DELL-XPS-13",
+                "category": "Electronics",
+                "quantity": 50,
+                "unit_price": 1200.00,
+                "supplier": "Dell Inc.",
+                "active": true,
+                "created_at": "2024-01-01T00:00:00.000000Z"
+              }
+            ],
+            "message": "Inventory items retrieved successfully"
           }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error retrieving inventory items: Database connection failed"
+          }
+        headers: []
+        description: ''
         custom: []
     responseFields: []
     auth:
@@ -55,15 +153,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/warehouses/establish-facility
+    uri: api/v1/inventory-items/register-inventory
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Store a newly created warehouse with all required fields.'
+      title: 'Store a newly created inventory item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -77,200 +175,150 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      warehouse_number:
-        name: warehouse_number
-        description: 'Must not be greater than 255 characters.'
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
         required: true
-        example: vmqeopfuudtdsufvyvddq
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      name:
-        name: name
+      item_number:
+        name: item_number
         description: 'Must not be greater than 255 characters.'
         required: true
-        example: amniihfqcoynlazghdtqt
+        example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      description:
-        name: description
-        description: 'Must not be greater than 1000 characters.'
-        required: false
-        example: 'Necessitatibus architecto aut consequatur debitis et id.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      address:
-        name: address
-        description: 'Must not be greater than 500 characters.'
-        required: false
-        example: ilpmufinllwloauydlsms
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      warehouse_keeper_employee_number:
-        name: warehouse_keeper_employee_number
+      item_name_ar:
+        name: item_name_ar
         description: 'Must not be greater than 255 characters.'
-        required: false
-        example: juryvojcybzvrbyickznk
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      warehouse_keeper_employee_name:
-        name: warehouse_keeper_employee_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: ygloigmkwxphlvazjrcnf
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      warehouse_keeper_id:
-        name: warehouse_keeper_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      mobile:
-        name: mobile
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: mqeopfuudtdsufvyv
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      fax_number:
-        name: fax_number
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: ddqamniihfqcoynla
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      phone_number:
-        name: phone_number
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: zghdtqtqxbajwbpil
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      sales_account_id:
-        name: sales_account_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      purchase_account_id:
-        name: purchase_account_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      branch_id:
-        name: branch_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      department_warehouse_id:
-        name: department_warehouse_id
-        description: ''
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      inventory_valuation_method:
-        name: inventory_valuation_method
-        description: ''
         required: true
-        example: no_value
+        example: mniihfqcoynlazghdtqtq
         type: string
-        enumValues:
-          - natural_division
-          - no_value
-          - first_purchase_price
-          - second_purchase_price
-          - third_purchase_price
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      status:
-        name: status
-        description: ''
-        required: true
-        example: active
-        type: string
-        enumValues:
-          - active
-          - inactive
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      warehouse_data:
-        name: warehouse_data
-        description: ''
+      item_name_en:
+        name: item_name_en
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: null
-        type: object
+        example: xbajwbpilpmufinllwloa
+        type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
+        custom: []
+      barcode:
+        name: barcode
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: uydlsmsjuryvojcybzvrb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      model:
+        name: model
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: yickznkygloigmkwxphlv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit:
+        name: unit
+        description: 'Must not be greater than 50 characters.'
+        required: true
+        example: azjrcnfbaqywuxhgjjmzu
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      quantity:
+        name: quantity
+        description: 'Must be at least 0.'
+        required: false
+        example: 82
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_price:
+        name: unit_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 34
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      minimum_limit:
+        name: minimum_limit
+        description: 'Must be at least 0.'
+        required: false
+        example: 71
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      reorder_limit:
+        name: reorder_limit
+        description: 'Must be at least 0.'
+        required: false
+        example: 4
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      active:
+        name: active
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
         custom: []
     cleanBodyParameters:
-      warehouse_number: vmqeopfuudtdsufvyvddq
-      name: amniihfqcoynlazghdtqt
-      description: 'Necessitatibus architecto aut consequatur debitis et id.'
-      address: ilpmufinllwloauydlsms
-      warehouse_keeper_employee_number: juryvojcybzvrbyickznk
-      warehouse_keeper_employee_name: ygloigmkwxphlvazjrcnf
-      warehouse_keeper_id: 17
-      mobile: mqeopfuudtdsufvyv
-      fax_number: ddqamniihfqcoynla
-      phone_number: zghdtqtqxbajwbpil
-      sales_account_id: 17
-      purchase_account_id: 17
-      branch_id: 17
-      department_warehouse_id: 17
-      inventory_valuation_method: no_value
-      status: active
+      company_id: consequatur
+      item_number: mqeopfuudtdsufvyvddqa
+      item_name_ar: mniihfqcoynlazghdtqtq
+      item_name_en: xbajwbpilpmufinllwloa
+      barcode: uydlsmsjuryvojcybzvrb
+      model: yickznkygloigmkwxphlv
+      unit: azjrcnfbaqywuxhgjjmzu
+      quantity: 82
+      unit_price: 34
+      minimum_limit: 71
+      reorder_limit: 4
+      notes: consequatur
+      active: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -285,15 +333,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/warehouses/inspect-facility/{id}'
+    uri: 'api/v1/inventory-items/examine-inventory/{id}'
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Display the specified warehouse with comprehensive data (Review/Preview).'
+      title: 'Display the specified inventory item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -305,7 +353,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the inspect facility.'
+        description: 'The ID of the examine inventory.'
         required: true
         example: consequatur
         type: string
@@ -325,7 +373,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/warehouses/inspect-facility/consequatur could not be found."
+              "message": "The route api/v1/inventory-items/examine-inventory/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -345,15 +393,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/warehouses/modify-facility/{id}'
+    uri: 'api/v1/inventory-items/modify-inventory/{id}'
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Update the specified warehouse with full validation and field updates.'
+      title: 'Update the specified inventory item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -365,7 +413,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the modify facility.'
+        description: 'The ID of the modify inventory.'
         required: true
         example: consequatur
         type: string
@@ -378,166 +426,150 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      branch_id:
-        name: branch_id
-        description: 'The <code>id</code> of an existing record in the branches table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      name:
-        name: name
-        description: 'Must not be greater than 255 characters.'
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
         required: true
-        example: vmqeopfuudtdsufvyvddq
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      code:
-        name: code
+      item_number:
+        name: item_number
         description: 'Must not be greater than 255 characters.'
-        required: false
-        example: amniihfqcoynlazghdtqt
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      location:
-        name: location
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: qxbajwbpilpmufinllwlo
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      warehouse_keeper_employee_number:
-        name: warehouse_keeper_employee_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: auydlsmsjuryvojcybzvr
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      warehouse_keeper_name:
-        name: warehouse_keeper_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: byickznkygloigmkwxphl
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      mobile:
-        name: mobile
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: vazjrcnfbaqywuxhgjjmz
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      fax_number:
-        name: fax_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: uxjubqouzswiwxtrkimfc
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      phone_number:
-        name: phone_number
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: atbxspzmrazsroyjpxmqe
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      department_warehouse_id:
-        name: department_warehouse_id
-        description: 'The <code>id</code> of an existing record in the department_warehouses table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      purchase_account:
-        name: purchase_account
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: sedyghenqcopwvownkbam
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      sale_account:
-        name: sale_account
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: lnfngefbeilfzsyuxoezb
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      inventory_valuation_method:
-        name: inventory_valuation_method
-        description: ''
         required: true
-        example: no_value
+        example: mqeopfuudtdsufvyvddqa
         type: string
-        enumValues:
-          - natural_division
-          - no_value
-          - first_purchase_price
-          - second_purchase_price
-          - third_purchase_price
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      status:
-        name: status
-        description: ''
+      item_name_ar:
+        name: item_name_ar
+        description: 'Must not be greater than 255 characters.'
         required: true
-        example: inactive
+        example: mniihfqcoynlazghdtqtq
         type: string
-        enumValues:
-          - active
-          - inactive
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      item_name_en:
+        name: item_name_en
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      barcode:
+        name: barcode
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: uydlsmsjuryvojcybzvrb
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      model:
+        name: model
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: yickznkygloigmkwxphlv
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit:
+        name: unit
+        description: 'Must not be greater than 50 characters.'
+        required: true
+        example: azjrcnfbaqywuxhgjjmzu
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      quantity:
+        name: quantity
+        description: 'Must be at least 0.'
+        required: false
+        example: 82
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      unit_price:
+        name: unit_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 34
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      minimum_limit:
+        name: minimum_limit
+        description: 'Must be at least 0.'
+        required: false
+        example: 71
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      reorder_limit:
+        name: reorder_limit
+        description: 'Must be at least 0.'
+        required: false
+        example: 4
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      active:
+        name: active
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      name: vmqeopfuudtdsufvyvddq
-      code: amniihfqcoynlazghdtqt
-      location: qxbajwbpilpmufinllwlo
-      warehouse_keeper_employee_number: auydlsmsjuryvojcybzvr
-      warehouse_keeper_name: byickznkygloigmkwxphl
-      mobile: vazjrcnfbaqywuxhgjjmz
-      fax_number: uxjubqouzswiwxtrkimfc
-      phone_number: atbxspzmrazsroyjpxmqe
-      purchase_account: sedyghenqcopwvownkbam
-      sale_account: lnfngefbeilfzsyuxoezb
-      inventory_valuation_method: no_value
-      status: inactive
+      company_id: consequatur
+      item_number: mqeopfuudtdsufvyvddqa
+      item_name_ar: mniihfqcoynlazghdtqtq
+      item_name_en: xbajwbpilpmufinllwloa
+      barcode: uydlsmsjuryvojcybzvrb
+      model: yickznkygloigmkwxphlv
+      unit: azjrcnfbaqywuxhgjjmzu
+      quantity: 82
+      unit_price: 34
+      minimum_limit: 71
+      reorder_limit: 4
+      notes: consequatur
+      active: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -552,15 +584,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/warehouses/demolish-facility/{id}'
+    uri: 'api/v1/inventory-items/remove-inventory/{id}'
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Remove the specified warehouse with soft delete.'
+      title: 'Remove the specified inventory item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -572,7 +604,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the demolish facility.'
+        description: 'The ID of the remove inventory.'
         required: true
         example: consequatur
         type: string
@@ -600,15 +632,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/warehouses/configuration-data
+    uri: api/v1/inventory-items/first-inventory
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Get dropdown data for warehouse form.'
+      title: '! Get first inventory item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -629,7 +661,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/warehouses/configuration-data could not be found."
+              "message": "The route api/v1/inventory-items/first-inventory could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -649,121 +681,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/warehouses/filter-by-criteria
+    uri: api/v1/inventory-items/last-inventory
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Filter warehouses by specific field value (Selection-Driven Display).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      field:
-        name: field
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      value:
-        name: value
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      per_page:
-        name: per_page
-        description: 'Must be at least 1. Must not be greater than 100.'
-        required: false
-        example: 13
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      sort_by:
-        name: sort_by
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      sort_direction:
-        name: sort_direction
-        description: ''
-        required: false
-        example: desc
-        type: string
-        enumValues:
-          - asc
-          - desc
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-    cleanBodyParameters:
-      field: consequatur
-      value: consequatur
-      per_page: 13
-      sort_by: consequatur
-      sort_direction: desc
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/warehouses/filter-by-criteria could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/warehouses/archived-facilities
-    metadata:
-      groupName: 'Inventory Management / Warehouses'
-      groupDescription: |-
-
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '✅ Get trashed warehouses (soft deleted).'
+      title: '! Get last inventory item.'
       description: ''
       authenticated: true
       deprecated: false
@@ -784,7 +710,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/warehouses/archived-facilities could not be found."
+              "message": "The route api/v1/inventory-items/last-inventory could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -804,15 +730,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/warehouses/initial-facility
+    uri: api/v1/inventory-items/low-stock-items
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get the first warehouse.'
+      title: '! Get low stock items.'
       description: ''
       authenticated: true
       deprecated: false
@@ -833,7 +759,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/warehouses/initial-facility could not be found."
+              "message": "The route api/v1/inventory-items/low-stock-items could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -853,15 +779,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/warehouses/final-facility
+    uri: api/v1/inventory-items/reorder-required-items
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get the last warehouse.'
+      title: '! Get items that need reordering.'
       description: ''
       authenticated: true
       deprecated: false
@@ -882,7 +808,56 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/warehouses/final-facility could not be found."
+              "message": "The route api/v1/inventory-items/reorder-required-items could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/inventory-items/deleted-inventory
+    metadata:
+      groupName: 'Inventory Management / Inventory Items'
+      groupDescription: |-
+
+        APIs for managing inventory items, stock levels, and warehouse operations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '? Get trashed (soft deleted) inventory items.'
+      description: 'Retrieve all soft deleted inventory items with search and pagination support.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/inventory-items/deleted-inventory could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -902,16 +877,16 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/v1/warehouses/{id}/reactivate-facility'
+    uri: 'api/v1/inventory-items/{id}/restore-inventory'
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Restore a soft deleted warehouse.'
-      description: ''
+      title: '? Restore a soft deleted inventory item.'
+      description: 'Restore a previously soft deleted inventory item back to active status.'
       authenticated: true
       deprecated: false
       custom: []
@@ -922,7 +897,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the warehouse.'
+        description: 'The ID of the inventory item.'
         required: true
         example: consequatur
         type: string
@@ -950,16 +925,16 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/warehouses/{id}/permanently-remove'
+    uri: 'api/v1/inventory-items/{id}/permanently-delete'
     metadata:
-      groupName: 'Inventory Management / Warehouses'
+      groupName: 'Inventory Management / Inventory Items'
       groupDescription: |-
 
-        APIs for managing warehouses, including creation, updates, search, and warehouse operations.
+        APIs for managing inventory items, stock levels, and warehouse operations.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Permanently delete a warehouse.'
-      description: ''
+      title: '? Permanently delete an inventory item (force delete).'
+      description: 'Permanently remove an inventory item from the database. This action cannot be undone.'
       authenticated: true
       deprecated: false
       custom: []
@@ -970,7 +945,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the warehouse.'
+        description: 'The ID of the inventory item.'
         required: true
         example: consequatur
         type: string
