@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Inventory\Models\Item;
+use Modules\Inventory\Models\Unit;
+use Modules\FinancialAccounts\Models\Account;
 
 class PurchaseItem extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $table = 'purchase_items';
-
     protected $fillable = [
         'purchase_id',
         'serial_number',
@@ -20,10 +22,6 @@ class PurchaseItem extends Model
         'item_id',
         'item_number',
         'item_name',
-        'unit_id',
-        'unit_name',
-        'warehouse_number',
-        'warehouse_id',
         'description',
         'quantity',
         'unit_price',
@@ -35,10 +33,14 @@ class PurchaseItem extends Model
         'tax_rate',
         'tax_amount',
         'line_total_after_tax',
+        'notes',
         'total_foreign',
         'total_local',
         'total',
-        'notes',
+        'unit_id',
+        'unit_name',
+        'warehouse_number',
+        'warehouse_id',
     ];
 
     protected $casts = [
@@ -50,6 +52,7 @@ class PurchaseItem extends Model
         'discount_amount' => 'decimal:2',
         'net_unit_price' => 'decimal:4',
         'line_total_before_tax' => 'decimal:4',
+        'total_without_tax' => 'decimal:2',
         'tax_rate' => 'decimal:2',
         'tax_amount' => 'decimal:4',
         'line_total_after_tax' => 'decimal:4',
@@ -71,7 +74,7 @@ class PurchaseItem extends Model
      */
     public function item(): BelongsTo
     {
-        return $this->belongsTo(\Modules\Inventory\Models\Item::class, 'item_id');
+        return $this->belongsTo(Item::class, 'item_id');
     }
 
     /**
@@ -79,7 +82,15 @@ class PurchaseItem extends Model
      */
     public function unit(): BelongsTo
     {
-        return $this->belongsTo(\Modules\Inventory\Models\Unit::class, 'unit_id');
+        return $this->belongsTo(Unit::class, 'unit_id');
+    }
+
+    /**
+     * Get the account details (for expense items)
+     */
+    public function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'account_id');
     }
 
     /**
@@ -135,6 +146,22 @@ class PurchaseItem extends Model
     }
 
     /**
+     * Calculate total amount for this item (backward compatibility)
+     */
+    public function calculateTotal(): float
+    {
+        return $this->calculateLineTotalAfterTax();
+    }
+
+    /**
+     * Calculate total without tax (backward compatibility)
+     */
+    public function calculateTotalWithoutTax(): float
+    {
+        return $this->calculateLineTotalBeforeTax();
+    }
+
+    /**
      * Auto-calculate all totals when saving
      */
     protected static function boot()
@@ -142,11 +169,14 @@ class PurchaseItem extends Model
         parent::boot();
 
         static::saving(function ($item) {
+            // Calculate all values
             $item->net_unit_price = $item->calculateNetUnitPrice();
             $item->line_total_before_tax = $item->calculateLineTotalBeforeTax();
             $item->tax_amount = $item->calculateTaxAmount();
             $item->line_total_after_tax = $item->calculateLineTotalAfterTax();
-            $item->total = $item->line_total_after_tax;
+
+            // Set total field
+            $item->total = $item->calculateTotal();
         });
     }
 }

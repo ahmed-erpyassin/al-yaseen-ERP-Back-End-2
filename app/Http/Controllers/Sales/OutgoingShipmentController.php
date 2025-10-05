@@ -8,6 +8,7 @@ use App\Models\OutgoingShipment;
 use App\Models\OutgoingShipmentItem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Sales\app\Enums\SalesTypeEnum;
 use Modules\Sales\Models\Sale;
@@ -16,7 +17,7 @@ class OutgoingShipmentController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $user_id = $request->user()->id;
+        $user_id = Auth::id();
 
         $shipments = Sale::where('user_id', $user_id)->where('type', SalesTypeEnum::OUTGOING_SHIPMENT)->get();
 

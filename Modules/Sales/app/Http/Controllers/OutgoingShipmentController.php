@@ -8,6 +8,11 @@ use Modules\Sales\app\Services\OutgoingShipmentService;
 use Modules\Sales\Http\Requests\OutgoingShipmentRequest;
 use Modules\Sales\Transformers\OutgoingShipmentResource;
 
+/**
+ * @group Sales Management / Outgoing Shipments
+ *
+ * APIs for managing outgoing shipments, including shipment creation, tracking, and delivery management.
+ */
 class OutgoingShipmentController extends Controller
 {
 

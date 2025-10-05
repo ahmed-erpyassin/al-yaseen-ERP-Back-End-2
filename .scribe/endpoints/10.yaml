@@ -1,20 +1,20 @@
-name: 'Inventory Management / BOM Items'
+name: 'Inventory Management / Item Types'
 description: |-
 
-  APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+  APIs for managing item types, categories, and item classification.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/bom-items/list-components
+    uri: api/v1/item-types/catalog-types
     metadata:
-      groupName: 'Inventory Management / BOM Items'
+      groupName: 'Inventory Management / Item Types'
       groupDescription: |-
 
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+        APIs for managing item types, categories, and item classification.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Display a listing of BOM items with enhanced search and filtering.'
+      title: 'Display a listing of item types.'
       description: ''
       authenticated: true
       deprecated: false
@@ -35,7 +35,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/bom-items/list-components could not be found."
+              "message": "The route api/v1/item-types/catalog-types could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -55,15 +55,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/bom-items/create-component
+    uri: api/v1/item-types/establish-type
     metadata:
-      groupName: 'Inventory Management / BOM Items'
+      groupName: 'Inventory Management / Item Types'
       groupDescription: |-
 
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+        APIs for managing item types, categories, and item classification.
       subgroup: ''
       subgroupDescription: ''
-      title: '✅ Store a newly created BOM item with all Manufacturing Formula fields.'
+      title: 'Store a newly created item type.'
       description: ''
       authenticated: true
       deprecated: false
@@ -77,61 +77,51 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      branch_id:
-        name: branch_id
-        description: 'The <code>id</code> of an existing record in the branches table.'
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      name_ar:
+        name: name_ar
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: null
+        example: amniihfqcoynlazghdtqt
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      item_id:
-        name: item_id
-        description: 'The <code>id</code> of an existing record in the items table.'
-        required: true
+      description:
+        name: description
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      description_ar:
+        name: description_ar
+        description: ''
+        required: false
         example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
-        custom: []
-      component_id:
-        name: component_id
-        description: 'The value and <code>item_id</code> must be different. The <code>id</code> of an existing record in the items table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      unit_id:
-        name: unit_id
-        description: 'The <code>id</code> of an existing record in the units table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      quantity:
-        name: quantity
-        description: 'Must be at least 0.000001.'
-        required: true
-        example: 45
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
     cleanBodyParameters:
-      item_id: consequatur
-      component_id: consequatur
-      unit_id: consequatur
-      quantity: 45
+      name: vmqeopfuudtdsufvyvddq
+      name_ar: amniihfqcoynlazghdtqt
+      description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      description_ar: consequatur
     fileParameters: []
     responses: []
     responseFields: []
@@ -146,15 +136,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/bom-items/view-component/{id}'
+    uri: 'api/v1/item-types/examine-type/{id}'
     metadata:
-      groupName: 'Inventory Management / BOM Items'
+      groupName: 'Inventory Management / Item Types'
       groupDescription: |-
 
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+        APIs for managing item types, categories, and item classification.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified BOM item.'
+      title: 'Display the specified item type.'
       description: ''
       authenticated: true
       deprecated: false
@@ -166,7 +156,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the view component.'
+        description: 'The ID of the examine type.'
         required: true
         example: consequatur
         type: string
@@ -186,7 +176,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/bom-items/view-component/consequatur could not be found."
+              "message": "The route api/v1/item-types/examine-type/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -206,15 +196,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/bom-items/update-component/{id}'
+    uri: 'api/v1/item-types/modify-type/{id}'
     metadata:
-      groupName: 'Inventory Management / BOM Items'
+      groupName: 'Inventory Management / Item Types'
       groupDescription: |-
 
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+        APIs for managing item types, categories, and item classification.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified BOM item.'
+      title: 'Update the specified item type.'
       description: ''
       authenticated: true
       deprecated: false
@@ -226,7 +216,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the update component.'
+        description: 'The ID of the modify type.'
         required: true
         example: consequatur
         type: string
@@ -239,61 +229,62 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      branch_id:
-        name: branch_id
-        description: 'The <code>id</code> of an existing record in the branches table.'
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      name_ar:
+        name: name_ar
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: null
+        example: amniihfqcoynlazghdtqt
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      item_id:
-        name: item_id
-        description: 'The <code>id</code> of an existing record in the items table.'
-        required: true
+      description:
+        name: description
+        description: ''
+        required: false
+        example: 'Dolores dolorum amet iste laborum eius est dolor.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      description_ar:
+        name: description_ar
+        description: ''
+        required: false
         example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         custom: []
-      component_id:
-        name: component_id
-        description: 'The value and <code>item_id</code> must be different. The <code>id</code> of an existing record in the items table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      unit_id:
-        name: unit_id
-        description: 'The <code>id</code> of an existing record in the units table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      quantity:
-        name: quantity
-        description: 'Must be at least 0.000001.'
-        required: true
-        example: 45
-        type: number
+      is_active:
+        name: is_active
+        description: ''
+        required: false
+        example: false
+        type: boolean
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
     cleanBodyParameters:
-      item_id: consequatur
-      component_id: consequatur
-      unit_id: consequatur
-      quantity: 45
+      name: vmqeopfuudtdsufvyvddq
+      name_ar: amniihfqcoynlazghdtqt
+      description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      description_ar: consequatur
+      is_active: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -308,15 +299,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/bom-items/delete-component/{id}'
+    uri: 'api/v1/item-types/eliminate-type/{id}'
     metadata:
-      groupName: 'Inventory Management / BOM Items'
+      groupName: 'Inventory Management / Item Types'
       groupDescription: |-
 
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+        APIs for managing item types, categories, and item classification.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified BOM item (soft delete).'
+      title: 'Remove the specified item type.'
       description: ''
       authenticated: true
       deprecated: false
@@ -328,7 +319,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the delete component.'
+        description: 'The ID of the eliminate type.'
         required: true
         example: consequatur
         type: string
@@ -356,194 +347,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/bom-items/by-item/{itemId}'
+    uri: api/v1/item-types/type-selections
     metadata:
-      groupName: 'Inventory Management / BOM Items'
+      groupName: 'Inventory Management / Item Types'
       groupDescription: |-
 
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
+        APIs for managing item types, categories, and item classification.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get BOM items for a specific item (Bill of Materials).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      itemId:
-        name: itemId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      itemId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/bom-items/by-item/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/bom-items/by-component/{componentId}'
-    metadata:
-      groupName: 'Inventory Management / BOM Items'
-      groupDescription: |-
-
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get items that use a specific component.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      componentId:
-        name: componentId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      componentId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/bom-items/by-component/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/bom-items/compute-requirements
-    metadata:
-      groupName: 'Inventory Management / BOM Items'
-      groupDescription: |-
-
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Calculate material requirements for production.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      item_id:
-        name: item_id
-        description: 'The <code>id</code> of an existing record in the items table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      production_quantity:
-        name: production_quantity
-        description: 'Must be at least 0.01.'
-        required: true
-        example: 45
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanBodyParameters:
-      item_id: consequatur
-      production_quantity: 45
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/bom-items/filter-by-criteria
-    metadata:
-      groupName: 'Inventory Management / BOM Items'
-      groupDescription: |-
-
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '! Filter BOM items by field value.'
+      title: 'Get item type options for dropdown.'
       description: ''
       authenticated: true
       deprecated: false
@@ -564,7 +376,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/bom-items/filter-by-criteria could not be found."
+              "message": "The route api/v1/item-types/type-selections could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -572,249 +384,6 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/bom-items/first-component
-    metadata:
-      groupName: 'Inventory Management / BOM Items'
-      groupDescription: |-
-
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '! Get first BOM item.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/bom-items/first-component could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/bom-items/last-component
-    metadata:
-      groupName: 'Inventory Management / BOM Items'
-      groupDescription: |-
-
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '! Get last BOM item.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/bom-items/last-component could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/bom-items/deleted-bom-items
-    metadata:
-      groupName: 'Inventory Management / BOM Items'
-      groupDescription: |-
-
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get trashed (soft deleted) BOM items.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/bom-items/deleted-bom-items could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: 'api/v1/bom-items/{id}/restore-bom-item'
-    metadata:
-      groupName: 'Inventory Management / BOM Items'
-      groupDescription: |-
-
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Restore a soft deleted BOM item.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the bom item.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/bom-items/{id}/permanently-delete'
-    metadata:
-      groupName: 'Inventory Management / BOM Items'
-      groupDescription: |-
-
-        APIs for managing Bill of Materials (BOM) items, including component relationships and requirements calculation.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Permanently delete a BOM item (force delete).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the bom item.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
     responseFields: []
     auth:
       - headers

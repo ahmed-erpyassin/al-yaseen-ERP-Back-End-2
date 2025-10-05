@@ -11,6 +11,13 @@ class PurchasesDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $this->command->info('🚀 Starting Purchases Module Seeding...');
+
+        $this->call([
+            PurchaseSeeder::class,
+            PurchaseItemSeeder::class,
+        ]);
+
+        $this->command->info('✅ Purchases Module Seeding Completed!');
     }
 }

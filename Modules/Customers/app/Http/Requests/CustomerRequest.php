@@ -14,9 +14,12 @@ class CustomerRequest extends FormRequest
 
     public function rules(): array
     {
+        // Get the customer ID from the route parameter
+        $customerId = $this->route('id');
+
         return  [
-            // 'company_id' => ['required', 'integer', 'exists:companies,id'],
-            // 'branch_id' => ['nullable', 'integer', 'exists:branches,id'],
+             'company_id' => ['required', 'integer', 'exists:companies,id'],
+            'branch_id' => ['nullable'],
             'currency_id' => ['required', 'integer', 'exists:currencies,id'],
             'employee_id' => ['nullable', 'integer', 'exists:users,id'],
             'country_id' => ['nullable', 'integer', 'exists:countries,id'],
@@ -29,7 +32,7 @@ class CustomerRequest extends FormRequest
                 'nullable',
                 'email',
                 'max:255',
-                Rule::unique('customers')->ignore($this->customer),
+                Rule::unique('customers')->ignore($customerId),
             ],
             'phone' => ['nullable', 'string', 'max:50'],
             'mobile' => ['nullable', 'string', 'max:50'],

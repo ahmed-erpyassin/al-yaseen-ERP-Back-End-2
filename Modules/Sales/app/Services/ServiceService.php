@@ -18,6 +18,10 @@ use Modules\FinancialAccounts\Models\Account;
 use Modules\FinancialAccounts\Models\Currency;
 use Modules\FinancialAccounts\Models\TaxRate;
 use Modules\Inventory\Models\Unit;
+use Modules\Inventory\Models\Item;
+use Modules\Companies\Models\Company;
+use Modules\Companies\Models\Branch;
+use Modules\HumanResources\Models\Employee;
 use Carbon\Carbon;
 
 class ServiceService
@@ -186,16 +190,13 @@ class ServiceService
     public function getSearchFormData(Request $request)
     {
         try {
-            $companyId = $request->user()->company_id ?? 101;
-
             return [
-                'customers' => Customer::where('company_id', $companyId)
-                    ->select('id', 'name', 'email')
-                    ->orderBy('name')
+                'customers' => Customer::select('id', 'first_name', 'email')
+                    ->orderBy('first_name')
                     ->get(),
 
                 'currencies' => Currency::select('id', 'name', 'code', 'symbol')
-                    ->where('is_active', true)
+                   // ->where('is_active', true)
                     ->orderBy('name')
                     ->get(),
 
@@ -234,9 +235,14 @@ class ServiceService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = $request->user()->company_id ?? 101;
-                $userId = $request->user()->id;
+                $userId = Auth::id();
                 $validatedData = $request->validated();
+
+                // Get or create required entities
+                $companyId = Auth::user()->company_id ?? Company::first()?->id ?? 1;
+                $branchId = $validatedData['branch_id'] ?? Branch::first()?->id ?? 1;
+                $currencyId = $validatedData['currency_id'] ?? Currency::first()?->id ?? 1;
+                $employeeId = $validatedData['employee_id'] ?? Employee::first()?->id ?? 1;
 
                 // Generate book code and invoice number for services
                 $numberingData = $this->generateBookAndInvoiceNumber($companyId);
@@ -246,8 +252,8 @@ class ServiceService
 
                 // Get live exchange rate if currency is provided
                 $exchangeRate = 1;
-                if (isset($validatedData['currency_id'])) {
-                    $exchangeRate = $this->getLiveExchangeRate($validatedData['currency_id']);
+                if ($currencyId) {
+                    $exchangeRate = $this->getLiveExchangeRate($currencyId);
                 }
 
                 // Prepare service data
@@ -263,29 +269,36 @@ class ServiceService
                     'date' => Carbon::now()->toDateString(),
                     'time' => Carbon::now()->toTimeString(),
 
-                    // Customer information
+                    // Required fields from original migration
+                    'journal_number' => $validatedData['journal_number'] ?? 1,
+                    'branch_id' => $branchId,
+                    'currency_id' => $currencyId,
+                    'employee_id' => $employeeId,
                     'customer_id' => $validatedData['customer_id'],
+                    'due_date' => $validatedData['due_date'] ?? Carbon::now()->addDays(30)->toDateString(),
+                    'exchange_rate' => $exchangeRate,
+                    'total_foreign' => 0.0000,
+                    'total_local' => 0.0000,
+                    'total_amount' => 0.0000,
+
+                    // Customer information
                     'customer_email' => $validatedData['customer_email'] ?? ($customer ? $customer->email : null),
 
-                    // Currency and exchange rate
-                    'currency_id' => $validatedData['currency_id'] ?? null,
-                    'exchange_rate' => $exchangeRate,
-
                     // Other fields from request
-                    'due_date' => $validatedData['due_date'] ?? null,
                     'licensed_operator' => $validatedData['licensed_operator'] ?? null,
                     'notes' => $validatedData['notes'] ?? null,
-                    'employee_id' => $validatedData['employee_id'] ?? null,
-                    'branch_id' => $validatedData['branch_id'] ?? null,
 
                     // Tax settings
                     'is_tax_inclusive' => $validatedData['is_tax_inclusive'] ?? false,
-                    'tax_percentage' => $validatedData['tax_percentage'] ?? 0,
+                    'tax_percentage' => floatval($validatedData['tax_percentage'] ?? 0),
 
-                    // Financial fields
-                    'total_without_tax' => 0, // Will be calculated
-                    'tax_amount' => 0, // Will be calculated
-                    'total_amount' => 0, // Will be calculated
+                    // Financial fields (will be calculated)
+                    'cash_paid' => 0.00,
+                    'checks_paid' => 0.00,
+                    'allowed_discount' => 0.00,
+                    'total_without_tax' => 0.00,
+                    'tax_amount' => 0.00,
+                    'remaining_balance' => 0.00,
                     'created_by' => $userId,
                 ];
 
@@ -427,6 +440,10 @@ class ServiceService
                 $unit = Unit::find($itemData['unit_id']);
             }
 
+            // Get or set default item_id and unit_id for required fields
+            $itemId = $itemData['item_id'] ?? Item::first()?->id ?? 1;
+            $unitId = $itemData['unit_id'] ?? Unit::first()?->id ?? 1;
+
             // Calculate totals
             $quantity = $itemData['quantity'] ?? 1;
             $unitPrice = $itemData['unit_price'] ?? 0;
@@ -443,11 +460,12 @@ class ServiceService
 
             $saleItemData = [
                 'sale_id' => $service->id,
+                'item_id' => $itemId, // Required field - use existing item or default
                 'serial_number' => $index + 1,
                 'account_id' => $itemData['account_id'] ?? null,
                 'account_number' => $account ? $account->code : ($itemData['account_number'] ?? null),
                 'account_name' => $account ? $account->name : ($itemData['account_name'] ?? null),
-                'unit_id' => $itemData['unit_id'] ?? null,
+                'unit_id' => $unitId, // Required field - use existing unit or default
                 'unit_name' => $unit ? $unit->name : ($itemData['unit_name'] ?? null),
                 'quantity' => $quantity,
                 'unit_price' => $unitPrice,
@@ -473,11 +491,12 @@ class ServiceService
         $totalAmount = $totalWithoutTax + $totalTaxAmount;
 
         $service->update([
-            'total_without_tax' => $totalWithoutTax,
-            'tax_amount' => $totalTaxAmount,
-            'total_amount' => $totalAmount,
-            'total_foreign' => $totalAmount,
-            'total_local' => $totalAmount * $service->exchange_rate,
+            'total_without_tax' => floatval($totalWithoutTax),
+            'tax_amount' => floatval($totalTaxAmount),
+            'total_amount' => floatval($totalAmount),
+            'total_foreign' => floatval($totalAmount),
+            'total_local' => floatval($totalAmount * $service->exchange_rate),
+            'remaining_balance' => floatval($totalAmount), // Initially, full amount is remaining
         ]);
     }
 
@@ -489,12 +508,12 @@ class ServiceService
         $search = $request->get('search', '');
         $limit = $request->get('limit', 10);
 
-        return Customer::where('name', 'like', "%{$search}%")
+        return Customer::where('first_name', 'like', "%{$search}%")
             ->orWhere('email', 'like', "%{$search}%")
             ->orWhere('phone', 'like', "%{$search}%")
             ->orWhere('customer_number', 'like', "%{$search}%")
             ->limit($limit)
-            ->get(['id', 'customer_number', 'name', 'email', 'phone']);
+            ->get(['id', 'customer_number', 'first_name', 'email', 'phone']);
     }
 
     /**
@@ -506,9 +525,7 @@ class ServiceService
         $search = $request->get('search', '');
         $searchType = $request->get('search_type', 'name'); // 'name', 'code', or 'both'
         $limit = $request->get('limit', 50);
-        $companyId = $request->user()->company_id ?? 101;
-
-        $query = Account::where('company_id', $companyId);
+        $query = Account::query();
 
         if ($search) {
             if ($searchType === 'name') {
@@ -537,10 +554,7 @@ class ServiceService
      */
     public function getAllAccountNumbers(Request $request)
     {
-        $companyId = $request->user()->company_id ?? 101;
-
-        return Account::where('company_id', $companyId)
-            ->select(['id', 'code', 'name', 'type'])
+        return Account::select(['id', 'code', 'name', 'type'])
             ->orderBy('code')
             ->get()
             ->map(function ($account) {
@@ -560,14 +574,11 @@ class ServiceService
     public function getAccountByNumber(Request $request)
     {
         $accountNumber = $request->get('account_number');
-        $companyId = $request->user()->company_id ?? 101;
-
         if (!$accountNumber) {
             throw new \Exception('Account number is required');
         }
 
-        $account = Account::where('company_id', $companyId)
-            ->where('code', $accountNumber)
+        $account = Account::where('code', $accountNumber)
             ->first();
 
         if (!$account) {
@@ -588,14 +599,11 @@ class ServiceService
     public function getAccountByName(Request $request)
     {
         $accountName = $request->get('account_name');
-        $companyId = $request->user()->company_id ?? 101;
-
         if (!$accountName) {
             throw new \Exception('Account name is required');
         }
 
-        $account = Account::where('company_id', $companyId)
-            ->where('name', 'like', $accountName . '%')
+        $account = Account::where('name', 'like', $accountName . '%')
             ->first();
 
         if (!$account) {
@@ -616,16 +624,12 @@ class ServiceService
     public function getFormData(?Request $request = null)
     {
         try {
-            $companyId = $request ? ($request->user()->company_id ?? 101) : 101;
-
             return [
-                'customers' => Customer::where('company_id', $companyId)
-                    ->select('id', 'customer_number', 'name', 'email', 'phone')
+                'customers' => Customer::select('id', 'customer_number', 'first_name', 'email', 'phone')
                     ->orderBy('customer_number')
                     ->get(),
 
-                'accounts' => Account::where('company_id', $companyId)
-                    ->select('id', 'code', 'name', 'type')
+                'accounts' => Account::select('id', 'code', 'name', 'type')
                     ->orderBy('code')
                     ->get()
                     ->map(function ($account) {
@@ -638,14 +642,12 @@ class ServiceService
                         ];
                     }),
 
-                'currencies' => Currency::where('company_id', $companyId)
-                    ->select('id', 'name', 'code', 'symbol')
+                'currencies' => Currency::select('id', 'name', 'code', 'symbol')
                     ->get(),
 
                 'units' => Unit::select('id', 'name', 'symbol')->get(),
 
-                'tax_rates' => TaxRate::where('company_id', $companyId)
-                    ->select('id', 'name', 'code', 'rate', 'type')
+                'tax_rates' => TaxRate::select('id', 'name', 'code', 'rate', 'type')
                     ->get(),
 
                 'statuses' => [
@@ -676,7 +678,7 @@ class ServiceService
     public function show($id)
     {
         try {
-            return Sale::with([
+            $service = Sale::with([
                 'customer',
                 'items.account',
                 'items.unit',
@@ -686,7 +688,14 @@ class ServiceService
                 'branch'
             ])
             ->where('type', SalesTypeEnum::SERVICE)
-            ->findOrFail($id);
+            ->where('id', $id)
+            ->first();
+
+            if (!$service) {
+                throw new \Exception('Service not found');
+            }
+
+            return $service;
 
         } catch (\Exception $e) {
             throw new \Exception('Error fetching service: ' . $e->getMessage());
@@ -702,7 +711,12 @@ class ServiceService
             return DB::transaction(function () use ($request, $id) {
                 $service = Sale::with(['items'])
                     ->where('type', SalesTypeEnum::SERVICE)
-                    ->findOrFail($id);
+                    ->where('id', $id)
+                    ->first();
+
+                if (!$service) {
+                    throw new \Exception('Service not found');
+                }
 
                 // Check if service can be updated
                 if ($service->status === 'completed') {
@@ -710,8 +724,8 @@ class ServiceService
                 }
 
                 $validatedData = $request->validated();
-                $userId = $request->user()->id;
-                $companyId = $request->user()->company_id ?? $service->company_id;
+                $userId = Auth::id();
+                $companyId = Auth::user()->company_id ?? $service->company_id;
 
                 // Get customer data for auto-population if customer changed
                 $customer = null;
@@ -795,7 +809,12 @@ class ServiceService
             return DB::transaction(function () use ($id) {
                 $service = Sale::with(['items'])
                     ->where('type', SalesTypeEnum::SERVICE)
-                    ->findOrFail($id);
+                    ->where('id', $id)
+                    ->first();
+
+                if (!$service) {
+                    throw new \Exception('Service not found');
+                }
 
                 // Check if service can be deleted
                 if ($service->status === 'completed') {
@@ -896,7 +915,12 @@ class ServiceService
             return DB::transaction(function () use ($id) {
                 $service = Sale::onlyTrashed()
                     ->where('type', SalesTypeEnum::SERVICE)
-                    ->findOrFail($id);
+                    ->where('id', $id)
+                    ->first();
+
+                if (!$service) {
+                    throw new \Exception('Deleted service not found');
+                }
 
                 // Restore the service items first
                 SaleItem::onlyTrashed()
@@ -934,7 +958,12 @@ class ServiceService
             return DB::transaction(function () use ($id) {
                 $service = Sale::onlyTrashed()
                     ->where('type', SalesTypeEnum::SERVICE)
-                    ->findOrFail($id);
+                    ->where('id', $id)
+                    ->first();
+
+                if (!$service) {
+                    throw new \Exception('Deleted service not found');
+                }
 
                 // Force delete all service items
                 SaleItem::onlyTrashed()

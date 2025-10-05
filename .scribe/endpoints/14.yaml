@@ -1,21 +1,268 @@
-name: 'Project Management / Tasks'
+name: 'Project Management / Projects'
 description: |-
 
-  APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+  APIs for managing projects, including creation, updates, search, and project lifecycle management.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-tasks/fetch-all
+    uri: api/v1/projects/browse-all
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display a listing of tasks.'
-      description: ''
+      title: 'List Projects'
+      description: 'Retrieve a paginated list of projects with advanced search and filtering capabilities.'
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      project_number:
+        name: project_number
+        description: 'Filter by project number.'
+        required: false
+        example: PRJ-001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      project_name:
+        name: project_name
+        description: 'Filter by project name.'
+        required: false
+        example: 'Website Development'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'Filter by customer name.'
+        required: false
+        example: 'ABC Company'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      status:
+        name: status
+        description: 'Filter by project status.'
+        required: false
+        example: active
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      project_manager_name:
+        name: project_manager_name
+        description: 'Filter by project manager name.'
+        required: false
+        example: 'John Doe'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      exact_date:
+        name: exact_date
+        description: 'Filter by exact date (Y-m-d format).'
+        required: false
+        example: '2024-01-15'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      date_from:
+        name: date_from
+        description: 'Filter projects from this date (Y-m-d format).'
+        required: false
+        example: '2024-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      date_to:
+        name: date_to
+        description: 'Filter projects to this date (Y-m-d format).'
+        required: false
+        example: '2024-12-31'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      start_date_from:
+        name: start_date_from
+        description: 'Filter by start date from (Y-m-d format).'
+        required: false
+        example: '2024-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      start_date_to:
+        name: start_date_to
+        description: 'Filter by start date to (Y-m-d format).'
+        required: false
+        example: '2024-12-31'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      end_date_from:
+        name: end_date_from
+        description: 'Filter by end date from (Y-m-d format).'
+        required: false
+        example: '2024-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      end_date_to:
+        name: end_date_to
+        description: 'Filter by end date to (Y-m-d format).'
+        required: false
+        example: '2024-12-31'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      general_search:
+        name: general_search
+        description: 'General search across multiple fields.'
+        required: false
+        example: development
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      sort_field:
+        name: sort_field
+        description: 'Field to sort by.'
+        required: false
+        example: created_at
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      sort_direction:
+        name: sort_direction
+        description: 'Sort direction (asc/desc).'
+        required: false
+        example: desc
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      per_page:
+        name: per_page
+        description: 'Number of items per page (default: 15).'
+        required: false
+        example: 20
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      project_number: PRJ-001
+      project_name: 'Website Development'
+      customer_name: 'ABC Company'
+      status: active
+      project_manager_name: 'John Doe'
+      exact_date: '2024-01-15'
+      date_from: '2024-01-01'
+      date_to: '2024-12-31'
+      start_date_from: '2024-01-01'
+      start_date_to: '2024-12-31'
+      end_date_from: '2024-01-01'
+      end_date_to: '2024-12-31'
+      general_search: development
+      sort_field: created_at
+      sort_direction: desc
+      per_page: 20
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": [
+              {
+                "id": 1,
+                "project_number": "PRJ-001",
+                "project_name": "Website Development",
+                "customer_name": "ABC Company",
+                "status": "active",
+                "project_manager_name": "John Doe",
+                "start_date": "2024-01-01",
+                "end_date": "2024-06-30",
+                "created_at": "2024-01-01T00:00:00.000000Z"
+              }
+            ],
+            "filters_applied": {},
+            "message": "Projects retrieved successfully"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error retrieving projects: Database connection failed"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/projects/establish-new
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Create Project'
+      description: 'Create a new project with the provided details.'
       authenticated: true
       deprecated: false
       custom: []
@@ -27,6 +274,373 @@ endpoints:
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
+    bodyParameters:
+      company_id:
+        name: company_id
+        description: 'The <code>id</code> of an existing record in the companies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      branch_id:
+        name: branch_id
+        description: 'The <code>id</code> of an existing record in the branches table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      fiscal_year_id:
+        name: fiscal_year_id
+        description: 'The <code>id</code> of an existing record in the fiscal_years table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      cost_center_id:
+        name: cost_center_id
+        description: 'The <code>id</code> of an existing record in the cost_centers table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      customer_id:
+        name: customer_id
+        description: 'The <code>id</code> of an existing record in the customers table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      currency_price:
+        name: currency_price
+        description: 'Must be at least 0.'
+        required: true
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      include_vat:
+        name: include_vat
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      project_number:
+        name: project_number
+        description: 'Unique project number.'
+        required: true
+        example: PRJ-001
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      name:
+        name: name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: niihfqcoynlazghdtqtqx
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      description:
+        name: description
+        description: 'Project description.'
+        required: false
+        example: 'Complete website redesign and development'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      project_value:
+        name: project_value
+        description: 'Must be at least 0.'
+        required: true
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      manager_id:
+        name: manager_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      project_manager_name:
+        name: project_manager_name
+        description: 'Name of the project manager.'
+        required: true
+        example: 'John Doe'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      start_date:
+        name: start_date
+        description: 'Project start date (Y-m-d format).'
+        required: true
+        example: '2024-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      end_date:
+        name: end_date
+        description: 'Project end date (Y-m-d format).'
+        required: true
+        example: '2024-06-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      status:
+        name: status
+        description: 'Project status.'
+        required: true
+        example: active
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      country_id:
+        name: country_id
+        description: 'The <code>id</code> of an existing record in the countries table.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      notes:
+        name: notes
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_name:
+        name: customer_name
+        description: 'Name of the customer.'
+        required: true
+        example: 'ABC Company'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: true
+        custom: []
+      customer_email:
+        name: customer_email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: eloisa.harber@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      customer_phone:
+        name: customer_phone
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: fqcoynlazghdtqtqx
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: bajwbpilpmufinllwloau
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      project_name:
+        name: project_name
+        description: 'The name of the project.'
+        required: true
+        example: 'Website Development'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+      budget:
+        name: budget
+        description: 'Project budget.'
+        required: false
+        example: '50000.00'
+        type: numeric
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      company_id: consequatur
+      branch_id: consequatur
+      fiscal_year_id: consequatur
+      cost_center_id: consequatur
+      customer_id: consequatur
+      currency_id: consequatur
+      currency_price: 45
+      include_vat: true
+      project_number: PRJ-001
+      name: niihfqcoynlazghdtqtqx
+      description: 'Complete website redesign and development'
+      project_value: 12
+      manager_id: consequatur
+      project_manager_name: 'John Doe'
+      start_date: '2024-01-01'
+      end_date: '2024-06-30'
+      status: active
+      country_id: consequatur
+      notes: consequatur
+      customer_name: 'ABC Company'
+      customer_email: eloisa.harber@example.com
+      customer_phone: fqcoynlazghdtqtqx
+      licensed_operator: bajwbpilpmufinllwloau
+      project_name: 'Website Development'
+      budget: '50000.00'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "id": 1,
+              "project_number": "PRJ-001",
+              "project_name": "Website Development",
+              "customer_name": "ABC Company",
+              "status": "active",
+              "project_manager_name": "John Doe",
+              "start_date": "2024-01-01",
+              "end_date": "2024-06-30",
+              "created_at": "2024-01-01T00:00:00.000000Z"
+            },
+            "message": "Project created successfully"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": "Validation failed",
+            "errors": {
+              "project_name": ["The project name field is required."]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error creating project: Database connection failed"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/examine/{id}'
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Show the specified resource with comprehensive data.'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the examine.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -35,7 +649,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-tasks/fetch-all could not be found."
+              "message": "The route api/v1/projects/examine/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -54,16 +668,16 @@ endpoints:
     custom: []
   -
     httpMethods:
-      - POST
-    uri: api/v1/project-tasks/generate-new
+      - PUT
+    uri: 'api/v1/projects/revise/{id}'
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Store a newly created task.'
+      title: 'Update the specified resource in storage.'
       description: ''
       authenticated: true
       deprecated: false
@@ -72,170 +686,22 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the revise.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      project_id:
-        name: project_id
-        description: 'The <code>id</code> of an existing record in the projects table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      task_name:
-        name: task_name
-        description: 'Must not be greater than 255 characters.'
-        required: true
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      assigned_to:
-        name: assigned_to
-        description: 'The <code>id</code> of an existing record in the employees table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      due_date:
-        name: due_date
-        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
-        required: true
-        example: '2106-10-25'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      status:
-        name: status
-        description: ''
-        required: true
-        example: blocked
-        type: string
-        enumValues:
-          - to_do
-          - in_progress
-          - done
-          - blocked
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      milestone_id:
-        name: milestone_id
-        description: 'The <code>id</code> of an existing record in the project_milestones table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      title:
-        name: title
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      description:
-        name: description
-        description: ''
-        required: false
-        example: 'Dolores dolorum amet iste laborum eius est dolor.'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      notes:
-        name: notes
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      priority:
-        name: priority
-        description: ''
-        required: false
-        example: low
-        type: string
-        enumValues:
-          - low
-          - medium
-          - high
-          - urgent
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      start_date:
-        name: start_date
-        description: 'Must be a valid date. Must be a date before or equal to <code>due_date</code>.'
-        required: false
-        example: '2020-01-21'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      estimated_hours:
-        name: estimated_hours
-        description: 'Must be at least 1. Must not be greater than 1000.'
-        required: false
-        example: 13
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      actual_hours:
-        name: actual_hours
-        description: 'Must be at least 0. Must not be greater than 1000.'
-        required: false
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      progress:
-        name: progress
-        description: 'Must be at least 0. Must not be greater than 100.'
-        required: false
-        example: 5
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      records:
-        name: records
-        description: 'Must be a valid URL. Must not be greater than 500 characters.'
-        required: false
-        example:
-          - opfuudtdsufvyvddqamni
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
       company_id:
         name: company_id
         description: 'The <code>id</code> of an existing record in the companies table.'
@@ -266,132 +732,9 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-    cleanBodyParameters:
-      project_id: consequatur
-      task_name: mqeopfuudtdsufvyvddqa
-      assigned_to: consequatur
-      due_date: '2106-10-25'
-      status: blocked
-      title: mqeopfuudtdsufvyvddqa
-      description: 'Dolores dolorum amet iste laborum eius est dolor.'
-      notes: consequatur
-      priority: low
-      start_date: '2020-01-21'
-      estimated_hours: 13
-      actual_hours: 16
-      progress: 5
-      records:
-        - opfuudtdsufvyvddqamni
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/project-tasks/inspect/{id}'
-    metadata:
-      groupName: 'Project Management / Tasks'
-      groupDescription: |-
-
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Display the specified task.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the inspect.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-tasks/inspect/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - PUT
-    uri: 'api/v1/project-tasks/update-existing/{id}'
-    metadata:
-      groupName: 'Project Management / Tasks'
-      groupDescription: |-
-
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Update the specified task.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        name: id
-        description: 'The ID of the update existing.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      project_id:
-        name: project_id
-        description: 'The <code>id</code> of an existing record in the projects table.'
+      cost_center_id:
+        name: cost_center_id
+        description: 'The <code>id</code> of an existing record in the cost_centers table.'
         required: false
         example: null
         type: string
@@ -399,19 +742,9 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      task_name:
-        name: task_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: vmqeopfuudtdsufvyvddq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      assigned_to:
-        name: assigned_to
-        description: 'The <code>id</code> of an existing record in the employees table.'
+      customer_id:
+        name: customer_id
+        description: 'The <code>id</code> of an existing record in the customers table.'
         required: false
         example: null
         type: string
@@ -419,45 +752,51 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      due_date:
-        name: due_date
-        description: 'Must be a valid date.'
+      currency_id:
+        name: currency_id
+        description: 'The <code>id</code> of an existing record in the currencies table.'
         required: false
-        example: '2025-09-25T13:42:26'
+        example: null
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      status:
-        name: status
+      currency_price:
+        name: currency_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 73
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      include_vat:
+        name: include_vat
         description: ''
         required: false
-        example: in_progress
-        type: string
-        enumValues:
-          - to_do
-          - in_progress
-          - done
-          - blocked
+        example: true
+        type: boolean
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      milestone_id:
-        name: milestone_id
-        description: 'The <code>id</code> of an existing record in the project_milestones table.'
+      project_number:
+        name: project_number
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: null
+        example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         custom: []
-      title:
-        name: title
+      name:
+        name: name
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: amniihfqcoynlazghdtqt
+        example: mniihfqcoynlazghdtqtq
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -473,6 +812,81 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
+      project_value:
+        name: project_value
+        description: 'Must be at least 0.'
+        required: false
+        example: 12
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      manager_id:
+        name: manager_id
+        description: 'The <code>id</code> of an existing record in the users table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      project_manager_name:
+        name: project_manager_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: tdsufvyvddqamniihfqco
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      start_date:
+        name: start_date
+        description: 'Must be a valid date.'
+        required: false
+        example: '2025-09-30T13:03:28'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      end_date:
+        name: end_date
+        description: 'Must be a valid date. Must be a date after <code>start_date</code>.'
+        required: false
+        example: '2106-10-30'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      status:
+        name: status
+        description: ''
+        required: false
+        example: draft
+        type: string
+        enumValues:
+          - draft
+          - open
+          - on-hold
+          - cancelled
+          - closed
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      country_id:
+        name: country_id
+        description: 'The <code>id</code> of an existing record in the countries table.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
       notes:
         name: notes
         description: ''
@@ -483,46 +897,62 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      priority:
-        name: priority
-        description: ''
+      customer_name:
+        name: customer_name
+        description: 'Must not be greater than 255 characters.'
         required: false
-        example: high
-        type: string
-        enumValues:
-          - low
-          - medium
-          - high
-          - urgent
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      start_date:
-        name: start_date
-        description: 'Must be a valid date.'
-        required: false
-        example: '2025-09-25T13:42:26'
+        example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      estimated_hours:
-        name: estimated_hours
-        description: 'Must be at least 1. Must not be greater than 1000.'
+      customer_email:
+        name: customer_email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: false
+        example: eloisa.harber@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      customer_phone:
+        name: customer_phone
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: fqcoynlazghdtqtqx
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      licensed_operator:
+        name: licensed_operator
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: bajwbpilpmufinllwloau
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      budget:
+        name: budget
+        description: 'Must be at least 0.'
+        required: false
+        example: 87
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      actual_cost:
+        name: actual_cost
+        description: 'Must be at least 0.'
         required: false
         example: 13
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      actual_hours:
-        name: actual_hours
-        description: 'Must be at least 0. Must not be greater than 1000.'
-        required: false
-        example: 16
-        type: integer
+        type: number
         enumValues: []
         exampleWasSpecified: false
         nullable: false
@@ -531,37 +961,31 @@ endpoints:
         name: progress
         description: 'Must be at least 0. Must not be greater than 100.'
         required: false
-        example: 5
+        example: 12
         type: number
         enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      records:
-        name: records
-        description: 'Must be a valid URL. Must not be greater than 500 characters.'
-        required: false
-        example:
-          - opfuudtdsufvyvddqamni
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
     cleanBodyParameters:
-      task_name: vmqeopfuudtdsufvyvddq
-      due_date: '2025-09-25T13:42:26'
-      status: in_progress
-      title: amniihfqcoynlazghdtqt
+      currency_price: 73
+      include_vat: true
+      project_number: mqeopfuudtdsufvyvddqa
+      name: mniihfqcoynlazghdtqtq
       description: 'Dolores dolorum amet iste laborum eius est dolor.'
+      project_value: 12
+      project_manager_name: tdsufvyvddqamniihfqco
+      start_date: '2025-09-30T13:03:28'
+      end_date: '2106-10-30'
+      status: draft
       notes: consequatur
-      priority: high
-      start_date: '2025-09-25T13:42:26'
-      estimated_hours: 13
-      actual_hours: 16
-      progress: 5
-      records:
-        - opfuudtdsufvyvddqamni
+      customer_name: mqeopfuudtdsufvyvddqa
+      customer_email: eloisa.harber@example.com
+      customer_phone: fqcoynlazghdtqtqx
+      licensed_operator: bajwbpilpmufinllwloau
+      budget: 87
+      actual_cost: 13
+      progress: 12
     fileParameters: []
     responses: []
     responseFields: []
@@ -576,15 +1000,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/project-tasks/delete-item/{id}'
+    uri: 'api/v1/projects/eliminate/{id}'
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified task.'
+      title: 'Delete a project (soft delete)'
       description: ''
       authenticated: true
       deprecated: false
@@ -596,7 +1020,324 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the delete item.'
+        description: 'The ID of the eliminate.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/projects/advanced-search
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Advanced search for projects'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/projects/filter-by-field
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get projects by specific field value for dynamic selection display'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/projects/filter-by-field could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/projects/field-values
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get unique values for a specific field for dropdown/selection'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/projects/field-values could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/projects/sortable-fields
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get sortable fields for projects'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/projects/sortable-fields could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/projects/apply-sort
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Sort projects by specific field with first/last functionality'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/projects/{id}/restore-project'
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Restore a soft-deleted project'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the project.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/projects/{id}/permanent-delete'
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Permanently delete a project (force delete)'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the project.'
         required: true
         example: consequatur
         type: string
@@ -624,15 +1365,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-tasks/advanced-search
+    uri: api/v1/projects/deleted-projects
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Advanced search for tasks.'
+      title: 'Get trashed (soft-deleted) projects'
       description: ''
       authenticated: true
       deprecated: false
@@ -653,7 +1394,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-tasks/advanced-search could not be found."
+              "message": "The route api/v1/projects/deleted-projects could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -673,15 +1414,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-tasks/filter-by-field
+    uri: api/v1/projects/customer-options
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get tasks filtered by specific field value (Dynamic Field Selection).'
+      title: 'Get all customers for dropdown'
       description: ''
       authenticated: true
       deprecated: false
@@ -702,7 +1443,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-tasks/filter-by-field could not be found."
+              "message": "The route api/v1/projects/customer-options could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -722,15 +1463,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-tasks/assigned-to-me
+    uri: 'api/v1/projects/customer-details/{customerId}'
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get tasks assigned to the current user (My Tasks).'
+      title: 'Get customer data when customer is selected'
       description: ''
       authenticated: true
       deprecated: false
@@ -739,8 +1480,19 @@ endpoints:
       Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
+    urlParameters:
+      customerId:
+        name: customerId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      customerId: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -751,7 +1503,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-tasks/assigned-to-me could not be found."
+              "message": "The route api/v1/projects/customer-details/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -771,15 +1523,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-tasks/due-today
+    uri: api/v1/projects/currency-options
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get tasks due today (Daily Due Date).'
+      title: 'Get all currencies for dropdown'
       description: ''
       authenticated: true
       deprecated: false
@@ -800,7 +1552,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-tasks/due-today could not be found."
+              "message": "The route api/v1/projects/currency-options could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -820,15 +1572,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-tasks/overdue-tasks
+    uri: api/v1/projects/employee-options
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get overdue tasks (tasks past due date but not completed).'
+      title: 'Get all employees/users for project manager dropdown'
       description: ''
       authenticated: true
       deprecated: false
@@ -849,7 +1601,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-tasks/overdue-tasks could not be found."
+              "message": "The route api/v1/projects/employee-options could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -869,15 +1621,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-tasks/sortable-fields
+    uri: api/v1/projects/country-options
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get sortable fields for tasks.'
+      title: 'Get all countries for dropdown'
       description: ''
       authenticated: true
       deprecated: false
@@ -898,7 +1650,56 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-tasks/sortable-fields could not be found."
+              "message": "The route api/v1/projects/country-options could not be found."
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/projects/status-options
+    metadata:
+      groupName: 'Project Management / Projects'
+      groupDescription: |-
+
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get project statuses for dropdown'
+      description: ''
+      authenticated: true
+      deprecated: false
+      custom: []
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "The route api/v1/projects/status-options could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -918,15 +1719,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-tasks/apply-sort
+    uri: api/v1/projects/vat-calculation
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Sort tasks by specified field and order.'
+      title: 'Calculate VAT for given price and company'
       description: ''
       authenticated: true
       deprecated: false
@@ -955,15 +1756,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-tasks/employee-options
+    uri: api/v1/projects/code-generation
     metadata:
-      groupName: 'Project Management / Tasks'
+      groupName: 'Project Management / Projects'
       groupDescription: |-
 
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
+        APIs for managing projects, including creation, updates, search, and project lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get employees for assignment dropdown.'
+      title: 'Generate next project code'
       description: ''
       authenticated: true
       deprecated: false
@@ -984,7 +1785,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-tasks/employee-options could not be found."
+              "message": "The route api/v1/projects/code-generation could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -992,320 +1793,6 @@ endpoints:
           access-control-allow-origin: '*'
         description: null
         custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/project-tasks/status-options
-    metadata:
-      groupName: 'Project Management / Tasks'
-      groupDescription: |-
-
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get task status options.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-tasks/status-options could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/project-tasks/priority-options
-    metadata:
-      groupName: 'Project Management / Tasks'
-      groupDescription: |-
-
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get task priority options.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-tasks/priority-options could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/project-tasks/by-project/{projectId}'
-    metadata:
-      groupName: 'Project Management / Tasks'
-      groupDescription: |-
-
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get tasks for a specific project.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      projectId:
-        name: projectId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      projectId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-tasks/by-project/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: 'api/v1/project-tasks/{taskId}/upload-document'
-    metadata:
-      groupName: 'Project Management / Tasks'
-      groupDescription: |-
-
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Upload document for a task.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      taskId:
-        name: taskId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      taskId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/project-tasks/{taskId}/task-documents'
-    metadata:
-      groupName: 'Project Management / Tasks'
-      groupDescription: |-
-
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get documents for a task.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      taskId:
-        name: taskId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      taskId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-tasks/consequatur/task-documents could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - DELETE
-    uri: 'api/v1/project-tasks/document/{documentId}/remove'
-    metadata:
-      groupName: 'Project Management / Tasks'
-      groupDescription: |-
-
-        APIs for managing project tasks, including creation, updates, assignments, and task lifecycle management.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Delete a task document.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      documentId:
-        name: documentId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      documentId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
     responseFields: []
     auth:
       - headers

@@ -1,21 +1,21 @@
-name: 'Project Management / Resources'
+name: 'Project Management / Milestones'
 description: |-
 
-  APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+  APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
 endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-resources/load-all
+    uri: api/v1/project-milestones/retrieve-all
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'List Project Resources'
-      description: 'Retrieve a paginated list of project resources with comprehensive filtering and search capabilities.'
+      title: 'Display a listing of milestones.'
+      description: ''
       authenticated: true
       deprecated: false
       custom: []
@@ -25,215 +25,23 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters:
-      project_id:
-        name: project_id
-        description: 'Filter by project ID.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      supplier_id:
-        name: supplier_id
-        description: 'Filter by supplier ID.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      resource_type:
-        name: resource_type
-        description: 'Filter by resource type.'
-        required: false
-        example: material
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      status:
-        name: status
-        description: 'Filter by resource status.'
-        required: false
-        example: allocated
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      supplier_number:
-        name: supplier_number
-        description: 'Search by supplier number.'
-        required: false
-        example: SUP-001
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      supplier_name:
-        name: supplier_name
-        description: 'Search by supplier name.'
-        required: false
-        example: 'ABC Supplier'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      project_number:
-        name: project_number
-        description: 'Search by project number.'
-        required: false
-        example: PRJ-001
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      project_name:
-        name: project_name
-        description: 'Search by project name.'
-        required: false
-        example: 'Website Development'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      allocation_from:
-        name: allocation_from
-        description: 'numeric Filter resources with allocation from this value.'
-        required: false
-        example: '1000.00'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      allocation_to:
-        name: allocation_to
-        description: 'numeric Filter resources with allocation to this value.'
-        required: false
-        example: '5000.00'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      date_from:
-        name: date_from
-        description: 'Filter by date from (Y-m-d format).'
-        required: false
-        example: '2024-01-01'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      date_to:
-        name: date_to
-        description: 'Filter by date to (Y-m-d format).'
-        required: false
-        example: '2024-12-31'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      sort_field:
-        name: sort_field
-        description: 'Field to sort by.'
-        required: false
-        example: created_at
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      sort_direction:
-        name: sort_direction
-        description: 'Sort direction (asc/desc).'
-        required: false
-        example: desc
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-      per_page:
-        name: per_page
-        description: 'Number of items per page (default: 15).'
-        required: false
-        example: 20
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        custom: []
-    cleanQueryParameters:
-      project_id: 1
-      supplier_id: 1
-      resource_type: material
-      status: allocated
-      supplier_number: SUP-001
-      supplier_name: 'ABC Supplier'
-      project_number: PRJ-001
-      project_name: 'Website Development'
-      allocation_from: '1000.00'
-      allocation_to: '5000.00'
-      date_from: '2024-01-01'
-      date_to: '2024-12-31'
-      sort_field: created_at
-      sort_direction: desc
-      per_page: 20
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 200
+        status: 404
         content: |-
           {
-            "success": true,
-            "data": [
-              {
-                "id": 1,
-                "project": {
-                  "id": 1,
-                  "project_number": "PRJ-001",
-                  "project_name": "Website Development"
-                },
-                "supplier": {
-                  "id": 1,
-                  "supplier_number": "SUP-001",
-                  "supplier_name": "ABC Supplier"
-                },
-                "resource_type": "material",
-                "allocation": 2500.00,
-                "status": "allocated",
-                "created_at": "2024-01-01T00:00:00.000000Z"
-              }
-            ],
-            "message": "Resources retrieved successfully"
+              "message": "The route api/v1/project-milestones/retrieve-all could not be found."
           }
-        headers: []
-        description: ''
-        custom: []
-      -
-        status: 500
-        content: |-
-          {
-            "success": false,
-            "message": "Error retrieving resources: Database connection failed"
-          }
-        headers: []
-        description: ''
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
         custom: []
     responseFields: []
     auth:
@@ -247,15 +55,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-resources/construct-new
+    uri: api/v1/project-milestones/build-new
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Store a newly created resource.'
+      title: 'Store a newly created milestone.'
       description: ''
       authenticated: true
       deprecated: false
@@ -279,18 +87,8 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      supplier_id:
-        name: supplier_id
-        description: 'The <code>id</code> of an existing record in the suppliers table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      role:
-        name: role
+      name:
+        name: name
         description: 'Must not be greater than 255 characters.'
         required: true
         example: mqeopfuudtdsufvyvddqa
@@ -299,75 +97,64 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      resource_type:
-        name: resource_type
-        description: ''
+      start_date:
+        name: start_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>today</code>.'
         required: true
-        example: internal
+        example: '2106-10-30'
         type: string
-        enumValues:
-          - supplier
-          - internal
-          - contractor
-          - consultant
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      supplier_number:
-        name: supplier_number
-        description: 'Must not be greater than 100 characters.'
+      status:
+        name: status
+        description: ''
+        required: true
+        example: not_started
+        type: string
+        enumValues:
+          - not_started
+          - in_progress
+          - completed
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      milestone_number:
+        name: milestone_number
+        description: 'Must be at least 1.'
         required: false
-        example: mniihfqcoynlazghdtqtq
+        example: 45
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      description:
+        name: description
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: 'Amet iste laborum eius est dolor dolores.'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      supplier_name:
-        name: supplier_name
-        description: 'Must not be greater than 255 characters.'
+      end_date:
+        name: end_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
         required: false
-        example: xbajwbpilpmufinllwloa
+        example: '2106-10-30'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      project_number:
-        name: project_number
-        description: 'Must not be greater than 100 characters.'
-        required: false
-        example: uydlsmsjuryvojcybzvrb
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      project_name:
-        name: project_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: yickznkygloigmkwxphlv
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      allocation_percentage:
-        name: allocation_percentage
+      progress:
+        name: progress
         description: 'Must be at least 0. Must not be greater than 100.'
         required: false
-        example: 1
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      allocation_value:
-        name: allocation_value
-        description: 'Must be at least 0.'
-        required: false
-        example: 87
+        example: 13
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -377,30 +164,7 @@ endpoints:
         name: notes
         description: 'Must not be greater than 2000 characters.'
         required: false
-        example: jrcnfbaqywuxhgjjmzuxj
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      status:
-        name: status
-        description: ''
-        required: false
-        example: completed
-        type: string
-        enumValues:
-          - active
-          - inactive
-          - completed
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      allocation:
-        name: allocation
-        description: 'Must not be greater than 500 characters.'
-        required: false
-        example: ubqouzswiwxtrkimfcatb
+        example: qeopfuudtdsufvyvddqam
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -438,18 +202,14 @@ endpoints:
         custom: []
     cleanBodyParameters:
       project_id: consequatur
-      supplier_id: consequatur
-      role: mqeopfuudtdsufvyvddqa
-      resource_type: internal
-      supplier_number: mniihfqcoynlazghdtqtq
-      supplier_name: xbajwbpilpmufinllwloa
-      project_number: uydlsmsjuryvojcybzvrb
-      project_name: yickznkygloigmkwxphlv
-      allocation_percentage: 1
-      allocation_value: 87
-      notes: jrcnfbaqywuxhgjjmzuxj
-      status: completed
-      allocation: ubqouzswiwxtrkimfcatb
+      name: mqeopfuudtdsufvyvddqa
+      start_date: '2106-10-30'
+      status: not_started
+      milestone_number: 45
+      description: 'Amet iste laborum eius est dolor dolores.'
+      end_date: '2106-10-30'
+      progress: 13
+      notes: qeopfuudtdsufvyvddqam
     fileParameters: []
     responses: []
     responseFields: []
@@ -464,15 +224,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/project-resources/display/{id}'
+    uri: 'api/v1/project-milestones/view-single/{id}'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Display the specified resource.'
+      title: 'Display the specified milestone.'
       description: ''
       authenticated: true
       deprecated: false
@@ -484,7 +244,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the display.'
+        description: 'The ID of the view single.'
         required: true
         example: consequatur
         type: string
@@ -504,7 +264,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-resources/display/consequatur could not be found."
+              "message": "The route api/v1/project-milestones/view-single/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -524,15 +284,15 @@ endpoints:
   -
     httpMethods:
       - PUT
-    uri: 'api/v1/project-resources/alter/{id}'
+    uri: 'api/v1/project-milestones/edit-record/{id}'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Update the specified resource.'
+      title: 'Update the specified milestone.'
       description: ''
       authenticated: true
       deprecated: false
@@ -544,7 +304,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the alter.'
+        description: 'The ID of the edit record.'
         required: true
         example: consequatur
         type: string
@@ -567,18 +327,8 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      supplier_id:
-        name: supplier_id
-        description: 'The <code>id</code> of an existing record in the suppliers table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-      role:
-        name: role
+      name:
+        name: name
         description: 'Must not be greater than 255 characters.'
         required: false
         example: vmqeopfuudtdsufvyvddq
@@ -587,75 +337,64 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         custom: []
-      resource_type:
-        name: resource_type
-        description: ''
+      start_date:
+        name: start_date
+        description: 'Must be a valid date.'
         required: false
-        example: internal
+        example: '2025-09-30T13:03:28'
         type: string
-        enumValues:
-          - supplier
-          - internal
-          - contractor
-          - consultant
+        enumValues: []
         exampleWasSpecified: false
         nullable: false
         custom: []
-      supplier_number:
-        name: supplier_number
-        description: 'Must not be greater than 100 characters.'
+      status:
+        name: status
+        description: ''
         required: false
-        example: amniihfqcoynlazghdtqt
+        example: completed
+        type: string
+        enumValues:
+          - not_started
+          - in_progress
+          - completed
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      milestone_number:
+        name: milestone_number
+        description: 'Must be at least 1.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+      description:
+        name: description
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: 'Molestias ipsam sit veniam sed fuga aspernatur.'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      supplier_name:
-        name: supplier_name
-        description: 'Must not be greater than 255 characters.'
+      end_date:
+        name: end_date
+        description: 'Must be a valid date. Must be a date after or equal to <code>start_date</code>.'
         required: false
-        example: qxbajwbpilpmufinllwlo
+        example: '2106-10-30'
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
-      project_number:
-        name: project_number
-        description: 'Must not be greater than 100 characters.'
-        required: false
-        example: auydlsmsjuryvojcybzvr
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      project_name:
-        name: project_name
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: byickznkygloigmkwxphl
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      allocation_percentage:
-        name: allocation_percentage
+      progress:
+        name: progress
         description: 'Must be at least 0. Must not be greater than 100.'
         required: false
-        example: 22
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      allocation_value:
-        name: allocation_value
-        description: 'Must be at least 0.'
-        required: false
-        example: 0
+        example: 13
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -665,47 +404,21 @@ endpoints:
         name: notes
         description: 'Must not be greater than 2000 characters.'
         required: false
-        example: zjrcnfbaqywuxhgjjmzux
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      status:
-        name: status
-        description: ''
-        required: false
-        example: completed
-        type: string
-        enumValues:
-          - active
-          - inactive
-          - completed
-        exampleWasSpecified: false
-        nullable: true
-        custom: []
-      allocation:
-        name: allocation
-        description: 'Must not be greater than 500 characters.'
-        required: false
-        example: jubqouzswiwxtrkimfcat
+        example: qeopfuudtdsufvyvddqam
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         custom: []
     cleanBodyParameters:
-      role: vmqeopfuudtdsufvyvddq
-      resource_type: internal
-      supplier_number: amniihfqcoynlazghdtqt
-      supplier_name: qxbajwbpilpmufinllwlo
-      project_number: auydlsmsjuryvojcybzvr
-      project_name: byickznkygloigmkwxphl
-      allocation_percentage: 22
-      allocation_value: 0
-      notes: zjrcnfbaqywuxhgjjmzux
+      name: vmqeopfuudtdsufvyvddq
+      start_date: '2025-09-30T13:03:28'
       status: completed
-      allocation: jubqouzswiwxtrkimfcat
+      milestone_number: 2
+      description: 'Molestias ipsam sit veniam sed fuga aspernatur.'
+      end_date: '2106-10-30'
+      progress: 13
+      notes: qeopfuudtdsufvyvddqam
     fileParameters: []
     responses: []
     responseFields: []
@@ -720,15 +433,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/project-resources/purge/{id}'
+    uri: 'api/v1/project-milestones/destroy-entry/{id}'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Remove the specified resource (soft delete).'
+      title: 'Remove the specified milestone (soft delete).'
       description: ''
       authenticated: true
       deprecated: false
@@ -740,7 +453,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the purge.'
+        description: 'The ID of the destroy entry.'
         required: true
         example: consequatur
         type: string
@@ -768,15 +481,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-resources/advanced-search
+    uri: api/v1/project-milestones/advanced-search
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Advanced search for resources.'
+      title: 'Advanced search for milestones.'
       description: ''
       authenticated: true
       deprecated: false
@@ -805,15 +518,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-resources/filter-by-field
+    uri: api/v1/project-milestones/filter-by-field
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get resources by specific field value.'
+      title: 'Get milestones filtered by specific field value.'
       description: ''
       authenticated: true
       deprecated: false
@@ -834,7 +547,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-resources/filter-by-field could not be found."
+              "message": "The route api/v1/project-milestones/filter-by-field could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -854,15 +567,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-resources/field-values
+    uri: api/v1/project-milestones/field-values
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get unique values for a specific field.'
+      title: 'Get all field values for dropdown filtering.'
       description: ''
       authenticated: true
       deprecated: false
@@ -883,7 +596,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-resources/field-values could not be found."
+              "message": "The route api/v1/project-milestones/field-values could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -903,15 +616,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-resources/sortable-fields
+    uri: api/v1/project-milestones/sortable-fields
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get sortable fields for resources.'
+      title: 'Get sortable fields list.'
       description: ''
       authenticated: true
       deprecated: false
@@ -932,7 +645,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-resources/sortable-fields could not be found."
+              "message": "The route api/v1/project-milestones/sortable-fields could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -952,15 +665,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-resources/apply-sort
+    uri: api/v1/project-milestones/apply-sort
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Sort resources by specified field and order.'
+      title: 'Sort milestones by specified field and order.'
       description: ''
       authenticated: true
       deprecated: false
@@ -989,15 +702,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: 'api/v1/project-resources/{id}/restore-resource'
+    uri: 'api/v1/project-milestones/{id}/restore-milestone'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Restore a soft-deleted resource.'
+      title: 'Restore a soft-deleted milestone.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1009,7 +722,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the project resource.'
+        description: 'The ID of the project milestone.'
         required: true
         example: consequatur
         type: string
@@ -1037,15 +750,15 @@ endpoints:
   -
     httpMethods:
       - DELETE
-    uri: 'api/v1/project-resources/{id}/permanent-delete'
+    uri: 'api/v1/project-milestones/{id}/permanent-delete'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Permanently delete a resource.'
+      title: 'Permanently delete a milestone.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1057,7 +770,7 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the project resource.'
+        description: 'The ID of the project milestone.'
         required: true
         example: consequatur
         type: string
@@ -1085,15 +798,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-resources/deleted-resources
+    uri: api/v1/project-milestones/deleted-milestones
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get trashed (soft-deleted) resources.'
+      title: 'Get trashed (soft-deleted) milestones.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1114,7 +827,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-resources/deleted-resources could not be found."
+              "message": "The route api/v1/project-milestones/deleted-milestones could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -1134,61 +847,12 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-resources/supplier-options
+    uri: api/v1/project-milestones/project-options
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get suppliers for dropdown (with supplier number and name).'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-resources/supplier-options could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/project-resources/project-options
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
       title: 'Get projects for dropdown (with project number and name).'
@@ -1212,7 +876,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-resources/project-options could not be found."
+              "message": "The route api/v1/project-milestones/project-options could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -1232,15 +896,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/project-resources/type-options
+    uri: api/v1/project-milestones/status-options
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get resource type options.'
+      title: 'Get milestone status options.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1261,56 +925,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-resources/type-options could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/project-resources/status-options
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get resource status options.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-resources/status-options could not be found."
+              "message": "The route api/v1/project-milestones/status-options could not be found."
           }
         headers:
           cache-control: 'no-cache, private'
@@ -1330,52 +945,15 @@ endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/project-resources/allocation-calculation
+    uri: api/v1/project-milestones/number-generation
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Calculate allocation based on project value and percentage.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - POST
-    uri: api/v1/project-resources/percentage-calculation
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Calculate allocation percentage based on project value and allocation value.'
+      title: 'Generate next milestone number for a project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1404,15 +982,15 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: 'api/v1/project-resources/by-project/{projectId}'
+    uri: 'api/v1/project-milestones/by-project/{projectId}'
     metadata:
-      groupName: 'Project Management / Resources'
+      groupName: 'Project Management / Milestones'
       groupDescription: |-
 
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
+        APIs for managing project milestones, including creation, updates, tracking, and milestone lifecycle management.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get resources for a specific project.'
+      title: 'Get milestones for a specific project.'
       description: ''
       authenticated: true
       deprecated: false
@@ -1444,67 +1022,7 @@ endpoints:
         status: 404
         content: |-
           {
-              "message": "The route api/v1/project-resources/by-project/consequatur could not be found."
-          }
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-        custom: []
-    responseFields: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/v1/project-resources/by-supplier/{supplierId}'
-    metadata:
-      groupName: 'Project Management / Resources'
-      groupDescription: |-
-
-        APIs for managing project resources, including supplier allocation, resource tracking, and allocation calculations.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get resources for a specific supplier.'
-      description: ''
-      authenticated: true
-      deprecated: false
-      custom: []
-    headers:
-      Authorization: 'Bearer {YOUR_AUTH_KEY}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      supplierId:
-        name: supplierId
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        custom: []
-    cleanUrlParameters:
-      supplierId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 404
-        content: |-
-          {
-              "message": "The route api/v1/project-resources/by-supplier/consequatur could not be found."
+              "message": "The route api/v1/project-milestones/by-project/consequatur could not be found."
           }
         headers:
           cache-control: 'no-cache, private'

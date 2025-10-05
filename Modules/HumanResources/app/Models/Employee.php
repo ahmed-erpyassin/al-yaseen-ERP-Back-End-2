@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\FinancialAccounts\Models\Currency;
 use Modules\Users\Models\User;
+use Modules\Companies\Models\Company;
+use Modules\Companies\Models\Branch;
+use Modules\FinancialAccounts\Models\FiscalYear;
 
 // use Modules\HumanResources\Database\Factories\EmployeeFactory;
 
@@ -24,6 +27,7 @@ class Employee extends Model
         'fiscal_year_id',
         'department_id',
         'job_title_id',
+        'category',
         'manager_id',
 
         'employee_number',
@@ -31,6 +35,7 @@ class Employee extends Model
 
         'nickname',
         'first_name',
+        'last_name',
         'second_name',
         'third_name',
         'phone1',
@@ -46,6 +51,7 @@ class Employee extends Model
         'wives_count',
         'children_count',
         'dependents_count',
+        'students_count',
 
         'car_number',
         'is_driver',
@@ -59,8 +65,10 @@ class Employee extends Model
         'salary',
         'billing_rate',
         'monthly_discount',
+        'balance',
 
         'currency_id',
+        'currency_rate',
         'notes',
 
         'created_by',
@@ -75,21 +83,53 @@ class Employee extends Model
         'is_sales'          => 'boolean',
         'billing_rate'      => 'decimal:2',
         'monthly_discount'  => 'decimal:2',
+        'balance'           => 'decimal:2',
+        'currency_rate'     => 'decimal:4',
+        'salary'            => 'decimal:2',
+        'wives_count'       => 'integer',
+        'children_count'    => 'integer',
+        'students_count'    => 'integer',
     ];
+
+    // Core relationships
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function fiscalYear()
+    {
+        return $this->belongsTo(FiscalYear::class);
+    }
 
     public function department()
     {
         return $this->belongsTo(Department::class);
     }
 
-    // public function jobTitle()
-    // {
-    //     return $this->belongsTo(jobTitle::class);
-    // }
+    public function jobTitle()
+    {
+        return $this->belongsTo(JobTitle::class);
+    }
 
     public function manager()
     {
         return $this->belongsTo(Employee::class, 'manager_id');
+    }
+
+    public function subordinates()
+    {
+        return $this->hasMany(Employee::class, 'manager_id');
     }
 
     public function currency()
@@ -97,6 +137,7 @@ class Employee extends Model
         return $this->belongsTo(Currency::class);
     }
 
+    // Audit relationships
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -111,8 +152,87 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
+    // Scopes
     public function scopeForCompany($query, $companyId)
     {
         return $query->where('company_id', $companyId);
+    }
+
+    public function scopeDrivers($query)
+    {
+        return $query->where('is_driver', true);
+    }
+
+    public function scopeSalesReps($query)
+    {
+        return $query->where('is_sales', true);
+    }
+
+    // Payroll relationships
+    public function payrollRecords()
+    {
+        return $this->hasMany(\Modules\HumanResources\Models\PayrollRecord::class);
+    }
+
+    public function payrollData()
+    {
+        return $this->hasMany(\Modules\HumanResources\Models\PayrollData::class);
+    }
+
+    // Helper methods
+    public function getFullNameAttribute()
+    {
+        $names = array_filter([
+            $this->first_name,
+            $this->second_name,
+            $this->third_name,
+            $this->last_name
+        ]);
+
+        return implode(' ', $names);
+    }
+
+    public function getEmployeeTypeAttribute()
+    {
+        if ($this->is_driver && $this->is_sales) {
+            return 'driver_sales';
+        } elseif ($this->is_driver) {
+            return 'driver';
+        } elseif ($this->is_sales) {
+            return 'sales';
+        }
+
+        return 'employee';
+    }
+
+    public function getMaritalStatusAttribute()
+    {
+        // Calculate marital status based on wives_count
+        if ($this->wives_count > 0) {
+            return 'married';
+        }
+        return 'single';
+    }
+
+    /**
+     * Generate next employee number
+     */
+    public static function generateEmployeeNumber($companyId = null)
+    {
+        $companyId = $companyId ?: (auth()->user()->company->id ?? 1);
+
+        $lastEmployee = static::where('company_id', $companyId)
+            ->orderBy('employee_number', 'desc')
+            ->first();
+
+        if (!$lastEmployee) {
+            return 'EMP-0001';
+        }
+
+        // Extract number from employee_number (e.g., EMP-0001 -> 1)
+        $lastNumber = (int) substr($lastEmployee->employee_number, 4);
+        $nextNumber = $lastNumber + 1;
+
+        return 'EMP-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
 }

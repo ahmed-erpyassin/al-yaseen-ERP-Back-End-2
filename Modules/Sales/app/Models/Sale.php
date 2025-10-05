@@ -167,11 +167,10 @@ class Sale extends Model
     /**
      * Generate the next sequential book code for incoming orders.
      */
-    public static function generateBookCode($companyId): string
+    public static function generateBookCode(): string
     {
-        // Get the last book code for this company
-        $lastSale = self::where('company_id', $companyId)
-            ->where('type', 'incoming_order')
+        // Get the last book code
+        $lastSale = self::where('type', 'incoming_order')
             ->whereNotNull('book_code')
             ->orderBy('id', 'desc')
             ->first();
@@ -184,8 +183,7 @@ class Sale extends Model
         $lastNumber = (int) substr($lastSale->book_code, -3);
 
         // Check if current book has reached 50 invoices
-        $currentBookInvoicesCount = self::where('company_id', $companyId)
-            ->where('type', 'incoming_order')
+        $currentBookInvoicesCount = self::where('type', 'incoming_order')
             ->where('book_code', $lastSale->book_code)
             ->count();
 
@@ -202,11 +200,10 @@ class Sale extends Model
     /**
      * Generate the next sequential invoice number for incoming orders.
      */
-    public static function generateInvoiceNumber($companyId): string
+    public static function generateInvoiceNumber(): string
     {
-        // Get the last invoice number for this company
-        $lastSale = self::where('company_id', $companyId)
-            ->where('type', 'incoming_order')
+        // Get the last invoice number
+        $lastSale = self::where('type', 'incoming_order')
             ->orderBy('id', 'desc')
             ->first();
 

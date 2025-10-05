@@ -5,6 +5,7 @@ namespace Modules\Sales\app\Services;
 use App\Models\SalesInvoice;
 use Exception;
 use Illuminate\Http\Request as Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Sales\app\Enums\SalesTypeEnum;
 use Modules\Sales\app\Services\BookNumberingService;
@@ -65,8 +66,9 @@ class OutgoingOfferService
     {
         try {
             return DB::transaction(function () use ($request) {
-                $companyId = $request->user()->company_id ?? 101;
-                $userId = $request->user()->id;
+                $user = Auth::user();
+                $companyId = $user->company_id ?? 1;
+                $userId = $user->id;
                 $validatedData = $request->validated();
 
                 // Generate book code and invoice number
@@ -129,7 +131,7 @@ class OutgoingOfferService
                 }
 
                 $data = $request->validated();
-                $data['updated_by'] = $request->user()->id;
+                $data['updated_by'] = Auth::id();
 
                 // Calculate totals
                 $this->calculateTotals($data, $request->validated()['items']);

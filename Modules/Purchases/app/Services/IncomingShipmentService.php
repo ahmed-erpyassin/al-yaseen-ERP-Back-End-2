@@ -4,8 +4,8 @@ namespace Modules\Purchases\app\Services;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Modules\Purchases\app\Enums\PurchaseTypeEnum;
 use Modules\Purchases\Http\Requests\IncomingShipmentRequest;
 use Modules\Purchases\Models\Purchase;
@@ -626,48 +626,173 @@ class IncomingShipmentService
     public function show($id, Request $request)
     {
         try {
-            $companyId = $request->user()->company_id;
+            return DB::transaction(function () use ($request) {
+                $companyId = $request->company_id;
+                $userId = Auth::id();
 
-            $purchase = Purchase::where('company_id', $companyId)
-                ->where('type', PurchaseTypeEnum::INCOMING_SHIPMENT)
-                ->with([
-                    'customer:id,first_name,second_name,email,mobile,customer_number,address,city,country',
-                    'currency:id,name,code,symbol,exchange_rate',
-                    'employee:id,first_name,last_name,employee_number,email,mobile',
-                    'user:id,first_name,second_name,email',
-                    'branch:id,name,address,phone,email',
-                    'items:id,purchase_id,item_id,item_name,item_number,quantity,unit_id,unit_price,total,warehouse_id,shipment_number,warehouse_number,notes,serial_number',
-                    'items.item:id,name,item_number,description,barcode,category_id',
-                    'items.item.category:id,name',
-                    'items.warehouse:id,name,warehouse_number,address,phone',
-                    'items.unit:id,name,symbol,code'
-                ])
+                if (!$userId) {
+                    // Fallback to first user if no authenticated user (for testing/seeding)
+                    $firstUser = \Modules\Users\Models\User::first();
+                    if (!$firstUser) {
+                        throw new \Exception('No users found in the system');
+                    }
+                    $userId = $firstUser->id;
+                }
+
+                $validatedData = $request->validated();
+                $items = $validatedData['items'] ?? [];
+                unset($validatedData['items']); // Remove items from main data
+
+                $data = [
+                    'type'       => PurchaseTypeEnum::INCOMING_SHIPMENT,
+                    'company_id' => $companyId,
+                    'user_id'    => $userId,
+                    'status'     => 'draft',
+                    'created_by' => $userId,
+                    'updated_by' => $userId,
+                ] + $validatedData;
+
+                $shipment = Purchase::create($data);
+
+                // Create shipment items if provided
+                if (!empty($items)) {
+                    $this->createShipmentItems($shipment, $items);
+                }
+
+                return $shipment->load(['items', 'supplier', 'currency', 'creator']);
+            });
+        } catch (Exception $e) {
+            throw new \Exception('Error creating incoming shipment: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Display the specified incoming shipment with all related data
+     */
+    public function show($id)
+    {
+        try {
+            $shipment = Purchase::with([
+                'items.item',
+                'items.unit',
+                'supplier',
+                'customer',
+                'currency',
+                'branch',
+                'creator',
+                'updater'
+            ])
+            ->where('type', PurchaseTypeEnum::INCOMING_SHIPMENT)
+            ->findOrFail($id);
+
+            return $shipment;
+        } catch (\Exception $e) {
+            throw new \Exception('Error fetching incoming shipment: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Update the specified incoming shipment
+     */
+    public function update($request, $id)
+    {
+        try {
+            return DB::transaction(function () use ($request, $id) {
+                $shipment = Purchase::where('type', PurchaseTypeEnum::INCOMING_SHIPMENT)
+                    ->findOrFail($id);
+
+                $userId = Auth::id();
+
+                if (!$userId) {
+                    // Fallback to first user if no authenticated user (for testing/seeding)
+                    $firstUser = \Modules\Users\Models\User::first();
+                    if (!$firstUser) {
+                        throw new \Exception('No users found in the system');
+                    }
+                    $userId = $firstUser->id;
+                }
+
+                $validatedData = $request->validated();
+                $items = $validatedData['items'] ?? [];
+                unset($validatedData['items']); // Remove items from main data
+
+                // Add updated_by field
+                $validatedData['updated_by'] = $userId;
+
+                // Update the shipment
+                $shipment->update($validatedData);
+
+                // Update shipment items if provided
+                if (!empty($items)) {
+                    // Delete existing items
+                    $shipment->items()->delete();
+
+                    // Create new items
+                    $this->createShipmentItems($shipment, $items);
+                }
+
+                return $shipment->load(['items', 'supplier', 'customer', 'currency', 'creator', 'updater']);
+            });
+        } catch (\Exception $e) {
+            throw new \Exception('Error updating incoming shipment: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete the specified incoming shipment (soft delete)
+     */
+    public function destroy($id)
+    {
+        try {
+            $shipment = Purchase::where('type', PurchaseTypeEnum::INCOMING_SHIPMENT)
                 ->findOrFail($id);
 
-            // Calculate additional statistics
-            $statistics = [
-                'total_items' => $purchase->items->count(),
-                'total_quantity' => $purchase->items->sum('quantity'),
-                'average_unit_price' => $purchase->items->avg('unit_price'),
-                'highest_unit_price' => $purchase->items->max('unit_price'),
-                'lowest_unit_price' => $purchase->items->min('unit_price'),
-                'unique_warehouses' => $purchase->items->pluck('warehouse_id')->unique()->count(),
-                'unique_items' => $purchase->items->pluck('item_id')->unique()->count(),
-            ];
+            $userId = Auth::id();
 
-            // Get related inventory movements
-            $inventoryMovements = InventoryMovement::where('inbound_invoice_id', $purchase->id)
-                ->with(['movementData.item:id,name,item_number', 'movementData.warehouse:id,name,warehouse_number'])
-                ->get();
+            if (!$userId) {
+                // Fallback to first user if no authenticated user (for testing/seeding)
+                $firstUser = \Modules\Users\Models\User::first();
+                if (!$firstUser) {
+                    throw new \Exception('No users found in the system');
+                }
+                $userId = $firstUser->id;
+            }
 
-            return [
-                'purchase' => $purchase,
-                'statistics' => $statistics,
-                'inventory_movements' => $inventoryMovements,
-                'formatted_data' => $this->formatPurchaseData($purchase)
-            ];
+            // Update the deleted_by field before soft deleting
+            $shipment->update(['updated_by' => $userId]);
+
+            // Soft delete the shipment
+            $shipment->delete();
+
+            return true;
         } catch (\Exception $e) {
-            throw new \Exception('Error retrieving incoming shipment: ' . $e->getMessage());
+            throw new \Exception('Error deleting incoming shipment: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Create shipment items
+     */
+    private function createShipmentItems($shipment, $items)
+    {
+        foreach ($items as $index => $itemData) {
+            $item = [
+                'purchase_id' => $shipment->id,
+                'serial_number' => $index + 1,
+                'item_id' => $itemData['item_id'] ?? null,
+                'account_id' => $itemData['account_id'] ?? null,
+                'quantity' => $itemData['quantity'] ?? 1,
+                'unit_price' => $itemData['unit_price'] ?? 0,
+                'discount_rate' => $itemData['discount_rate'] ?? 0,
+                'tax_rate' => $itemData['tax_rate'] ?? 0,
+                'total_foreign' => $itemData['total_foreign'] ?? 0,
+                'total_local' => $itemData['total_local'] ?? 0,
+                'total' => $itemData['total'] ?? 0,
+                'notes' => $itemData['notes'] ?? null,
+                'description' => $itemData['description'] ?? null,
+            ];
+
+            \Modules\Purchases\Models\PurchaseItem::create($item);
         }
     }
 

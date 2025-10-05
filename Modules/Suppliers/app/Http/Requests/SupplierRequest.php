@@ -30,7 +30,7 @@ class SupplierRequest extends FormRequest
 
             // Supplier Type and Number
             'supplier_type' => 'required|in:individual,business',
-            'supplier_number' => 'nullable|string|max:50|unique:suppliers,supplier_number,' . $this->route('supplier'),
+            'supplier_number' => 'nullable|string|max:50|unique:suppliers,supplier_number,' . ($this->route('supplier') ? $this->route('supplier')->id : 'NULL'),
             'supplier_name_ar' => 'required|string|max:255', // Company Name/Trade Name (required)
             'supplier_name_en' => 'nullable|string|max:255',
             'supplier_code' => 'nullable|string|max:50',
