@@ -94,6 +94,14 @@ class PurchaseItem extends Model
     }
 
     /**
+     * Get the warehouse details
+     */
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(\Modules\Inventory\Models\Warehouse::class, 'warehouse_id');
+    }
+
+    /**
      * Calculate net unit price after discount
      */
     public function calculateNetUnitPrice(): float

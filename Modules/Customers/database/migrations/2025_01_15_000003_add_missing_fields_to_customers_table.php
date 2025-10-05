@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::table('customers', function (Blueprint $table) {
             // Add customer type (Individual or Business)
             $table->enum('customer_type', ['individual', 'business'])->default('business')->after('customer_number');
-            
+
             // Add balance field
             $table->decimal('balance', 15, 2)->default(0.00)->after('customer_type');
-            
+
             // Add barcode fields
             $table->string('barcode')->nullable()->after('code');
             $table->string('barcode_type')->default('C128')->after('barcode');
-            
+
             // Add foreign key constraints that were missing
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->dropForeign(['country_id']);
             $table->dropForeign(['region_id']);
             $table->dropForeign(['city_id']);
-            
+
             // Drop added columns
             $table->dropColumn(['customer_type', 'balance', 'barcode', 'barcode_type']);
         });

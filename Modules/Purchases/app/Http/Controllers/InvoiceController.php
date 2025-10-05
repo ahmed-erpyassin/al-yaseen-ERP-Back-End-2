@@ -32,8 +32,17 @@ class InvoiceController extends Controller
             $invoices = $this->invoiceService->index($request);
             return response()->json([
                 'success' => true,
-                'data'    => InvoiceResource::collection($invoices)
-            ], 200);
+                'data' => PurchaseInvoiceResource::collection($invoices->items()),
+                'pagination' => [
+                    'current_page' => $invoices->currentPage(),
+                    'last_page' => $invoices->lastPage(),
+                    'per_page' => $invoices->perPage(),
+                    'total' => $invoices->total(),
+                    'from' => $invoices->firstItem(),
+                    'to' => $invoices->lastItem(),
+                ],
+                'message' => 'Purchase invoices retrieved successfully'
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -46,14 +55,15 @@ class InvoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(InvoiceRequest $request)
+    public function store(PurchaseInvoiceRequest $request)
     {
         try {
-            $offer = $this->invoiceService->store($request);
+            $invoice = $this->invoiceService->store($request);
             return response()->json([
                 'success' => true,
-                'data' => new InvoiceResource($offer)
-            ], 200);
+                'data' => new PurchaseInvoiceResource($invoice),
+                'message' => 'Purchase invoice created successfully'
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -70,7 +80,7 @@ class InvoiceController extends Controller
      * @param int $id Invoice ID
      * @return JsonResponse Invoice resource or error response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         try {
             $invoice = $this->invoiceService->show($id);
