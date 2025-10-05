@@ -4,9 +4,16 @@ namespace Modules\Purchases\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Modules\Purchases\app\Services\IncomingShipmentService;
 use Modules\Purchases\Http\Requests\IncomingShipmentRequest;
 use Modules\Purchases\Transformers\IncomingShipmentResource;
+use Modules\Customers\app\Models\Customer;
+use Modules\Inventory\Models\Item;
+use Modules\Inventory\Models\Unit;
+use Modules\Inventory\Models\Warehouse;
+use Modules\FinancialAccounts\Models\Currency;
+use Modules\HumanResources\Models\Employee;
 
 /**
  * @group Purchase Management / Incoming Shipments
@@ -71,7 +78,7 @@ class IncomingShipmentController extends Controller
      * @param int $id Shipment ID
      * @return JsonResponse Shipment resource or error response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         try {
             $shipment = $this->incomingShipmentService->show($id);
