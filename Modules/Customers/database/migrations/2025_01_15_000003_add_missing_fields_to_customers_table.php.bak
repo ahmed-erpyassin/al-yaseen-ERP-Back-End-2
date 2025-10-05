@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('balance', 15, 2)->default(0.00)->after('customer_type');
 
             // Add barcode fields
-            $table->string('barcode')->nullable()->after('code');
+            $table->string('barcode')->nullable()->after('balance');
             $table->string('barcode_type')->default('C128')->after('barcode');
 
             // Add foreign key constraints that were missing

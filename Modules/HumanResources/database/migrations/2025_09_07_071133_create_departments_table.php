@@ -18,28 +18,37 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->unsignedBigInteger('branch_id');
             $table->unsignedBigInteger('fiscal_year_id');
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->integer('number');
             $table->foreignId('manager_id')->constrained('users')->cascadeOnDelete();
-            $table->text('address');
-            $table->string('work_phone', 25);
-            $table->string('home_phone' , 25);
-            $table->string('fax' , 50);
-            $table->string('statement' , 150);
-            $table->string('statement_en' , 150);
-            $table->unsignedBigInteger('parent_id');
-            $table->unsignedBigInteger('funder_id');
+            $table->text('address')->nullable();
+            $table->string('work_phone', 25)->nullable();
+            $table->string('home_phone' , 25)->nullable();
+            $table->string('fax' , 50)->nullable();
+            $table->string('statement' , 150)->nullable();
+            $table->string('statement_en' , 150)->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('funder_id')->nullable();
             $table->enum('project_status', ['not_started', 'inprogress', 'completed', 'paused', 'canceled']);
             $table->enum('status', ['active', 'inactive']);
-            $table->date('proposed_start_date');
-            $table->date('proposed_end_date');
-            $table->date('actual_start_date');
-            $table->date('actual_end_date');
-            $table->unsignedBigInteger('budget_id');
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
-            $table->foreignId('updated_by')->constrained('users')->onDelete('cascade');
-            $table->foreignId('deleted_by')->constrained('users')->onDelete('cascade');
+            $table->date('proposed_start_date')->nullable();
+            $table->date('proposed_end_date')->nullable();
+            $table->date('actual_start_date')->nullable();
+            $table->date('actual_end_date')->nullable();
+            $table->unsignedBigInteger('budget_id')->nullable();
+            $table->text('notes')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
+            $table->softDeletes();
+
+            // Foreign key constraints
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+            $table->foreign('fiscal_year_id')->references('id')->on('fiscal_years')->onDelete('cascade');
+            $table->foreign('parent_id')->references('id')->on('departments')->onDelete('set null');
+            $table->foreign('budget_id')->references('id')->on('budgets')->onDelete('set null');
         });
     }
 

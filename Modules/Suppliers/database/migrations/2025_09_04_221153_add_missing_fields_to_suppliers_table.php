@@ -13,100 +13,62 @@ return new class extends Migration
     {
         Schema::table('suppliers', function (Blueprint $table) {
             // Add missing fields that don't exist yet
-            
+
             // Supplier Type and Number
             if (!Schema::hasColumn('suppliers', 'supplier_type')) {
-                $table->enum('supplier_type', ['individual', 'business'])->default('business')->after('supplier_code');
+                $table->enum('supplier_type', ['individual', 'business'])->default('business')->after('id');
             }
-            
+
             if (!Schema::hasColumn('suppliers', 'supplier_number')) {
-                $table->string('supplier_number', 50)->unique()->nullable()->after('supplier_code');
+                $table->string('supplier_number', 50)->unique()->nullable()->after('supplier_type');
             }
-            
+
             // Balance and Last Transaction Date
             if (!Schema::hasColumn('suppliers', 'balance')) {
-                $table->decimal('balance', 15, 2)->default(0)->after('credit_limit');
+                $table->decimal('balance', 15, 2)->default(0);
             }
-            
+
             if (!Schema::hasColumn('suppliers', 'last_transaction_date')) {
-                $table->date('last_transaction_date')->nullable()->after('balance');
+                $table->date('last_transaction_date')->nullable();
             }
-            
+
             // Account Data
             if (!Schema::hasColumn('suppliers', 'code_number')) {
-                $table->string('code_number', 50)->nullable()->after('supplier_number');
+                $table->string('code_number', 50)->nullable();
             }
-            
+
             if (!Schema::hasColumn('suppliers', 'barcode_type_id')) {
-                $table->foreignId('barcode_type_id')->nullable()->constrained('barcode_types')->nullOnDelete()->after('code_number');
+                $table->unsignedBigInteger('barcode_type_id')->nullable();
             }
-            
+
             // Foreign Key Relations
             if (!Schema::hasColumn('suppliers', 'department_id')) {
-                $table->foreignId('department_id')->nullable()->constrained('departments')->nullOnDelete()->after('branch_id');
+                $table->unsignedBigInteger('department_id')->nullable();
             }
-            
+
             if (!Schema::hasColumn('suppliers', 'project_id')) {
-                $table->foreignId('project_id')->nullable()->constrained('projects')->nullOnDelete()->after('department_id');
+                $table->unsignedBigInteger('project_id')->nullable();
             }
-            
+
             if (!Schema::hasColumn('suppliers', 'donor_id')) {
-                $table->foreignId('donor_id')->nullable()->constrained('donors')->nullOnDelete()->after('project_id');
+                $table->unsignedBigInteger('donor_id')->nullable();
             }
-            
+
             if (!Schema::hasColumn('suppliers', 'sales_representative_id')) {
-                $table->foreignId('sales_representative_id')->nullable()->constrained('sales_representatives')->nullOnDelete()->after('donor_id');
+                $table->unsignedBigInteger('sales_representative_id')->nullable();
             }
-            
+
             // Classification
             if (!Schema::hasColumn('suppliers', 'classification')) {
                 $table->enum('classification', ['major', 'medium', 'minor'])->default('medium')->after('sales_representative_id');
             }
-            
+
             if (!Schema::hasColumn('suppliers', 'custom_classification')) {
                 $table->string('custom_classification')->nullable()->after('classification');
             }
         });
 
-        // Add foreign key constraints for existing fields (simplified)
-        Schema::table('suppliers', function (Blueprint $table) {
-            // Add foreign key constraints (will skip if they already exist)
-            try {
-                $table->foreign('branch_id')->references('id')->on('branches')->onDelete('set null');
-            } catch (\Exception) {
-                // Foreign key already exists, skip
-            }
-
-            try {
-                $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('set null');
-            } catch (\Exception) {
-                // Foreign key already exists, skip
-            }
-
-            try {
-                $table->foreign('employee_id')->references('id')->on('employees')->onDelete('set null');
-            } catch (\Exception) {
-                // Foreign key already exists, skip
-            }
-
-            try {
-                $table->foreign('country_id')->references('id')->on('countries')->onDelete('set null');
-            } catch (\Exception) {
-                // Foreign key already exists, skip
-            }
-
-            try {
-                $table->foreign('region_id')->references('id')->on('regions')->onDelete('set null');
-            } catch (\Exception) {
-                // Foreign key already exists, skip
-            }
-
-            try {
-                $table->foreign('city_id')->references('id')->on('cities')->onDelete('set null');
-            } catch (\Exception) {
-                // Foreign key already exists, skip
-            }
-        });
+        // Foreign keys for existing fields are already created in the create table migration
 
         // Add indexes for better performance
         Schema::table('suppliers', function (Blueprint $table) {
@@ -136,14 +98,14 @@ return new class extends Migration
             $table->dropIndex(['department_id']);
             $table->dropIndex(['project_id']);
             $table->dropIndex(['donor_id']);
-            
+
             // Drop foreign key constraints
             $table->dropForeign(['barcode_type_id']);
             $table->dropForeign(['department_id']);
             $table->dropForeign(['project_id']);
             $table->dropForeign(['donor_id']);
             $table->dropForeign(['sales_representative_id']);
-            
+
             // Drop columns
             $table->dropColumn([
                 'supplier_type',
