@@ -16,9 +16,12 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
     // Departments Routes
     Route::prefix('departments')->name('departments.')->group(function () {
         Route::get('/list', [DepartmentController::class, 'index'])->name('list');
+        Route::get('/first', [DepartmentController::class, 'first'])->name('first');
+        Route::get('/{department}/show', [DepartmentController::class, 'show'])->name('show');
         Route::post('/create', [DepartmentController::class, 'store'])->name('create');
         Route::put('/{department}/update', [DepartmentController::class, 'update'])->name('update');
         Route::delete('/{department}/delete', [DepartmentController::class, 'destroy'])->name('delete');
+        Route::get('/next-number/generate', [DepartmentController::class, 'getNextDepartmentNumber'])->name('next-number');
     });
 
     // Enhanced Employee Routes

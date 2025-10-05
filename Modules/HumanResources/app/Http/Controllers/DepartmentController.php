@@ -22,9 +22,40 @@ class DepartmentController extends Controller
     /**
      * Display a listing of the departments.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return DerpartmentResource::collection($this->service->list());
+        return DerpartmentResource::collection($this->service->list($request));
+    }
+
+    /**
+     * Display the specified department.
+     */
+    public function show(Department $department)
+    {
+        $department = $this->service->show($department);
+        return new DerpartmentResource($department);
+    }
+
+    /**
+     * Get the first department for initial display.
+     */
+    public function first()
+    {
+        $department = $this->service->first();
+
+        if (!$department) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No departments found.',
+                'data' => null
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => new DerpartmentResource($department),
+            'message' => 'First department retrieved successfully.'
+        ]);
     }
 
     /**
@@ -46,11 +77,49 @@ class DepartmentController extends Controller
     }
 
     /**
-     * Remove the specified department from storage.
+     * Get next department number
+     */
+    public function getNextDepartmentNumber()
+    {
+        try {
+            $companyId = request()->company_id;
+            $nextNumber = Department::generateDepartmentNumber($companyId);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'department_number' => $nextNumber
+                ],
+                'message' => 'Next department number generated successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while generating department number.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified department from storage (soft delete).
      */
     public function destroy(Department $department)
     {
-        $this->service->delete($department);
-        return response()->noContent();
+        try {
+            $this->service->delete($department);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Department deleted successfully.',
+                'data' => null
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'An error occurred while deleting the department.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

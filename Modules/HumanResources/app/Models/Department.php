@@ -40,6 +40,7 @@ class Department extends Model
         'actual_start_date',
         'actual_end_date',
         'budget_id',
+        'notes',
         'created_by',
         'updated_by',
         'deleted_by'
@@ -93,6 +94,11 @@ class Department extends Model
         return $this->belongsTo(Budget::class);
     }
 
+    public function funder()
+    {
+        return $this->belongsTo(\App\Models\Funder::class, 'funder_id');
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -107,8 +113,49 @@ class Department extends Model
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
+
+    // Reverse relationships - models that belong to this department
+    public function employees()
+    {
+        return $this->hasMany(\Modules\HumanResources\Models\Employee::class);
+    }
+
+    public function jobTitles()
+    {
+        return $this->hasMany(\Modules\HumanResources\Models\JobTitle::class);
+    }
+
+    public function childDepartments()
+    {
+        return $this->hasMany(Department::class, 'parent_id');
+    }
+
+    // Scopes
     public function scopeForCompany($query, $companyId)
     {
         return $query->where('company_id', $companyId);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    /**
+     * Generate next department number
+     */
+    public static function generateDepartmentNumber($companyId = null)
+    {
+        $companyId = $companyId ?: request()->company_id;
+
+        $lastDepartment = static::where('company_id', $companyId)
+            ->orderBy('number', 'desc')
+            ->first();
+
+        if (!$lastDepartment) {
+            return 1;
+        }
+
+        return $lastDepartment->number + 1;
     }
 }
