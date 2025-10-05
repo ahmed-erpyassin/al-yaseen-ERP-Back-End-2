@@ -62,9 +62,9 @@ return new class extends Migration
             $table->decimal('purchase_price', 15, 4)->default(0); // سعر الشراء من جدول الموردين
 
             // ✅ Date and Time Information (automatic)
-            $table->date('formula_date')->default(DB::raw('CURRENT_DATE')); // تاريخ المعادلة
-            $table->time('formula_time')->default(DB::raw('CURRENT_TIME')); // وقت المعادلة
-            $table->timestamp('formula_datetime')->default(DB::raw('CURRENT_TIMESTAMP')); // تاريخ ووقت المعادلة
+            $table->date('formula_date')->nullable();
+            $table->time('formula_time')->nullable();
+            $table->timestamp('formula_datetime')->useCurrent(); // هذا مسموح
 
             // ✅ Manufacturing Schedule
             $table->date('start_date')->nullable(); // تاريخ بداية التصنيع
