@@ -53,8 +53,8 @@ return new class extends Migration
             $table->string('invoice_number')->nullable(); // General invoice number
             $table->string('reference')->nullable();
 
-            // ✅ Warehouse Reference
-            $table->foreignId('warehouse_id')->constrained('warehouses')->cascadeOnDelete();
+            // ✅ Warehouse Reference (skip foreign key for now)
+            $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->string('warehouse_number')->nullable(); // Store for quick access
             $table->string('warehouse_name')->nullable(); // Store for quick access
 

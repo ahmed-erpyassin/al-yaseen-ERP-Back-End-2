@@ -29,9 +29,9 @@ return new class extends Migration
                 $table->string('item_name')->nullable()->after('item_number');
             }
             
-            // Unit information
+            // Unit information (skip foreign key for now)
             if (!Schema::hasColumn('purchase_items', 'unit_id')) {
-                $table->foreignId('unit_id')->nullable()->constrained('units')->nullOnDelete()->after('item_name');
+                $table->unsignedBigInteger('unit_id')->nullable()->after('item_name');
             }
             
             if (!Schema::hasColumn('purchase_items', 'unit_name')) {
@@ -73,11 +73,18 @@ return new class extends Migration
             }
         });
 
-        // Add indexes for better performance
+        // Add indexes for better performance (skip if already exists)
         Schema::table('purchase_items', function (Blueprint $table) {
-            $table->index(['purchase_id', 'item_id']);
-            $table->index(['item_number']);
-            $table->index(['unit_id']);
+            // Check if index doesn't exist before creating
+            if (!Schema::hasIndex('purchase_items', 'purchase_items_purchase_id_item_id_index')) {
+                $table->index(['purchase_id', 'item_id']);
+            }
+            if (!Schema::hasIndex('purchase_items', 'purchase_items_item_number_index')) {
+                $table->index(['item_number']);
+            }
+            if (!Schema::hasIndex('purchase_items', 'purchase_items_unit_id_index')) {
+                $table->index(['unit_id']);
+            }
         });
     }
 

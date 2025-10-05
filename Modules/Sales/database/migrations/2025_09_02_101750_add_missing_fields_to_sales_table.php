@@ -20,12 +20,8 @@ return new class extends Migration
             $table->decimal('discount_percentage', 5, 2)->default(0)->after('allowed_discount'); // Discount percentage
             $table->boolean('is_tax_inclusive')->default(false)->after('tax_percentage'); // Tax inclusive flag
             
-            // Add foreign key constraints that are missing
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
-            $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('cascade');
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            // Add foreign key constraints that are missing (skip employees for now)
+            // Note: Most foreign keys are already defined in the main table creation
         });
 
         // Add indexes for better performance
@@ -44,20 +40,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('sales', function (Blueprint $table) {
-            // Drop foreign keys first
-            $table->dropForeign(['company_id']);
-            $table->dropForeign(['branch_id']);
-            $table->dropForeign(['currency_id']);
-            $table->dropForeign(['employee_id']);
-            $table->dropForeign(['customer_id']);
-            
             // Drop indexes
             $table->dropIndex(['company_id', 'type']);
             $table->dropIndex(['company_id', 'book_code']);
             $table->dropIndex(['company_id', 'invoice_number']);
             $table->dropIndex(['company_id', 'customer_id']);
             $table->dropIndex(['company_id', 'date']);
-            
+
             // Drop columns
             $table->dropColumn([
                 'book_code',

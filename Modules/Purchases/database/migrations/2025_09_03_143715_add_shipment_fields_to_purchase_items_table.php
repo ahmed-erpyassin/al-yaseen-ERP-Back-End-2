@@ -14,17 +14,17 @@ return new class extends Migration
         Schema::table('purchase_items', function (Blueprint $table) {
             // Add shipment number field for incoming shipments
             if (!Schema::hasColumn('purchase_items', 'shipment_number')) {
-                $table->string('shipment_number', 50)->nullable()->after('serial_number');
+                $table->string('shipment_number', 50)->nullable()->after('id');
             }
             
             // Add warehouse number field for inventory tracking
             if (!Schema::hasColumn('purchase_items', 'warehouse_number')) {
-                $table->string('warehouse_number', 50)->nullable()->after('unit_name');
+                $table->string('warehouse_number', 50)->nullable()->after('shipment_number');
             }
             
-            // Add warehouse_id foreign key for proper relationship
+            // Add warehouse_id foreign key for proper relationship (skip foreign key for now)
             if (!Schema::hasColumn('purchase_items', 'warehouse_id')) {
-                $table->foreignId('warehouse_id')->nullable()->constrained('warehouses')->nullOnDelete()->after('warehouse_number');
+                $table->unsignedBigInteger('warehouse_id')->nullable()->after('warehouse_number');
             }
         });
 

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('purchases', function (Blueprint $table) {
             // Add supplier number field for purchase invoices
             if (!Schema::hasColumn('purchases', 'supplier_number')) {
-                $table->string('supplier_number', 50)->nullable()->after('supplier_name');
+                $table->string('supplier_number', 50)->nullable()->after('supplier_id');
                 $table->index('supplier_number');
             }
             
@@ -30,13 +30,13 @@ return new class extends Migration
             
             // Add entry number field (from original table)
             if (!Schema::hasColumn('purchases', 'entry_number')) {
-                $table->string('entry_number', 50)->nullable()->after('journal_number');
+                $table->string('entry_number', 50)->nullable()->after('supplier_mobile');
                 $table->index('entry_number');
             }
-            
+
             // Add purchase invoice number field (separate from invoice_number)
             if (!Schema::hasColumn('purchases', 'purchase_invoice_number')) {
-                $table->string('purchase_invoice_number', 50)->nullable()->after('invoice_number');
+                $table->string('purchase_invoice_number', 50)->nullable()->after('entry_number');
                 $table->index('purchase_invoice_number');
             }
         });

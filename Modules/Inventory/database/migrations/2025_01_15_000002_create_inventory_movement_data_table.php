@@ -18,16 +18,16 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
             $table->foreignId('inventory_movement_id')->constrained('inventory_movements')->cascadeOnDelete(); // Reference to header table
 
-            // ✅ Item Information (from Items table)
-            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete(); // Reference to items table
+            // ✅ Item Information (skip foreign key for now)
+            $table->unsignedBigInteger('item_id');
             // item_number, item_name, item_description removed - available via item relationship
 
-            // ✅ Unit Information (from Units table)
-            $table->foreignId('unit_id')->nullable()->constrained('units')->nullOnDelete(); // Reference to units table
+            // ✅ Unit Information (skip foreign key for now)
+            $table->unsignedBigInteger('unit_id')->nullable();
             // unit_name, unit_code removed - available via unit relationship
 
-            // ✅ Warehouse Information (from Warehouses table)
-            $table->foreignId('warehouse_id')->constrained('warehouses')->cascadeOnDelete(); // Reference to warehouses table
+            // ✅ Warehouse Information (skip foreign key for now)
+            $table->unsignedBigInteger('warehouse_id');
             // warehouse_number, warehouse_name removed - available via warehouse relationship
 
             // ✅ Quantity Information
@@ -62,12 +62,10 @@ return new class extends Migration
 
             // ✅ Foreign Key Constraints (already handled by foreignId above)
 
-            // ✅ Indexes
+            // ✅ Indexes (only for existing columns)
             $table->index(['company_id', 'inventory_movement_id']);
             $table->index(['company_id', 'item_id']);
             $table->index(['company_id', 'warehouse_id']);
-            $table->index(['item_number']);
-            $table->index(['warehouse_number']);
             $table->index(['batch_number']);
             $table->index(['serial_number']);
         });

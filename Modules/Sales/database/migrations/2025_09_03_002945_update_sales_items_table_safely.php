@@ -32,7 +32,7 @@ return new class extends Migration
                 $table->decimal('discount_amount', 15, 2)->default(0)->after('discount_percentage');
             }
             if (!Schema::hasColumn('sales_items', 'warehouse_id')) {
-                $table->unsignedBigInteger('warehouse_id')->nullable()->after('unit_id');
+                $table->unsignedBigInteger('warehouse_id')->nullable()->after('unit_name');
             }
             if (!Schema::hasColumn('sales_items', 'notes')) {
                 $table->text('notes')->nullable()->after('warehouse_id');
