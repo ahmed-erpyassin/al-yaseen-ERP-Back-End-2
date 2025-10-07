@@ -16,8 +16,8 @@ use Modules\FinancialAccounts\Http\Controllers\TaxRateController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
-    Route::withoutMiddleware(['auth:sanctum'])->prefix('currencies/')->as('currencies.')->group(function () {
-        Route::apiResource('/', CurrenciesController::class);
+    Route::withoutMiddleware(['auth:sanctum'])->group(function () {
+        Route::apiResource('currencies', CurrenciesController::class)->names('currencies');
     });
 
     Route::prefix('exchange-rates')->as('exchange-rates.')->group(function () {
