@@ -25,13 +25,13 @@ class CurrenciesController extends Controller
 
     public function store(CurrencyRequest $request)
     {
-        dd($request->validated());
         $currency = $this->currencyService->createCurrency($request->validated(), $request->user());
         return new CurrencyResource($currency);
     }
 
     public function show($id)
     {
+        dd($id);
         $currency = $this->currencyService->getCurrencyById($id);
         return new CurrencyResource($currency);
     }

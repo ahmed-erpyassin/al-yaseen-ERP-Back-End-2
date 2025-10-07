@@ -10,10 +10,8 @@ class CurrencyService
     public function createCurrency(array $data, $user)
     {
         return DB::transaction(function () use ($data, $user) {
-            $data['user_id'] = $user->id;
-            $data['company_id'] = $data['company_id'] ?? $user->company?->id;
-            $data['created_by'] = $user->id;
-            $data['updated_by'] = $user->id;
+            $data['user_id'] = $user?->id;
+            $data['company_id'] = $data['company_id'] ?? $user?->company?->id;
             return Currency::create($data);
         });
     }

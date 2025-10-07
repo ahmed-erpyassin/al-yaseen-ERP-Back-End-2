@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
 
             $table->string('code', 10);
             $table->string('name', 100);
