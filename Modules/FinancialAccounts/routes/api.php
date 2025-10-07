@@ -14,18 +14,11 @@ use Modules\FinancialAccounts\Http\Controllers\JournalEntriesLinesController;
 use Modules\FinancialAccounts\Http\Controllers\JournalFinancialController;
 use Modules\FinancialAccounts\Http\Controllers\TaxRateController;
 
-Route::prefix('v1')->group(function () {
-
-    Route::prefix('currencies')->name('currencies.')->group(function () {
-        Route::apiResource('', CurrenciesController::class);
-    });
-});
-
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 
-    // Route::prefix('currencies')->name('currencies.')->group(function () {
-    //     Route::apiResource('', CurrenciesController::class);
-    // });
+    Route::prefix('currencies')->name('currencies.')->withoutMiddleware(['auth:sanctum'])->group(function () {
+        Route::apiResource('', CurrenciesController::class);
+    });
 
     Route::prefix('exchange-rates')->name('exchange-rates.')->group(function () {
         Route::apiResource('', ExchangeRatesController::class);
