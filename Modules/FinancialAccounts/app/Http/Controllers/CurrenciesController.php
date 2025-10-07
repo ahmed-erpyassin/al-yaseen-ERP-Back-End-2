@@ -31,7 +31,6 @@ class CurrenciesController extends Controller
 
     public function show($id)
     {
-        dd($id);
         $currency = $this->currencyService->getCurrencyById($id);
         return new CurrencyResource($currency);
     }
