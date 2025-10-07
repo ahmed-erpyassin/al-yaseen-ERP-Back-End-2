@@ -72,7 +72,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1/purchase')->group(function () {
 
     Route::prefix('invoices')->as('invoices.')->group(function () {
         // CRUD operations
-        Route::get('/list', [InvoiceController::class, 'index'])->name('index');
+        // Route::get('/list', [InvoiceController::class, 'index'])->name('index');
         Route::post('/create', [InvoiceController::class, 'store'])->name('store');
         Route::get('/details/{id}', [InvoiceController::class, 'show'])->name('show');
         Route::put('/update/{id}', [InvoiceController::class, 'update'])->name('update');
