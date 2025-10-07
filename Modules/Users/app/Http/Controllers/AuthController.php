@@ -37,6 +37,9 @@ class AuthController extends Controller
                 'type'       => 'customer',
                 'created_by' => 1, // لو أول مستخدم ممكن تعطيه 1
                 'updated_by' => 1,
+                'otp_expires_at' => Carbon::now(),
+                'email_verified_at' => Carbon::now(),
+                'phone_verified_at' => Carbon::now(),
             ]);
 
             $user->update(['created_by' => $user->id, 'updated_by' => $user->id]);
@@ -44,14 +47,14 @@ class AuthController extends Controller
             // ✅ إضافة الدور للعميل (مهم guard = api)
             $user->assignRoleApi('customer');
 
-            event(new Registered($user));
+            // event(new Registered($user));
 
             // إرسال OTP للهاتف
-            $otp = random_int(1000, 9999);
-            $user->update([
-                'otp_code' => $otp,
-                'otp_expires_at' => Carbon::now()->addMinutes(5),
-            ]);
+            // $otp = random_int(1000, 9999);
+            // $user->update([
+            //     'otp_code' => $otp,
+            //     'otp_expires_at' => Carbon::now()->addMinutes(5),
+            // ]);
 
             // هنا ترسل OTP عبر SMS (Twilio, Vonage...)
 
