@@ -13,7 +13,7 @@ class CustomerService
     {
         $data['user_id'] = $user->id;
        // $data['company_id'] = $user->company?->id;
-       // $data['branch_id'] = $user->branch?->id;
+    //    $data['branch_id'] = $user->branch?->id;
         $data['created_by'] = $user->id;
         $data['updated_by'] = $user->id;
 

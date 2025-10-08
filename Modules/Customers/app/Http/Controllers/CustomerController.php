@@ -37,7 +37,7 @@ class CustomerController extends Controller
     {
         try {
             DB::beginTransaction();
-            $user = Auth::user();
+            $user = auth('sanctum')->user();
             $customer = $this->customerService->createCustomer($request->validated(), $user);
             DB::commit();
             return new CustomerResource($customer);
@@ -59,7 +59,7 @@ class CustomerController extends Controller
     public function index(): AnonymousResourceCollection|JsonResponse
     {
         try {
-            $user = Auth::user();
+            $user = auth('sanctum')->user();
             $customers = $this->customerService->getCustomers($user);
             return CustomerResource::collection($customers);
         } catch (\Exception $e) {
