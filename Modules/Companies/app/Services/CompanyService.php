@@ -21,6 +21,8 @@ class CompanyService
             $data['created_by'] = $user->id;
             $data['updated_by'] = $user->id;
 
+            dd($data);
+
             $company = Company::create($data);
 
             $this->setCompanyCoreData($company, $user);
