@@ -23,7 +23,7 @@ class CompaniesController extends Controller
      */
     public function store(CompanyRequest $request)
     {
-        $user = Auth::user();
+        $user = $request->user();
 
         if ($user->company) {
             return response()->json(['message' => 'User already has a company'], 400);
