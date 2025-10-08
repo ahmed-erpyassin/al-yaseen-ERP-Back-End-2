@@ -21,7 +21,7 @@ class CompanyService
             $data['created_by'] = $user->id;
             $data['updated_by'] = $user->id;
 
-            dd($data);
+            return $data;
 
             $company = Company::create($data);
 
