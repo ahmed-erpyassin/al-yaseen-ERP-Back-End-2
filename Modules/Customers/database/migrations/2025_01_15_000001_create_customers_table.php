@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('customer_number', 50)->nullable()->unique();
+            $table->string('company_name')->nullable();
+            $table->enum('customer_type', ['individual', 'business'])->default('business');
+            $table->decimal('balance', 15, 2)->default(0.00);
+            $table->string('barcode')->nullable();
+            $table->string('barcode_type')->default('C128');
 
             // علاقات مفتاحية محتملة
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
