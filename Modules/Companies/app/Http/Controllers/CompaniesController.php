@@ -23,7 +23,8 @@ class CompaniesController extends Controller
      */
     public function store(CompanyRequest $request)
     {
-        $user = $request->user();
+        $user = auth('sanctum')->user();
+        return $user;
 
         if ($user->company) {
             return response()->json(['message' => 'User already has a company'], 400);
