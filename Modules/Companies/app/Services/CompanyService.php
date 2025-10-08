@@ -20,6 +20,7 @@ class CompanyService
             $data['user_id'] = $user->id;
             $data['created_by'] = $user->id;
             $data['updated_by'] = $user->id;
+            $data['logo'] = "";
 
             $company = Company::create($data);
 
