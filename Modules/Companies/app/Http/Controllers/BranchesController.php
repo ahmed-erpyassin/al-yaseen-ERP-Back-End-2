@@ -26,7 +26,7 @@ class BranchesController extends Controller
 
     public function store(BranchRequest $request)
     {
-        $user = Auth::user();
+        $user = auth('sanctum')->user();
         $branch = $this->branchService->createBranch($request->validated(), $user);
         return new BranchResource($branch);
     }

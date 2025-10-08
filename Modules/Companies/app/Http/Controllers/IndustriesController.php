@@ -29,7 +29,7 @@ class IndustriesController extends Controller
     {
         DB::beginTransaction();
         try {
-            $user = Auth::user();
+            $user = auth('sanctum')->user();
             $industry = $this->industryService->createIndustry($request->validated(), $user);
             DB::commit();
             return new IndustryResource($industry);

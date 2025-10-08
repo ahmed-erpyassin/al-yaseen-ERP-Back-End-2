@@ -26,7 +26,7 @@ class BusinessTypesController extends Controller
 
     public function store(BusinessTypeRequest $request)
     {
-        $user = Auth::user();
+        $user = auth('sanctum')->user();
         $businessType = $this->businessTypeService->createBusinessType($request->validated(), $user);
         return new BusinessTypeResource($businessType);
     }

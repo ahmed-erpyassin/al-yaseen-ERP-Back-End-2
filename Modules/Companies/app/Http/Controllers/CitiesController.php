@@ -26,7 +26,7 @@ class CitiesController extends Controller
 
     public function store(CityRequest $request)
     {
-        $user = Auth::user();
+        $user = auth('sanctum')->user();
         $city = $this->cityService->createCity($request->validated(), $user);
         return new CityResource($city);
     }

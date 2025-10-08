@@ -26,7 +26,7 @@ class CountriesController extends Controller
 
     public function store(CountryRequest $request)
     {
-        $user = Auth::user();
+        $user = auth('sanctum')->user();
         $country = $this->countryService->createCountry($request->validated(), $user);
         return new CountryResource($country);
     }

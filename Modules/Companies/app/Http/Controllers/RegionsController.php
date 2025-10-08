@@ -26,7 +26,7 @@ class RegionsController extends Controller
 
     public function store(RegionRequest $request)
     {
-        $user = Auth::user();
+        $user = auth('sanctum')->user();
         $region = $this->regionService->createRegion($request->validated(), $user);
         return new RegionResource($region);
     }
