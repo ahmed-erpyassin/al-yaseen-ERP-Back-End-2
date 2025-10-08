@@ -25,9 +25,9 @@ class CompaniesController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->company) {
-            return response()->json(['message' => 'User already has a company'], 400);
-        }
+        // if ($user->company) {
+        //     return response()->json(['message' => 'User already has a company'], 400);
+        // }
 
         $company = $this->companyService->createCompany($request->validated(), $user);
         return new CompanyResource($company);
