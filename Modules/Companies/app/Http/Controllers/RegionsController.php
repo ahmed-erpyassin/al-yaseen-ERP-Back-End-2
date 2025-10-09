@@ -4,7 +4,6 @@ namespace Modules\Companies\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Modules\Companies\Http\Requests\RegionRequest;
 use Modules\Companies\Services\RegionService;
 use Modules\Companies\Transformers\RegionResource;

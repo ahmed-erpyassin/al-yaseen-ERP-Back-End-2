@@ -18,7 +18,7 @@ class CustomerRequest extends FormRequest
         $customerId = $this->route('id');
 
         return  [
-             'company_id' => ['required', 'integer', 'exists:companies,id'],
+            'company_id' => ['required', 'integer', 'exists:companies,id'],
             'branch_id' => ['nullable'],
             'currency_id' => ['required', 'integer', 'exists:currencies,id'],
             'employee_id' => ['nullable', 'integer', 'exists:users,id'],
