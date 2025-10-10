@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Modules\FinancialAccounts\Models\Currency;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @group Employee/Currency Rate Management
@@ -118,32 +119,85 @@ class CurrencyRateController extends Controller
 
     /**
      * Get live rates for multiple currencies
+     *
+     * @bodyParam currency_ids array required Array of currency IDs to get rates for. Example: [1, 2, 3]
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "rates": [
+     *       {
+     *         "currency_id": 1,
+     *         "currency_code": "USD",
+     *         "rate": 1.2500,
+     *         "is_base_currency": false
+     *       },
+     *       {
+     *         "currency_id": 2,
+     *         "currency_code": "SAR",
+     *         "rate": 1.0000,
+     *         "is_base_currency": true
+     *       }
+     *     ],
+     *     "last_updated": "2025-10-10 12:00:00"
+     *   },
+     *   "message": "Live currency rates retrieved successfully."
+     * }
      */
     public function getLiveRates(Request $request): JsonResponse
     {
         try {
-            $request->validate([
-                'currency_ids' => 'required|array',
+            // Log the incoming request for debugging
+            Log::info('getLiveRates called with data: ', $request->all());
+
+            // Validate the request
+            $validated = $request->validate([
+                'currency_ids' => 'required|array|min:1',
                 'currency_ids.*' => 'integer|exists:currencies,id'
             ]);
 
-            $currencies = Currency::whereIn('id', $request->currency_ids)->get();
+            $currencyIds = $validated['currency_ids'];
+
+            // Get currencies from database
+            $currencies = Currency::whereIn('id', $currencyIds)->get();
+
+            if ($currencies->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'No valid currencies found.',
+                    'message' => 'None of the provided currency IDs exist.'
+                ], 404);
+            }
+
             $rates = [];
 
             foreach ($currencies as $currency) {
-                if ($currency->is_base_currency) {
+                try {
+                    if ($currency->is_base_currency) {
+                        $rates[] = [
+                            'currency_id' => $currency->id,
+                            'currency_code' => $currency->code,
+                            'rate' => 1.0000,
+                            'is_base_currency' => true,
+                        ];
+                    } else {
+                        $liveRate = $this->fetchLiveRate($currency);
+                        $rates[] = [
+                            'currency_id' => $currency->id,
+                            'currency_code' => $currency->code,
+                            'rate' => $liveRate,
+                            'is_base_currency' => false,
+                        ];
+                    }
+                } catch (\Exception $e) {
+                    Log::warning("Failed to get rate for currency {$currency->code}: " . $e->getMessage());
+                    // Continue with other currencies, add this one with stored rate
                     $rates[] = [
                         'currency_id' => $currency->id,
                         'currency_code' => $currency->code,
-                        'rate' => 1.0000,
-                        'is_base_currency' => true,
-                    ];
-                } else {
-                    $rates[] = [
-                        'currency_id' => $currency->id,
-                        'currency_code' => $currency->code,
-                        'rate' => $this->fetchLiveRate($currency),
-                        'is_base_currency' => false,
+                        'rate' => $currency->exchange_rate ?? 1.0,
+                        'is_base_currency' => $currency->is_base_currency ?? false,
+                        'error' => 'Failed to fetch live rate, using stored rate'
                     ];
                 }
             }
@@ -157,7 +211,19 @@ class CurrencyRateController extends Controller
                 'message' => 'Live currency rates retrieved successfully.'
             ]);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Validation failed.',
+                'message' => 'The given data was invalid.',
+                'errors' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
+            Log::error('getLiveRates error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'error' => 'An error occurred while fetching currency rates.',
@@ -230,7 +296,7 @@ class CurrencyRateController extends Controller
 
         } catch (\Exception $e) {
             // Log the error if needed
-            \Log::warning("Failed to fetch live rate for {$currency->code}: " . $e->getMessage());
+            Log::warning("Failed to fetch live rate for {$currency->code}: " . $e->getMessage());
             return null;
         }
     }
