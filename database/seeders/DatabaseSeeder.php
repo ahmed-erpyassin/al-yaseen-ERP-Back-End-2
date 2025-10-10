@@ -19,5 +19,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(WorkTypeSeeder::class);
         // $this->call(CountrySeeder::class);
         // $this->call(EmployeeSeeder::class);
+
+        // Human Resources Seeder
+        $this->call(\Modules\HumanResources\Database\Seeders\HumanResourcesSeeder::class);
     }
 }

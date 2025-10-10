@@ -12,7 +12,7 @@ class HumanResourcesDatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            EmployeeSeeder::class,
+            CompleteHRSeeder::class,
         ]);
     }
 }
