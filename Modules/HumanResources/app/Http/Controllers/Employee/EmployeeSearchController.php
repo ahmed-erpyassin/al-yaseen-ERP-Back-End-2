@@ -218,7 +218,7 @@ class EmployeeSearchController extends Controller
                     'total_records' => $employees->total(),
                     'format' => $request->get('format'),
                     'fields' => $fieldsToExport,
-                    'preview' => EmployeeResource::collection($employees->items()->take(5)),
+                    'preview' => EmployeeResource::collection(collect($employees->items())->take(5)),
                 ],
                 'message' => 'Export data prepared successfully. (Implementation pending)'
             ]);

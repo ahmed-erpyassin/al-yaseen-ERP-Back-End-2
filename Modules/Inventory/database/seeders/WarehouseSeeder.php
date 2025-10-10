@@ -214,7 +214,10 @@ class WarehouseSeeder extends Seeder
                 }
             }
 
-            Warehouse::create($warehouseData);
+            Warehouse::firstOrCreate([
+                'company_id' => $warehouseData['company_id'],
+                'warehouse_number' => $warehouseData['warehouse_number']
+            ], $warehouseData);
         }
 
         $this->command->info('✅ Warehouses seeded successfully!');

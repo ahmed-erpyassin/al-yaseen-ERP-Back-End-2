@@ -36,7 +36,7 @@ class PurchaseOrderSeeder extends Seeder
             [
                 'company_id' => $company->id,
                 'user_id' => $user->id,
-                'supplier_id' => $suppliers->where('supplier_code', 'SUP-001')->first()?->id ?? $suppliers->first()->id,
+                'supplier_id' => $suppliers->where('supplier_number', 'SUP-001')->first()?->id ?? $suppliers->first()->id,
                 'warehouse_id' => $warehouses->first()->id,
                 'order_number' => 'PO-001',
                 'order_date' => Carbon::now()->subDays(30),
@@ -59,7 +59,7 @@ class PurchaseOrderSeeder extends Seeder
             [
                 'company_id' => $company->id,
                 'user_id' => $user->id,
-                'supplier_id' => $suppliers->where('supplier_code', 'SUP-002')->first()?->id ?? $suppliers->skip(1)->first()->id,
+                'supplier_id' => $suppliers->where('supplier_number', 'SUP-002')->first()?->id ?? $suppliers->skip(1)->first()?->id ?? $suppliers->first()->id,
                 'warehouse_id' => $warehouses->skip(1)->first()?->id ?? $warehouses->first()->id,
                 'order_number' => 'PO-002',
                 'order_date' => Carbon::now()->subDays(25),
@@ -82,7 +82,7 @@ class PurchaseOrderSeeder extends Seeder
             [
                 'company_id' => $company->id,
                 'user_id' => $user->id,
-                'supplier_id' => $suppliers->where('supplier_code', 'SUP-003')->first()?->id ?? $suppliers->skip(2)->first()->id,
+                'supplier_id' => $suppliers->where('supplier_number', 'SUP-002')->first()?->id ?? $suppliers->skip(1)->first()?->id ?? $suppliers->first()->id,
                 'warehouse_id' => $warehouses->skip(2)->first()?->id ?? $warehouses->first()->id,
                 'order_number' => 'PO-003',
                 'order_date' => Carbon::now()->subDays(20),
@@ -105,7 +105,7 @@ class PurchaseOrderSeeder extends Seeder
             [
                 'company_id' => $company->id,
                 'user_id' => $user->id,
-                'supplier_id' => $suppliers->where('supplier_code', 'SUP-004')->first()?->id ?? $suppliers->skip(3)->first()->id,
+                'supplier_id' => $suppliers->where('supplier_number', 'SUP-001')->first()?->id ?? $suppliers->first()->id,
                 'warehouse_id' => $warehouses->first()->id,
                 'order_number' => 'PO-004',
                 'order_date' => Carbon::now()->subDays(15),
@@ -128,7 +128,7 @@ class PurchaseOrderSeeder extends Seeder
             [
                 'company_id' => $company->id,
                 'user_id' => $user->id,
-                'supplier_id' => $suppliers->where('supplier_code', 'SUP-005')->first()?->id ?? $suppliers->skip(4)->first()->id,
+                'supplier_id' => $suppliers->where('supplier_number', 'SUP-002')->first()?->id ?? $suppliers->skip(1)->first()?->id ?? $suppliers->first()->id,
                 'warehouse_id' => $warehouses->skip(1)->first()?->id ?? $warehouses->first()->id,
                 'order_number' => 'PO-005',
                 'order_date' => Carbon::now()->subDays(10),

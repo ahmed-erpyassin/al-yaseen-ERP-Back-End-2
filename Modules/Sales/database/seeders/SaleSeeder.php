@@ -13,16 +13,44 @@ class SaleSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get actual data from database
+        $user = \Modules\Users\Models\User::first();
+        $company = \Modules\Companies\Models\Company::first();
+        $branch = \Modules\Companies\Models\Branch::first();
+        $currency = \Modules\FinancialAccounts\Models\Currency::first();
+
+        if (!$user || !$company || !$branch || !$currency) {
+            $this->command->warn('⚠️  Required data not found. Please seed Users, Companies, and Currencies first.');
+            return;
+        }
+
+        // Create a default customer if none exists
+        $customer = \Modules\Customers\Models\Customer::first();
+        if (!$customer) {
+            $customer = \Modules\Customers\Models\Customer::create([
+                'company_id' => $company->id,
+                'user_id' => $user->id,
+                'customer_number' => 'CUST-001',
+                'first_name' => 'عميل تجريبي',
+                'email' => 'customer@example.com',
+                'phone' => '0599123456',
+                'address_one' => 'رام الله، فلسطين',
+                'status' => 'active',
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
+            ]);
+        }
+
         // Check if employees exist, if not use null
         $employeeId = \Modules\HumanResources\Models\Employee::first()?->id;
 
         $sales = [
             // Incoming Orders
             [
-                'user_id' => 1,
-                'company_id' => 1,
-                'branch_id' => 1,
-                'currency_id' => 1,
+                'user_id' => $user->id,
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'currency_id' => $currency->id,
                 'employee_id' => $employeeId,
                 'customer_id' => 1,
                 'journal_id' => null,
@@ -44,14 +72,14 @@ class SaleSeeder extends Seeder
                 'total_local' => 1092.50,
                 'total_amount' => 1092.50,
                 'notes' => 'First incoming order - Electronics',
-                'created_by' => 1,
-                'updated_by' => 1,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
             ],
             [
-                'user_id' => 1,
-                'company_id' => 1,
-                'branch_id' => 1,
-                'currency_id' => 1,
+                'user_id' => $user->id,
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
+                'currency_id' => $currency->id,
                 'employee_id' => $employeeId,
                 'customer_id' => 2,
                 'journal_id' => null,
@@ -231,7 +259,16 @@ class SaleSeeder extends Seeder
             ],
         ];
 
-        foreach ($sales as $sale) {
+        foreach ($sales as &$sale) {
+            // Update all hardcoded IDs with actual values
+            $sale['user_id'] = $user->id;
+            $sale['company_id'] = $company->id;
+            $sale['branch_id'] = $branch->id;
+            $sale['currency_id'] = $currency->id;
+            $sale['customer_id'] = $customer->id;
+            $sale['created_by'] = $user->id;
+            $sale['updated_by'] = $user->id;
+
             Sale::updateOrCreate(
                 ['invoice_number' => $sale['invoice_number']],
                 $sale

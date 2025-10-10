@@ -280,7 +280,9 @@ class InventoryItemSeeder extends Seeder
         ];
 
         foreach ($inventoryItems as $itemData) {
-            InventoryItem::create($itemData);
+            InventoryItem::firstOrCreate([
+                'item_number' => $itemData['item_number']
+            ], $itemData);
         }
 
         $this->command->info('✅ Inventory Items seeded successfully!');

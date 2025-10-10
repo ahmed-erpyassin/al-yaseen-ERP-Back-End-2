@@ -25,7 +25,46 @@ class SupplierSeeder extends Seeder
             return;
         }
 
+        // Create simple suppliers that match the actual table structure
         $suppliers = [
+            [
+                'company_id' => $company->id,
+                'user_id' => $user->id,
+                'supplier_number' => 'SUP-001',
+                'first_name' => 'مورد تجريبي',
+                'email' => 'supplier1@example.com',
+                'phone' => '0599123456',
+                'address_one' => 'رام الله، فلسطين',
+                'status' => 'active',
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
+            ],
+            [
+                'company_id' => $company->id,
+                'user_id' => $user->id,
+                'supplier_number' => 'SUP-002',
+                'first_name' => 'مورد آخر',
+                'email' => 'supplier2@example.com',
+                'phone' => '0599234567',
+                'address_one' => 'نابلس، فلسطين',
+                'status' => 'active',
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
+            ],
+        ];
+
+        foreach ($suppliers as $supplierData) {
+            Supplier::firstOrCreate([
+                'company_id' => $supplierData['company_id'],
+                'supplier_number' => $supplierData['supplier_number']
+            ], $supplierData);
+        }
+
+        $this->command->info('✅ Suppliers seeded successfully!');
+        return;
+
+        // Old complex suppliers data (commented out)
+        $oldSuppliers = [
             [
                 'user_id' => $user->id,
                 'company_id' => $company->id,
@@ -139,9 +178,13 @@ class SupplierSeeder extends Seeder
         ];
 
         foreach ($suppliers as $supplierData) {
+            // Convert supplier_code to supplier_number for the actual table
+            $supplierData['supplier_number'] = $supplierData['supplier_code'];
+            unset($supplierData['supplier_code']);
+
             Supplier::firstOrCreate([
                 'company_id' => $supplierData['company_id'],
-                'supplier_code' => $supplierData['supplier_code']
+                'supplier_number' => $supplierData['supplier_number']
             ], $supplierData);
         }
 
