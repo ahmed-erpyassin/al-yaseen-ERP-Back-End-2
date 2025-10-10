@@ -12,11 +12,21 @@ class SalesRepresentativeSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get actual data from database
+        $user = \Modules\Users\Models\User::first();
+        $company = \Modules\Companies\Models\Company::first();
+        $branch = \Modules\Companies\Models\Branch::first();
+
+        if (!$user || !$company || !$branch) {
+            $this->command->warn('⚠️  Required data not found. Please seed Users and Companies first.');
+            return;
+        }
+
         $representatives = [
             [
-                'user_id' => 1,
-                'company_id' => 1,
-                'branch_id' => 1,
+                'user_id' => $user->id,
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'department_id' => null,
                 'representative_number' => 'REP-0001',
                 'employee_number' => 'EMP-001',
@@ -45,13 +55,13 @@ class SalesRepresentativeSeeder extends Seeder
                 'specialization' => json_encode(['Electronics', 'Home Appliances']),
                 'notes' => 'Top performing sales representative',
                 'status' => 'active',
-                'created_by' => 1,
-                'updated_by' => 1,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
             ],
             [
-                'user_id' => 1,
-                'company_id' => 1,
-                'branch_id' => 1,
+                'user_id' => $user->id,
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'department_id' => null,
                 'representative_number' => 'REP-0002',
                 'employee_number' => 'EMP-002',
@@ -80,13 +90,13 @@ class SalesRepresentativeSeeder extends Seeder
                 'specialization' => json_encode(['Furniture', 'Office Supplies']),
                 'notes' => 'Excellent customer relations',
                 'status' => 'active',
-                'created_by' => 1,
-                'updated_by' => 1,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
             ],
             [
-                'user_id' => 1,
-                'company_id' => 1,
-                'branch_id' => 1,
+                'user_id' => $user->id,
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'department_id' => null,
                 'representative_number' => 'REP-0003',
                 'employee_number' => 'EMP-003',
@@ -115,13 +125,13 @@ class SalesRepresentativeSeeder extends Seeder
                 'specialization' => json_encode(['Construction Materials', 'Hardware']),
                 'notes' => 'Strong in southern region',
                 'status' => 'active',
-                'created_by' => 1,
-                'updated_by' => 1,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
             ],
             [
-                'user_id' => 1,
-                'company_id' => 1,
-                'branch_id' => 1,
+                'user_id' => $user->id,
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'department_id' => null,
                 'representative_number' => 'REP-0004',
                 'employee_number' => 'EMP-004',
@@ -150,13 +160,13 @@ class SalesRepresentativeSeeder extends Seeder
                 'specialization' => json_encode(['Textiles', 'Fashion']),
                 'notes' => 'Part-time representative with good performance',
                 'status' => 'active',
-                'created_by' => 1,
-                'updated_by' => 1,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
             ],
             [
-                'user_id' => 1,
-                'company_id' => 1,
-                'branch_id' => 1,
+                'user_id' => $user->id,
+                'company_id' => $company->id,
+                'branch_id' => $branch->id,
                 'department_id' => null,
                 'representative_number' => 'REP-0005',
                 'employee_number' => 'EMP-005',
@@ -185,8 +195,8 @@ class SalesRepresentativeSeeder extends Seeder
                 'specialization' => json_encode(['Food & Beverages', 'FMCG']),
                 'notes' => 'Contract-based representative',
                 'status' => 'active',
-                'created_by' => 1,
-                'updated_by' => 1,
+                'created_by' => $user->id,
+                'updated_by' => $user->id,
             ],
         ];
 

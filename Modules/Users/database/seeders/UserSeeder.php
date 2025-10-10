@@ -110,28 +110,8 @@ class UserSeeder extends Seeder
             );
         }
 
-        $company = Company::create([
-            'currency_id'                           => 1,
-            'financial_year_id'                     => 1,
-            'industry_id'                           => 1,
-            'business_type_id'                      => 1,
-            'country_id'                            => 1,
-            'region_id'                             => 1,
-            'city_id'                               => 1,
-            'user_id'                               => $user->id,
-            'title'                                 => 'Yassin ERP Company',
-            'commercial_registeration_number'       => 'YERPC-001',
-            'address'                               => 'رام الله، فلسطين',
-            'logo'                                  => 'path/to/logo.png',
-            'email'                                 => 'info@yassincompany.com',
-            'landline'                              => '02-1234567',
-            'mobile'                                => '0599916672',
-            'income_tax_rate'                       => 15.00,
-            'vat_rate'                              => 16.00,
-            'status'                                => 'active',
-            'created_by'                            => $user->id,
-            'updated_by'                            => $user->id,
-        ]);
+        // Skip company creation for now - will be handled by Companies module seeder
+        // $company = Company::create([...]);
 
         $this->command->info('✅ تم إنشاء مدير النظام وربطه بكل الصلاحيات (web + api).');
     }

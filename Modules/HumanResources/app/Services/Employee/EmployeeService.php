@@ -346,7 +346,7 @@ class EmployeeService
         return [
             'next_employee_number' => Employee::generateEmployeeNumber($companyId),
             'departments' => Department::where('company_id', $companyId)->get(['id', 'name']),
-            'job_titles' => JobTitle::where('company_id', $companyId)->get(['id', 'title']),
+            'job_titles' => JobTitle::where('company_id', $companyId)->get(['id', 'name']),
             'branches' => Branch::where('company_id', $companyId)->get(['id', 'name']),
             'currencies' => Currency::where('is_active', true)->get(['id', 'code', 'name', 'symbol']),
             'fiscal_years' => FiscalYear::where('company_id', $companyId)->get(['id', 'name', 'start_date', 'end_date']),
