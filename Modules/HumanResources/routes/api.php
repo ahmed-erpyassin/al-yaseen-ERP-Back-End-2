@@ -97,7 +97,9 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
                 Route::delete('/{payrollData}/delete', [PayrollDataController::class, 'destroy'])->name('delete');
 
                 // Payroll Data Helper Endpoints
+                Route::get('/available-employees', [PayrollDataController::class, 'availableEmployees'])->name('available-employees');
                 Route::post('/populate-from-employee', [PayrollDataController::class, 'populateFromEmployee'])->name('populate-employee');
+                Route::post('/update-from-employee', [PayrollDataController::class, 'updateFromEmployee'])->name('update-from-employee');
                 Route::post('/{payrollData}/recalculate', [PayrollDataController::class, 'recalculateAmounts'])->name('recalculate');
                 Route::post('/bulk-add-employees', [PayrollDataController::class, 'bulkAddEmployees'])->name('bulk-add');
 

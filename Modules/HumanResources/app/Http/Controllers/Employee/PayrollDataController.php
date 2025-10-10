@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\HumanResources\Models\PayrollData;
 use Modules\HumanResources\Models\PayrollRecord;
 use Modules\HumanResources\Models\Employee;
@@ -197,7 +198,7 @@ class PayrollDataController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Failed to delete payroll data', [
+            Log::error('Failed to delete payroll data', [
                 'payroll_data_id' => $payrollData->id,
                 'payroll_record_id' => $payrollRecord->id,
                 'user_id' => Auth::id(),
@@ -236,7 +237,34 @@ class PayrollDataController extends Controller
                 'success' => false,
                 'error' => 'Failed to populate payroll data from employee.',
                 'message' => $e->getMessage()
-            ], 500);
+            ], 422);
+        }
+    }
+
+    /**
+     * Update existing payroll data from employee information
+     */
+    public function updateFromEmployee(Request $request, PayrollRecord $payrollRecord): JsonResponse
+    {
+        try {
+            $request->validate([
+                'employee_id' => 'required|integer|exists:employees,id'
+            ]);
+
+            $employee = Employee::find($request->employee_id);
+            $payrollData = $this->service->updateFromEmployee($employee, $payrollRecord);
+
+            return response()->json([
+                'success' => true,
+                'data' => new PayrollDataResource($payrollData),
+                'message' => 'Payroll data updated from employee successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to update payroll data from employee.',
+                'message' => $e->getMessage()
+            ], 422);
         }
     }
 
@@ -266,6 +294,28 @@ class PayrollDataController extends Controller
             return response()->json([
                 'success' => false,
                 'error' => 'Failed to recalculate payroll data amounts.',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get available employees for payroll record (not already added)
+     */
+    public function availableEmployees(Request $request, PayrollRecord $payrollRecord): JsonResponse
+    {
+        try {
+            $availableEmployees = $this->service->getAvailableEmployees($payrollRecord, $request);
+
+            return response()->json([
+                'success' => true,
+                'data' => $availableEmployees,
+                'message' => 'Available employees retrieved successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to retrieve available employees.',
                 'message' => $e->getMessage()
             ], 500);
         }

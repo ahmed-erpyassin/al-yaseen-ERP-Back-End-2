@@ -23,6 +23,7 @@ class PayrollDataService
             'employee.department',
             'creator'
         ])->forPayrollRecord($payrollRecord->id);
+        // dd($query);
 
         // Apply filters
         if ($request->filled('employee_id')) {
@@ -138,11 +139,7 @@ class PayrollDataService
             ->first();
 
         if ($existingData) {
-            // Update existing data
-            $existingData->populateFromEmployee($employee);
-            $existingData->recalculateAmounts();
-            $existingData->save();
-            return $existingData;
+            throw new \Exception("This employee is already added to this payroll record.");
         }
 
         // Create new payroll data
@@ -158,7 +155,35 @@ class PayrollDataService
 
         $data = $this->populateDataFromEmployee($data, $employee);
 
-        return PayrollData::create($data);
+        $payrollData = PayrollData::create($data);
+
+        // Recalculate amounts after creation
+        $payrollData->recalculateAmounts();
+        $payrollData->save();
+
+        return $payrollData->fresh();
+    }
+
+    /**
+     * Update existing payroll data from employee information
+     */
+    public function updateFromEmployee(Employee $employee, PayrollRecord $payrollRecord): PayrollData
+    {
+        // Find existing data
+        $existingData = PayrollData::where('payroll_record_id', $payrollRecord->id)
+            ->where('employee_id', $employee->id)
+            ->first();
+
+        if (!$existingData) {
+            throw new \Exception("Employee not found in this payroll record.");
+        }
+
+        // Update existing data
+        $existingData->populateFromEmployee($employee);
+        $existingData->recalculateAmounts();
+        $existingData->save();
+
+        return $existingData->fresh();
     }
 
     /**

@@ -145,10 +145,10 @@ class PayrollRecordRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Auto-set company_id from request if not provided
-        if (!$this->has('company_id') && $this->has('company_id')) {
+        // Auto-set company_id from session if not provided
+        if (!$this->has('company_id') && $this->hasSession() && $this->session()->has('company_id')) {
             $this->merge([
-                'company_id' => $this->company_id
+                'company_id' => $this->session()->get('company_id')
             ]);
         }
 
@@ -169,6 +169,16 @@ class PayrollRecordRequest extends FormRequest
 
         if (!empty($data)) {
             $this->merge($data);
+        }
+
+        // Set default values
+        if (!$this->has('status') || $this->input('status') === null) {
+            $this->merge(['status' => 'draft']);
+        }
+
+        // Set default currency rate to 1.0000 if not provided
+        if (!$this->has('currency_rate') || $this->input('currency_rate') === null) {
+            $this->merge(['currency_rate' => 1.0000]);
         }
     }
 }

@@ -72,6 +72,9 @@ class CompleteHRSeeder extends Seeder
         // 10. Seed Payroll Records
         $this->seedPayrollRecords($company, $user, $branch, $fiscalYear);
 
+        // 11. Seed Payroll Data
+        $this->seedPayrollData($company, $user, $branch, $fiscalYear);
+
         $this->command->info('✅ Complete HR seeding completed successfully!');
     }
 
@@ -464,5 +467,102 @@ class CompleteHRSeeder extends Seeder
                 'updated_by' => $user->id,
             ]);
         }
+    }
+
+    private function seedPayrollData($company, $user, $branch, $fiscalYear)
+    {
+        $this->command->info('💰 Seeding Payroll Data...');
+
+        // Get all payroll records
+        $payrollRecords = PayrollRecord::where('company_id', $company->id)->get();
+
+        if ($payrollRecords->isEmpty()) {
+            $this->command->warn('⚠️  No payroll records found. Skipping payroll data seeding.');
+            return;
+        }
+
+        // Get all employees
+        $employees = Employee::where('company_id', $company->id)->get();
+
+        if ($employees->isEmpty()) {
+            $this->command->warn('⚠️  No employees found. Skipping payroll data seeding.');
+            return;
+        }
+
+        $this->command->info("📊 Creating payroll data for {$employees->count()} employees across {$payrollRecords->count()} payroll records...");
+
+        foreach ($payrollRecords as $payrollRecord) {
+            foreach ($employees as $employee) {
+                // Check if payroll data already exists for this employee and payroll record
+                $existingPayrollData = PayrollData::where('payroll_record_id', $payrollRecord->id)
+                    ->where('employee_id', $employee->id)
+                    ->first();
+
+                if ($existingPayrollData) {
+                    continue; // Skip if already exists
+                }
+
+                // Calculate employee duration
+                $duration = '';
+                if ($employee->hire_date) {
+                    $years = $employee->hire_date->diffInYears(now());
+                    $months = $employee->hire_date->diffInMonths(now()) % 12;
+                    $duration = "{$years} years, {$months} months";
+                }
+
+                // Determine marital status
+                $maritalStatus = $employee->wives_count > 0 ? 'married' : 'single';
+
+                // Calculate salary components
+                $basicSalary = $employee->salary ?? rand(3000, 8000);
+                $allowances = rand(200, 1000);
+                $overtimeHours = rand(0, 20);
+                $overtimeRate = rand(15, 30);
+                $overtimeAmount = $overtimeHours * $overtimeRate;
+                $deductions = rand(100, 500);
+
+                // Calculate income tax (10% of basic salary)
+                $incomeTax = $basicSalary * 0.10;
+
+                // Calculate salary for payment
+                $totalSalary = $basicSalary + $allowances + $overtimeAmount;
+                $totalDeductions = $incomeTax + $deductions;
+                $salaryForPayment = $totalSalary - $totalDeductions;
+
+                // Calculate paid in cash (random percentage of salary for payment)
+                $paidInCash = $salaryForPayment * (rand(20, 80) / 100);
+
+                PayrollData::create([
+                    'company_id' => $company->id,
+                    'user_id' => $user->id,
+                    'branch_id' => $branch->id,
+                    'fiscal_year_id' => $fiscalYear->id,
+                    'payroll_record_id' => $payrollRecord->id,
+                    'employee_id' => $employee->id,
+                    'employee_number' => $employee->employee_number,
+                    'employee_name' => $employee->full_name,
+                    'national_id' => $employee->national_id,
+                    'marital_status' => $maritalStatus,
+                    'job_title' => $employee->jobTitle ? $employee->jobTitle->name : 'General Employee',
+                    'duration' => $duration,
+                    'basic_salary' => $basicSalary,
+                    'income_tax' => $incomeTax,
+                    'salary_for_payment' => $salaryForPayment,
+                    'paid_in_cash' => $paidInCash,
+                    'allowances' => $allowances,
+                    'deductions' => $deductions,
+                    'overtime_hours' => $overtimeHours,
+                    'overtime_rate' => $overtimeRate,
+                    'overtime_amount' => $overtimeAmount,
+                    'status' => 'active',
+                    'notes' => 'Payroll data for ' . $payrollRecord->salaries_wages_period,
+                    'created_by' => $user->id,
+                    'updated_by' => $user->id,
+                ]);
+            }
+        }
+
+        $totalPayrollData = PayrollData::where('company_id', $company->id)->count();
+        $this->command->info("✅ Created {$totalPayrollData} payroll data records successfully!");
     }
 }

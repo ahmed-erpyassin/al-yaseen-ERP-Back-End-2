@@ -7,10 +7,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Modules\HumanResources\Models\PayrollRecord;
 use Modules\HumanResources\app\Services\Employee\PayrollService;
 use Modules\HumanResources\Http\Requests\Employee\PayrollRecordRequest;
-use Modules\HumanResources\Transformers\Employee\PayrollRecordResource;
+use Modules\HumanResources\Http\Resources\Employee\PayrollRecordResource;
 
 /**
  * @group Employee/Payroll Management
@@ -178,7 +179,7 @@ class PayrollController extends Controller
             // Log the changes
             $changes = array_diff_assoc($request->validated(), $originalData);
             if (!empty($changes)) {
-                \Log::info('Payroll record updated', [
+                Log::info('Payroll record updated', [
                     'payroll_record_id' => $updatedPayrollRecord->id,
                     'user_id' => Auth::id(),
                     'changes' => $changes,
@@ -209,7 +210,7 @@ class PayrollController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Failed to update payroll record', [
+            Log::error('Failed to update payroll record', [
                 'payroll_record_id' => $payrollRecord->id,
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
@@ -263,7 +264,7 @@ class PayrollController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Failed to delete payroll record', [
+            Log::error('Failed to delete payroll record', [
                 'payroll_record_id' => $payrollRecord->id,
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
@@ -309,7 +310,7 @@ class PayrollController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Failed to permanently delete payroll record', [
+            Log::error('Failed to permanently delete payroll record', [
                 'payroll_record_id' => $payrollRecordId,
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
@@ -356,7 +357,7 @@ class PayrollController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Failed to restore payroll record', [
+            Log::error('Failed to restore payroll record', [
                 'payroll_record_id' => $payrollRecordId,
                 'user_id' => Auth::id(),
                 'error' => $e->getMessage(),
